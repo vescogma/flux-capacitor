@@ -1,0 +1,65 @@
+{
+  "name": "flux-capacitor",
+  "version": "0.0.0-development",
+  "description": "State management for StoreFront",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/groupby/flux-capacitor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/groupby/flux-capacitor/issues"
+  },
+  "homepage": "https://github.com/groupby/flux-capacitor#readme",
+  "author": "Ben Teichman <ben.teichman@groupbyinc.com>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "start": "start-runner -p re-start/presets/typescript",
+    "prepush": "yarn start prepush",
+    "prepublish": "yarn start build"
+  },
+  "release": {
+    "verifyConditions": "condition-circle"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
+    "restart": {
+      "testFiles": [
+        "test/bootstrap.ts",
+        "test/**/*.ts"
+      ],
+      "releaseOpts": {
+        "public": true
+      }
+    }
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.4.0",
+    "chai": "^3.5.0",
+    "condition-circle": "^1.5.0",
+    "cz-conventional-changelog": "^2.0.0",
+    "husky": "^0.13.3",
+    "re-start": "^1.10.1",
+    "sinon": "^2.2.0",
+    "start-babel-cli": "^4.0.1",
+    "tslint": "^5.2.0",
+    "tslint-config-groupby": "^1.0.0",
+    "typescript": "^2.3.2"
+  },
+  "dependencies": {
+    "@types/uuid": "^2.0.29",
+    "eventemitter3": "^2.0.3",
+    "groupby-api": "file:../api-javascript",
+    "lodash.range": "^3.2.0",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0",
+    "sayt": "^0.1.7",
+    "uuid": "^3.0.1"
+  }
+}
