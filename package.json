@@ -1,5 +1,5 @@
 {
-  "name": "flux-capacitor",
+  "name": "@storefront/flux-capacitor",
   "version": "0.0.0-development",
   "description": "State management for StoreFront",
   "repository": {
@@ -34,7 +34,10 @@
       "testFiles": [
         "test/bootstrap.ts",
         "test/**/*.ts"
-      ]
+      ],
+      "releaseOpts": {
+        "public": true
+      }
     }
   },
   "devDependencies": {
