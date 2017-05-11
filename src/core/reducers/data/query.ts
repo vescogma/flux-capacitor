@@ -1,4 +1,4 @@
-import { Action, Store } from '..';
+import { Action, Store } from '../..';
 import Actions = Action.Query;
 
 export type State = Store.Query;

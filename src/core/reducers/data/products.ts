@@ -1,4 +1,4 @@
-import { Action, Store } from '..';
+import { Action, Store } from '../..';
 
 export type State = Store.Product[];
 

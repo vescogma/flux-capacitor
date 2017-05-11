@@ -156,4 +156,11 @@ export default class Creator {
 
   receiveDetailsProduct = (product: Store.Product) =>
     thunk<Action.Details.ReceiveProduct>(Action.types.RECEIVE_DETAILS_PRODUCT, { product })
+
+  // ui action creators
+  createComponentState = (tagName: string, id: string, state: any = {}) =>
+    thunk<Action.UI.CreateComponentState>(Action.types.CREATE_COMPONENT_STATE, { tagName, id, state })
+
+  removeComponentState = (tagName: string, id: string) =>
+    thunk<Action.UI.RemoveComponentState>(Action.types.REMOVE_COMPONENT_STATE, { tagName, id })
 }

@@ -1,7 +1,7 @@
 import { Action, Store } from '..';
 import State = Store.IsFetching;
 
-export default function updateIsFetching(state: State, action): State {
+export default function updateIsFetching(state: State = {}, action): State {
   switch (action.type) {
     case Action.types.SO_FETCHING: return soFetching(state, action);
     case Action.types.RECEIVE_MORE_REFINEMENTS: return notFetching(state, 'moreRefinements');

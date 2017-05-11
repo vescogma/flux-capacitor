@@ -35,7 +35,7 @@ namespace Store {
   export function create(): ReduxStore<State> {
     return createStore<State>(
       reducer,
-      <any>{ isFetching: {}, data: {} },
+      <any>{ isFetching: {}, data: {}, ui: {} },
       applyMiddleware(
         thunk,
         idGenerator('recallId', RECALL_CHANGE_ACTIONS),
@@ -47,7 +47,7 @@ namespace Store {
   export interface State {
     isFetching: IsFetching;
     session: Session;
-    data?: {
+    data: {
       query: Query; // mixed
 
       sorts: Indexed.Selectable<Sort.Labeled>; // pre
@@ -70,10 +70,13 @@ namespace Store {
       errors: string[]; // post
       warnings: string[]; // post
     };
-    ui?: {
-      [tagName: string]: {
-        [tagId: number]: any;
-      };
+    ui: UI;
+  }
+
+  export interface UI {
+    [tagName: string]: {
+      global?: any;
+      [tagId: string]: any;
     };
   }
 

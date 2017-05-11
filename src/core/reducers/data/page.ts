@@ -1,4 +1,4 @@
-import { Action, Store } from '..';
+import { Action, Store } from '../..';
 import Actions = Action.Page;
 
 export type State = Store.Page;

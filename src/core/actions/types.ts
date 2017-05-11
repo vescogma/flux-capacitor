@@ -25,3 +25,7 @@ export const RECEIVE_REDIRECT = 'RECEIVE_REDIRECT';
 
 // request status
 export const SO_FETCHING = 'SO_FETCHING';
+
+// ui
+export const CREATE_COMPONENT_STATE = 'CREATE_COMPONENT_STATE';
+export const REMOVE_COMPONENT_STATE = 'REMOVE_COMPONENT_STATE';

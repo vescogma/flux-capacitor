@@ -1,6 +1,6 @@
-import { Action, Store } from '..';
+import { Action, Store } from '../..';
 
-export default function updateWarnings(state, action) {
+export default function updateWarnings(state: string[] = [], action) {
   switch (action.type) {
     // case Actions.UPDATE_WARNINGS:
     //   return { ...state };

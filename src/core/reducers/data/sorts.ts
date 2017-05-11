@@ -1,4 +1,4 @@
-import { Action, Store } from '..';
+import { Action, Store } from '../..';
 import Actions = Action.Sort;
 
 export type State = Store.Indexed.Selectable<Store.Sort.Labeled>;

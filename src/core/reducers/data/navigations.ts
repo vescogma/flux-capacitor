@@ -1,9 +1,14 @@
-import { Action, Store } from '..';
+import { Action, Store } from '../..';
 import Actions = Action.Navigation;
 
 export type State = Store.Indexed<Store.Navigation>;
 
-export default function updateNavigations(state: State, action) {
+export const DEFAULTS: State = {
+  allIds: [],
+  byId: {},
+};
+
+export default function updateNavigations(state: State = DEFAULTS, action) {
   switch (action.type) {
     case Action.types.UPDATE_SEARCH:
       // TODO: add case for clear

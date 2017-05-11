@@ -6,6 +6,17 @@ export { Creator, types };
 
 export interface Action { type: string; }
 
+export namespace UI {
+  export interface ComponentStateAction extends Action {
+    tagName: string;
+    id: string;
+  }
+  export interface CreateComponentState extends ComponentStateAction {
+    state: object;
+  }
+  export type RemoveComponentState = ComponentStateAction;
+}
+
 export namespace Autocomplete {
   export interface UpdateQuery extends Action {
     query: string;

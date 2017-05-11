@@ -1,6 +1,6 @@
-import { Action, Store } from '..';
+import { Action, Store } from '../..';
 
-export default function updateErrors(state, action) {
+export default function updateErrors(state: string[] = [], action) {
   switch (action.type) {
     // case Actions.UPDATE_ERRORS:
     //   return { ...state };
