@@ -38,6 +38,7 @@
     }
   },
   "devDependencies": {
+    "@types/mocha": "^2.2.41",
     "babel-preset-env": "^1.4.0",
     "babel-preset-stage-3": "^6.24.1",
     "chai": "^3.5.0",
