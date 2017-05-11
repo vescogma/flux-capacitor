@@ -1,7 +1,9 @@
-import * as redux from 'redux';
+import { applyMiddleware, createStore, Store as ReduxStore } from 'redux';
 import thunk from 'redux-thunk';
 import * as uuid from 'uuid/v1';
 import { reducer, Action } from '.';
+
+export { ReduxStore };
 
 export const RECALL_CHANGE_ACTIONS = [
   Action.types.UPDATE_SEARCH,
@@ -30,11 +32,11 @@ export const idGenerator = (key: string, actions: string[]) =>
 
 namespace Store {
 
-  export function create() {
-    return redux.createStore<State>(
+  export function create(): ReduxStore<State> {
+    return createStore<State>(
       reducer,
       <any>{ isFetching: {}, data: {} },
-      redux.applyMiddleware(
+      applyMiddleware(
         thunk,
         idGenerator('recallId', RECALL_CHANGE_ACTIONS),
         idGenerator('searchId', SEARCH_CHANGE_ACTIONS),

@@ -20,8 +20,7 @@
   "scripts": {
     "start": "start-runner -p re-start/presets/typescript",
     "prepush": "yarn start prepush",
-    "prepublish": "yarn start build",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "prepublish": "yarn start build"
   },
   "release": {
     "verifyConditions": "condition-circle"

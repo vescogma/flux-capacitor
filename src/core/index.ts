@@ -3,6 +3,6 @@ import Adapters from './adapters';
 import * as Events from './events';
 import reducer from './reducers';
 import Selectors from './selectors';
-import Store from './store';
+import Store, { ReduxStore } from './store';
 
-export { Action, Adapters, Events, Selectors, Store, reducer };
+export { Action, Adapters, Events, ReduxStore, Selectors, Store, reducer };
