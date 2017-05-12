@@ -3,10 +3,10 @@ import State = Store.Session;
 
 export default function updateSession(state: State = {}, action) {
   if ('recallId' in action) {
-    return updateRecallId(state, action);
+    state = updateRecallId(state, action);
   }
   if ('searchId' in action) {
-    return updateSearchId(state, action);
+    state = updateSearchId(state, action);
   }
 
   return state;

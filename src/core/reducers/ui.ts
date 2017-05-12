@@ -11,25 +11,21 @@ export default function updateUi(state: State = {}, action) {
   }
 }
 
-export const createComponentState = (state: State, { tagName, id, state: tagState }: Actions.CreateComponentState) => {
-  const tags = state[tagName] || {};
-  const globalState = tags.global || {};
-  const currentState = tags[id] || {};
-  return {
+export const createComponentState = (state: State, { tagName, id, state: tagState }: Actions.CreateComponentState) =>
+  ({
     ...state,
     [tagName]: {
-      ...tags, [id]: { ...globalState, ...currentState, ...tagState }
+      ...state[tagName],
+      [id]: tagState
     }
-  };
-};
+  });
 
-export const removeComponentState = (state: State, { tagName, id }: Actions.RemoveComponentState) => {
-  return {
+export const removeComponentState = (state: State, { tagName, id }: Actions.RemoveComponentState) =>
+  ({
     ...state,
     [tagName]: {
       ...Object.keys(state[tagName])
         .filter((key) => key !== id)
         .reduce((tags, key) => Object.assign(tags, { [key]: state[tagName][key] }), {})
     }
-  };
-};
+  });

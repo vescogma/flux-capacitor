@@ -55,3 +55,6 @@ export const FETCH_AUTOCOMPLETE_SUGGESTIONS_DONE = 'fetch:autocomplete_suggestio
 export const FETCH_AUTOCOMPLETE_PRODUCTS_DONE = 'fetch:autocomplete_products:done';
 export const FETCH_MORE_REFINEMENTS_DONE = 'fetch:more_refinements:done';
 export const FETCH_DETAILS_DONE = 'fetch:details:done';
+
+// ui events
+export const UI_UPDATED = 'ui:updated';

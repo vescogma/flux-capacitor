@@ -4,9 +4,10 @@ import { Store } from '.';
 namespace Selectors {
 
   // export const searchRequest = (store: Store.State): Request => ({
-  export const searchRequest = (store: Store.State): Request => (<any>{
-    query: store.data.query.original,
-    refinements: store.data.navigations.allIds.map((id) => store.data.navigations.byId[id])
+  export const searchRequest = (state: Store.State): Request => (<any>{
+    query: state.data.query.original,
+    collection: Selectors.collection(state),
+    refinements: state.data.navigations.allIds.map((id) => state.data.navigations.byId[id])
       .reduce((allRefinements, navigation) =>
         (<any[]>navigation.refinements).reduce((refinements, { field, type, low, high, value }) =>
           refinements.concat(navigation.range
@@ -14,6 +15,20 @@ namespace Selectors {
             : { navigationName: field, type: 'Value', value }), []), []),
     // sort: store.data.sorts.allIds.map((id) => store.data.sorts.byId[id]),
   });
+
+  export const query = (state: Store.State) =>
+    state.data.query.original;
+
+  export const collection = (state: Store.State) =>
+    state.data.collections.selected;
+
+  export const refinements = (state: Store.State) =>
+    state.data.navigations.allIds.map((id) => state.data.navigations.byId[id])
+      .reduce((allRefinements, navigation) =>
+        (<any[]>navigation.refinements).reduce((refs, { field, type, low, high, value }) =>
+          refs.concat(navigation.range
+            ? { navigationName: field, high, low, type: 'Range' }
+            : { navigationName: field, type: 'Value', value }), []), []);
 
   export const navigation = (state: Store.State, navigationId: string) =>
     state.data.navigations.byId[navigationId];

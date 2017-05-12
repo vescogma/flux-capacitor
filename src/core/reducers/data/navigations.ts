@@ -14,6 +14,8 @@ export default function updateNavigations(state: State = DEFAULTS, action) {
       // TODO: add case for clear
       if (action.clear) {
         return updateSearch(state, action);
+      } else {
+        return state;
       }
     case Action.types.RECEIVE_NAVIGATIONS: return receiveNavigations(state, action);
     case Action.types.SELECT_REFINEMENT: return selectRefinement(state, action);

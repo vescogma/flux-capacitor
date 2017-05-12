@@ -99,15 +99,20 @@ export default class Creator {
     thunk<Action.Details.UpdateId>(Action.types.UPDATE_DETAILS_ID, { id })
 
   updateAutocompleteQuery = (query: string) =>
-    conditional<Action.Autocomplete.UpdateQuery>((state) =>
-      state.data.autocomplete.query !== query,
+    conditional<Action.Autocomplete.UpdateQuery>((state) => {
+      // console.log('WTFFF', query);
+      return state.data.autocomplete.query !== query;
+      // return false;
+    },
       Action.types.UPDATE_AUTOCOMPLETE_QUERY, { query })
 
   // response action creators
   receiveSearchResponse = (results: Results) =>
     (dispatch: Dispatch<any>, getStore: () => Store.State) => {
       const state = getStore();
-      dispatch(this.receiveRedirect(results.redirect));
+      if (results.redirect) {
+        dispatch(this.receiveRedirect(results.redirect));
+      }
       dispatch(this.receiveQuery(Adapters.Search.extractQuery(results, this.linkMapper)));
       dispatch(this.receiveProducts(results.records.map(Adapters.Search.extractProduct)));
       // tslint:disable-next-line max-line-length

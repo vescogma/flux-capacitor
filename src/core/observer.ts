@@ -39,14 +39,15 @@ namespace Observer {
 
   export function resolve(oldState: any, newState: any, observer: Node) {
     if (oldState !== newState) {
-      if (Observer.shouldObserve(oldState, newState, observer)) {
+      // if (Observer.shouldObserve(oldState, newState, observer)) {
+      if (typeof observer === 'function') {
         observer(oldState, newState);
       }
 
-      if (INDEXED in observer && 'allIds' in newState && oldState.allIds === newState.allIds) {
-        Object.keys(newState.allIds)
-          .forEach((key) => Observer.resolveIndexed(oldState.byId[key], newState.byId[key], observer[INDEXED]));
-      }
+      // if (INDEXED in observer && 'allIds' in newState && oldState.allIds === newState.allIds) {
+      //   Object.keys(newState.allIds)
+      //     .forEach((key) => Observer.resolveIndexed(oldState.byId[key], newState.byId[key], observer[INDEXED]));
+      // }
 
       Object.keys(observer)
         .forEach((key) => Observer.resolve((oldState || {})[key], (newState || {})[key], observer[key]));
@@ -114,7 +115,7 @@ namespace Observer {
         Object.keys(newState)
           .forEach((key) => {
             if (!oldState[key] && newState[key]) {
-              this.flux.emit(FETCH_EVENTS[key]);
+              flux.emit(FETCH_EVENTS[key]);
             }
           });
       },
@@ -122,6 +123,7 @@ namespace Observer {
         recallId: emit(Events.RECALL_CHANGED),
         searchId: emit(Events.SEARCH_CHANGED),
       },
+      ui: emit(Events.UI_UPDATED)
     };
   }
 }

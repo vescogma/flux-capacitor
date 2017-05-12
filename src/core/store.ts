@@ -1,7 +1,9 @@
 import { applyMiddleware, createStore, Store as ReduxStore } from 'redux';
+import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import * as uuid from 'uuid/v1';
 import { reducer, Action } from '.';
+import FluxCapacitor from '../flux-capacitor';
 
 export { ReduxStore };
 
@@ -32,12 +34,35 @@ export const idGenerator = (key: string, actions: string[]) =>
 
 namespace Store {
 
-  export function create(): ReduxStore<State> {
+  export function extractCollectionsState(config: FluxCapacitor.Configuration): Indexed.Selectable<Collection> {
+    const selected = typeof config.collection === 'object' ? config.collection.default : config.collection;
+    const allIds = typeof config.collection === 'object' && config.collection.options || [];
+
+    return {
+      selected,
+      allIds,
+      byId: allIds.reduce((map, name) => Object.assign(map, { [name]: { name } }), {})
+    };
+  }
+
+  export function extractInitialState(config: FluxCapacitor.Configuration): Partial<State> {
+    return {
+      isFetching: {},
+      session: {},
+      data: <any>{
+        collections: Store.extractCollectionsState(config)
+      },
+      ui: {}
+    };
+  }
+
+  export function create(config: FluxCapacitor.Configuration): ReduxStore<State> {
     return createStore<State>(
       reducer,
-      <any>{ isFetching: {}, data: {}, ui: {} },
+      <any>Store.extractInitialState(config),
       applyMiddleware(
         thunk,
+        logger,
         idGenerator('recallId', RECALL_CHANGE_ACTIONS),
         idGenerator('searchId', SEARCH_CHANGE_ACTIONS),
       ),
@@ -98,7 +123,6 @@ namespace Store {
      * byId key
      */
     name: string; // static
-    label: string; // static
     total: number; // post
   }
 
