@@ -5,14 +5,9 @@ namespace Selectors {
 
   // export const searchRequest = (store: Store.State): Request => ({
   export const searchRequest = (state: Store.State): Request => (<any>{
-    query: state.data.query.original,
+    query: Selectors.query(state),
     collection: Selectors.collection(state),
-    refinements: state.data.navigations.allIds.map((id) => state.data.navigations.byId[id])
-      .reduce((allRefinements, navigation) =>
-        (<any[]>navigation.refinements).reduce((refinements, { field, type, low, high, value }) =>
-          refinements.concat(navigation.range
-            ? { navigationName: field, high, low, type: 'Range' }
-            : { navigationName: field, type: 'Value', value }), []), []),
+    refinements: Selectors.selectedRefinements(state),
     // sort: store.data.sorts.allIds.map((id) => store.data.sorts.byId[id]),
   });
 
@@ -22,16 +17,20 @@ namespace Selectors {
   export const collection = (state: Store.State) =>
     state.data.collections.selected;
 
-  export const refinements = (state: Store.State) =>
-    state.data.navigations.allIds.map((id) => state.data.navigations.byId[id])
+  export const selectedRefinements = (state: Store.State) =>
+    Selectors.navigations(state)
       .reduce((allRefinements, navigation) =>
-        (<any[]>navigation.refinements).reduce((refs, { field, type, low, high, value }) =>
-          refs.concat(navigation.range
-            ? { navigationName: field, high, low, type: 'Range' }
-            : { navigationName: field, type: 'Value', value }), []), []);
+        navigation.selected.map<any>((refinementIndex) => navigation.refinements[refinementIndex])
+          .reduce((refs, { field, type, low, high, value }) =>
+            refs.concat(navigation.range
+              ? { navigationName: field, type: 'Range', high, low }
+              : { navigationName: field, type: 'Value', value }), []), []);
 
   export const navigation = (state: Store.State, navigationId: string) =>
     state.data.navigations.byId[navigationId];
+
+  export const navigations = (state: Store.State) =>
+    state.data.navigations.allIds.map((id) => Selectors.navigation(state, id));
 
   export const isRefinementDeselected = (state: Store.State, navigationId: string, index: number) => {
     const nav = Selectors.navigation(state, navigationId);

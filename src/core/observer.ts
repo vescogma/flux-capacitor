@@ -20,14 +20,13 @@ namespace Observer {
   export type Node = Map | Observer | (Observer & Map);
 
   export function listen(flux: FluxCapacitor) {
-    let oldState = flux.store.getState();
+    let savedState = flux.store.getState();
 
     return () => {
-      const state = flux.store.getState();
-      const tempState = oldState;
-      oldState = state;
+      const oldState = savedState;
+      const newState = savedState = flux.store.getState();
 
-      Observer.resolve(tempState, state, Observer.create(flux), '[root]');
+      Observer.resolve(oldState, newState, Observer.create(flux), '[root]');
     };
   }
 
