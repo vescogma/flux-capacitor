@@ -58,3 +58,10 @@ export const FETCH_DETAILS_DONE = 'fetch:details:done';
 
 // ui events
 export const UI_UPDATED = 'ui:updated';
+
+// app events
+export const APP_STARTED = 'app:started';
+export const APP_KILLED = 'app:killed';
+
+// observer events
+export const OBSERVER_NODE_CHANGED = 'observer:node_changed';

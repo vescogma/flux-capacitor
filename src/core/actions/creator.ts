@@ -32,9 +32,12 @@ export default class Creator {
 
   fetchProducts = () =>
     (dispatch: Dispatch<any>, getStore: () => Store.State) => {
-      dispatch(this.soFetching('search'));
-      return this.flux.clients.bridge.search(Selectors.searchRequest(getStore()))
-        .then((res) => dispatch(this.receiveSearchResponse(res)));
+      const state = getStore();
+      if (!state.isFetching.search) {
+        dispatch(this.soFetching('search'));
+        return this.flux.clients.bridge.search(Selectors.searchRequest(state))
+          .then((res) => dispatch(this.receiveSearchResponse(res)));
+      }
     }
 
   fetchAutocompleteSuggestions = (query: string, config: QueryTimeAutocompleteConfig) =>
@@ -168,4 +171,7 @@ export default class Creator {
 
   removeComponentState = (tagName: string, id: string) =>
     thunk<Action.UI.RemoveComponentState>(Action.types.REMOVE_COMPONENT_STATE, { tagName, id })
+
+  // app action creators
+  startApp = () => ({ type: Action.types.START_APP });
 }

@@ -11,7 +11,7 @@ class FluxCapacitor extends EventEmitter {
   clients: {
     bridge: BrowserBridge;
     sayt: Sayt;
-  };
+  } = this.createClients();
   store: Store<core.Store.State> = core.Store.create(this.config);
 
   constructor(public config: FluxCapacitor.Configuration) {
@@ -22,33 +22,6 @@ class FluxCapacitor extends EventEmitter {
     this.store.subscribe(core.observer.listen(this));
 
     this.on(core.Events.ORIGINAL_QUERY_UPDATED, (originalQuery) => this.originalQuery = originalQuery);
-  }
-
-  createBridge() {
-    const networkConfig = this.config.network;
-    const bridge = new BrowserBridge(this.config.customerId, networkConfig.https, networkConfig);
-    if (networkConfig.headers) {
-      bridge.headers = networkConfig.headers;
-    }
-    bridge.errorHandler = (err) => {
-      this.emit(core.Events.ERROR_BRIDGE, err);
-      if (networkConfig.errorHandler) {
-        networkConfig.errorHandler(err);
-      }
-    };
-
-    return bridge;
-  }
-
-  createSayt() {
-    const saytConfig = this.config.autocomplete;
-
-    return new Sayt(<any>{
-      autocomplete: { language: saytConfig.language || this.config.language },
-      collection: saytConfig.collection || FluxCapacitor.extractCollection(this.config),
-      productSearch: { area: saytConfig.area || this.config.area },
-      subdomain: this.config.customerId,
-    });
   }
 
   search(query: string = this.originalQuery) {
@@ -96,10 +69,38 @@ class FluxCapacitor extends EventEmitter {
   }
 
   private createClients() {
-    this.clients = {
-      bridge: this.createBridge(),
-      sayt: this.createSayt()
+    return {
+      bridge: FluxCapacitor.createBridge(this.config, (err) => {
+        const networkConfig = this.config.network;
+        this.emit(core.Events.ERROR_BRIDGE, err);
+        if (networkConfig.errorHandler) {
+          networkConfig.errorHandler(err);
+        }
+      }),
+      sayt: FluxCapacitor.createSayt(this.config)
     };
+  }
+
+  static createBridge(config: FluxCapacitor.Configuration, errorHandler: (err: Error) => void) {
+    const networkConfig = config.network;
+    const bridge = new BrowserBridge(config.customerId, networkConfig.https, networkConfig);
+    if (networkConfig.headers) {
+      bridge.headers = networkConfig.headers;
+    }
+    bridge.errorHandler = errorHandler;
+
+    return bridge;
+  }
+
+  static createSayt(config: FluxCapacitor.Configuration) {
+    const saytConfig = config.autocomplete;
+
+    return new Sayt(<any>{
+      autocomplete: { language: saytConfig.language || config.language },
+      collection: saytConfig.collection || FluxCapacitor.extractCollection(config),
+      productSearch: { area: saytConfig.area || config.area },
+      subdomain: config.customerId,
+    });
   }
 
   static extractCollection(config: FluxCapacitor.Configuration) {

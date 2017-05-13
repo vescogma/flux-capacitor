@@ -29,3 +29,7 @@ export const SO_FETCHING = 'SO_FETCHING';
 // ui
 export const CREATE_COMPONENT_STATE = 'CREATE_COMPONENT_STATE';
 export const REMOVE_COMPONENT_STATE = 'REMOVE_COMPONENT_STATE';
+
+// app
+export const START_APP = 'START_APP';
+export const SHUTDOWN_APP = 'SHUTDOWN_APP';

@@ -26,7 +26,7 @@ export const SEARCH_CHANGE_ACTIONS = [
 export const idGenerator = (key: string, actions: string[]) =>
   (store) => (next) => (action) => {
     if (actions.includes(action.type)) {
-      return next(Object.assign(action, { [key]: uuid() }));
+      return next({ ...action, [key]: uuid() });
     } else {
       return next(action);
     }
@@ -47,12 +47,9 @@ namespace Store {
 
   export function extractInitialState(config: FluxCapacitor.Configuration): Partial<State> {
     return {
-      isFetching: {},
-      session: {},
       data: <any>{
         collections: Store.extractCollectionsState(config)
-      },
-      ui: {}
+      }
     };
   }
 
@@ -70,6 +67,7 @@ namespace Store {
   }
 
   export interface State {
+    isRunning: boolean;
     isFetching: IsFetching;
     session: Session;
     data: {

@@ -26,8 +26,9 @@ export default function updatePage(state: State = DEFAULTS, action): State {
   }
 }
 
+// conditional reducer here only because reset page is a side effect of other actions
 export const resetPage = (state: State) =>
-  ({ ...state, current: 1 });
+  state.current === 1 ? state : ({ ...state, current: 1 });
 
 export const updateCurrent = (state: State, { page: current }: Actions.UpdateCurrent) =>
   ({ ...state, current });

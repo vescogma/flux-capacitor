@@ -13,21 +13,21 @@ export const FETCH_EVENTS = {
   search: Events.FETCH_SEARCH_DONE,
 };
 
-type Observer = (oldState: any, newState: any) => void;
+type Observer = (oldState: any, newState: any, path: string) => void;
 
 namespace Observer {
   export interface Map { [key: string]: Observer | Map; }
   export type Node = Map | Observer | (Observer & Map);
 
   export function listen(flux: FluxCapacitor) {
-    let oldState;
+    let oldState = flux.store.getState();
 
     return () => {
       const state = flux.store.getState();
-
-      Observer.resolve(oldState, state, Observer.create(flux));
-
+      const tempState = oldState;
       oldState = state;
+
+      Observer.resolve(tempState, state, Observer.create(flux), '[root]');
     };
   }
 
@@ -37,11 +37,11 @@ namespace Observer {
       && !(INDEXED in observer && oldState.allIds === newState.allIds);
   }
 
-  export function resolve(oldState: any, newState: any, observer: Node) {
+  export function resolve(oldState: any, newState: any, observer: Node, path: string) {
     if (oldState !== newState) {
       // if (Observer.shouldObserve(oldState, newState, observer)) {
       if (typeof observer === 'function') {
-        observer(oldState, newState);
+        observer(oldState, newState, path);
       }
 
       // if (INDEXED in observer && 'allIds' in newState && oldState.allIds === newState.allIds) {
@@ -50,18 +50,27 @@ namespace Observer {
       // }
 
       Object.keys(observer)
-        .forEach((key) => Observer.resolve((oldState || {})[key], (newState || {})[key], observer[key]));
+        .forEach((key) => Observer.resolve((
+          oldState || {})[key],
+          (newState || {})[key],
+          observer[key],
+          `${path}.${key}`
+        ));
     }
   }
 
-  export function resolveIndexed(oldState: any, newState: any, observer: Observer) {
+  export function resolveIndexed(oldState: any, newState: any, observer: Observer, path: string) {
     if (oldState !== newState) {
-      observer(oldState, newState);
+      observer(oldState, newState, path);
     }
   }
 
   export function create(flux: FluxCapacitor) {
-    const emit = (event: string) => (_, newValue) => flux.emit(event, newValue);
+    const emit = (event: string) => (_, newValue, path) => {
+      flux.emit(event, newValue);
+      flux.emit(Events.OBSERVER_NODE_CHANGED, path);
+    };
+    let called = 0;
 
     return {
       data: {
@@ -97,7 +106,7 @@ namespace Observer {
 
         query: Object.assign(emit(Events.QUERY_UPDATED), {
           corrected: emit(Events.CORRECTED_QUERY_UPDATED),
-          didYouMeans: emit(Events.DID_YOU_MEANS_UPDATED),
+          didYouMean: emit(Events.DID_YOU_MEANS_UPDATED),
           original: emit(Events.ORIGINAL_QUERY_UPDATED),
           related: emit(Events.RELATED_QUERIES_UPDATED),
           rewrites: emit(Events.QUERY_REWRITES_UPDATED),
@@ -111,6 +120,13 @@ namespace Observer {
 
         template: emit(Events.TEMPLATE_UPDATED),
       },
+      isRunning: (oldState, newState) => {
+        if (newState) {
+          flux.emit(Events.APP_STARTED);
+        } else if (oldState) {
+          flux.emit(Events.APP_KILLED);
+        }
+      },
       isFetching: (oldState, newState) => {
         Object.keys(newState)
           .forEach((key) => {
@@ -121,7 +137,7 @@ namespace Observer {
       },
       session: {
         recallId: emit(Events.RECALL_CHANGED),
-        searchId: emit(Events.SEARCH_CHANGED),
+        searchId: emit(Events.SEARCH_CHANGED)
       },
       ui: emit(Events.UI_UPDATED)
     };
