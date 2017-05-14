@@ -1,6 +1,6 @@
-import { Action, Store } from '../..';
+export type State = string[];
 
-export default function updateWarnings(state: string[] = [], action) {
+export default function updateWarnings(state: State = [], action): State {
   switch (action.type) {
     // case Actions.UPDATE_WARNINGS:
     //   return { ...state };

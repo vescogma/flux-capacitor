@@ -1,6 +1,6 @@
-import { Store } from '.';
 import FluxCapacitor from '../flux-capacitor';
 import * as Events from './events';
+import Store from './store';
 import { rayify } from './utils';
 
 export const DETAIL_QUERY_INDICATOR = 'gbiDetailQuery';

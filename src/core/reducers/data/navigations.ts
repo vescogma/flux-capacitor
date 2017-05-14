@@ -1,5 +1,6 @@
-import { Action, Store } from '../..';
-import Actions = Action.Navigation;
+import _Action, * as Actions from '../../actions';
+import Store from '../../store';
+import Action = _Action.Navigation;
 
 export type State = Store.Indexed<Store.Navigation>;
 
@@ -10,22 +11,22 @@ export const DEFAULTS: State = {
 
 export default function updateNavigations(state: State = DEFAULTS, action) {
   switch (action.type) {
-    case Action.types.UPDATE_SEARCH:
+    case Actions.UPDATE_SEARCH:
       // TODO: add case for clear
       if (action.clear) {
         return updateSearch(state, action);
       } else {
         return state;
       }
-    case Action.types.RECEIVE_NAVIGATIONS: return receiveNavigations(state, action);
-    case Action.types.SELECT_REFINEMENT: return selectRefinement(state, action);
-    case Action.types.DESELECT_REFINEMENT: return deselectRefinement(state, action);
-    case Action.types.RECEIVE_MORE_REFINEMENTS: return receiveMoreRefinements(state, action);
+    case Actions.RECEIVE_NAVIGATIONS: return receiveNavigations(state, action);
+    case Actions.SELECT_REFINEMENT: return selectRefinement(state, action);
+    case Actions.DESELECT_REFINEMENT: return deselectRefinement(state, action);
+    case Actions.RECEIVE_MORE_REFINEMENTS: return receiveMoreRefinements(state, action);
     default: return state;
   }
 }
 
-export const updateSearch = (state: State, { navigationId, index: refinementIndex }: Actions.UpdateSearch) => {
+export const updateSearch = (state: State, { navigationId, index: refinementIndex }: Action.UpdateSearch) => {
   const byId = state.allIds.reduce(
     (navs, nav) => Object.assign(navs, { [nav]: { ...state.byId[nav], selected: [] } }), {},
   );
@@ -49,7 +50,7 @@ export const updateSearch = (state: State, { navigationId, index: refinementInde
   }
 };
 
-export const receiveNavigations = (state: State, { navigations }: Actions.ReceiveNavigations) => {
+export const receiveNavigations = (state: State, { navigations }: Action.ReceiveNavigations) => {
   const allIds = navigations.map((nav) => nav.field);
   const byId = navigations.reduce(
     (navs, nav) => Object.assign(navs, { [nav.field]: { ...nav, selected: [] } }), {},
@@ -61,7 +62,7 @@ export const receiveNavigations = (state: State, { navigations }: Actions.Receiv
   };
 };
 
-export const selectRefinement = (state: State, { navigationId, index: refinementIndex }: Actions.SelectRefinement) => {
+export const selectRefinement = (state: State, { navigationId, index: refinementIndex }: Action.SelectRefinement) => {
   if (navigationId && refinementIndex != null) {
     return {
       ...state,
@@ -80,7 +81,7 @@ export const selectRefinement = (state: State, { navigationId, index: refinement
 };
 
 // tslint:disable-next-line max-line-length
-export const deselectRefinement = (state: State, { navigationId, index: refinementIndex }: Actions.DeselectRefinement) => {
+export const deselectRefinement = (state: State, { navigationId, index: refinementIndex }: Action.DeselectRefinement) => {
   if (navigationId && refinementIndex != null) {
     return {
       ...state,
@@ -97,7 +98,7 @@ export const deselectRefinement = (state: State, { navigationId, index: refineme
   }
 };
 
-export const receiveMoreRefinements = (state: State, { navigationId, refinements }: Actions.ReceiveMoreRefinements) => {
+export const receiveMoreRefinements = (state: State, { navigationId, refinements }: Action.ReceiveMoreRefinements) => {
   if (navigationId && refinements) {
     return {
       ...state,

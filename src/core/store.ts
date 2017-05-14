@@ -2,25 +2,26 @@ import { applyMiddleware, createStore, Store as ReduxStore } from 'redux';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import * as uuid from 'uuid/v1';
-import { reducer, Action } from '.';
 import FluxCapacitor from '../flux-capacitor';
+import * as Actions from './actions';
+import reducer from './reducers';
 
 export { ReduxStore };
 
 export const RECALL_CHANGE_ACTIONS = [
-  Action.types.UPDATE_SEARCH,
-  Action.types.SELECT_REFINEMENT,
-  Action.types.DESELECT_REFINEMENT,
+  Actions.UPDATE_SEARCH,
+  Actions.SELECT_REFINEMENT,
+  Actions.DESELECT_REFINEMENT,
 ];
 
 export const SEARCH_CHANGE_ACTIONS = [
-  Action.types.UPDATE_SEARCH,
-  Action.types.SELECT_REFINEMENT,
-  Action.types.DESELECT_REFINEMENT,
-  Action.types.SELECT_COLLECTION,
-  Action.types.SELECT_SORT,
-  Action.types.UPDATE_PAGE_SIZE,
-  Action.types.UPDATE_CURRENT_PAGE,
+  Actions.UPDATE_SEARCH,
+  Actions.SELECT_REFINEMENT,
+  Actions.DESELECT_REFINEMENT,
+  Actions.SELECT_COLLECTION,
+  Actions.SELECT_SORT,
+  Actions.UPDATE_PAGE_SIZE,
+  Actions.UPDATE_CURRENT_PAGE,
 ];
 
 export const idGenerator = (key: string, actions: string[]) =>
@@ -53,8 +54,8 @@ namespace Store {
     };
   }
 
-  export function create(config: FluxCapacitor.Configuration): ReduxStore<State> {
-    return createStore<State>(
+  export function create(config: FluxCapacitor.Configuration, listener?: () => void): ReduxStore<State> {
+    const store = createStore<State>(
       reducer,
       <any>Store.extractInitialState(config),
       applyMiddleware(
@@ -64,6 +65,12 @@ namespace Store {
         idGenerator('searchId', SEARCH_CHANGE_ACTIONS),
       ),
     );
+
+    if (listener) {
+      store.subscribe(listener);
+    }
+
+    return store;
   }
 
   export interface State {

@@ -1,9 +1,12 @@
-import { Action, Store } from '..';
+import * as Actions from '../actions';
+import Store from '../store';
 
-export default function updateIsRunning(state: boolean = false, action) {
+export type State = boolean;
+
+export default function updateIsRunning(state: State = false, action): State {
   switch (action.type) {
-    case Action.types.START_APP: return true;
-    case Action.types.SHUTDOWN_APP: return false;
+    case Actions.START_APP: return true;
+    case Actions.SHUTDOWN_APP: return false;
     default: return state;
   }
 }

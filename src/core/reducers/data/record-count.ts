@@ -1,10 +1,10 @@
-import { Action, Store } from '../..';
+import * as Actions from '../../actions';
 
 export type State = number;
 
 export default function updateRecordCount(state: State = 0, action): State {
   switch (action.type) {
-    case Action.types.RECEIVE_RECORD_COUNT: return action.recordCount;
+    case Actions.RECEIVE_RECORD_COUNT: return action.recordCount;
     default: return state;
   }
 }

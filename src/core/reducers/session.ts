@@ -1,7 +1,8 @@
-import { Action, Store } from '..';
-import State = Store.Session;
+import Store from '../store';
 
-export default function updateSession(state: State = {}, action) {
+export type State = Store.Session;
+
+export default function updateSession(state: State = {}, action): State {
   if ('recallId' in action) {
     state = updateRecallId(state, action);
   }

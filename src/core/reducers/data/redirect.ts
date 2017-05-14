@@ -1,10 +1,10 @@
-import { Action, Store } from '../..';
+import * as Actions from '../../actions';
 
 export type State = string;
 
 export default function updateRedirect(state: State = null, action): State {
   switch (action.type) {
-    case Action.types.RECEIVE_REDIRECT: return action.redirect;
+    case Actions.RECEIVE_REDIRECT: return action.redirect;
     default: return state;
   }
 }

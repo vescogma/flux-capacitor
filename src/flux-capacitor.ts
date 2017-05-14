@@ -1,30 +1,22 @@
 import { EventEmitter } from 'eventemitter3';
 import { BrowserBridge, Request, Results } from 'groupby-api';
-import { Store } from 'redux';
 import { Sayt } from 'sayt';
-import * as core from './core';
+import { Actions, Events, Observer, ReduxStore, Selectors, Store } from './core';
 
 class FluxCapacitor extends EventEmitter {
 
-  originalQuery: string;
-  actions: core.Action.Creator;
+  actions: Actions.Creator = new Actions.Creator(this, { search: '/search' });
   clients: {
     bridge: BrowserBridge;
     sayt: Sayt;
-  } = this.createClients();
-  store: Store<core.Store.State> = core.Store.create(this.config);
+  } = FluxCapacitor.createClients(this);
+  store: ReduxStore<Store.State> = Store.create(this.config, Observer.listen(this));
 
   constructor(public config: FluxCapacitor.Configuration) {
     super();
-    this.createClients();
-
-    this.actions = new core.Action.Creator(this, { search: '/search' });
-    this.store.subscribe(core.observer.listen(this));
-
-    this.on(core.Events.ORIGINAL_QUERY_UPDATED, (originalQuery) => this.originalQuery = originalQuery);
   }
 
-  search(query: string = this.originalQuery) {
+  search(query: string = Selectors.query(this.store.getState())) {
     this.store.dispatch(this.actions.updateSearch({ query }));
   }
 
@@ -68,16 +60,16 @@ class FluxCapacitor extends EventEmitter {
     this.store.dispatch(this.actions.updateAutocompleteQuery(query));
   }
 
-  private createClients() {
+  static createClients(flux: FluxCapacitor) {
     return {
-      bridge: FluxCapacitor.createBridge(this.config, (err) => {
-        const networkConfig = this.config.network;
-        this.emit(core.Events.ERROR_BRIDGE, err);
+      bridge: FluxCapacitor.createBridge(flux.config, (err) => {
+        const networkConfig = flux.config.network;
+        flux.emit(Events.ERROR_BRIDGE, err);
         if (networkConfig.errorHandler) {
           networkConfig.errorHandler(err);
         }
       }),
-      sayt: FluxCapacitor.createSayt(this.config)
+      sayt: FluxCapacitor.createSayt(flux.config)
     };
   }
 

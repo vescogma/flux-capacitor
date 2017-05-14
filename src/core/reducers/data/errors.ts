@@ -1,6 +1,6 @@
-import { Action, Store } from '../..';
+export type State = string[];
 
-export default function updateErrors(state: string[] = [], action) {
+export default function updateErrors(state: State = [], action): State {
   switch (action.type) {
     // case Actions.UPDATE_ERRORS:
     //   return { ...state };

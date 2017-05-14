@@ -1,5 +1,6 @@
-import { Action, Store } from '../..';
-import Actions = Action.Sort;
+import _Action, * as Actions from '../../actions';
+import Store from '../../store';
+import Action = _Action.Sort;
 
 export type State = Store.Indexed.Selectable<Store.Sort.Labeled>;
 
@@ -10,10 +11,10 @@ export const DEFAULTS: State = {
 
 export default function updateSorts(state: State = DEFAULTS, action): State {
   switch (action.type) {
-    case Action.types.SELECT_SORT: return updateSelected(state, action);
+    case Actions.SELECT_SORT: return updateSelected(state, action);
     default: return state;
   }
 }
 
-export const updateSelected = (state: State, { id: selected }: Actions.UpdateSelected) =>
+export const updateSelected = (state: State, { id: selected }: Action.UpdateSelected) =>
   ({ ...state, selected });

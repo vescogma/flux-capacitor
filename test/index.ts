@@ -1,8 +1,24 @@
-import { expect } from 'chai';
-import * as pkg from '../src';
+import FluxCapacitor, * as pkg from '../src';
+import suite from './_suite';
 
-describe('package', () => {
+suite('package', ({ expect }) => {
   it('should expose FluxCapacitor', () => {
-    expect(pkg.FluxCapacitor).to.be.ok;
+    expect(FluxCapacitor).to.be.ok;
   });
+
+  // it('should expose ActionCreator', () => {
+  //   expect(pkg.ActionCreator).to.be.ok;
+  // });
+
+  // it('should expose Store', () => {
+  //   expect(pkg.Store).to.be.ok;
+  // });
+  //
+  // it('should expose Observer', () => {
+  //   expect(pkg.Observer).to.be.ok;
+  // });
+  //
+  // it('should expose reducer', () => {
+  //   expect(pkg.reducer).to.be.ok;
+  // });
 });

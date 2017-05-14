@@ -1,5 +1,6 @@
-import { Action, Store } from '../..';
-import Actions = Action.Autocomplete;
+import _Action, * as Actions from '../../actions';
+import Store from '../../store';
+import Action = _Action.Autocomplete;
 
 export type State = Store.Autocomplete;
 
@@ -11,16 +12,16 @@ export const DEFAULTS: State = {
 
 export default function updateAutocomplete(state: State = DEFAULTS, action): State {
   switch (action.type) {
-    case Action.types.UPDATE_AUTOCOMPLETE_QUERY: return updateQuery(state, action);
-    case Action.types.RECEIVE_AUTOCOMPLETE_SUGGESTIONS: return receiveSuggestions(state, action);
+    case Actions.UPDATE_AUTOCOMPLETE_QUERY: return updateQuery(state, action);
+    case Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS: return receiveSuggestions(state, action);
     default: return state;
   }
 }
 
-export const updateQuery = (state: State, { query }: Actions.UpdateQuery) =>
+export const updateQuery = (state: State, { query }: Action.UpdateQuery) =>
   ({ ...state, query });
 
-export const receiveSuggestions = (state: State, { categoryValues, suggestions }: Actions.ReceiveSuggestions) =>
+export const receiveSuggestions = (state: State, { categoryValues, suggestions }: Action.ReceiveSuggestions) =>
   ({
     ...state,
     category: {

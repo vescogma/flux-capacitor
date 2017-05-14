@@ -1,10 +1,11 @@
-import { Action, Store } from '../..';
+import * as Actions from '../../actions';
+import Store from '../../store';
 
 export type State = Store.Product[];
 
-export default function updateProducts(state: State = [], action) {
+export default function updateProducts(state: State = [], action): State {
   switch (action.type) {
-    case Action.types.RECEIVE_PRODUCTS: return action.products;
+    case Actions.RECEIVE_PRODUCTS: return action.products;
     default: return state;
   }
 }

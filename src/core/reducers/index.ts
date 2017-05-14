@@ -1,5 +1,5 @@
 import * as redux from 'redux';
-import { Store } from '..';
+import Store from '../store';
 
 import data from './data';
 import isFetching from './is-fetching';

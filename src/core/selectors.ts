@@ -1,5 +1,5 @@
 import { Request } from 'groupby-api';
-import { Store } from '.';
+import Store from './store';
 
 namespace Selectors {
 

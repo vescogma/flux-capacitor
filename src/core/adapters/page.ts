@@ -1,5 +1,4 @@
 import * as range from 'lodash.range';
-import { Action, Store } from '..';
 
 const MAX_RECORDS = 10000;
 

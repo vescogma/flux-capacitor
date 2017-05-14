@@ -1,5 +1,6 @@
-import { Action, Store } from '../..';
-import Actions = Action.Page;
+import _Action, * as Actions from '../../actions';
+import Store from '../../store';
+import Action = _Action.Page;
 
 export type State = Store.Page;
 
@@ -13,15 +14,15 @@ export const DEFAULTS: State = {
 
 export default function updatePage(state: State = DEFAULTS, action): State {
   switch (action.type) {
-    case Action.types.UPDATE_SEARCH:
-    case Action.types.SELECT_SORT:
-    case Action.types.SELECT_COLLECTION:
-    case Action.types.SELECT_REFINEMENT:
-    case Action.types.DESELECT_REFINEMENT:
+    case Actions.UPDATE_SEARCH:
+    case Actions.SELECT_SORT:
+    case Actions.SELECT_COLLECTION:
+    case Actions.SELECT_REFINEMENT:
+    case Actions.DESELECT_REFINEMENT:
       return resetPage(state);
-    case Action.types.UPDATE_CURRENT_PAGE: return updateCurrent(state, action);
-    case Action.types.UPDATE_PAGE_SIZE: return updateSize(state, action);
-    case Action.types.RECEIVE_PAGE: return receivePage(state, action);
+    case Actions.UPDATE_CURRENT_PAGE: return updateCurrent(state, action);
+    case Actions.UPDATE_PAGE_SIZE: return updateSize(state, action);
+    case Actions.RECEIVE_PAGE: return receivePage(state, action);
     default: return state;
   }
 }
@@ -30,11 +31,11 @@ export default function updatePage(state: State = DEFAULTS, action): State {
 export const resetPage = (state: State) =>
   state.current === 1 ? state : ({ ...state, current: 1 });
 
-export const updateCurrent = (state: State, { page: current }: Actions.UpdateCurrent) =>
+export const updateCurrent = (state: State, { page: current }: Action.UpdateCurrent) =>
   ({ ...state, current });
 
-export const updateSize = (state: State, { size }: Actions.UpdateSize) =>
+export const updateSize = (state: State, { size }: Action.UpdateSize) =>
   ({ ...state, current: 1, size });
 
-export const receivePage = (state: State, { from, to, last, next, previous, range }: Actions.ReceivePage) =>
+export const receivePage = (state: State, { from, to, last, next, previous, range }: Action.ReceivePage) =>
   ({ ...state, from, to, last, next, previous, range });
