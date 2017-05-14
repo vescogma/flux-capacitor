@@ -39,7 +39,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       const instance = { c: 'd' };
       const observer = () => null;
       const create = stub(Store, 'create').returns(instance);
-      const listen = stub(Observer, 'listen').returns(observer);
+      const listener = stub(Observer, 'listener').returns(observer);
       stub(FluxCapacitor, 'createClients');
       stub(Actions, 'Creator');
 
@@ -47,7 +47,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
 
       expect(flux.store).to.eq(instance);
       expect(create.calledWith(config, observer)).to.be.true;
-      expect(listen.calledWith(flux));
+      expect(listener.calledWith(flux));
     });
   });
 
@@ -68,7 +68,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     }
 
     beforeEach(() => {
-      stub(Actions, 'Creator').returns(actions = {});
+      stub(Actions, 'Creator').returns(actions = <any>{});
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
       stub(Store, 'create').returns(store = {});
