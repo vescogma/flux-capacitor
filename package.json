@@ -1,6 +1,6 @@
 {
   "name": "@storefront/flux-capacitor",
-  "version": "0.0.3-development",
+  "version": "0.0.4-development",
   "description": "State management for StoreFront",
   "repository": {
     "type": "git",
@@ -48,7 +48,7 @@
     "condition-circle": "^1.5.0",
     "cz-conventional-changelog": "^2.0.0",
     "husky": "^0.13.3",
-    "re-start": "^1.11.0",
+    "re-start": "^1.13.0",
     "semantic-release": "^6.3.6",
     "sinon": "^2.2.0",
     "start-babel-cli": "^4.0.1",
