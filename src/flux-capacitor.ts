@@ -10,7 +10,7 @@ class FluxCapacitor extends EventEmitter {
     bridge: BrowserBridge;
     sayt: Sayt;
   } = FluxCapacitor.createClients(this);
-  store: ReduxStore<Store.State> = Store.create(this.config, Observer.listen(this));
+  store: ReduxStore<Store.State> = Store.create(this.config, Observer.listener(this));
 
   constructor(public config: FluxCapacitor.Configuration) {
     super();

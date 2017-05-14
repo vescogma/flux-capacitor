@@ -54,7 +54,8 @@ namespace Store {
     };
   }
 
-  export function create(config: FluxCapacitor.Configuration, listener?: () => void): ReduxStore<State> {
+  // tslint:disable-next-line max-line-length
+  export function create(config: FluxCapacitor.Configuration, listener?: (store: ReduxStore<State>) => () => void): ReduxStore<State> {
     const store = createStore<State>(
       reducer,
       <any>Store.extractInitialState(config),
@@ -67,7 +68,7 @@ namespace Store {
     );
 
     if (listener) {
-      store.subscribe(listener);
+      store.subscribe(listener(store));
     }
 
     return store;

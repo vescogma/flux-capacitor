@@ -1,3 +1,4 @@
+import { Store as ReduxStore } from 'redux';
 import FluxCapacitor from '../flux-capacitor';
 import * as Events from './events';
 import Store from './store';
@@ -19,12 +20,15 @@ namespace Observer {
   export interface Map { [key: string]: Observer | Map; }
   export type Node = Map | Observer | (Observer & Map);
 
-  export function listen(flux: FluxCapacitor) {
-    let savedState = flux.store.getState();
+  export const listener = (flux: FluxCapacitor) =>
+    (store: ReduxStore<Store.State>) => listen(flux, store);
+
+  export function listen(flux: FluxCapacitor, store: ReduxStore<Store.State>) {
+    let savedState = store.getState();
 
     return () => {
       const oldState = savedState;
-      const newState = savedState = flux.store.getState();
+      const newState = savedState = store.getState();
 
       Observer.resolve(oldState, newState, Observer.create(flux), '[root]');
     };
