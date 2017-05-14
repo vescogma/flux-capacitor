@@ -1,4 +1,4 @@
-import FluxCapacitor, * as pkg from '../src';
+import FluxCapacitor, * as pkg from '../../src';
 import suite from './_suite';
 
 suite('package', ({ expect }) => {
@@ -10,10 +10,10 @@ suite('package', ({ expect }) => {
   //   expect(pkg.ActionCreator).to.be.ok;
   // });
 
-  // it('should expose Store', () => {
-  //   expect(pkg.Store).to.be.ok;
-  // });
-  //
+  it('should expose Store', () => {
+    expect(pkg.Store).to.be.ok;
+  });
+
   // it('should expose Observer', () => {
   //   expect(pkg.Observer).to.be.ok;
   // });
