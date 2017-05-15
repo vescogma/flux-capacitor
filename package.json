@@ -50,7 +50,6 @@
     "husky": "^0.13.3",
     "mocha-suite": "^1.0.9",
     "re-start": "^1.13.0",
-    "semantic-release": "^6.3.6",
     "sinon": "^2.2.0",
     "start-babel-cli": "^4.0.1",
     "tslint": "^5.2.0",
