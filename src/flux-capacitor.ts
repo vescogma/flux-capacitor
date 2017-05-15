@@ -52,6 +52,10 @@ class FluxCapacitor extends EventEmitter {
     this.store.dispatch(this.actions.selectCollection(collection));
   }
 
+  switchPage(page: number) {
+    this.store.dispatch(this.actions.updateCurrentPage(page));
+  }
+
   countRecords(collection: string) {
     this.store.dispatch(this.actions.fetchCollectionCount(collection));
   }
