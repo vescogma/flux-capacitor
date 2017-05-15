@@ -1,4 +1,4 @@
-import * as Actions from '../actions';
+import Actions from '../actions';
 import Store from '../store';
 
 export type State = Store.IsFetching;

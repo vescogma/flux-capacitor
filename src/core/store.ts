@@ -3,7 +3,7 @@ import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import * as uuid from 'uuid/v1';
 import FluxCapacitor from '../flux-capacitor';
-import * as Actions from './actions';
+import Actions from './actions';
 import reducer from './reducers';
 
 export { ReduxStore };

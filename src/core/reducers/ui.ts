@@ -1,6 +1,6 @@
-import _Action, * as Actions from '../actions';
+import Actions from '../actions';
 import Store from '../store';
-import Action = _Action.UI;
+import Action = Actions.UI;
 
 export type State = Store.UI;
 

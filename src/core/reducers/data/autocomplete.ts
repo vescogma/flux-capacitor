@@ -1,6 +1,6 @@
-import _Action, * as Actions from '../../actions';
+import Actions from '../../actions';
 import Store from '../../store';
-import Action = _Action.Autocomplete;
+import Action = Actions.Autocomplete;
 
 export type State = Store.Autocomplete;
 

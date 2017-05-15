@@ -1,4 +1,5 @@
-import Action, * as Actions from './actions';
+import ActionCreator from './action-creator';
+import Actions from './actions';
 import Adapters from './adapters';
 import * as Events from './events';
 import Observer from './observer';
@@ -7,7 +8,7 @@ import Selectors from './selectors';
 import Store, { ReduxStore } from './store';
 
 export {
-  Action,
+  ActionCreator,
   Actions,
   Adapters,
   Events,

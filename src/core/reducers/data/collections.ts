@@ -1,6 +1,6 @@
-import _Action, * as Actions from '../../actions';
+import Actions from '../../actions';
 import Store from '../../store';
-import Action = _Action.Collections;
+import Action = Actions.Collections;
 
 export type State = Store.Indexed.Selectable<Store.Collection>;
 

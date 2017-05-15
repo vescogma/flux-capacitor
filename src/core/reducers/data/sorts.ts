@@ -1,6 +1,6 @@
-import _Action, * as Actions from '../../actions';
+import Actions from '../../actions';
 import Store from '../../store';
-import Action = _Action.Sort;
+import Action = Actions.Sort;
 
 export type State = Store.Indexed.Selectable<Store.Sort.Labeled>;
 

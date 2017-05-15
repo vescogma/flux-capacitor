@@ -1,6 +1,6 @@
-import _Action, * as Actions from '../../actions';
+import Actions from '../../actions';
 import Store from '../../store';
-import Action = _Action.Navigation;
+import Action = Actions.Navigation;
 
 export type State = Store.Indexed<Store.Navigation>;
 

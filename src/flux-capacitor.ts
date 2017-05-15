@@ -1,22 +1,22 @@
 import { EventEmitter } from 'eventemitter3';
 import { BrowserBridge, Request, Results } from 'groupby-api';
 import { Sayt } from 'sayt';
-import { Actions, Events, Observer, ReduxStore, Selectors, Store } from './core';
+import * as core from './core';
 
 class FluxCapacitor extends EventEmitter {
 
-  actions: Actions.Creator = new Actions.Creator(this, { search: '/search' });
+  actions: core.ActionCreator = new core.ActionCreator(this, { search: '/search' });
   clients: {
     bridge: BrowserBridge;
     sayt: Sayt;
   } = FluxCapacitor.createClients(this);
-  store: ReduxStore<Store.State> = Store.create(this.config, Observer.listener(this));
+  store: core.ReduxStore<core.Store.State> = core.Store.create(this.config, core.Observer.listener(this));
 
   constructor(public config: FluxCapacitor.Configuration) {
     super();
   }
 
-  search(query: string = Selectors.query(this.store.getState())) {
+  search(query: string = core.Selectors.query(this.store.getState())) {
     this.store.dispatch(this.actions.updateSearch({ query }));
   }
 
@@ -64,7 +64,7 @@ class FluxCapacitor extends EventEmitter {
     return {
       bridge: FluxCapacitor.createBridge(flux.config, (err) => {
         const networkConfig = flux.config.network;
-        flux.emit(Events.ERROR_BRIDGE, err);
+        flux.emit(core.Events.ERROR_BRIDGE, err);
         if (networkConfig.errorHandler) {
           networkConfig.errorHandler(err);
         }

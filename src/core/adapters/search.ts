@@ -8,13 +8,13 @@ import {
   ValueRefinement,
   Zone,
 } from 'groupby-api';
-import Action from '../actions';
+import Actions from '../actions';
 import Store from '../store';
 import Page from './page';
 
 namespace Adapter {
 
-  export const extractQuery = (results: Results, linkMapper: (value: string) => Store.Linkable): Action.Query => ({
+  export const extractQuery = (results: Results, linkMapper: (value: string) => Store.Linkable): Actions.Query => ({
     corrected: results.correctedQuery,
     didYouMean: results.didYouMean.map(linkMapper),
     related: results.relatedQueries.map(linkMapper),
@@ -112,7 +112,7 @@ namespace Adapter {
       Object.assign(zones, { [key]: Adapter.extractZone(template.zones[key]) }), {}),
   });
 
-  export const extractPage = (state: Store.State): Action.Page => {
+  export const extractPage = (state: Store.State): Actions.Page => {
     // TODO move this default into the reducer setup
     const pageSize = state.data.page.size || 10;
     const currentPage = state.data.page.current;

@@ -1,6 +1,6 @@
-import _Action, * as Actions from '../../actions';
+import Actions from '../../actions';
 import Store from '../../store';
-import Action = _Action.Query;
+import Action = Actions.Query;
 
 export type State = Store.Query;
 

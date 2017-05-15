@@ -1,4 +1,4 @@
-import * as Actions from '../../src/core/actions';
+import ActionCreator, * as creatorPkg from '../../src/core/action-creator';
 import Observer from '../../src/core/observer';
 import Selectors from '../../src/core/selectors';
 import Store from '../../src/core/store';
@@ -10,7 +10,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
   describe('constructor()', () => {
     it('should initialize action creator, API clients and store', () => {
       const instance = { a: 'b' };
-      const creator = stub(Actions, 'Creator').returns(instance);
+      const creator = stub(creatorPkg, 'default').returns(instance);
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
       stub(Store, 'create').returns({ subscribe: () => null });
@@ -24,7 +24,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     it('should create API clients', () => {
       const clients = { a: 'b' };
       const createClients = stub(FluxCapacitor, 'createClients').returns(clients);
-      stub(Actions, 'Creator');
+      stub(creatorPkg, 'default');
       stub(Observer, 'listen');
       stub(Store, 'create').returns({ subscribe: () => null });
 
@@ -41,7 +41,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       const create = stub(Store, 'create').returns(instance);
       const listener = stub(Observer, 'listener').returns(observer);
       stub(FluxCapacitor, 'createClients');
-      stub(Actions, 'Creator');
+      stub(creatorPkg, 'default');
 
       const flux = new FluxCapacitor(config);
 
@@ -53,7 +53,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
 
   describe('actions', () => {
     let flux: FluxCapacitor;
-    let actions: Actions.Creator;
+    let actions: ActionCreator;
     let store: any;
 
     function expectDispatch(action: () => void, creatorName: string, expectedValue: any) {
@@ -68,7 +68,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     }
 
     beforeEach(() => {
-      stub(Actions, 'Creator').returns(actions = <any>{});
+      stub(creatorPkg, 'default').returns(actions = <any>{});
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
       stub(Store, 'create').returns(store = {});

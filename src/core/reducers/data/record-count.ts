@@ -1,4 +1,4 @@
-import * as Actions from '../../actions';
+import Actions from '../../actions';
 
 export type State = number;
 

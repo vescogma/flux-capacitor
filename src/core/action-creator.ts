@@ -1,18 +1,18 @@
 import { Results } from 'groupby-api';
 import { Dispatch } from 'redux';
 import { QueryTimeAutocompleteConfig, QueryTimeProductSearchConfig } from 'sayt';
-import Action, * as Actions from '.';
-import FluxCapacitor from '../../flux-capacitor';
-import Adapters from '../adapters';
-import Selectors from '../selectors';
-import Store from '../store';
-import { conditional, thunk } from '../utils';
+import FluxCapacitor from '../flux-capacitor';
+import Actions from './actions';
+import Adapters from './adapters';
+import Selectors from './selectors';
+import Store from './store';
+import { conditional, thunk } from './utils';
 
 export default class Creator {
 
   linkMapper: (value: string) => { value: string, url: string };
 
-  constructor(private flux: FluxCapacitor, paths: Action.Paths) {
+  constructor(private flux: FluxCapacitor, paths: Actions.Paths) {
     this.linkMapper = (value: string) => ({ value, url: `${paths.search}/${value}` });
   }
 
@@ -68,44 +68,44 @@ export default class Creator {
       .then((res) => dispatch(this.receiveCollectionCount(collection, res.totalRecordCount)))
 
   // request action creators
-  updateSearch = (search: Action.Search) =>
+  updateSearch = (search: Actions.Search) =>
     thunk(Actions.UPDATE_SEARCH, Object.assign(search))
 
   selectRefinement = (navigationId: string, index: number) =>
-    conditional<Action.Navigation.SelectRefinement>((state) =>
+    conditional<Actions.Navigation.SelectRefinement>((state) =>
       Selectors.isRefinementDeselected(state, navigationId, index),
       Actions.SELECT_REFINEMENT, { navigationId, index })
 
   deselectRefinement = (navigationId: string, index: number) =>
-    conditional<Action.Navigation.DeselectRefinement>((state) =>
+    conditional<Actions.Navigation.DeselectRefinement>((state) =>
       Selectors.isRefinementSelected(state, navigationId, index),
       Actions.DESELECT_REFINEMENT, { navigationId, index })
 
   selectCollection = (id: string) =>
-    conditional<Action.Collections.SelectCollection>((state) =>
+    conditional<Actions.Collections.SelectCollection>((state) =>
       state.data.collections.selected !== id,
       Actions.SELECT_COLLECTION, { id })
 
   selectSort = (id: string) =>
-    conditional<Action.Sort.UpdateSelected>((state) =>
+    conditional<Actions.Sort.UpdateSelected>((state) =>
       state.data.sorts.selected !== id,
       Actions.SELECT_SORT, { id })
 
   updatePageSize = (size: number) =>
-    conditional<Action.Page.UpdateSize>((state) =>
+    conditional<Actions.Page.UpdateSize>((state) =>
       state.data.page.size !== size,
       Actions.UPDATE_PAGE_SIZE, { size })
 
   updateCurrentPage = (page: number) =>
-    conditional<Action.Page.UpdateCurrent>((state) =>
+    conditional<Actions.Page.UpdateCurrent>((state) =>
       state.data.page.current !== page,
       Actions.UPDATE_CURRENT_PAGE, { page })
 
   updateDetailsId = (id: string) =>
-    thunk<Action.Details.UpdateId>(Actions.UPDATE_DETAILS_ID, { id })
+    thunk<Actions.Details.UpdateId>(Actions.UPDATE_DETAILS_ID, { id })
 
   updateAutocompleteQuery = (query: string) =>
-    conditional<Action.Autocomplete.UpdateQuery>((state) => {
+    conditional<Actions.Autocomplete.UpdateQuery>((state) => {
       // console.log('WTFFF', query);
       return state.data.autocomplete.query !== query;
       // return false;
@@ -129,22 +129,22 @@ export default class Creator {
       dispatch(this.receiveTemplate(Adapters.Search.extractTemplate(results.template)));
     }
 
-  receiveQuery = (query: Action.Query) =>
-    thunk<Action.Query.ReceiveQuery>(Actions.RECEIVE_QUERY, query)
+  receiveQuery = (query: Actions.Query) =>
+    thunk<Actions.Query.ReceiveQuery>(Actions.RECEIVE_QUERY, query)
 
   receiveProducts = (products: Store.Product[]) =>
     thunk(Actions.RECEIVE_PRODUCTS, { products })
 
   receiveCollectionCount = (collection: string, count: number) =>
-    thunk<Action.Collections.ReceiveCount>(
+    thunk<Actions.Collections.ReceiveCount>(
       Actions.RECEIVE_COLLECTION_COUNT, { collection, count })
 
   receiveNavigations = (navigations: Store.Navigation[]) =>
-    thunk<Action.Navigation.ReceiveNavigations>(
+    thunk<Actions.Navigation.ReceiveNavigations>(
       Actions.RECEIVE_NAVIGATIONS, { navigations })
 
-  receivePage = (page: Action.Page) =>
-    thunk<Action.Page.ReceivePage>(
+  receivePage = (page: Actions.Page) =>
+    thunk<Actions.Page.ReceivePage>(
       Actions.RECEIVE_PAGE, page)
 
   receiveTemplate = (template: Store.Template) =>
@@ -166,14 +166,14 @@ export default class Creator {
     thunk(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, { products })
 
   receiveDetailsProduct = (product: Store.Product) =>
-    thunk<Action.Details.ReceiveProduct>(Actions.RECEIVE_DETAILS_PRODUCT, { product })
+    thunk<Actions.Details.ReceiveProduct>(Actions.RECEIVE_DETAILS_PRODUCT, { product })
 
   // ui action creators
   createComponentState = (tagName: string, id: string, state: any = {}) =>
-    thunk<Action.UI.CreateComponentState>(Actions.CREATE_COMPONENT_STATE, { tagName, id, state })
+    thunk<Actions.UI.CreateComponentState>(Actions.CREATE_COMPONENT_STATE, { tagName, id, state })
 
   removeComponentState = (tagName: string, id: string) =>
-    thunk<Action.UI.RemoveComponentState>(Actions.REMOVE_COMPONENT_STATE, { tagName, id })
+    thunk<Actions.UI.RemoveComponentState>(Actions.REMOVE_COMPONENT_STATE, { tagName, id })
 
   // app action creators
   startApp = () => ({ type: Actions.START_APP });

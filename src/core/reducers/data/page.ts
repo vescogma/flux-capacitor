@@ -1,6 +1,6 @@
-import _Action, * as Actions from '../../actions';
+import Actions from '../../actions';
 import Store from '../../store';
-import Action = _Action.Page;
+import Action = Actions.Page;
 
 export type State = Store.Page;
 
