@@ -1,4 +1,6 @@
-import ActionCreator, * as creatorPkg from '../../src/core/action-creator';
+import { EventEmitter } from 'eventemitter3';
+import * as core from '../../src/core';
+import ActionCreator from '../../src/core/action-creator';
 import Observer from '../../src/core/observer';
 import Selectors from '../../src/core/selectors';
 import Store from '../../src/core/store';
@@ -8,12 +10,12 @@ import suite from './_suite';
 suite('FluxCapacitor', ({ expect, spy, stub }) => {
 
   describe('constructor()', () => {
-    it('should initialize action creator, API clients and store', () => {
+    it('should initialize action creator', () => {
       const instance = { a: 'b' };
-      const creator = stub(creatorPkg, 'default').returns(instance);
+      const creator = stub(core, 'ActionCreator').returns(instance);
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
-      stub(Store, 'create').returns({ subscribe: () => null });
+      stub(Store, 'create');
 
       const flux = new FluxCapacitor(<any>{});
 
@@ -24,9 +26,9 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     it('should create API clients', () => {
       const clients = { a: 'b' };
       const createClients = stub(FluxCapacitor, 'createClients').returns(clients);
-      stub(creatorPkg, 'default');
+      stub(core, 'ActionCreator');
       stub(Observer, 'listen');
-      stub(Store, 'create').returns({ subscribe: () => null });
+      stub(Store, 'create');
 
       const flux = new FluxCapacitor(<any>{});
 
@@ -41,13 +43,22 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       const create = stub(Store, 'create').returns(instance);
       const listener = stub(Observer, 'listener').returns(observer);
       stub(FluxCapacitor, 'createClients');
-      stub(creatorPkg, 'default');
+      stub(core, 'ActionCreator');
 
       const flux = new FluxCapacitor(config);
 
       expect(flux.store).to.eq(instance);
       expect(create.calledWith(config, observer)).to.be.true;
       expect(listener.calledWith(flux));
+    });
+
+    it('should extend EventEmitter', () => {
+      stub(core, 'ActionCreator');
+      stub(FluxCapacitor, 'createClients');
+      stub(Observer, 'listen');
+      stub(Store, 'create');
+
+      expect(new FluxCapacitor(<any>{})).to.be.an.instanceOf(EventEmitter);
     });
   });
 
@@ -68,7 +79,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     }
 
     beforeEach(() => {
-      stub(creatorPkg, 'default').returns(actions = <any>{});
+      stub(core, 'ActionCreator').returns(actions = <any>{});
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
       stub(Store, 'create').returns(store = {});
