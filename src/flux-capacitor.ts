@@ -5,11 +5,17 @@ import * as core from './core';
 
 class FluxCapacitor extends EventEmitter {
 
+  /**
+   * actions for modifying contents of the store
+   */
   actions: core.ActionCreator = new core.ActionCreator(this, { search: '/search' });
-  clients: {
-    bridge: BrowserBridge;
-    sayt: Sayt;
-  } = FluxCapacitor.createClients(this);
+  /**
+   * instances of all microservice clients
+   */
+  clients: FluxCapacitor.Clients = FluxCapacitor.createClients(this);
+  /**
+   * instance of the state store
+   */
   store: core.ReduxStore<core.Store.State> = core.Store.create(this.config, core.Observer.listener(this));
 
   constructor(public config: FluxCapacitor.Configuration) {
@@ -117,6 +123,7 @@ namespace FluxCapacitor {
       default: string;
     };
 
+    // state initial configuration for SAYT
     autocomplete?: {
       area?: string;
       collection?: string;
@@ -131,6 +138,7 @@ namespace FluxCapacitor {
       overrides?: any;
     };
 
+    // state initial configuration for Searchandiser
     search?: {
       fields?: string[]; // should be auto-generated from structure
       pageSize?: number | {
@@ -161,6 +169,11 @@ namespace FluxCapacitor {
       skipCache?: boolean;
       skipSemantish?: boolean;
     }
+  }
+
+  export interface Clients {
+    bridge: BrowserBridge;
+    sayt: Sayt;
   }
 }
 
