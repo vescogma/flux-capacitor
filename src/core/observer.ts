@@ -77,6 +77,7 @@ namespace Observer {
 
     return {
       data: {
+        // TODO break this into individual events, makes rendering easier
         autocomplete: Object.assign(emit(Events.AUTOCOMPLETE_UPDATED), {
           products: emit(Events.AUTOCOMPLETE_PRODUCTS_UPDATED),
           query: emit(Events.AUTOCOMPLETE_QUERY_UPDATED),
