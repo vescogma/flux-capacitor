@@ -86,14 +86,14 @@ export default class Creator {
       state.data.collections.selected !== id,
       Actions.SELECT_COLLECTION, { id })
 
-  selectSort = (id: string) =>
+  selectSort = (index: number) =>
     conditional<Actions.Sort.UpdateSelected>((state) =>
-      state.data.sorts.selected !== id,
-      Actions.SELECT_SORT, { id })
+      state.data.sorts.selected !== index,
+      Actions.SELECT_SORT, { index })
 
   updatePageSize = (size: number) =>
     conditional<Actions.Page.UpdateSize>((state) =>
-      state.data.page.size !== size,
+      Selectors.pageSize(state) !== size,
       Actions.UPDATE_PAGE_SIZE, { size })
 
   updateCurrentPage = (page: number) =>

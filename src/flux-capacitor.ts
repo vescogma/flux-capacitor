@@ -10,6 +10,10 @@ class FluxCapacitor extends EventEmitter {
    */
   actions: core.ActionCreator = new core.ActionCreator(this, { search: '/search' });
   /**
+   * selector functions for extracting data from the store
+   */
+  selectors: typeof core.Selectors = core.Selectors;
+  /**
    * instances of all microservice clients
    */
   clients: FluxCapacitor.Clients = FluxCapacitor.createClients(this);
@@ -21,6 +25,8 @@ class FluxCapacitor extends EventEmitter {
   constructor(public config: FluxCapacitor.Configuration) {
     super();
   }
+
+  /* ACTION SUGAR */
 
   search(query: string = core.Selectors.query(this.store.getState())) {
     this.store.dispatch(this.actions.updateSearch({ query }));
@@ -38,8 +44,8 @@ class FluxCapacitor extends EventEmitter {
     this.store.dispatch(this.actions.updatePageSize(pageSize));
   }
 
-  sort(label: string) {
-    this.store.dispatch(this.actions.selectSort(label));
+  sort(index: number) {
+    this.store.dispatch(this.actions.selectSort(index));
   }
 
   refine(navigationName: string, index: number) {
@@ -70,6 +76,9 @@ class FluxCapacitor extends EventEmitter {
     this.store.dispatch(this.actions.updateAutocompleteQuery(query));
   }
 
+  /**
+   * create instances of all clients used to contact microservices
+   */
   static createClients(flux: FluxCapacitor) {
     return {
       bridge: FluxCapacitor.createBridge(flux.config, (err) => {
@@ -83,6 +92,9 @@ class FluxCapacitor extends EventEmitter {
     };
   }
 
+  /**
+   * create instance of Searchandiser API client
+   */
   static createBridge(config: FluxCapacitor.Configuration, errorHandler: (err: Error) => void) {
     const networkConfig = config.network;
     const bridge = new BrowserBridge(config.customerId, networkConfig.https, networkConfig);
@@ -94,6 +106,9 @@ class FluxCapacitor extends EventEmitter {
     return bridge;
   }
 
+  /**
+   * create instance of SAYT API client
+   */
   static createSayt(config: FluxCapacitor.Configuration) {
     const saytConfig = config.autocomplete;
 
@@ -105,6 +120,9 @@ class FluxCapacitor extends EventEmitter {
     });
   }
 
+  /**
+   * extract current collection from config
+   */
   static extractCollection(config: FluxCapacitor.Configuration) {
     return typeof config.collection === 'object' ? config.collection.default : config.collection;
   }
@@ -112,61 +130,142 @@ class FluxCapacitor extends EventEmitter {
 
 namespace FluxCapacitor {
   export interface Configuration {
+    /**
+     * GroupBy customer ID
+     */
     customerId: string;
+    /**
+     * ID unique to the viewer of the rendered page
+     */
     visitorId?: string;
+    /**
+     * ID unique to the session of the viewer of the rendered page
+     */
     sessionId?: string;
 
+    /**
+     * area of search data
+     */
     area?: string;
+    /**
+     * input language for the search engine
+     */
     language?: string;
-    collection?: string | {
-      options: string[];
-      default: string;
-    };
+    /**
+     * collection of search data or collection options
+     */
+    collection?: ValueOptions<string>;
 
-    // state initial configuration for SAYT
+    /**
+     * state initial configuration for SAYT
+     */
     autocomplete?: {
+      /**
+       * area override
+       */
       area?: string;
+      /**
+       * collection override
+       */
       collection?: string;
+      /**
+       * language override
+       */
       language?: string;
+      /**
+       * category field used to render sayt results
+       */
       category?: string;
+      /**
+       * number of suggestions to request
+       */
       suggestionCount?: number;
+      /**
+       * number of navigations to request
+       */
       navigationCount?: number;
+      /**
+       * number of products to request
+       */
       productCount?: number;
-      // map of field to label, also restricts displayed navigations
+      /**
+       * map of field to label, also restricts displayed navigations if provided
+       */
       navigations?: { [field: string]: string };
-      defaults?: any;
-      overrides?: any;
+      /**
+       * default request values
+       */
+      defaults?: object;
+      /**
+       * override any computed request value
+       */
+      overrides?: object;
     };
 
-    // state initial configuration for Searchandiser
+    /**
+     * state initial configuration for Searchandiser
+     */
     search?: {
-      fields?: string[]; // should be auto-generated from structure
-      pageSize?: number | {
-        options: number[];
-        default: number;
-      };
-      sort?: { field: string, descending?: boolean } | {
-        options: Array<{
-          label: string; // the problem with label being the key is multilingual
-          field: string;
-          descending?: boolean;
-        }>;
-        default: string; // label
-      };
-      defaults?: Request; // unhandled options
-      overrides?: Request; // applied before request is sent
+      /**
+       * product fields to request
+       * auto-generated from structure if not provided
+       */
+      fields?: string[];
+      /**
+       * number of products to request or sort options and default
+       */
+      pageSize?: ValueOptions<number>;
+      /**
+       * sorting of products or sort options and default
+       */
+      sort?: ValueOptions<{
+        /**
+         * field path to sort on
+         */
+        field: string;
+        descending?: boolean;
+      }>;
+      /**
+       * default request values
+       */
+      defaults?: Request;
+      /**
+       * override any computed request value
+       */
+      overrides?: Request;
     };
 
+    /**
+     * network request configuration
+     */
     network?: Bridge.Configuration;
   }
 
   export namespace Bridge {
     export interface Configuration {
+      /**
+       * map of headers to send with search requests
+       */
       headers?: { [key: string]: string };
+      /**
+       * send requests over HTTPS
+       */
       https?: boolean;
+      /**
+       * connection timeout for search requests
+       */
       timeout?: number;
+      /**
+       * global request error handler
+       */
       errorHandler?: (error: Error) => void;
+      /**
+       * add SkipCache header to search requests
+       */
       skipCache?: boolean;
+      /**
+       * add SkipSemantish header to search requests
+       */
       skipSemantish?: boolean;
     }
   }
@@ -175,6 +274,8 @@ namespace FluxCapacitor {
     bridge: BrowserBridge;
     sayt: Sayt;
   }
+
+  export type ValueOptions<T> = T | { options: T[], default: T };
 }
 
 export default FluxCapacitor;

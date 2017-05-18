@@ -3,12 +3,13 @@ import Store from './store';
 
 namespace Selectors {
 
-  // export const searchRequest = (store: Store.State): Request => ({
+  // export const searchRequest = (state: Store.State): Request => ({
   export const searchRequest = (state: Store.State): Request => (<any>{
     query: Selectors.query(state),
     collection: Selectors.collection(state),
     refinements: Selectors.selectedRefinements(state),
-    // sort: store.data.sorts.allIds.map((id) => store.data.sorts.byId[id]),
+    pageSize: Selectors.pageSize(state),
+    sort: Selectors.requestSort(Selectors.sort(state))
   });
 
   export const query = (state: Store.State) =>
@@ -16,6 +17,15 @@ namespace Selectors {
 
   export const collection = (state: Store.State) =>
     state.data.collections.selected;
+
+  export const pageSize = (state: Store.State) =>
+    state.data.page.sizes.items[state.data.page.sizes.selected];
+
+  export const requestSort = ({ field, descending }: Store.Sort) =>
+    ({ field, order: descending && 'Descending' });
+
+  export const sort = (state: Store.State) =>
+    state.data.sorts.items[state.data.sorts.selected];
 
   export const selectedRefinements = (state: Store.State) =>
     Selectors.navigations(state)

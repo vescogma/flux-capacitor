@@ -2,11 +2,10 @@ import Actions from '../../actions';
 import Store from '../../store';
 import Action = Actions.Sort;
 
-export type State = Store.Indexed.Selectable<Store.Sort.Labeled>;
+export type State = Store.SelectableList<Store.Sort>;
 
 export const DEFAULTS: State = {
-  allIds: [],
-  byId: {},
+  items: []
 };
 
 export default function updateSorts(state: State = DEFAULTS, action): State {
@@ -16,5 +15,5 @@ export default function updateSorts(state: State = DEFAULTS, action): State {
   }
 }
 
-export const updateSelected = (state: State, { id: selected }: Action.UpdateSelected) =>
+export const updateSelected = (state: State, { index: selected }: Action.UpdateSelected) =>
   ({ ...state, selected });

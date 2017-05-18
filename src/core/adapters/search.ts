@@ -9,6 +9,7 @@ import {
   Zone,
 } from 'groupby-api';
 import Actions from '../actions';
+import Selectors from '../selectors';
 import Store from '../store';
 import Page from './page';
 
@@ -113,8 +114,7 @@ namespace Adapter {
   });
 
   export const extractPage = (state: Store.State): Actions.Page => {
-    // TODO move this default into the reducer setup
-    const pageSize = state.data.page.size || 10;
+    const pageSize = Selectors.pageSize(state);
     const currentPage = state.data.page.current;
     const totalRecords = state.data.recordCount;
     const last = Page.finalPage(pageSize, totalRecords);

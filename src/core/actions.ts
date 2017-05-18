@@ -171,7 +171,7 @@ namespace Actions {
 
   export namespace Sort {
     export interface UpdateSelected extends Base {
-      id: string;
+      index: number;
     }
   }
 

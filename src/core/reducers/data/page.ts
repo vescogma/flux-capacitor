@@ -4,12 +4,17 @@ import Action = Actions.Page;
 
 export type State = Store.Page;
 
+export const DEFAULT_PAGE_SIZE = 10;
 export const DEFAULTS: State = {
   current: 1,
   first: 1,
+  from: 1,
   limit: 5,
   range: [],
-  size: 10,
+  sizes: {
+    items: [DEFAULT_PAGE_SIZE],
+    selected: 0
+  },
 };
 
 export default function updatePage(state: State = DEFAULTS, action): State {
@@ -34,8 +39,10 @@ export const resetPage = (state: State) =>
 export const updateCurrent = (state: State, { page: current }: Action.UpdateCurrent) =>
   ({ ...state, current });
 
-export const updateSize = (state: State, { size }: Action.UpdateSize) =>
-  ({ ...state, current: 1, size });
+export const updateSize = (state: State, { size }: Action.UpdateSize) => {
+  const selected = state.sizes.items.findIndex((pageSize) => pageSize === size);
+  return selected === -1 ? state : { ...state, current: 1, sizes: { ...state.sizes, selected } };
+};
 
 export const receivePage = (state: State, { from, to, last, next, previous, range }: Action.ReceivePage) =>
   ({ ...state, from, to, last, next, previous, range });

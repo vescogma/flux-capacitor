@@ -71,7 +71,7 @@ namespace Observer {
   export function create(flux: FluxCapacitor) {
     const emit = (event: string) => (_, newValue, path) => {
       flux.emit(event, newValue);
-      flux.emit(Events.OBSERVER_NODE_CHANGED, path);
+      flux.emit(Events.OBSERVER_NODE_CHANGED, `${path} : ${event} ${JSON.stringify(newValue)}`);
     };
     let called = 0;
 
@@ -103,7 +103,7 @@ namespace Observer {
 
         page: Object.assign(emit(Events.PAGE_UPDATED), {
           current: emit(Events.CURRENT_PAGE_UPDATED),
-          size: emit(Events.PAGE_SIZE_UPDATED),
+          sizes: emit(Events.PAGE_SIZE_UPDATED)
         }),
 
         products: emit(Events.PRODUCTS_UPDATED),

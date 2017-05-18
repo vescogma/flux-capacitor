@@ -18,7 +18,6 @@ namespace Page {
 
   export function fromResult(currentPage: number, pageSize: number) {
     return currentPage * pageSize + 1;
-    // TODO move the default value into reducer setup
     // return this.flux.query.build().skip + 1 || 1;
   }
 

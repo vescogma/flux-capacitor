@@ -5,8 +5,11 @@ import * as uuid from 'uuid/v1';
 import FluxCapacitor from '../flux-capacitor';
 import Actions from './actions';
 import reducer from './reducers';
+import * as PageReducer from './reducers/data/page';
 
 export { ReduxStore };
+
+export const DEFAULT_COLLECTION = 'default';
 
 export const RECALL_CHANGE_ACTIONS = [
   Actions.UPDATE_SEARCH,
@@ -35,9 +38,17 @@ export const idGenerator = (key: string, actions: string[]) =>
 
 namespace Store {
 
-  export function extractCollectionsState(config: FluxCapacitor.Configuration): Indexed.Selectable<Collection> {
-    const selected = typeof config.collection === 'object' ? config.collection.default : config.collection;
-    const allIds = typeof config.collection === 'object' && config.collection.options || [];
+  export function extractIndexedState(state: string | { options: string[], default: string }) {
+    if (typeof state === 'object') {
+      return { selected: state.default, allIds: state.options || [state.default] };
+    } else {
+      return { selected: state, allIds: [state] };
+    }
+  }
+
+  // tslint:disable-next-line max-line-length
+  export function extractCollectionsState(config: FluxCapacitor.Configuration, defaultValue: string): Indexed.Selectable<Collection> {
+    const { selected, allIds } = Store.extractIndexedState(config.collection || defaultValue);
 
     return {
       selected,
@@ -46,10 +57,43 @@ namespace Store {
     };
   }
 
+  // tslint:disable-next-line max-line-length
+  export function extractPageSizeState(config: FluxCapacitor.Configuration, defaultValue: number): SelectableList<number> {
+    const state = config.search.pageSize || defaultValue;
+    if (typeof state === 'object') {
+      const selected = state.default;
+      const items = state.options || [defaultValue];
+      const selectedIndex = items.findIndex((pageSize) => pageSize === selected);
+
+      return { items, selected: selectedIndex === -1 ? 0 : selectedIndex };
+    } else {
+      return { selected: 0, items: [state] };
+    }
+  }
+
+  export function extractSortState(config: FluxCapacitor.Configuration): SelectableList<Sort> {
+    const state = config.search.sort;
+    if (typeof state === 'object' && ('options' in state || 'default' in state)) {
+      const selected: Sort = (<{ default: Sort }>state).default || <any>{};
+      const items = ((<{ options: Sort[] }>state).options || []);
+      const selectedIndex = items
+        .findIndex((sort) => sort.field === selected.field && !sort.descending === !selected.descending);
+
+      return { items, selected: selectedIndex === -1 ? 0 : selectedIndex };
+    } else {
+      return { selected: 0, items: [<Sort>state] };
+    }
+  }
+
   export function extractInitialState(config: FluxCapacitor.Configuration): Partial<State> {
     return {
       data: <any>{
-        collections: Store.extractCollectionsState(config)
+        collections: Store.extractCollectionsState(config, DEFAULT_COLLECTION),
+        sorts: Store.extractSortState(config),
+        page: {
+          ...PageReducer.DEFAULTS,
+          sizes: Store.extractPageSizeState(config, PageReducer.DEFAULT_PAGE_SIZE)
+        }
       }
     };
   }
@@ -81,7 +125,7 @@ namespace Store {
     data: {
       query: Query; // mixed
 
-      sorts: Indexed.Selectable<Sort.Labeled>; // pre
+      sorts: SelectableList<Sort>;
       products: Product[]; // post
       collections: Indexed.Selectable<Collection>; // mixed
       navigations: Indexed<Navigation>; // mixed
@@ -137,20 +181,11 @@ namespace Store {
     descending?: boolean;
   }
 
-  export namespace Sort {
-    export interface Labeled extends Sort {
-      /**
-       * byId key
-       */
-      label: string;
-    }
-  }
-
   export interface Page {
     /**
      * number of products per page
      */
-    size: number; // pre
+    sizes: SelectableList<number>; // mixed
 
     /**
      * current page number
@@ -298,6 +333,11 @@ namespace Store {
       field?: string; // static
       values: string[]; // post
     }
+  }
+
+  export interface SelectableList<T> {
+    items: T[];
+    selected?: number;
   }
 
   export interface Indexed<T> {
