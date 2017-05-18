@@ -4,13 +4,17 @@ import Store from './store';
 namespace Selectors {
 
   // export const searchRequest = (state: Store.State): Request => ({
-  export const searchRequest = (state: Store.State): Request => (<any>{
-    query: Selectors.query(state),
-    collection: Selectors.collection(state),
-    refinements: Selectors.selectedRefinements(state),
-    pageSize: Selectors.pageSize(state),
-    sort: Selectors.requestSort(Selectors.sort(state))
-  });
+  export const searchRequest = (state: Store.State): Request => {
+    const sort = Selectors.sort(state);
+
+    return <any>{
+      query: Selectors.query(state),
+      collection: Selectors.collection(state),
+      refinements: Selectors.selectedRefinements(state),
+      pageSize: Selectors.pageSize(state),
+      sort: sort && Selectors.requestSort(sort)
+    };
+  };
 
   export const query = (state: Store.State) =>
     state.data.query.original;
