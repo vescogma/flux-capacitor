@@ -98,7 +98,7 @@ export default class Creator {
 
   updateCurrentPage = (page: number) =>
     conditional<Actions.Page.UpdateCurrent>((state) =>
-      state.data.page.current !== page,
+      page !== null && state.data.page.current !== page,
       Actions.UPDATE_CURRENT_PAGE, { page })
 
   updateDetailsId = (id: string) =>
@@ -125,7 +125,7 @@ export default class Creator {
       dispatch(this.receiveNavigations(Adapters.Search.combineNavigations(results.availableNavigation, results.selectedNavigation)));
       dispatch(this.receiveRecordCount(results.totalRecordCount));
       dispatch(this.receiveCollectionCount(state.data.collections.selected, results.totalRecordCount));
-      dispatch(this.receivePage(Adapters.Search.extractPage(state)));
+      dispatch(this.receivePage(Adapters.Search.extractPage(state, results)));
       dispatch(this.receiveTemplate(Adapters.Search.extractTemplate(results.template)));
     }
 

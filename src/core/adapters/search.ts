@@ -113,19 +113,22 @@ namespace Adapter {
       Object.assign(zones, { [key]: Adapter.extractZone(template.zones[key]) }), {}),
   });
 
-  export const extractPage = (state: Store.State): Actions.Page => {
+  export const extractPage = (state: Store.State, data): Actions.Page => {
     const pageSize = Selectors.pageSize(state);
     const currentPage = state.data.page.current;
-    const totalRecords = state.data.recordCount;
+    const totalRecords = data.totalRecordCount;
     const last = Page.finalPage(pageSize, totalRecords);
+    const pageInfo = data.pageInfo;
+    const from = Page.fromResult(currentPage, pageSize);
+    const to = Page.toResult(currentPage, pageSize, totalRecords);
 
     return {
-      from: Page.fromResult(currentPage, pageSize),
+      from,
       last,
       next: Page.nextPage(currentPage, last),
       previous: Page.previousPage(currentPage),
       range: Page.pageNumbers(currentPage, last, state.data.page.limit),
-      to: Page.toResult(currentPage, pageSize, totalRecords),
+      to,
     };
   };
 

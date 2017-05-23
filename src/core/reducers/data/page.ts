@@ -33,16 +33,19 @@ export default function updatePage(state: State = DEFAULTS, action): State {
 }
 
 // conditional reducer here only because reset page is a side effect of other actions
-export const resetPage = (state: State) =>
-  state.current === 1 ? state : ({ ...state, current: 1 });
+export function resetPage(state: State) {
+  return state.current === 1 ? state : { ...state, current: 1 };
+}
 
-export const updateCurrent = (state: State, { page: current }: Action.UpdateCurrent) =>
-  ({ ...state, current });
+export function updateCurrent(state: State, { page: current }: Action.UpdateCurrent) {
+   return { ...state, current };
+ }
 
-export const updateSize = (state: State, { size }: Action.UpdateSize) => {
+export function updateSize(state: State, { size }: Action.UpdateSize) {
   const selected = state.sizes.items.findIndex((pageSize) => pageSize === size);
   return selected === -1 ? state : { ...state, current: 1, sizes: { ...state.sizes, selected } };
-};
+}
 
-export const receivePage = (state: State, { from, to, last, next, previous, range }: Action.ReceivePage) =>
-  ({ ...state, from, to, last, next, previous, range });
+export function receivePage(state: State, { from, to, last, next, previous, range }: Action.ReceivePage) {
+  return { ...state, from, to, last, next, previous, range };
+}

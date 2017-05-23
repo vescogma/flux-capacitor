@@ -5,7 +5,7 @@ const MAX_RECORDS = 10000;
 namespace Page {
 
   export function previousPage(currentPage: number) {
-    return currentPage > 1 ? currentPage - 1 : null;
+    return currentPage - 1 >= 1 ? currentPage - 1 : null;
   }
 
   export function nextPage(currentPage: number, finalPage: number) {
@@ -13,17 +13,19 @@ namespace Page {
   }
 
   export function finalPage(pageSize: number, totalRecords: number) {
-    return Math.max(Page.getPage(pageSize, Page.restrictTotalRecords(pageSize, totalRecords)), 1);
+    return Math.max(Math.ceil(totalRecords / pageSize), 1);
   }
 
   export function fromResult(currentPage: number, pageSize: number) {
-    return currentPage * pageSize + 1;
+    return (currentPage - 1) * pageSize + 1;
+    // TODO move the default value into reducer setup
     // return this.flux.query.build().skip + 1 || 1;
   }
 
   export function toResult(currentPage: number, pageSize: number, totalRecords: number) {
     if ((currentPage * pageSize) > totalRecords) {
-      return ((currentPage - 1) * pageSize) + (totalRecords % currentPage);
+      const total = (currentPage - 1) * pageSize;
+      return total + (totalRecords % total);
     } else {
       return currentPage * pageSize;
     }
@@ -46,10 +48,6 @@ namespace Page {
     } else {
       return totalRecords;
     }
-  }
-
-  export function getPage(pageSize: number, totalRecords: number) {
-    return Math.ceil(totalRecords / pageSize);
   }
 
   export function transformPages(currentPage: number, finalPage: number, limit: number) {
