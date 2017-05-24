@@ -34,27 +34,15 @@ namespace Observer {
     };
   }
 
-  export function shouldObserve(oldState: any, newState: any, observer: Node): observer is Observer {
-    // double check this logic
-    return typeof observer === 'function'
-      && !(INDEXED in observer && oldState.allIds === newState.allIds);
-  }
-
   export function resolve(oldState: any, newState: any, observer: Node, path: string) {
     if (oldState !== newState) {
-      // if (Observer.shouldObserve(oldState, newState, observer)) {
       if (typeof observer === 'function') {
         observer(oldState, newState, path);
       }
 
-      // if (INDEXED in observer && 'allIds' in newState && oldState.allIds === newState.allIds) {
-      //   Object.keys(newState.allIds)
-      //     .forEach((key) => Observer.resolveIndexed(oldState.byId[key], newState.byId[key], observer[INDEXED]));
-      // }
-
       Object.keys(observer)
-        .forEach((key) => Observer.resolve((
-          oldState || {})[key],
+        .forEach((key) => Observer.resolve(
+          (oldState || {})[key],
           (newState || {})[key],
           observer[key],
           `${path}.${key}`
@@ -62,10 +50,16 @@ namespace Observer {
     }
   }
 
-  export function resolveIndexed(oldState: any, newState: any, observer: Observer, path: string) {
+  export function terminal(oldState: any, newState: any, observer: Observer, path: string) {
     if (oldState !== newState) {
       observer(oldState, newState, path);
     }
+  }
+
+  export function indexed(emit: Observer) {
+    return (oldState, newState, path) =>
+      Object.keys(newState)
+        .forEach((key) => Observer.terminal(oldState[key], newState[key], emit, `${path}.${key}`));
   }
 
   export function create(flux: FluxCapacitor) {
@@ -73,7 +67,6 @@ namespace Observer {
       flux.emit(event, newValue);
       flux.emit(Events.OBSERVER_NODE_CHANGED, `${path} : ${event} ${JSON.stringify(newValue)}`);
     };
-    let called = 0;
 
     return {
       data: {
@@ -84,7 +77,7 @@ namespace Observer {
         }),
 
         collections: {
-          [INDEXED]: (_, newIndexed) => flux.emit(`${Events.COLLECTION_UPDATED}:${newIndexed.name}`, newIndexed),
+          byId: Observer.indexed(emit(Events.COLLECTION_UPDATED)),
           selected: emit(Events.SELECTED_COLLECTION_UPDATED),
         },
 
@@ -124,21 +117,20 @@ namespace Observer {
 
         template: emit(Events.TEMPLATE_UPDATED),
       },
-      isRunning: (oldState, newState) => {
+      isRunning: (oldState, newState, path) => {
         if (newState) {
-          flux.emit(Events.APP_STARTED);
+          emit(Events.APP_STARTED)(oldState, newState, path);
         } else if (oldState) {
-          flux.emit(Events.APP_KILLED);
+          emit(Events.APP_KILLED)(oldState, newState, path);
         }
       },
-      isFetching: (oldState, newState) => {
+      isFetching: (oldState, newState) =>
         Object.keys(newState)
           .forEach((key) => {
             if (!oldState[key] && newState[key]) {
               flux.emit(FETCH_EVENTS[key]);
             }
-          });
-      },
+          }),
       session: {
         recallId: emit(Events.RECALL_CHANGED),
         searchId: emit(Events.SEARCH_CHANGED)
