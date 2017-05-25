@@ -65,3 +65,7 @@ export const APP_KILLED = 'app:killed';
 
 // observer events
 export const OBSERVER_NODE_CHANGED = 'observer:node_changed';
+
+// tag events
+export const TAG_LIFECYCLE = 'tag:lifecycle';
+export const TAG_ALIASING = 'tag:aliasing';

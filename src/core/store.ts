@@ -88,6 +88,7 @@ namespace Store {
   export function extractInitialState(config: FluxCapacitor.Configuration): Partial<State> {
     return {
       data: <any>{
+        fields: config.search.fields || [],
         collections: Store.extractCollectionsState(config, DEFAULT_COLLECTION),
         sorts: Store.extractSortState(config),
         page: {
@@ -141,6 +142,8 @@ namespace Store {
       recordCount: number; // post
 
       redirect?: string; // post
+
+      fields: string[]; // static
 
       errors: string[]; // post
       warnings: string[]; // post

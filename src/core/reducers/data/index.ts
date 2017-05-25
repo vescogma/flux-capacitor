@@ -19,6 +19,7 @@ export default redux.combineReducers({
   collections,
   details,
   errors,
+  fields: (state = []) => state,
   navigations,
   page,
   products,
