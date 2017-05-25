@@ -27,9 +27,8 @@ export default function updateNavigations(state: State = DEFAULTS, action) {
 }
 
 export const updateSearch = (state: State, { navigationId, index: refinementIndex }: Action.UpdateSearch) => {
-  const byId = state.allIds.reduce(
-    (navs, nav) => Object.assign(navs, { [nav]: { ...state.byId[nav], selected: [] } }), {},
-  );
+  const byId = state.allIds.reduce((navs, nav) =>
+    Object.assign(navs, { [nav]: { ...state.byId[nav], selected: [] } }), {});
   if (!(navigationId && refinementIndex != null)) {
     return {
       ...state,
@@ -52,9 +51,8 @@ export const updateSearch = (state: State, { navigationId, index: refinementInde
 
 export const receiveNavigations = (state: State, { navigations }: Action.ReceiveNavigations) => {
   const allIds = navigations.map((nav) => nav.field);
-  const byId = navigations.reduce(
-    (navs, nav) => Object.assign(navs, { [nav.field]: { ...nav, selected: [] } }), {},
-  );
+  const byId = navigations.reduce((navs, nav) =>
+    Object.assign(navs, { [nav.field]: nav }), {});
   return {
     ...state,
     allIds,

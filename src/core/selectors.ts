@@ -42,11 +42,12 @@ namespace Selectors {
   export const selectedRefinements = (state: Store.State) =>
     Selectors.navigations(state)
       .reduce((allRefinements, navigation) =>
-        navigation.selected.map<any>((refinementIndex) => navigation.refinements[refinementIndex])
-          .reduce((refs, { field, type, low, high, value }) =>
+        allRefinements.concat(navigation.selected
+          .map<any>((refinementIndex) => navigation.refinements[refinementIndex])
+          .reduce((refs, { low, high, value }) =>
             refs.concat(navigation.range
-              ? { navigationName: field, type: 'Range', high, low }
-              : { navigationName: field, type: 'Value', value }), []), []);
+              ? { navigationName: navigation.field, type: 'Range', high, low }
+              : { navigationName: navigation.field, type: 'Value', value }), [])), []);
 
   export const navigation = (state: Store.State, navigationId: string) =>
     state.data.navigations.byId[navigationId];

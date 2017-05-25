@@ -5,7 +5,6 @@ import Store from './store';
 import { rayify } from './utils';
 
 export const DETAIL_QUERY_INDICATOR = 'gbiDetailQuery';
-export const INDEXED = Symbol();
 export const FETCH_EVENTS = {
   autocompleteProducts: Events.FETCH_AUTOCOMPLETE_PRODUCTS_DONE,
   autocompleteSuggestions: Events.FETCH_AUTOCOMPLETE_SUGGESTIONS_DONE,
@@ -86,13 +85,21 @@ namespace Observer {
           product: emit(Events.DETAILS_PRODUCT_UPDATED),
         },
 
-        navigations: Object.assign(emit(Events.NAVIGATIONS_UPDATED), {
-          [INDEXED]: (oldNavigation, newNavigation) => {
-            if (oldNavigation.selected !== newNavigation.selected) {
-              flux.emit(`${Events.SELECTED_REFINEMENTS_UPDATED}:${newNavigation.field}`, newNavigation.selected);
-            }
-          },
-        }),
+        // tslint:disable-next-line max-line-length
+        navigations: ((emitIndexUpdated) => (oldState: Store.Indexed<Store.Navigation>, newState: Store.Indexed<Store.Navigation>, path) => {
+          if (oldState.allIds !== newState.allIds) {
+            emitIndexUpdated(oldState, newState, path);
+          } else {
+            newState.allIds.forEach((id) => {
+              const oldNavigation = oldState.byId[id];
+              const newNavigation = newState.byId[id];
+              if (oldNavigation.selected !== newNavigation.selected) {
+                // tslint:disable-next-line max-line-length
+                emit(`${Events.SELECTED_REFINEMENTS_UPDATED}:${id}`)(oldNavigation, newNavigation, `${path}.byId.${id}`);
+              }
+            });
+          }
+        })(emit(Events.NAVIGATIONS_UPDATED)),
 
         page: Object.assign(emit(Events.PAGE_UPDATED), {
           current: emit(Events.CURRENT_PAGE_UPDATED),
