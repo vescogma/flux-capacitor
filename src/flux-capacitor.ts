@@ -29,7 +29,7 @@ class FluxCapacitor extends EventEmitter {
   /* ACTION SUGAR */
 
   search(query: string = core.Selectors.query(this.store.getState())) {
-    this.store.dispatch(this.actions.updateSearch({ query }));
+    this.store.dispatch(this.actions.updateSearch({ query, clear: true }));
   }
 
   refinements(navigationName: string) {
@@ -38,6 +38,10 @@ class FluxCapacitor extends EventEmitter {
 
   reset(query: string = null, { field: navigationId, index }: { field: string, index: number } = <any>{}) {
     this.store.dispatch(this.actions.updateSearch({ query, navigationId, index, clear: true }));
+  }
+
+  resetQuery() {
+    this.store.dispatch(this.actions.updateSearch({ query: null }));
   }
 
   resize(pageSize: number) {
