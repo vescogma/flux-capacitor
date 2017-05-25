@@ -90,7 +90,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       it('should updateSearch() action', () => {
         const query = 'black bear';
 
-        expectDispatch(() => flux.search(query), 'updateSearch', { query });
+        expectDispatch(() => flux.search(query), 'updateSearch', { query, clear: true });
       });
 
       it('should revert to current query value', () => {
@@ -100,7 +100,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
         const querySelector = stub(Selectors, 'query').returns(selectedQuery);
         store.getState = () => state;
 
-        expectDispatch(() => flux.search(), 'updateSearch', { query: selectedQuery });
+        expectDispatch(() => flux.search(), 'updateSearch', { query: selectedQuery, clear: true });
         expect(querySelector.calledWith(state)).to.be.true;
       });
     });
