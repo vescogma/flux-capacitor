@@ -1,6 +1,6 @@
 {
   "name": "@storefront/flux-capacitor",
-  "version": "0.0.15-development",
+  "version": "0.0.16-development",
   "description": "State management for StoreFront",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   "files": [
     "dist/",
     "esnext/",
-    "src/",
+    "src/"
   ],
   "scripts": {
     "start": "start-runner -p re-start/presets/typescript",
