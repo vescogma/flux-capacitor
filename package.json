@@ -13,17 +13,20 @@
   "author": "Ben Teichman <ben.teichman@groupbyinc.com>",
   "license": "MIT",
   "main": "dist/index.js",
+  "module:esnext": "esnext/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist/"
+    "dist/",
+    "esnext/"
   ],
   "scripts": {
     "start": "start-runner -p re-start/presets/typescript",
+    "esnext": "npm start build -- -- --compileOpts.configFile tsconfig.esnext.json --outDir esnext",
     "dev": "npm start dev",
     "test": "npm start test",
     "tdd": "npm start tdd",
     "prepush": "npm start prepush",
-    "prepublish": "npm start build"
+    "prepublish": "npm start build && npm run esnext"
   },
   "release": {
     "verifyConditions": "condition-circle"
@@ -63,7 +66,7 @@
     "groupby-api": "beta",
     "lodash.range": "^3.2.0",
     "redux": "^3.6.0",
-    "redux-logger": "^3.0.1",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "sayt": "^0.1.7",
     "uuid": "^3.0.1"
