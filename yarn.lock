@@ -3345,9 +3345,9 @@ rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-re-start@^1.14.3:
-  version "1.14.3"
-  resolved "https://registry.yarnpkg.com/re-start/-/re-start-1.14.3.tgz#fb49c32f0c0d80182b7f17a4be18082340826197"
+re-start@^1.14.5:
+  version "1.14.5"
+  resolved "https://registry.yarnpkg.com/re-start/-/re-start-1.14.5.tgz#e65669c32c6de13a150c867536e6b2979164607e"
   dependencies:
     minimist "^1.2.0"
     start "^5.0.0"
@@ -3365,7 +3365,7 @@ re-start@^1.14.3:
     start-read "^0.3.0"
     start-release "^1.4.1"
     start-split "^1.0.7"
-    start-typescript "^1.3.6"
+    start-typescript "^1.3.8"
     start-watch "^3.0.0"
     start-webpack "^0.2.0"
     start-write "^2.0.2"
@@ -3984,9 +3984,9 @@ start-split@^1.0.7:
     start-concurrent "^0.1.0"
     start-input-connector "^0.2.0"
 
-start-typescript@^1.3.6:
-  version "1.3.6"
-  resolved "https://registry.yarnpkg.com/start-typescript/-/start-typescript-1.3.6.tgz#ff149921fc0cac629499cf7c4474f43a4483034e"
+start-typescript@^1.3.8:
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/start-typescript/-/start-typescript-1.3.8.tgz#a4666f3c95f2b61494a531bc2943574c3628ee17"
   dependencies:
     common-path-prefix "^1.0.0"
     tsconfig "^6.0.0"

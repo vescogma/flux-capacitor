@@ -53,7 +53,7 @@
     "cz-conventional-changelog": "^2.0.0",
     "husky": "^0.13.3",
     "mocha-suite": "^1.0.9",
-    "re-start": "^1.14.3",
+    "re-start": "^1.14.5",
     "sinon": "^2.3.2",
     "start-babel-cli": "^4.0.1",
     "tslint": "^5.3.2",
