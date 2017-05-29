@@ -67,6 +67,12 @@ export default class Creator {
     this.flux.clients.bridge.search({ ...Selectors.searchRequest(getStore()), collection })
       .then((res) => dispatch(this.receiveCollectionCount(collection, res.totalRecordCount)))
 
+  fetchProductDetails = (id: string) => (dispatch: Dispatch<any>, getStore: () => Store.State) =>
+    this.flux.clients.bridge.search({
+      ...Selectors.searchRequest(getStore()),
+      refinements: [<any>{ navigationName: 'id', type: 'Value', value: id }]
+    }).then((res) => dispatch(this.receiveDetailsProduct(res.records[0].allMeta)))
+
   // request action creators
   updateSearch = (search: Actions.Search) =>
     thunk(Actions.UPDATE_SEARCH, Object.assign(search))
