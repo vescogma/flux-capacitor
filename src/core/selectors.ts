@@ -82,6 +82,9 @@ namespace Selectors {
       range: nav.range,
     };
   };
+
+  export const recordCount = (state: Store.State) =>
+    state.data.recordCount;
 }
 
 export default Selectors;
