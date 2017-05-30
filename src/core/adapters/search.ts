@@ -94,14 +94,15 @@ namespace Adapter {
         type: Store.Zone.Type.CONTENT,
       };
       case 'Rich_Content': return {
-        content: zone.content,
+        content: zone.richContent,
         name: zone.name,
         type: Store.Zone.Type.RICH_CONTENT,
       };
-      case 'Records': return {
+      case 'Record': return {
         name: zone.name,
+        query: zone.query,
         products: zone.records.map((record) => record.allMeta),
-        type: Store.Zone.Type.RECORD,
+        type: Store.Zone.Type.PRODUCTS,
       };
     }
   };

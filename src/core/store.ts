@@ -253,15 +253,15 @@ namespace Store {
     details?: boolean;
   }
 
-  export type Zone = ContentZone | RichContentZone | RecordZone;
+  export type Zone = ContentZone | RichContentZone | ProductsZone;
 
   export namespace Zone {
-    export type Type = 'content' | 'rich_content' | 'record';
+    export type Type = typeof Type.CONTENT | typeof Type.RICH_CONTENT | typeof Type.PRODUCTS;
 
     export namespace Type {
       export const CONTENT = 'content';
       export const RICH_CONTENT = 'rich_content';
-      export const RECORD = 'record';
+      export const PRODUCTS = 'products';
     }
   }
 
@@ -271,17 +271,18 @@ namespace Store {
   }
 
   export interface ContentZone extends BaseZone {
-    type: 'content';
+    type: typeof Zone.Type.CONTENT;
     content: string;
   }
 
   export interface RichContentZone extends BaseZone {
-    type: 'rich_content';
+    type: typeof Zone.Type.RICH_CONTENT;
     content: string;
   }
 
-  export interface RecordZone extends BaseZone {
-    type: 'record';
+  export interface ProductsZone extends BaseZone {
+    type: typeof Zone.Type.PRODUCTS;
+    query: string;
     products: Product[];
   }
 

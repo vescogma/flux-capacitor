@@ -64,7 +64,7 @@
     "@types/redux-logger": "^3.0.0",
     "@types/uuid": "^2.0.29",
     "eventemitter3": "^2.0.3",
-    "groupby-api": "beta",
+    "groupby-api": "dev",
     "lodash.range": "^3.2.0",
     "redux": "^3.6.0",
     "redux-logger": "^3.0.6",
