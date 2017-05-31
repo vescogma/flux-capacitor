@@ -132,7 +132,6 @@ namespace Actions {
     last: number;
     from: number;
     to: number;
-    range: number[];
   }
   export namespace Page {
     export interface UpdateCurrent extends Base {
@@ -147,7 +146,6 @@ namespace Actions {
       last: number;
       next: number;
       previous: number;
-      range: number[];
     }
   }
 

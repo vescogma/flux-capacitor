@@ -199,10 +199,6 @@ namespace Store {
      * number of first page
      */
     first: 1; // static
-    /**
-     * maximum number of page numbers to display
-     */
-    limit: number; // static
 
     /**
      * number of next page
@@ -225,11 +221,6 @@ namespace Store {
      * end of displayed products
      */
     to?: number; // post
-
-    /**
-     * displayed number range (in <gb-pages>)
-     */
-    range: number[]; // post
   }
 
   export interface Template {

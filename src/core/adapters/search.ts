@@ -128,7 +128,6 @@ namespace Adapter {
       last,
       next: Page.nextPage(currentPage, last),
       previous: Page.previousPage(currentPage),
-      range: Page.pageNumbers(currentPage, last, state.data.page.limit),
       to,
     };
   };

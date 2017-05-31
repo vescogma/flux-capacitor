@@ -9,8 +9,6 @@ export const DEFAULTS: State = {
   current: 1,
   first: 1,
   from: 1,
-  limit: 5,
-  range: [],
   sizes: {
     items: [DEFAULT_PAGE_SIZE],
     selected: 0
@@ -38,14 +36,14 @@ export function resetPage(state: State) {
 }
 
 export function updateCurrent(state: State, { page: current }: Action.UpdateCurrent) {
-   return { ...state, current };
- }
+  return { ...state, current };
+}
 
 export function updateSize(state: State, { size }: Action.UpdateSize) {
   const selected = state.sizes.items.findIndex((pageSize) => pageSize === size);
   return selected === -1 ? state : { ...state, current: 1, sizes: { ...state.sizes, selected } };
 }
 
-export function receivePage(state: State, { from, to, last, next, previous, range }: Action.ReceivePage) {
-  return { ...state, from, to, last, next, previous, range };
+export function receivePage(state: State, { from, to, last, next, previous }: Action.ReceivePage) {
+  return { ...state, from, to, last, next, previous };
 }
