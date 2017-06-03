@@ -1,5 +1,4 @@
 import { applyMiddleware, createStore, Store as ReduxStore } from 'redux';
-import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import * as uuid from 'uuid/v1';
 import FluxCapacitor from '../flux-capacitor';
@@ -101,15 +100,22 @@ namespace Store {
 
   // tslint:disable-next-line max-line-length
   export function create(config: FluxCapacitor.Configuration, listener?: (store: ReduxStore<State>) => () => void): ReduxStore<State> {
+    const middleware = [
+      thunk,
+      idGenerator('recallId', RECALL_CHANGE_ACTIONS),
+      idGenerator('searchId', SEARCH_CHANGE_ACTIONS)
+    ];
+
+    if (process.env.NODE_ENV === 'development' && (((config.services || {}).logging || {}).debug || {}).flux) {
+      const logger = require('redux-logger').default;
+
+      middleware.push(logger);
+    }
+
     const store = createStore<State>(
       reducer,
       <any>Store.extractInitialState(config),
-      applyMiddleware(
-        thunk,
-        logger,
-        idGenerator('recallId', RECALL_CHANGE_ACTIONS),
-        idGenerator('searchId', SEARCH_CHANGE_ACTIONS),
-      ),
+      applyMiddleware(...middleware),
     );
 
     if (listener) {

@@ -45,12 +45,14 @@ export default class Creator {
 
   fetchAutocompleteSuggestions = (query: string, config: QueryTimeAutocompleteConfig) =>
     (dispatch: Dispatch<any>) => {
-      dispatch(this.soFetching('autocompleteSuggestions'));
-      return this.flux.clients.sayt.autocomplete(query, config)
-        .then((res) => {
-          const { suggestions, categoryValues } = Adapters.Search.extractAutocompleteSuggestions(res);
-          dispatch(this.receiveAutocompleteSuggestions(suggestions, categoryValues));
-        });
+      if (query) {
+        dispatch(this.soFetching('autocompleteSuggestions'));
+        return this.flux.clients.sayt.autocomplete(query, config)
+          .then((res) => {
+            const { suggestions, categoryValues } = Adapters.Search.extractAutocompleteSuggestions(res);
+            dispatch(this.receiveAutocompleteSuggestions(suggestions, categoryValues));
+          });
+      }
     }
 
   fetchAutocompleteProducts = (query: string, config: QueryTimeProductSearchConfig) =>

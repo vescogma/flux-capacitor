@@ -70,10 +70,12 @@ namespace Observer {
     return {
       data: {
         // TODO break this into individual events, makes rendering easier
-        autocomplete: Object.assign(emit(Events.AUTOCOMPLETE_UPDATED), {
+        autocomplete: {
+          category: emit(Events.AUTOCOMPLETE_CATEGORY_UPDATED),
+          suggestions: emit(Events.AUTOCOMPLETE_SUGGESTIONS_UPDATED),
           products: emit(Events.AUTOCOMPLETE_PRODUCTS_UPDATED),
           query: emit(Events.AUTOCOMPLETE_QUERY_UPDATED),
-        }),
+        },
 
         collections: {
           byId: Observer.indexed(emit(Events.COLLECTION_UPDATED)),

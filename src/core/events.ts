@@ -20,8 +20,9 @@ export const NAVIGATIONS_UPDATED = 'navigations_updated'; // post
 export const SELECTED_REFINEMENTS_UPDATED = 'selected_refinements_updated'; // post
 
 // autocomplete events
-export const AUTOCOMPLETE_UPDATED = 'autocomplete_updated'; // post
 export const AUTOCOMPLETE_QUERY_UPDATED = 'autocomplete_query_updated'; // pre
+export const AUTOCOMPLETE_SUGGESTIONS_UPDATED = 'autocomplete_suggestions_updated'; // post
+export const AUTOCOMPLETE_CATEGORY_UPDATED = 'autocomplete_category_updated'; // post
 export const AUTOCOMPLETE_PRODUCTS_UPDATED = 'autocomplete_products_updated'; // post
 
 // template events
