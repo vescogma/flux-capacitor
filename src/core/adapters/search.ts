@@ -13,6 +13,8 @@ import Selectors from '../selectors';
 import Store from '../store';
 import Page from './page';
 
+export const MAX_RECORDS = 10000;
+
 namespace Adapter {
 
   export const extractQuery = (results: Results, linkMapper: (value: string) => Store.Linkable): Actions.Query => ({
@@ -114,12 +116,13 @@ namespace Adapter {
       Object.assign(zones, { [key]: Adapter.extractZone(template.zones[key]) }), {}),
   });
 
-  export const extractPage = (state: Store.State, data): Actions.Page => {
+  export const extractRecordCount = (results: Results) =>
+    Math.min(results.totalRecordCount, MAX_RECORDS);
+
+  export const extractPage = (state: Store.State, totalRecords: number): Actions.Page => {
     const pageSize = Selectors.pageSize(state);
     const currentPage = state.data.page.current;
-    const totalRecords = data.totalRecordCount;
     const last = Page.finalPage(pageSize, totalRecords);
-    const pageInfo = data.pageInfo;
     const from = Page.fromResult(currentPage, pageSize);
     const to = Page.toResult(currentPage, pageSize, totalRecords);
 
@@ -133,10 +136,15 @@ namespace Adapter {
   };
 
   // tslint:disable-next-line max-line-length
-  export const extractAutocompleteSuggestions = ({ result }: any, category?: string): { suggestions: string[], categoryValues: string[] } => ({
-    categoryValues: category && result.searchTerms[0] ? Adapter.extractCategoryValues(result.searchTerms[0], category) : [],
-    suggestions: result.searchTerms.map(({ value }) => value),
-  });
+  export const extractAutocompleteSuggestions = ({ result }: any, category?: string) => {
+    const searchTerms = result.searchTerms || [];
+    const navigations = result.navigations || [];
+    return ({
+      categoryValues: category && searchTerms[0] ? Adapter.extractCategoryValues(searchTerms[0], category) : [],
+      suggestions: searchTerms.map(({ value }) => value),
+      navigations: navigations.map(({ name: field, values: refinements }) => ({ field, refinements }))
+    });
+  };
 
   // tslint:disable-next-line max-line-length
   export const extractCategoryValues = ({ additionalInfo }: { additionalInfo: { [key: string]: any } }, category: string) => additionalInfo[category] || [];

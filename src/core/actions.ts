@@ -53,9 +53,15 @@ namespace Actions {
     export interface UpdateQuery extends Base {
       query: string;
     }
+
     export interface ReceiveSuggestions extends Base {
       suggestions: string[];
       categoryValues: string[];
+      navigations: Store.Autocomplete.Navigation[];
+    }
+
+    export interface ReceiveProducts extends Base {
+      products: any[];
     }
   }
 
@@ -86,6 +92,8 @@ namespace Actions {
       low?: number;
       high?: number;
     }
+
+    export type UpdateSearch = Base & Actions.Search;
   }
 
   export namespace Collections {
@@ -149,6 +157,12 @@ namespace Actions {
     }
   }
 
+  export namespace Products {
+    export interface ReceiveProducts extends Base {
+      products: Store.Product[];
+    }
+  }
+
   export interface Query {
     corrected?: string;
     related: Store.Query.Related[];
@@ -167,9 +181,27 @@ namespace Actions {
     }
   }
 
+  export namespace RecordCount {
+    export interface ReceiveRecordCount extends Base {
+      recordCount: number;
+    }
+  }
+
+  export namespace Redirect {
+    export interface ReceiveRedirect extends Base {
+      redirect: string;
+    }
+  }
+
   export namespace Sort {
     export interface UpdateSelected extends Base {
       index: number;
+    }
+  }
+
+  export namespace Template {
+    export interface UpdateTemplate extends Base {
+      template: Store.Template;
     }
   }
 

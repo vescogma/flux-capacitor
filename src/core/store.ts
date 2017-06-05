@@ -326,6 +326,7 @@ namespace Store {
     query?: string; // pre
     suggestions: string[]; // post
     category: Autocomplete.Category; // static & post
+    navigations: Autocomplete.Navigation[]; // post
     products: Product[]; // post
   }
 
@@ -333,6 +334,11 @@ namespace Store {
     export interface Category {
       field?: string; // static
       values: string[]; // post
+    }
+
+    export interface Navigation {
+      field: string;
+      refinements: string[];
     }
   }
 

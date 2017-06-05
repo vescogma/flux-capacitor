@@ -69,12 +69,20 @@ namespace Observer {
 
     return {
       data: {
-        // TODO break this into individual events, makes rendering easier
-        autocomplete: {
-          category: emit(Events.AUTOCOMPLETE_CATEGORY_UPDATED),
-          suggestions: emit(Events.AUTOCOMPLETE_SUGGESTIONS_UPDATED),
-          products: emit(Events.AUTOCOMPLETE_PRODUCTS_UPDATED),
-          query: emit(Events.AUTOCOMPLETE_QUERY_UPDATED),
+        autocomplete: (oldState: Store.Autocomplete, newState: Store.Autocomplete, path: string) => {
+          if (oldState !== newState) {
+            if (oldState.suggestions !== newState.suggestions
+              || oldState.category !== newState.category
+              || oldState.navigations !== newState.navigations) {
+              emit(Events.AUTOCOMPLETE_SUGGESTIONS_UPDATED)(oldState, newState, path);
+            }
+            if (oldState.query !== newState.query) {
+              emit(Events.AUTOCOMPLETE_QUERY_UPDATED)(oldState.query, newState.query, `${path}.query`);
+            }
+            if (oldState.products !== newState.products) {
+              emit(Events.AUTOCOMPLETE_PRODUCTS_UPDATED)(oldState.products, newState.products, `${path}.products`);
+            }
+          }
         },
 
         collections: {

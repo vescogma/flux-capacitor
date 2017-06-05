@@ -1,7 +1,5 @@
 import * as range from 'lodash.range';
 
-const MAX_RECORDS = 10000;
-
 namespace Page {
 
   export function previousPage(currentPage: number) {
@@ -26,20 +24,6 @@ namespace Page {
       return total + (totalRecords % total);
     } else {
       return currentPage * pageSize;
-    }
-  }
-
-  export function restrictTotalRecords(pageSize: number, totalRecords: number) {
-    if (totalRecords > MAX_RECORDS) {
-      return MAX_RECORDS - (MAX_RECORDS % pageSize);
-    } else if ((totalRecords + pageSize) > MAX_RECORDS) {
-      if (MAX_RECORDS % pageSize === 0) {
-        return MAX_RECORDS;
-      } else {
-        return totalRecords - (totalRecords % pageSize);
-      }
-    } else {
-      return totalRecords;
     }
   }
 }
