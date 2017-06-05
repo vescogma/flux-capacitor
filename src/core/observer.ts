@@ -10,6 +10,7 @@ export const FETCH_EVENTS = {
   autocompleteSuggestions: Events.FETCH_AUTOCOMPLETE_SUGGESTIONS_DONE,
   details: Events.FETCH_DETAILS_DONE,
   moreRefinements: Events.FETCH_MORE_REFINEMENTS_DONE,
+  moreProducts: Events.FETCH_MORE_PRODUCTS_DONE,
   search: Events.FETCH_SEARCH_DONE,
 };
 
@@ -118,7 +119,14 @@ namespace Observer {
           sizes: emit(Events.PAGE_SIZE_UPDATED)
         }),
 
-        products: emit(Events.PRODUCTS_UPDATED),
+        products: ((emitMoreProductsAdded, emitProductsUpdated) => (oldState: Store.Product[], newState: Store.Product[], path) => {
+          const oldLength = oldState.length;
+          if (oldLength < newState.length && oldState[0] === newState[0]) {
+            emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
+          } else {
+            emitProductsUpdated(oldState, newState, path);
+          }
+        })(emit(Events.MORE_PRODUCTS_ADDED), emit(Events.PRODUCTS_UPDATED)),
 
         query: Object.assign(emit(Events.QUERY_UPDATED), {
           corrected: emit(Events.CORRECTED_QUERY_UPDATED),

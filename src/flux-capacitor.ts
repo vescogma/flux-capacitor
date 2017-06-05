@@ -32,8 +32,16 @@ class FluxCapacitor extends EventEmitter {
     this.store.dispatch(this.actions.updateSearch({ query, clear: true }));
   }
 
-  refinements(navigationName: string) {
+  products() {
+    this.store.dispatch(this.actions.fetchProducts());
+  }
+
+  moreRefinements(navigationName: string) {
     this.store.dispatch(this.actions.fetchMoreRefinements(navigationName));
+  }
+
+  moreProducts(amount: number) {
+    this.store.dispatch(this.actions.fetchMoreProducts(amount));
   }
 
   reset(query: string = null, { field: navigationId, index }: { field: string, index: number } = <any>{}) {

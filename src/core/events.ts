@@ -10,6 +10,7 @@ export const SORTS_UPDATED = 'sorts_updated'; // mixed
 
 // product events
 export const PRODUCTS_UPDATED = 'products_updated'; // mixed
+export const MORE_PRODUCTS_ADDED = 'more_products_added'; // post
 
 // collection events
 export const COLLECTION_UPDATED = 'collection_updated'; // post
@@ -54,6 +55,7 @@ export const FETCH_SEARCH_DONE = 'fetch:search:done';
 export const FETCH_AUTOCOMPLETE_SUGGESTIONS_DONE = 'fetch:autocomplete_suggestions:done';
 export const FETCH_AUTOCOMPLETE_PRODUCTS_DONE = 'fetch:autocomplete_products:done';
 export const FETCH_MORE_REFINEMENTS_DONE = 'fetch:more_refinements:done';
+export const FETCH_MORE_PRODUCTS_DONE = 'fetch:more_products:done';
 export const FETCH_DETAILS_DONE = 'fetch:details:done';
 
 // ui events

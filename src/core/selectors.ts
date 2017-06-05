@@ -39,6 +39,9 @@ namespace Selectors {
   export const skip = (state: Store.State, pagesize: number) =>
     (state.data.page.current - 1) * pagesize;
 
+  export const products = (state: Store.State) =>
+    state.data.products;
+
   export const selectedRefinements = (state: Store.State) =>
     Selectors.navigations(state)
       .reduce((allRefinements, navigation) =>

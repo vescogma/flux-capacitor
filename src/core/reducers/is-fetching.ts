@@ -7,6 +7,7 @@ export default function updateIsFetching(state: State = {}, action): State {
   switch (action.type) {
     case Actions.SO_FETCHING: return soFetching(state, action);
     case Actions.RECEIVE_MORE_REFINEMENTS: return notFetching(state, 'moreRefinements');
+    case Actions.RECEIVE_MORE_PRODUCTS: return notFetching(state, 'moreProducts');
     case Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS: return notFetching(state, 'autocompleteSuggestions');
     case Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS: return notFetching(state, 'autocompleteProducts');
     case Actions.RECEIVE_DETAILS_PRODUCT: return notFetching(state, 'details');

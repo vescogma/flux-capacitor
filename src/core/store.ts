@@ -257,6 +257,7 @@ namespace Store {
 
   export interface IsFetching {
     moreRefinements?: boolean;
+    moreProducts?: boolean;
     search?: boolean;
     autocompleteSuggestions?: boolean;
     autocompleteProducts?: boolean;

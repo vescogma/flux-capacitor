@@ -105,11 +105,11 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       });
     });
 
-    describe('refinements()', () => {
+    describe('moreRefinements()', () => {
       it('should call fetchMoreRefinements() action', () => {
         const navigationName = 'brand';
 
-        expectDispatch(() => flux.refinements(navigationName), 'fetchMoreRefinements', navigationName);
+        expectDispatch(() => flux.moreRefinements(navigationName), 'fetchMoreRefinements', navigationName);
       });
     });
 

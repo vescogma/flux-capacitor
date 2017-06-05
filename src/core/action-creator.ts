@@ -43,6 +43,22 @@ export default class Creator {
       }
     }
 
+  fetchMoreProducts = (amount: number) =>
+    (dispatch: Dispatch<any>, getStore: () => Store.State) => {
+      const state = getStore();
+      if (!state.isFetching.moreProducts) {
+        dispatch(this.soFetching('moreProducts'));
+        return this.flux.clients.bridge.search({
+          ...Selectors.searchRequest(state),
+          pageSize: amount,
+          skip: Selectors.products(state).length
+        }).then((res) => {
+          const products = Adapters.Autocomplete.extractProducts(res);
+          dispatch(this.receiveMoreProducts(products));
+        });
+      }
+    }
+
   fetchAutocompleteSuggestions = (query: string, config: QueryTimeAutocompleteConfig) =>
     (dispatch: Dispatch<any>, getState: () => Store.State) => {
       if (query) {
@@ -183,6 +199,9 @@ export default class Creator {
   receiveAutocompleteSuggestions = (suggestions: string[], categoryValues: string[], navigations: Store.Autocomplete.Navigation[]) =>
     thunk<Actions.Autocomplete.ReceiveSuggestions>(
       Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS, { suggestions, categoryValues, navigations })
+
+  receiveMoreProducts = (products: Store.Product[]) =>
+    thunk(Actions.RECEIVE_MORE_PRODUCTS, { products })
 
   receiveAutocompleteProducts = (products: Store.Product[]) =>
     thunk<Actions.Autocomplete.ReceiveProducts>(
