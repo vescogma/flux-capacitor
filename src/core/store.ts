@@ -84,9 +84,22 @@ namespace Store {
     }
   }
 
+  export function extractSaytCategoryField(config: FluxCapacitor.Configuration) {
+    return config.autocomplete.category;
+  }
+
   export function extractInitialState(config: FluxCapacitor.Configuration): Partial<State> {
     return {
       data: <any>{
+        autocomplete: {
+          suggestions: [],
+          navigations: [],
+          products: [],
+          category: {
+            field: Store.extractSaytCategoryField(config),
+            values: []
+          }
+        },
         fields: config.search.fields || [],
         collections: Store.extractCollectionsState(config, DEFAULT_COLLECTION),
         sorts: Store.extractSortState(config),

@@ -21,8 +21,8 @@ export default class Creator {
 
   // fetch action creators
   fetchMoreRefinements = (navigationId: string) =>
-    (dispatch: Dispatch<any>, getStore: () => Store.State) => {
-      const state = getStore();
+    (dispatch: Dispatch<any>, getState: () => Store.State) => {
+      const state = getState();
       if (Selectors.hasMoreRefinements(state, navigationId)) {
         dispatch(this.soFetching('moreRefinements'));
         return this.flux.clients.bridge.refinements(Selectors.searchRequest(state), navigationId)
@@ -34,8 +34,8 @@ export default class Creator {
     }
 
   fetchProducts = () =>
-    (dispatch: Dispatch<any>, getStore: () => Store.State) => {
-      const state = getStore();
+    (dispatch: Dispatch<any>, getState: () => Store.State) => {
+      const state = getState();
       if (!state.isFetching.search) {
         dispatch(this.soFetching('search'));
         return this.flux.clients.bridge.search(Selectors.searchRequest(state))
@@ -44,12 +44,17 @@ export default class Creator {
     }
 
   fetchAutocompleteSuggestions = (query: string, config: QueryTimeAutocompleteConfig) =>
-    (dispatch: Dispatch<any>) => {
+    (dispatch: Dispatch<any>, getState: () => Store.State) => {
       if (query) {
         dispatch(this.soFetching('autocompleteSuggestions'));
         return this.flux.clients.sayt.autocomplete(query, config)
           .then((res) => {
-            const { suggestions, categoryValues, navigations } = Adapters.Search.extractAutocompleteSuggestions(res);
+            const category = getState().data.autocomplete.category.field;
+            const {
+              suggestions,
+              categoryValues,
+              navigations
+            } = Adapters.Autocomplete.extractSuggestions(res, category);
             dispatch(this.receiveAutocompleteSuggestions(suggestions, categoryValues, navigations));
           });
       }
@@ -61,19 +66,19 @@ export default class Creator {
         dispatch(this.soFetching('autocompleteProducts'));
         return this.flux.clients.sayt.productSearch(query, config)
           .then((res) => {
-            const products = Adapters.Search.extractAutocompleteProducts(res);
+            const products = Adapters.Autocomplete.extractProducts(res);
             dispatch(this.receiveAutocompleteProducts(products));
           });
       }
     }
 
-  fetchCollectionCount = (collection: string) => (dispatch: Dispatch<any>, getStore: () => Store.State) =>
-    this.flux.clients.bridge.search(Object.assign(Selectors.searchRequest(getStore()), { collection }))
+  fetchCollectionCount = (collection: string) => (dispatch: Dispatch<any>, getState: () => Store.State) =>
+    this.flux.clients.bridge.search(Object.assign(Selectors.searchRequest(getState()), { collection }))
       .then((res) => dispatch(this.receiveCollectionCount(collection, Adapters.Search.extractRecordCount(res))))
 
-  fetchProductDetails = (id: string) => (dispatch: Dispatch<any>, getStore: () => Store.State) =>
+  fetchProductDetails = (id: string) => (dispatch: Dispatch<any>, getState: () => Store.State) =>
     this.flux.clients.bridge.search({
-      ...Selectors.searchRequest(getStore()),
+      ...Selectors.searchRequest(getState()),
       refinements: [<any>{ navigationName: 'id', type: 'Value', value: id }]
     }).then((res) => dispatch(this.receiveDetailsProduct(res.records[0].allMeta)))
 
@@ -123,8 +128,8 @@ export default class Creator {
 
   // response action creators
   receiveSearchResponse = (results: Results) =>
-    (dispatch: Dispatch<any>, getStore: () => Store.State) => {
-      const state = getStore();
+    (dispatch: Dispatch<any>, getState: () => Store.State) => {
+      const state = getState();
       if (results.redirect) {
         dispatch(this.receiveRedirect(results.redirect));
       }

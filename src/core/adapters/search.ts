@@ -135,22 +135,6 @@ namespace Adapter {
     };
   };
 
-  // tslint:disable-next-line max-line-length
-  export const extractAutocompleteSuggestions = ({ result }: any, category?: string) => {
-    const searchTerms = result.searchTerms || [];
-    const navigations = result.navigations || [];
-    return ({
-      categoryValues: category && searchTerms[0] ? Adapter.extractCategoryValues(searchTerms[0], category) : [],
-      suggestions: searchTerms.map(({ value }) => value),
-      navigations: navigations.map(({ name: field, values: refinements }) => ({ field, refinements }))
-    });
-  };
-
-  // tslint:disable-next-line max-line-length
-  export const extractCategoryValues = ({ additionalInfo }: { additionalInfo: { [key: string]: any } }, category: string) => additionalInfo[category] || [];
-
-  export const extractAutocompleteProducts = ({ result: { products } }: any) => products.map(Adapter.extractProduct);
-
   export const extractProduct = ({ allMeta }) => allMeta;
 }
 

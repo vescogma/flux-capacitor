@@ -15,7 +15,7 @@ export default function updateAutocomplete(state: State = DEFAULTS, action): Sta
   switch (action.type) {
     case Actions.UPDATE_AUTOCOMPLETE_QUERY: return updateQuery(state, action);
     case Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS: return receiveSuggestions(state, action);
-    case Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS: return receiveSuggestions(state, action);
+    case Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS: return receiveProducts(state, action);
     default: return state;
   }
 }

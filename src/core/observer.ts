@@ -69,21 +69,23 @@ namespace Observer {
 
     return {
       data: {
-        autocomplete: (oldState: Store.Autocomplete, newState: Store.Autocomplete, path: string) => {
-          if (oldState !== newState) {
-            if (oldState.suggestions !== newState.suggestions
-              || oldState.category !== newState.category
-              || oldState.navigations !== newState.navigations) {
-              emit(Events.AUTOCOMPLETE_SUGGESTIONS_UPDATED)(oldState, newState, path);
+        autocomplete: ((emitSuggestionsUpdated: Observer, emitQueryUpdated: Observer, emitProductsUpdated: Observer) =>
+          (oldState: Store.Autocomplete, newState: Store.Autocomplete, path: string) => {
+            if (oldState !== newState) {
+              if (oldState.suggestions !== newState.suggestions
+                || oldState.category !== newState.category
+                || oldState.navigations !== newState.navigations) {
+                emitSuggestionsUpdated(oldState, newState, path);
+              }
+              if (oldState.query !== newState.query) {
+                emitQueryUpdated(oldState.query, newState.query, `${path}.query`);
+              }
+              if (oldState.products !== newState.products) {
+                emitProductsUpdated(oldState.products, newState.products, `${path}.products`);
+              }
             }
-            if (oldState.query !== newState.query) {
-              emit(Events.AUTOCOMPLETE_QUERY_UPDATED)(oldState.query, newState.query, `${path}.query`);
-            }
-            if (oldState.products !== newState.products) {
-              emit(Events.AUTOCOMPLETE_PRODUCTS_UPDATED)(oldState.products, newState.products, `${path}.products`);
-            }
-          }
-        },
+            // tslint:disable-next-line max-line-length
+          })(emit(Events.AUTOCOMPLETE_SUGGESTIONS_UPDATED), emit(Events.AUTOCOMPLETE_QUERY_UPDATED), emit(Events.AUTOCOMPLETE_PRODUCTS_UPDATED)),
 
         collections: {
           byId: Observer.indexed(emit(Events.COLLECTION_UPDATED)),
@@ -95,21 +97,21 @@ namespace Observer {
           product: emit(Events.DETAILS_PRODUCT_UPDATED),
         },
 
-        // tslint:disable-next-line max-line-length
-        navigations: ((emitIndexUpdated) => (oldState: Store.Indexed<Store.Navigation>, newState: Store.Indexed<Store.Navigation>, path) => {
-          if (oldState.allIds !== newState.allIds) {
-            emitIndexUpdated(oldState, newState, path);
-          } else {
-            newState.allIds.forEach((id) => {
-              const oldNavigation = oldState.byId[id];
-              const newNavigation = newState.byId[id];
-              if (oldNavigation.selected !== newNavigation.selected) {
-                // tslint:disable-next-line max-line-length
-                emit(`${Events.SELECTED_REFINEMENTS_UPDATED}:${id}`)(oldNavigation, newNavigation, `${path}.byId.${id}`);
-              }
-            });
-          }
-        })(emit(Events.NAVIGATIONS_UPDATED)),
+        navigations: ((emitIndexUpdated) =>
+          (oldState: Store.Indexed<Store.Navigation>, newState: Store.Indexed<Store.Navigation>, path) => {
+            if (oldState.allIds !== newState.allIds) {
+              emitIndexUpdated(oldState, newState, path);
+            } else {
+              newState.allIds.forEach((id) => {
+                const oldNavigation = oldState.byId[id];
+                const newNavigation = newState.byId[id];
+                if (oldNavigation.selected !== newNavigation.selected) {
+                  // tslint:disable-next-line max-line-length
+                  emit(`${Events.SELECTED_REFINEMENTS_UPDATED}:${id}`)(oldNavigation, newNavigation, `${path}.byId.${id}`);
+                }
+              });
+            }
+          })(emit(Events.NAVIGATIONS_UPDATED)),
 
         page: Object.assign(emit(Events.PAGE_UPDATED), {
           current: emit(Events.CURRENT_PAGE_UPDATED),

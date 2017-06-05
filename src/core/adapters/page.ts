@@ -1,5 +1,3 @@
-import * as range from 'lodash.range';
-
 namespace Page {
 
   export function previousPage(currentPage: number) {

@@ -45,6 +45,7 @@
   "devDependencies": {
     "@types/chai": "^3.5.2",
     "@types/mocha": "^2.2.41",
+    "@types/redux-logger": "^3.0.0",
     "@types/sinon": "^2.2.2",
     "babel-preset-env": "^1.5.1",
     "babel-preset-stage-3": "^6.24.1",
@@ -62,11 +63,9 @@
     "typescript": "^2.3.3"
   },
   "dependencies": {
-    "@types/redux-logger": "^3.0.0",
     "@types/uuid": "^2.0.29",
     "eventemitter3": "^2.0.3",
     "groupby-api": "dev",
-    "lodash.range": "^3.2.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "sayt": "^0.1.7",

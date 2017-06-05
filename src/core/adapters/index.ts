@@ -1,3 +1,4 @@
+import Autocomplete from './autocomplete';
 import Search from './search';
 
-export default { Search };
+export default { Autocomplete, Search };
