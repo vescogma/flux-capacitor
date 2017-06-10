@@ -1,28 +1,34 @@
-import * as redux from 'redux';
+import { applyMiddleware, createStore, Store as ReduxStore } from 'redux';
 import thunk from 'redux-thunk';
 import * as uuid from 'uuid/v1';
-import { reducer, Action } from '.';
+import FluxCapacitor from '../flux-capacitor';
+import Actions from './actions';
+import Adapter from './adapters/configuration';
+import reducer from './reducers';
+import * as PageReducer from './reducers/data/page';
+
+export { ReduxStore };
 
 export const RECALL_CHANGE_ACTIONS = [
-  Action.types.UPDATE_SEARCH,
-  Action.types.SELECT_REFINEMENT,
-  Action.types.DESELECT_REFINEMENT,
+  Actions.UPDATE_SEARCH,
+  Actions.SELECT_REFINEMENT,
+  Actions.DESELECT_REFINEMENT,
 ];
 
 export const SEARCH_CHANGE_ACTIONS = [
-  Action.types.UPDATE_SEARCH,
-  Action.types.SELECT_REFINEMENT,
-  Action.types.DESELECT_REFINEMENT,
-  Action.types.SELECT_COLLECTION,
-  Action.types.SELECT_SORT,
-  Action.types.UPDATE_PAGE_SIZE,
-  Action.types.UPDATE_CURRENT_PAGE,
+  Actions.UPDATE_SEARCH,
+  Actions.SELECT_REFINEMENT,
+  Actions.DESELECT_REFINEMENT,
+  Actions.SELECT_COLLECTION,
+  Actions.SELECT_SORT,
+  Actions.UPDATE_PAGE_SIZE,
+  Actions.UPDATE_CURRENT_PAGE,
 ];
 
 export const idGenerator = (key: string, actions: string[]) =>
   (store) => (next) => (action) => {
     if (actions.includes(action.type)) {
-      return next(Object.assign(action, { [key]: uuid() }));
+      return next({ ...action, [key]: uuid() });
     } else {
       return next(action);
     }
@@ -30,25 +36,41 @@ export const idGenerator = (key: string, actions: string[]) =>
 
 namespace Store {
 
-  export function create() {
-    return redux.createStore<State>(
+  // tslint:disable-next-line max-line-length
+  export function create(config: FluxCapacitor.Configuration, listener?: (store: ReduxStore<State>) => () => void): ReduxStore<State> {
+    const middleware = [
+      thunk,
+      idGenerator('recallId', RECALL_CHANGE_ACTIONS),
+      idGenerator('searchId', SEARCH_CHANGE_ACTIONS)
+    ];
+
+    if (process.env.NODE_ENV === 'development' && (((config.services || {}).logging || {}).debug || {}).flux) {
+      const logger = require('redux-logger').default;
+
+      middleware.push(logger);
+    }
+
+    const store = createStore<State>(
       reducer,
-      <any>{ isFetching: {}, data: {} },
-      redux.applyMiddleware(
-        thunk,
-        idGenerator('recallId', RECALL_CHANGE_ACTIONS),
-        idGenerator('searchId', SEARCH_CHANGE_ACTIONS),
-      ),
+      <any>Adapter.initialState(config),
+      applyMiddleware(...middleware),
     );
+
+    if (listener) {
+      store.subscribe(listener(store));
+    }
+
+    return store;
   }
 
   export interface State {
+    isRunning: boolean;
     isFetching: IsFetching;
     session: Session;
-    data?: {
+    data: {
       query: Query; // mixed
 
-      sorts: Indexed.Selectable<Sort.Labeled>; // pre
+      sorts: SelectableList<Sort>;
       products: Product[]; // post
       collections: Indexed.Selectable<Collection>; // mixed
       navigations: Indexed<Navigation>; // mixed
@@ -65,13 +87,18 @@ namespace Store {
 
       redirect?: string; // post
 
+      fields: string[]; // static
+
       errors: string[]; // post
       warnings: string[]; // post
     };
-    ui?: {
-      [tagName: string]: {
-        [tagId: number]: any;
-      };
+    ui: UI;
+  }
+
+  export interface UI {
+    [tagName: string]: {
+      global?: any;
+      [tagId: string]: any;
     };
   }
 
@@ -93,7 +120,6 @@ namespace Store {
      * byId key
      */
     name: string; // static
-    label: string; // static
     total: number; // post
   }
 
@@ -102,20 +128,11 @@ namespace Store {
     descending?: boolean;
   }
 
-  export namespace Sort {
-    export interface Labeled extends Sort {
-      /**
-       * byId key
-       */
-      label: string;
-    }
-  }
-
   export interface Page {
     /**
      * number of products per page
      */
-    size: number; // pre
+    sizes: SelectableList<number>; // mixed
 
     /**
      * current page number
@@ -126,10 +143,6 @@ namespace Store {
      * number of first page
      */
     first: 1; // static
-    /**
-     * maximum number of page numbers to display
-     */
-    limit: number; // static
 
     /**
      * number of next page
@@ -152,11 +165,6 @@ namespace Store {
      * end of displayed products
      */
     to?: number; // post
-
-    /**
-     * displayed number range (in <gb-pages>)
-     */
-    range: number[]; // post
   }
 
   export interface Template {
@@ -174,21 +182,22 @@ namespace Store {
 
   export interface IsFetching {
     moreRefinements?: boolean;
+    moreProducts?: boolean;
     search?: boolean;
     autocompleteSuggestions?: boolean;
     autocompleteProducts?: boolean;
     details?: boolean;
   }
 
-  export type Zone = ContentZone | RichContentZone | RecordZone;
+  export type Zone = ContentZone | RichContentZone | ProductsZone;
 
   export namespace Zone {
-    export type Type = 'content' | 'rich_content' | 'record';
+    export type Type = typeof Type.CONTENT | typeof Type.RICH_CONTENT | typeof Type.PRODUCTS;
 
     export namespace Type {
       export const CONTENT = 'content';
       export const RICH_CONTENT = 'rich_content';
-      export const RECORD = 'record';
+      export const PRODUCTS = 'products';
     }
   }
 
@@ -198,17 +207,18 @@ namespace Store {
   }
 
   export interface ContentZone extends BaseZone {
-    type: 'content';
+    type: typeof Zone.Type.CONTENT;
     content: string;
   }
 
   export interface RichContentZone extends BaseZone {
-    type: 'rich_content';
+    type: typeof Zone.Type.RICH_CONTENT;
     content: string;
   }
 
-  export interface RecordZone extends BaseZone {
-    type: 'record';
+  export interface ProductsZone extends BaseZone {
+    type: typeof Zone.Type.PRODUCTS;
+    query: string;
     products: Product[];
   }
 
@@ -255,6 +265,7 @@ namespace Store {
     query?: string; // pre
     suggestions: string[]; // post
     category: Autocomplete.Category; // static & post
+    navigations: Autocomplete.Navigation[]; // post
     products: Product[]; // post
   }
 
@@ -263,6 +274,16 @@ namespace Store {
       field?: string; // static
       values: string[]; // post
     }
+
+    export interface Navigation {
+      field: string;
+      refinements: string[];
+    }
+  }
+
+  export interface SelectableList<T> {
+    items: T[];
+    selected?: number;
   }
 
   export interface Indexed<T> {

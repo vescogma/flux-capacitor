@@ -1,14 +1,17 @@
-import { Action, Store } from '..';
-import State = Store.IsFetching;
+import Actions from '../actions';
+import Store from '../store';
 
-export default function updateIsFetching(state: State, action): State {
+export type State = Store.IsFetching;
+
+export default function updateIsFetching(state: State = {}, action): State {
   switch (action.type) {
-    case Action.types.SO_FETCHING: return soFetching(state, action);
-    case Action.types.RECEIVE_MORE_REFINEMENTS: return notFetching(state, 'moreRefinements');
-    case Action.types.RECEIVE_AUTOCOMPLETE_SUGGESTIONS: return notFetching(state, 'autocompleteSuggestions');
-    case Action.types.RECEIVE_AUTOCOMPLETE_PRODUCTS: return notFetching(state, 'autocompleteProducts');
-    case Action.types.RECEIVE_DETAILS_PRODUCT: return notFetching(state, 'details');
-    case Action.types.RECEIVE_PRODUCTS: return notFetching(state, 'search');
+    case Actions.SO_FETCHING: return soFetching(state, action);
+    case Actions.RECEIVE_MORE_REFINEMENTS: return notFetching(state, 'moreRefinements');
+    case Actions.RECEIVE_MORE_PRODUCTS: return notFetching(state, 'moreProducts');
+    case Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS: return notFetching(state, 'autocompleteSuggestions');
+    case Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS: return notFetching(state, 'autocompleteProducts');
+    case Actions.RECEIVE_DETAILS_PRODUCT: return notFetching(state, 'details');
+    case Actions.RECEIVE_PRODUCTS: return notFetching(state, 'search');
     default: return state;
   }
 }

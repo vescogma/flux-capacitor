@@ -10,6 +10,7 @@ export const SORTS_UPDATED = 'sorts_updated'; // mixed
 
 // product events
 export const PRODUCTS_UPDATED = 'products_updated'; // mixed
+export const MORE_PRODUCTS_ADDED = 'more_products_added'; // post
 
 // collection events
 export const COLLECTION_UPDATED = 'collection_updated'; // post
@@ -20,8 +21,8 @@ export const NAVIGATIONS_UPDATED = 'navigations_updated'; // post
 export const SELECTED_REFINEMENTS_UPDATED = 'selected_refinements_updated'; // post
 
 // autocomplete events
-export const AUTOCOMPLETE_UPDATED = 'autocomplete_updated'; // post
 export const AUTOCOMPLETE_QUERY_UPDATED = 'autocomplete_query_updated'; // pre
+export const AUTOCOMPLETE_SUGGESTIONS_UPDATED = 'autocomplete_suggestions_updated'; // post
 export const AUTOCOMPLETE_PRODUCTS_UPDATED = 'autocomplete_products_updated'; // post
 
 // template events
@@ -54,4 +55,22 @@ export const FETCH_SEARCH_DONE = 'fetch:search:done';
 export const FETCH_AUTOCOMPLETE_SUGGESTIONS_DONE = 'fetch:autocomplete_suggestions:done';
 export const FETCH_AUTOCOMPLETE_PRODUCTS_DONE = 'fetch:autocomplete_products:done';
 export const FETCH_MORE_REFINEMENTS_DONE = 'fetch:more_refinements:done';
+export const FETCH_MORE_PRODUCTS_DONE = 'fetch:more_products:done';
 export const FETCH_DETAILS_DONE = 'fetch:details:done';
+
+// ui events
+export const UI_UPDATED = 'ui:updated';
+
+// app events
+export const APP_STARTED = 'app:started';
+export const APP_KILLED = 'app:killed';
+
+// observer events
+export const OBSERVER_NODE_CHANGED = 'observer:node_changed';
+
+// tag events
+export const TAG_LIFECYCLE = 'tag:lifecycle';
+export const TAG_ALIASING = 'tag:aliasing';
+
+// history events
+export const HISTORY_SAVE = 'history:save';

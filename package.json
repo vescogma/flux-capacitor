@@ -1,6 +1,6 @@
 {
-  "name": "flux-capacitor",
-  "version": "0.0.0-development",
+  "name": "@storefront/flux-capacitor",
+  "version": "0.0.28-development",
   "description": "State management for StoreFront",
   "repository": {
     "type": "git",
@@ -13,15 +13,21 @@
   "author": "Ben Teichman <ben.teichman@groupbyinc.com>",
   "license": "MIT",
   "main": "dist/index.js",
+  "module:esnext": "esnext/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist/"
+    "dist/",
+    "esnext/",
+    "src/"
   ],
   "scripts": {
     "start": "start-runner -p re-start/presets/typescript",
-    "prepush": "yarn start prepush",
-    "prepublish": "yarn start build",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "esnext": "npm start build -- -- --compileOpts.configFile tsconfig.esnext.json --outDir esnext",
+    "dev": "npm start dev",
+    "test": "npm start test",
+    "tdd": "npm start tdd",
+    "prepush": "npm start prepush",
+    "prepublish": "npm start build && npm run esnext"
   },
   "release": {
     "verifyConditions": "condition-circle"
@@ -33,32 +39,39 @@
     "restart": {
       "testFiles": [
         "test/bootstrap.ts",
-        "test/**/*.ts"
-      ]
+        "test/unit/**/*.ts"
+      ],
+      "releaseOpts": {
+        "public": true
+      }
     }
   },
   "devDependencies": {
+    "@types/chai": "^4.0.0",
     "@types/mocha": "^2.2.41",
-    "babel-preset-env": "^1.4.0",
-    "babel-preset-stage-3": "^6.24.1",
-    "chai": "^3.5.0",
+    "@types/node": "^7.0.29",
+    "@types/sinon": "^2.2.2",
+    "@types/sinon-chai": "^2.7.28",
+    "chai": "^4.0.0",
     "condition-circle": "^1.5.0",
     "cz-conventional-changelog": "^2.0.0",
     "husky": "^0.13.3",
-    "re-start": "^1.11.0",
-    "semantic-release": "^6.3.6",
-    "sinon": "^2.2.0",
-    "start-babel-cli": "^4.0.1",
-    "tslint": "^5.2.0",
+    "mocha-suite": "^1.0.9",
+    "re-start": "^1.14.8",
+    "sinon": "^2.3.2",
+    "sinon-chai": "^2.10.0",
+    "start-simple-cli": "^4.1.1",
+    "tslint": "^5.3.2",
     "tslint-config-groupby": "^1.0.0",
-    "typescript": "^2.3.2"
+    "typescript": "^2.3.3"
   },
   "dependencies": {
-    "@types/uuid": "^2.0.29",
+    "@types/redux-logger": "^3.0.0",
+    "@types/uuid": "^3.0.0",
     "eventemitter3": "^2.0.3",
-    "groupby-api": "beta",
-    "lodash.range": "^3.2.0",
+    "groupby-api": "^2.0.1",
     "redux": "^3.6.0",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "sayt": "^0.1.7",
     "uuid": "^3.0.1"

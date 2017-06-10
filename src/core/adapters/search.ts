@@ -8,12 +8,16 @@ import {
   ValueRefinement,
   Zone,
 } from 'groupby-api';
-import { Action, Store } from '..';
+import Actions from '../actions';
+import Selectors from '../selectors';
+import Store from '../store';
 import Page from './page';
+
+export const MAX_RECORDS = 10000;
 
 namespace Adapter {
 
-  export const extractQuery = (results: Results, linkMapper: (value: string) => Store.Linkable): Action.Query => ({
+  export const extractQuery = (results: Results, linkMapper: (value: string) => Store.Linkable): Actions.Query => ({
     corrected: results.correctedQuery,
     didYouMean: results.didYouMean.map(linkMapper),
     related: results.relatedQueries.map(linkMapper),
@@ -53,19 +57,27 @@ namespace Adapter {
     }
   };
 
-  export const appendSelectedRefinements = (available: Store.Navigation, selected: Navigation) => {
-    available.selected = selected.refinements.reduce((indices, refinement) => {
-      // tslint:disable-next-line max-line-length
-      const index = (<any>available.refinements.findIndex)((availableRef) =>
-        Adapter.refinementsMatch(availableRef, <any>refinement));
+  export const mergeSelectedRefinements = (available: Store.Navigation, selected: Navigation) => {
+    available.selected = [];
+
+    selected.refinements.forEach((refinement) => {
+      const index = available.refinements.findIndex((availableRef) =>
+        Adapter.refinementsMatch(<any>availableRef, <any>refinement));
+
       if (index !== -1) {
-        indices.push(index);
+        available.selected.push(index);
+      } else {
+        const { value, low, high, total } = <any>refinement;
+        const newIndex = available.refinements.push(available.range
+          ? { low, high, total }
+          : { value, total }) - 1;
+        available.selected.push(newIndex);
       }
-      return indices;
-    }, []);
+    });
   };
 
-  export const combineNavigations = (available: Navigation[], selected: Navigation[]): Store.Navigation[] => {
+  // tslint:disable-next-line max-line-length
+  export const combineNavigations = ({ availableNavigation: available, selectedNavigation: selected }: Results): Store.Navigation[] => {
     const navigations = available.reduce((map, navigation) =>
       Object.assign(map, { [navigation.name]: Adapter.extractNavigation(navigation) }), {});
 
@@ -73,10 +85,10 @@ namespace Adapter {
       const availableNav = navigations[selectedNav.name];
 
       if (availableNav) {
-        Adapter.appendSelectedRefinements(availableNav, selectedNav);
+        Adapter.mergeSelectedRefinements(availableNav, selectedNav);
       } else {
         const navigation = Adapter.extractNavigation(selectedNav);
-        navigation.selected = <any[]>Object.keys(Array(selectedNav.refinements.length));
+        navigation.selected = <any[]>Object.keys(Array(navigation.refinements.length));
         navigations[selectedNav.name] = navigation;
       }
     });
@@ -92,14 +104,15 @@ namespace Adapter {
         type: Store.Zone.Type.CONTENT,
       };
       case 'Rich_Content': return {
-        content: zone.content,
+        content: zone.richContent,
         name: zone.name,
         type: Store.Zone.Type.RICH_CONTENT,
       };
-      case 'Records': return {
+      case 'Record': return {
         name: zone.name,
+        query: zone.query,
         products: zone.records.map((record) => record.allMeta),
-        type: Store.Zone.Type.RECORD,
+        type: Store.Zone.Type.PRODUCTS,
       };
     }
   };
@@ -111,33 +124,24 @@ namespace Adapter {
       Object.assign(zones, { [key]: Adapter.extractZone(template.zones[key]) }), {}),
   });
 
-  export const extractPage = (state: Store.State): Action.Page => {
-    // TODO move this default into the reducer setup
-    const pageSize = state.data.page.size || 10;
+  export const extractRecordCount = (results: Results) =>
+    Math.min(results.totalRecordCount, MAX_RECORDS);
+
+  export const extractPage = (state: Store.State, totalRecords: number): Actions.Page => {
+    const pageSize = Selectors.pageSize(state);
     const currentPage = state.data.page.current;
-    const totalRecords = state.data.recordCount;
     const last = Page.finalPage(pageSize, totalRecords);
+    const from = Page.fromResult(currentPage, pageSize);
+    const to = Page.toResult(currentPage, pageSize, totalRecords);
 
     return {
-      from: Page.fromResult(currentPage, pageSize),
+      from,
       last,
       next: Page.nextPage(currentPage, last),
       previous: Page.previousPage(currentPage),
-      range: Page.pageNumbers(currentPage, last, state.data.page.limit),
-      to: Page.toResult(currentPage, pageSize, totalRecords),
+      to,
     };
   };
-
-  // tslint:disable-next-line max-line-length
-  export const extractAutocompleteSuggestions = ({ result }: any, category?: string): { suggestions: string[], categoryValues: string[] } => ({
-    categoryValues: category && result.searchTerms[0] ? Adapter.extractCategoryValues(result.searchTerms[0], category) : [],
-    suggestions: result.searchTerms.map(({ value }) => value),
-  });
-
-  // tslint:disable-next-line max-line-length
-  export const extractCategoryValues = ({ additionalInfo }: { additionalInfo: { [key: string]: any } }, category: string) => additionalInfo[category] || [];
-
-  export const extractAutocompleteProducts = ({ result: { products } }: any) => products.map(Adapter.extractProduct);
 
   export const extractProduct = ({ allMeta }) => allMeta;
 }

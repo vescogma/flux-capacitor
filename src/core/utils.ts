@@ -1,7 +1,10 @@
 import { Dispatch } from 'redux';
-import { Store } from '.';
+import Store from './store';
 
 export const rayify = <T>(arr: T | T[]): T[] => Array.isArray(arr) ? arr : [arr];
+
+// tslint:disable-next-line max-line-length
+export const action = <T>(type: string, data: Partial<T>) => ({ type, ...<any>data });
 
 // tslint:disable-next-line max-line-length
 export const thunk = <T>(type: string, data: Partial<T>) => (dispatch: Dispatch<T>) => dispatch({ type, ...<any>data });
