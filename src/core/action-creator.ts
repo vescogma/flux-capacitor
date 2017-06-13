@@ -34,8 +34,22 @@ export default class Creator {
         dispatch(this.soFetching('moreRefinements'));
         return this.flux.clients.bridge.refinements(Selectors.searchRequest(state), navigationId)
           .then(({ navigation: { name, refinements } }) => {
+            const navigation = Selectors.navigation(state, name);
+            const navigationType = navigation.range ? 'Range' : 'Value';
+            // tslint:disable-next-line max-line-length
+            const selectedRefinements = navigation.refinements.filter((_, index) => navigation.selected.includes(index));
             const remapped = refinements.map(Adapters.Search.extractRefinement);
-            return dispatch(this.receiveMoreRefinements(name, remapped));
+
+            const selected = [];
+            remapped.forEach((refinement, index) => {
+              // tslint:disable-next-line max-line-length
+              const found = selectedRefinements.findIndex((ref) => Adapters.Search.refinementsMatch(<any>refinement, <any>ref, navigationType));
+              if (found !== -1) {
+                selected.push(index);
+              }
+            });
+
+            return dispatch(this.receiveMoreRefinements(name, remapped, selected));
           });
       }
     }
@@ -203,9 +217,9 @@ export default class Creator {
     thunk<Actions.Redirect.ReceiveRedirect>(
       Actions.RECEIVE_REDIRECT, { redirect })
 
-  receiveMoreRefinements = (navigationId: string, refinements: Store.Refinement[]) =>
+  receiveMoreRefinements = (navigationId: string, refinements: Store.Refinement[], selected: number[]) =>
     thunk<Actions.Navigation.ReceiveMoreRefinements>(
-      Actions.RECEIVE_MORE_REFINEMENTS, { navigationId, refinements })
+      Actions.RECEIVE_MORE_REFINEMENTS, { navigationId, refinements, selected })
 
   // tslint:disable-next-line max-line-length
   receiveAutocompleteSuggestions = (suggestions: string[], categoryValues: string[], navigations: Store.Autocomplete.Navigation[]) =>

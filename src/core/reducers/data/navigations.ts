@@ -96,7 +96,8 @@ export const deselectRefinement = (state: State, { navigationId, index: refineme
   }
 };
 
-export const receiveMoreRefinements = (state: State, { navigationId, refinements }: Action.ReceiveMoreRefinements) => {
+// tslint:disable-next-line max-line-length
+export const receiveMoreRefinements = (state: State, { navigationId, refinements, selected }: Action.ReceiveMoreRefinements) => {
   if (navigationId && refinements) {
     return {
       ...state,
@@ -105,6 +106,7 @@ export const receiveMoreRefinements = (state: State, { navigationId, refinements
         [navigationId]: {
           ...state.byId[navigationId],
           refinements,
+          selected,
           more: false,
         },
       },

@@ -133,6 +133,7 @@ namespace Actions {
     export interface ReceiveMoreRefinements extends Base {
       navigationId: string;
       refinements: Store.Refinement[];
+      selected: number[];
     }
   }
 

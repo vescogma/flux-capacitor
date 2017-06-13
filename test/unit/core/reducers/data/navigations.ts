@@ -196,6 +196,7 @@ suite('navigations', ({ expect }) => {
     });
 
     it('should update refinements state on RECEIVE_MORE_REFINEMENTS', () => {
+      const selected = [0, 3, 4];
       const refinements = [
         { value: 'Paper back', total: 400 },
         { value: 'ebook', total: 2000 },
@@ -207,6 +208,7 @@ suite('navigations', ({ expect }) => {
             ...Format,
             more: false,
             refinements,
+            selected
           },
           Section,
         },
@@ -216,6 +218,7 @@ suite('navigations', ({ expect }) => {
         type: Actions.RECEIVE_MORE_REFINEMENTS,
         navigationId: 'Format',
         refinements,
+        selected
       });
 
       expect(reducer).to.eql(newState);

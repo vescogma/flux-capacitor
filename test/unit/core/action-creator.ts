@@ -54,6 +54,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const action = actions.fetchMoreRefinements(name);
         const refinements = stub().resolves({ navigation: { name, refinements: ['c', 'd'] } });
         const searchRequest = stub(Selectors, 'searchRequest').returns(search);
+        stub(Selectors, 'navigation').returns({ refinements: [] });
         stub(Selectors, 'hasMoreRefinements').returns(true);
         stub(actions, 'receiveMoreRefinements');
         stub(SearchAdapter, 'extractRefinement').callsFake((s) => s);
@@ -74,6 +75,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const dispatch = spy();
         const extractRefinement = stub(SearchAdapter, 'extractRefinement').callsFake((value) => value);
         const receiveMoreRefinements = stub(actions, 'receiveMoreRefinements').returns(moreRefinementsAction);
+        stub(Selectors, 'navigation').returns({ refinements: [] });
         stub(Selectors, 'hasMoreRefinements').returns(true);
         stub(Selectors, 'searchRequest');
         flux.clients = {
@@ -84,9 +86,36 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
         return action(dispatch, () => state)
           .then(() => {
-            expect(extractRefinement).to.be.calledWith('c');
-            expect(extractRefinement).to.be.calledWith('d');
-            expect(receiveMoreRefinements).to.be.calledWith(name, ['c', 'd']);
+            expect(extractRefinement).to.be.calledWith('c')
+              .and.calledWith('d');
+            expect(receiveMoreRefinements).to.be.calledWith(name, ['c', 'd'], []);
+            expect(dispatch).to.be.calledWith(moreRefinementsAction);
+          });
+      });
+
+      it('should apply selected refinements', () => {
+        const name = 'brand';
+        const state: any = { a: 'b' };
+        const moreRefinementsAction = { e: 'f' };
+        const action = actions.fetchMoreRefinements(name);
+        const dispatch = spy();
+        const extractRefinement = stub(SearchAdapter, 'extractRefinement').callsFake((value) => value);
+        const receiveMoreRefinements = stub(actions, 'receiveMoreRefinements').returns(moreRefinementsAction);
+        stub(SearchAdapter, 'refinementsMatch').returns(true);
+        stub(Selectors, 'navigation').returns({ refinements: ['a', 'b', 'c'], selected: [1, 2] });
+        stub(Selectors, 'hasMoreRefinements').returns(true);
+        stub(Selectors, 'searchRequest');
+        flux.clients = {
+          bridge: {
+            refinements: stub().resolves({ navigation: { name, refinements: ['c', 'd'] }, selected: [0, 3] })
+          }
+        };
+
+        return action(dispatch, () => state)
+          .then(() => {
+            expect(extractRefinement).to.be.calledWith('c')
+              .and.calledWith('d');
+            expect(receiveMoreRefinements).to.be.calledWith(name, ['c', 'd'], [0, 1]);
             expect(dispatch).to.be.calledWith(moreRefinementsAction);
           });
       });
@@ -475,8 +504,8 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
           expect(extractQuery).to.be.calledWith(results, linkMapper);
           expect(dispatch).to.be.calledWith(receiveQueryAction);
           expect(receiveProducts).to.be.calledWith(['x', 'x']);
-          expect(extractProduct).to.be.calledWith({ allMeta: { u: 'v' } });
-          expect(extractProduct).to.be.calledWith({ allMeta: { w: 'x' } });
+          expect(extractProduct).to.be.calledWith({ allMeta: { u: 'v' } })
+            .and.calledWith({ allMeta: { w: 'x' } });
           expect(dispatch).to.be.calledWith(receiveProductsAction);
           expect(receiveNavigations).to.be.calledWith(navigations);
           expect(combineNavigations).to.be.calledWith(results);
@@ -574,11 +603,12 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         it('should create a RECEIVE_MORE_REFINEMENTS action', () => {
           const navigationId = 'brand';
           const refinements: any[] = ['a', 'b'];
+          const selected = [1, 7];
           const thunk = stub(utils, 'thunk');
 
-          actions.receiveMoreRefinements(navigationId, refinements);
+          actions.receiveMoreRefinements(navigationId, refinements, selected);
 
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_MORE_REFINEMENTS, { navigationId, refinements });
+          expect(thunk).to.be.calledWith(Actions.RECEIVE_MORE_REFINEMENTS, { navigationId, refinements, selected });
         });
       });
 

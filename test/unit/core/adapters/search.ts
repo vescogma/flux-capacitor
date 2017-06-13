@@ -92,8 +92,8 @@ suite('SearchAdapter', ({ expect, stub }) => {
         selected: [],
         sort,
       });
-      expect(extractRefinement).to.be.calledWith('a');
-      expect(extractRefinement).to.be.calledWith('b');
+      expect(extractRefinement).to.be.calledWith('a')
+        .and.calledWith('b');
       expect(extractNavigationSort).to.be.calledWith({ c: 'd' });
     });
 
@@ -135,6 +135,13 @@ suite('SearchAdapter', ({ expect, stub }) => {
       const rhs: any = { type: 'Range', low: 10, high: 30 };
 
       expect(Adapter.refinementsMatch(lhs, rhs)).to.be.false;
+    });
+
+    it('should accept explicit type', () => {
+      const lhs: any = { type: 'Range', value: 'prestigious' };
+      const rhs: any = { type: 'Range', value: 'prestigious' };
+
+      expect(Adapter.refinementsMatch(lhs, rhs, 'Value')).to.be.true;
     });
   });
 

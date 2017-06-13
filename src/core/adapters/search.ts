@@ -49,11 +49,11 @@ namespace Adapter {
   });
 
   // tslint:disable-next-line max-line-length
-  export const refinementsMatch = (lhs: Store.RangeRefinement & Store.ValueRefinement, rhs: RangeRefinement & ValueRefinement) => {
-    if (rhs.type === 'Value') {
-      return lhs.value === rhs.value;
+  export const refinementsMatch = (lhs: Store.RangeRefinement | Store.ValueRefinement, rhs: RangeRefinement | ValueRefinement, type: string = rhs.type) => {
+    if (type === 'Value') {
+      return (<any>lhs).value === (<any>rhs).value;
     } else {
-      return lhs.low === rhs.low && lhs.high === rhs.high;
+      return (<any>lhs).low === (<any>rhs).low && (<any>lhs).high === (<any>rhs).high;
     }
   };
 
