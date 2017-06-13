@@ -88,7 +88,8 @@ namespace Adapter {
         Adapter.mergeSelectedRefinements(availableNav, selectedNav);
       } else {
         const navigation = Adapter.extractNavigation(selectedNav);
-        navigation.selected = <any[]>Object.keys(Array(navigation.refinements.length));
+        navigation.selected = <any[]>Object.keys(Array(navigation.refinements.length).fill(0))
+          .map((value) => Number(value));
         navigations[selectedNav.name] = navigation;
       }
     });

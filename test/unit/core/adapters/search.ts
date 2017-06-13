@@ -139,7 +139,7 @@ suite('SearchAdapter', ({ expect, stub }) => {
   });
 
   describe('mergeSelectedRefinements()', () => {
-    it('should set selected on availble navigation', () => {
+    it('should set selected on available navigation', () => {
       const available: any = { refinements: ['a', 'b', 'c', 'd'] };
       const selected: any = { refinements: ['a', 'd'] };
       const refinementsMatch = stub(Adapter, 'refinementsMatch')
@@ -148,11 +148,74 @@ suite('SearchAdapter', ({ expect, stub }) => {
       Adapter.mergeSelectedRefinements(available, selected);
 
       expect(available.selected).to.eql([0, 3]);
-      expect(refinementsMatch).to.be.calledWith('a', 'a');
-      expect(refinementsMatch).to.be.calledWith('a', 'd');
-      expect(refinementsMatch).to.be.calledWith('b', 'd');
-      expect(refinementsMatch).to.be.calledWith('c', 'd');
-      expect(refinementsMatch).to.be.calledWith('d', 'd');
+      expect(refinementsMatch).to.be.calledWith('a', 'a')
+        .and.calledWith('a', 'd')
+        .and.calledWith('b', 'd')
+        .and.calledWith('c', 'd')
+        .and.calledWith('d', 'd');
+    });
+
+    it('should add selected value refinements', () => {
+      const available: any = { refinements: ['a', 'b', 'c', 'd'] };
+      const selected: any = { refinements: [{ value: 'e', total: 10 }, { value: 'f', total: 13 }] };
+      stub(Adapter, 'refinementsMatch').returns(false);
+
+      Adapter.mergeSelectedRefinements(available, selected);
+
+      expect(available.refinements).to.eql([
+        'a', 'b', 'c', 'd',
+        { value: 'e', total: 10 },
+        { value: 'f', total: 13 }
+      ]);
+      expect(available.selected).to.eql([4, 5]);
+    });
+
+    it('should add selected range refinements', () => {
+      const available: any = { range: true, refinements: ['a', 'b', 'c', 'd'] };
+      const selected: any = { refinements: [{ low: 3, high: 4, total: 10 }, { low: 7, high: 9, total: 13 }] };
+      stub(Adapter, 'refinementsMatch').returns(false);
+
+      Adapter.mergeSelectedRefinements(available, selected);
+
+      expect(available.refinements).to.eql([
+        'a', 'b', 'c', 'd',
+        { low: 3, high: 4, total: 10 },
+        { low: 7, high: 9, total: 13 }
+      ]);
+      expect(available.selected).to.eql([4, 5]);
+    });
+  });
+
+  describe('combineNavigations()', () => {
+    it('should merge selected and available refinements', () => {
+      const availableNavigation = [{ name: 'a' }, { name: 'b' }, { name: 'c' }];
+      const extractedAvailable = [
+        { name: 'A', refinements: [4, 5] },
+        { name: 'B', refinements: [6, 7] },
+        { name: 'C', refinements: [8, 9] }
+      ];
+      const selectedNavigation = [{ name: 'b' }, { name: 'd' }];
+      const extractNavigation = stub(Adapter, 'extractNavigation').callsFake((nav) => {
+        if (availableNavigation.includes(nav)) {
+          return extractedAvailable[availableNavigation.indexOf(nav)];
+        } else {
+          return { name: 'x', refinements: [1, 2, 3] };
+        }
+      });
+      const mergeSelectedRefinements = stub(Adapter, 'mergeSelectedRefinements');
+
+      const merged = Adapter.combineNavigations(<any>{ availableNavigation, selectedNavigation });
+
+      expect(merged).to.eql([
+        ...extractedAvailable,
+        { name: 'x', refinements: [1, 2, 3], selected: [0, 1, 2] },
+      ]);
+      expect(mergeSelectedRefinements).to.be.calledWith(extractedAvailable[1], selectedNavigation[0]);
+      expect(extractNavigation).to.have.callCount(4)
+        .and.calledWith(availableNavigation[0])
+        .and.calledWith(availableNavigation[1])
+        .and.calledWith(availableNavigation[2])
+        .and.calledWith(selectedNavigation[1]);
     });
   });
 
@@ -212,8 +275,8 @@ suite('SearchAdapter', ({ expect, stub }) => {
           'zone 2': 'x',
         },
       });
-      expect(extractZone).to.be.calledWith('a');
-      expect(extractZone).to.be.calledWith('b');
+      expect(extractZone).to.be.calledWith('a')
+        .and.calledWith('b');
     });
   });
 
