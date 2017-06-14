@@ -242,7 +242,7 @@ namespace Store {
     range?: boolean; // post
     or?: boolean; // post
     selected: number[]; // pre
-    refinements: Array<ValueRefinement | RangeRefinement>; // post
+    refinements: Refinement[]; // post
     sort?: Sort; // post
   }
 
