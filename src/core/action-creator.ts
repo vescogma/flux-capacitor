@@ -121,8 +121,12 @@ export default class Creator {
 
   // request action creators
   updateSearch = (search: Actions.Search) =>
-    thunk<Actions.Search.UpdateSearch>(
-      Actions.UPDATE_SEARCH, search)
+    (dispatch: Dispatch<Actions.Search.UpdateSearch>) => {
+      const query = search.query && search.query.trim();
+      if (query) {
+        dispatch({ type: Actions.UPDATE_SEARCH, ...<any>search, query });
+      }
+    }
 
   selectRefinement = (navigationId: string, index: number) =>
     conditional<Actions.Navigation.SelectRefinement>((state) =>
