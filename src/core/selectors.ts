@@ -1,3 +1,4 @@
+import { MAX_RECORDS } from './adapters/search';
 import { Request } from 'groupby-api';
 import Store from './store';
 
@@ -6,15 +7,16 @@ namespace Selectors {
   export const searchRequest = (state: Store.State): Request => {
     const sort = Selectors.sort(state);
     const pageSize = Selectors.pageSize(state);
+    const skip = Selectors.skip(state, pageSize);
 
     return <any>{
-      pageSize,
+      pageSize: Math.min(pageSize, MAX_RECORDS - skip),
       fields: Selectors.fields(state),
       query: Selectors.query(state),
       collection: Selectors.collection(state),
       refinements: Selectors.selectedRefinements(state),
       sort: sort && Selectors.requestSort(sort),
-      skip: Selectors.skip(state, pageSize)
+      skip
     };
   };
 

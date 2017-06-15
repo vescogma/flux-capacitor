@@ -1,7 +1,30 @@
+import { MAX_RECORDS } from '../../../src/core/adapters/search';
 import Selectors from '../../../src/core/selectors';
 import suite from '../_suite';
 
 suite('selectors', ({ expect, stub }) => {
+
+  describe('searchRequest()', () => {
+    it('should decrease page size to prevent exceeding MAX_RECORDS', () => {
+      const remainingRecords = 2;
+      const originalPageSize = MAX_RECORDS - 1;
+      const originalSkip = MAX_RECORDS - remainingRecords;
+
+      stub(Selectors, 'fields');
+      stub(Selectors, 'query');
+      stub(Selectors, 'collection');
+      stub(Selectors, 'selectedRefinements');
+      stub(Selectors, 'sort');
+      stub(Selectors, 'requestSort');
+      stub(Selectors, 'pageSize').returns(originalPageSize);
+      stub(Selectors, 'skip').returns(originalSkip);
+
+      const { pageSize, skip } = Selectors.searchRequest(<any>{});
+
+      expect(pageSize).to.eq(remainingRecords);
+      expect(skip).to.eq(originalSkip);
+    });
+  });
 
   describe('navigation()', () => {
     it('should select a navigation from the state', () => {
