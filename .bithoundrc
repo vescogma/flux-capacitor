@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "unused-ignores": [
+      "uuid",
+      "redux-logger",
+      "redux-thunk",
+      "@types/*"
+    ]
+  }
+}

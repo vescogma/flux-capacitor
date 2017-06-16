@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore, Store as ReduxStore } from 'redux';
 import thunk from 'redux-thunk';
-import * as uuid from 'uuid/v1';
+import * as uuid from 'uuid';
 import FluxCapacitor from '../flux-capacitor';
 import Actions from './actions';
 import Adapter from './adapters/configuration';
@@ -28,7 +28,7 @@ export const SEARCH_CHANGE_ACTIONS = [
 export const idGenerator = (key: string, actions: string[]) =>
   (store) => (next) => (action) => {
     if (actions.includes(action.type)) {
-      return next({ ...action, [key]: uuid() });
+      return next({ ...action, [key]: uuid.v1() });
     } else {
       return next(action);
     }

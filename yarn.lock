@@ -80,10 +80,6 @@
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-2.3.1.tgz#5e214093e9e2345219ab0f31bf310c9790ad0712"
 
-"@types/uuid@^3.0.0":
-  version "3.3.28"
-  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-3.3.28.tgz#e0ca8f62e667783180b179ed69068586d6fba5cc"
-
 abbrev@1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.0.tgz#d0554c2256636e2f56e7c2e5ad183f859428d81f"
