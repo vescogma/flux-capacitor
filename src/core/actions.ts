@@ -70,7 +70,16 @@ namespace Actions {
   export interface Search {
     query?: string;
     navigationId?: string;
+
+    // used to select existing refinement
     index?: number;
+
+    // used to add new value refinement
+    value?: string;
+
+    // used to add new range refinement
+    low?: number;
+    high?: number;
 
     /**
      * only for refinements
@@ -125,6 +134,10 @@ namespace Actions {
     export type SelectRefinement = RefinementAction;
     export type DeselectRefinement = RefinementAction;
     export interface UpdateSearch extends Partial<RefinementAction> {
+      range?: boolean;
+      value?: string;
+      low?: number;
+      high?: number;
       clear?: boolean;
     }
     export interface ReceiveNavigations extends Base {

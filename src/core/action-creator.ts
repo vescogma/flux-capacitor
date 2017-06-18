@@ -123,7 +123,7 @@ export default class Creator {
   updateSearch = (search: Actions.Search) =>
     (dispatch: Dispatch<Actions.Search.UpdateSearch>) => {
       const query = search.query && search.query.trim();
-      if (query) {
+      if (query || query === null) {
         dispatch({ type: Actions.UPDATE_SEARCH, ...<any>search, query });
       }
     }
@@ -253,4 +253,9 @@ export default class Creator {
 
   // app action creators
   startApp = () => ({ type: Actions.START_APP });
+}
+
+export interface AddRefinement {
+  (navigationId: string, value: string): (dispatch: AddRefinement) => void;
+  (navigationId: string, low: number, high: number): (dispatch: AddRefinement) => void;
 }

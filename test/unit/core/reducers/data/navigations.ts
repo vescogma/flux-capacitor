@@ -166,6 +166,119 @@ suite('navigations', ({ expect }) => {
       expect(reducer).to.eql(state);
     });
 
+    it('should add value navigation and refinement on UPDATE_SEARCH', () => {
+      const newState = {
+        allIds: ['Format', 'Section', 'Brand'],
+        byId: {
+          Format,
+          Section,
+          Brand: {
+            field: 'Brand',
+            label: 'Brand',
+            range: false,
+            refinements: [{ value: 'Oakley' }],
+            selected: [0]
+          }
+        }
+      };
+
+      const reducer = navigations(state, {
+        type: Actions.UPDATE_SEARCH,
+        navigationId: 'Brand',
+        range: false,
+        value: 'Oakley',
+        clear: true
+      });
+
+      expect(reducer).to.eql(newState);
+    });
+
+    it('should add range navigation and refinement on UPDATE_SEARCH', () => {
+      const newState = {
+        allIds: ['Format', 'Section', 'Brand'],
+        byId: {
+          Format,
+          Section,
+          Brand: {
+            field: 'Brand',
+            label: 'Brand',
+            range: true,
+            refinements: [{ low: 23, high: 34 }],
+            selected: [0]
+          }
+        }
+      };
+
+      const reducer = navigations(state, {
+        type: Actions.UPDATE_SEARCH,
+        navigationId: 'Brand',
+        range: true,
+        low: 23,
+        high: 34,
+        clear: true
+      });
+
+      expect(reducer).to.eql(newState);
+    });
+
+    it('should add refinement to existing navigation on UPDATE_SEARCH', () => {
+      const newState = {
+        allIds,
+        byId: {
+          Section,
+          Format: {
+            ...Format,
+            refinements: [
+              ...Format.refinements,
+              { value: 'eBook' }
+            ],
+            selected: [0, 2, 3]
+          }
+        }
+      };
+
+      const reducer = navigations(state, {
+        type: Actions.UPDATE_SEARCH,
+        navigationId: 'Format',
+        range: false,
+        value: 'eBook',
+        clear: true
+      });
+
+      expect(reducer).to.eql(newState);
+    });
+
+    it('should select existing refinement on UPDATE_SEARCH', () => {
+      const newState = {
+        allIds,
+        byId: {
+          Section,
+          Format: {
+            ...Format,
+            selected: [0, 2, 1]
+          }
+        }
+      };
+
+      const reducer = navigations(state, {
+        type: Actions.UPDATE_SEARCH,
+        navigationId: 'Format',
+        range: false,
+        value: 'Paper',
+        clear: true
+      });
+
+      expect(reducer).to.eql(newState);
+    });
+
+    it('should return state on UPDATE_SEARCH if no navigationId', () => {
+      const reducer = navigations(state, {
+        type: Actions.UPDATE_SEARCH,
+      });
+
+      expect(reducer).to.eql(state);
+    });
+
     it('should remove selected refinement state on DESELECT_REFINEMENT', () => {
       const newState = {
         allIds,

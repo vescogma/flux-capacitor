@@ -357,6 +357,15 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           actions.updateSearch(search)(dispatch);
         });
+
+        it('should create an UPDATE_SEARCH action with null query', () => {
+          const search: Actions.Search = { query: null };
+          const dispatch = spy();
+
+          actions.updateSearch(search)(dispatch);
+
+          expect(dispatch).to.be.calledWith({ type: Actions.UPDATE_SEARCH, query: null });
+        });
       });
 
       describe('selectRefinement()', () => {
@@ -466,6 +475,17 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
           expect(conditional).to.be.calledWith(sinon.match((predicate) =>
             predicate({ data: { autocomplete: { query: 'Fred Flinsto' } } })),
             Actions.UPDATE_AUTOCOMPLETE_QUERY, { query });
+        });
+      });
+
+      describe('refreshState()', () => {
+        it('should create a REFRESH_STATE action', () => {
+          const state = { a: 'b' };
+
+          expect(actions.refreshState(state)).to.eql({
+            type: Actions.REFRESH_STATE,
+            state
+          });
         });
       });
     });

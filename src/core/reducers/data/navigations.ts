@@ -1,4 +1,5 @@
 import Actions from '../../actions';
+import Adapter from '../../adapters/search';
 import Store from '../../store';
 import Action = Actions.Navigation;
 
@@ -26,25 +27,33 @@ export default function updateNavigations(state: State = DEFAULTS, action) {
   }
 }
 
-export const updateSearch = (state: State, { navigationId, index: refinementIndex }: Action.UpdateSearch) => {
+export const updateSearch = (state: State, action: Action.UpdateSearch) => {
   const byId = state.allIds.reduce((navs, nav) =>
     Object.assign(navs, { [nav]: { ...state.byId[nav], selected: [] } }), {});
-  if (!(navigationId && refinementIndex != null)) {
-    return {
-      ...state,
-      byId,
-    };
+
+  if ('navigationId' in action) {
+    const navigationId = action.navigationId;
+    if ('index' in action) {
+      const refinementIndex = action.index;
+
+      return {
+        ...state,
+        byId: {
+          ...byId,
+          [navigationId]: {
+            ...state.byId[navigationId],
+            // TODO: maybe check if already there
+            selected: [refinementIndex],
+          },
+        },
+      };
+    } else {
+      return addRefinement(state, action);
+    }
   } else {
     return {
       ...state,
-      byId: {
-        ...byId,
-        [navigationId]: {
-          ...state.byId[navigationId],
-          // TODO: maybe check if already there
-          selected: [refinementIndex],
-        },
-      },
+      byId,
     };
   }
 };
@@ -93,6 +102,54 @@ export const deselectRefinement = (state: State, { navigationId, index: refineme
     };
   } else {
     return state;
+  }
+};
+
+export const addRefinement = (state: State, { navigationId, value, low, high, range }: Action.UpdateSearch) => {
+  const refinement: any = range ? { low, high } : { value };
+
+  if (navigationId in state.byId) {
+    const index = state.byId[navigationId].refinements
+      .findIndex((ref) => Adapter.refinementsMatch(ref, refinement, range ? 'Range' : 'Value'));
+
+    return {
+      ...state,
+      byId: {
+        ...state.byId,
+        [navigationId]: {
+          ...state.byId[navigationId],
+          ...(index === -1
+            ? {
+              refinements: [
+                ...state.byId[navigationId].refinements,
+                refinement
+              ],
+              selected: [
+                ...state.byId[navigationId].selected,
+                state.byId[navigationId].refinements.length
+              ]
+            }
+            : {
+              selected: [...state.byId[navigationId].selected, index]
+            })
+        }
+      }
+    };
+  } else {
+    return {
+      ...state,
+      allIds: [...state.allIds, navigationId],
+      byId: {
+        ...state.byId,
+        [navigationId]: {
+          field: navigationId,
+          label: navigationId,
+          range,
+          refinements: [refinement],
+          selected: [0]
+        }
+      }
+    };
   }
 };
 
