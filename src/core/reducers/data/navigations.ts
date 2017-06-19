@@ -48,7 +48,7 @@ export const updateSearch = (state: State, action: Action.UpdateSearch) => {
         },
       };
     } else {
-      return addRefinement(state, action);
+      return addRefinement({ ...state, byId }, action);
     }
   } else {
     return {

@@ -170,8 +170,14 @@ suite('navigations', ({ expect }) => {
       const newState = {
         allIds: ['Format', 'Section', 'Brand'],
         byId: {
-          Format,
-          Section,
+          Format: {
+            ...Format,
+            selected: []
+          },
+          Section: {
+            ...Section,
+            selected: []
+          },
           Brand: {
             field: 'Brand',
             label: 'Brand',
@@ -197,8 +203,14 @@ suite('navigations', ({ expect }) => {
       const newState = {
         allIds: ['Format', 'Section', 'Brand'],
         byId: {
-          Format,
-          Section,
+          Format: {
+            ...Format,
+            selected: []
+          },
+          Section: {
+            ...Section,
+            selected: []
+          },
           Brand: {
             field: 'Brand',
             label: 'Brand',
@@ -225,14 +237,17 @@ suite('navigations', ({ expect }) => {
       const newState = {
         allIds,
         byId: {
-          Section,
+          Section: {
+            ...Section,
+            selected: []
+          },
           Format: {
             ...Format,
             refinements: [
               ...Format.refinements,
               { value: 'eBook' }
             ],
-            selected: [0, 2, 3]
+            selected: [3]
           }
         }
       };
@@ -252,10 +267,13 @@ suite('navigations', ({ expect }) => {
       const newState = {
         allIds,
         byId: {
-          Section,
+          Section: {
+            ...Section,
+            selected: []
+          },
           Format: {
             ...Format,
-            selected: [0, 2, 1]
+            selected: [1]
           }
         }
       };
