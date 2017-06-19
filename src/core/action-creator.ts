@@ -50,7 +50,9 @@ export default class Creator {
             });
 
             return dispatch(this.receiveMoreRefinements(name, remapped, selected));
-          });
+          })
+          // this action won't change the state other than to clear fetching flag
+          .catch((err) => dispatch(this.receiveMoreRefinements(null, [], [])));
       }
     }
 
@@ -60,7 +62,9 @@ export default class Creator {
       if (!state.isFetching.search) {
         dispatch(this.soFetching('search'));
         return this.flux.clients.bridge.search(Selectors.searchRequest(state))
-          .then((res) => dispatch(this.receiveSearchResponse(res)));
+          .then((res) => dispatch(this.receiveSearchResponse(res)))
+          // the action will re-use the existing products array and clear the fetching flag
+          .catch((err) => dispatch(this.receiveProducts(Selectors.products(state))));
       }
     }
 
@@ -76,7 +80,8 @@ export default class Creator {
         }).then((res) => {
           const products = Adapters.Autocomplete.extractProducts(res);
           dispatch(this.receiveMoreProducts(products));
-        });
+          // this action will add 0 new products but clear the fetching flag
+        }).catch((err) => dispatch(this.receiveMoreProducts([])));
       }
     }
 
@@ -93,7 +98,9 @@ export default class Creator {
               navigations
             } = Adapters.Autocomplete.extractSuggestions(res, category);
             dispatch(this.receiveAutocompleteSuggestions(suggestions, categoryValues, navigations));
-          });
+          })
+          // this action will clear autocomplete suggestions fetching flag
+          .catch((err) => dispatch(this.receiveAutocompleteSuggestions([], [], [])));
       }
     }
 
@@ -105,7 +112,9 @@ export default class Creator {
           .then((res) => {
             const products = Adapters.Autocomplete.extractProducts(res);
             dispatch(this.receiveAutocompleteProducts(products));
-          });
+          })
+          // this action will clear autocomplete products fetching flag
+          .catch((err) => dispatch(this.receiveAutocompleteProducts([])));
       }
     }
 
@@ -118,6 +127,7 @@ export default class Creator {
       ...Selectors.searchRequest(getState()),
       refinements: [<any>{ navigationName: 'id', type: 'Value', value: id }]
     }).then((res) => dispatch(this.receiveDetailsProduct(res.records[0].allMeta)))
+      .catch((err) => dispatch(this.receiveDetailsProduct(<any>{})))
 
   // request action creators
   updateSearch = (search: Actions.Search) =>

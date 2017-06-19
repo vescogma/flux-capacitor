@@ -119,6 +119,22 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
             expect(dispatch).to.be.calledWith(moreRefinementsAction);
           });
       });
+
+      it('should catch error and clear fetching flag', () => {
+        const moreRefinementsAction = { e: 'f' };
+        const action = actions.fetchMoreRefinements('brand');
+        const dispatch = spy();
+        const receiveMoreRefinements = stub(actions, 'receiveMoreRefinements').returns(moreRefinementsAction);
+        stub(Selectors, 'searchRequest');
+        stub(Selectors, 'hasMoreRefinements').returns(true);
+        flux.clients = { bridge: { refinements: () => Promise.reject('') } };
+
+        return action(dispatch, () => <any>({}))
+          .then(() => {
+            expect(receiveMoreRefinements).to.be.calledWith(null, [], []);
+            expect(dispatch).to.be.calledWith(moreRefinementsAction);
+          });
+      });
     });
 
     describe('fetchProducts()', () => {
@@ -148,6 +164,25 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
             expect(dispatch).to.be.calledWith(receiveSearchResponseAction);
           });
       });
+
+      it('should catch error and clear fetching flag', () => {
+        const products = ['e', 'f', 'g'];
+        const state: any = { isFetching: {} };
+        const receiveProductsAction = () => null;
+        const dispatch = spy();
+        const selectProducts = stub(Selectors, 'products').returns(products);
+        const receiveProducts = stub(actions, 'receiveProducts').returns(receiveProductsAction);
+        const action = actions.fetchProducts();
+        stub(Selectors, 'searchRequest');
+        flux.clients = { bridge: { search: () => Promise.reject('') } };
+
+        return action(dispatch, () => state)
+          .then(() => {
+            expect(selectProducts).to.be.calledWith(state);
+            expect(receiveProducts).to.be.calledWith(products);
+            expect(dispatch).to.be.calledWith(receiveProductsAction);
+          });
+      });
     });
 
     describe('fetchMoreProducts()', () => {
@@ -175,14 +210,15 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const amount = 5;
         const products = [1, 2, 3, 4, 5];
         const state: any = { a: 'b', isFetching: { moreProducts: false } };
-        const moreProducts = spy();
+        const moreProductsAction = { e: 'f' };
+        const soFetchingAction = { g: 'h' };
         const dispatch = spy();
         const getStore = spy(() => state);
         const search = stub().resolves(response);
         const searchRequest = stub(Selectors, 'searchRequest').returns(request);
-        const receiveMoreProducts = stub(actions, 'receiveMoreProducts').returns(moreProducts);
+        const receiveMoreProducts = stub(actions, 'receiveMoreProducts').returns(moreProductsAction);
         const action = actions.fetchMoreProducts(amount);
-        const soFetching = stub(actions, 'soFetching').returns(moreProducts);
+        const soFetching = stub(actions, 'soFetching').returns(soFetchingAction);
         const extractProducts = stub(AutocompleteAdapter, 'extractProducts').callsFake((s) => s);
         stub(Selectors, 'products').returns(products);
         flux.clients = { bridge: { search } };
@@ -190,9 +226,32 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         return action(dispatch, getStore)
           .then(() => {
             expect(search).to.be.calledWith({ ...request, pageSize: amount, skip: products.length });
+            expect(soFetching).to.be.calledWith('moreProducts');
             expect(searchRequest).to.be.calledWith(state);
             expect(extractProducts).to.be.calledWith(response);
-            expect(dispatch).to.be.calledWith(moreProducts).calledTwice;
+            expect(dispatch).to.be.calledTwice
+              .and.calledWith(soFetchingAction)
+              .and.calledWith(moreProductsAction);
+          });
+      });
+
+      it('should catch error and clear fetching flag', () => {
+        const request = { a: 'b' };
+        const response = { c: 'd' };
+        const moreProductsAction = { e: 'f' };
+        const state: any = { a: 'b', isFetching: { moreProducts: false } };
+        const dispatch = spy();
+        const receiveMoreProducts = stub(actions, 'receiveMoreProducts').returns(moreProductsAction);
+        const action = actions.fetchMoreProducts(5);
+        stub(Selectors, 'searchRequest').returns(request);
+        stub(actions, 'soFetching');
+        stub(Selectors, 'products').returns([]);
+        flux.clients = { bridge: { search: () => Promise.reject('') } };
+
+        return action(dispatch, () => state)
+          .then(() => {
+            expect(receiveMoreProducts).to.be.calledWith([]);
+            expect(dispatch).to.be.calledWith(moreProductsAction);
           });
       });
     });
@@ -228,6 +287,21 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
             expect(dispatch).to.be.calledWith(receiveAutocompleteSuggestionsAction);
           });
       });
+
+      it('should catch error and clear fetching flag', () => {
+        const receiveAutocompleteSuggestionsAction = () => null;
+        const dispatch = spy();
+        const receiveAutocompleteSuggestions = stub(actions, 'receiveAutocompleteSuggestions')
+          .returns(receiveAutocompleteSuggestionsAction);
+        const action = actions.fetchAutocompleteSuggestions('red app', {});
+        flux.clients = { sayt: { autocomplete: () => Promise.reject('') } };
+
+        return action(dispatch, () => <any>({ data: { autocomplete: { category: { field: 'brand' } } } }))
+          .then(() => {
+            expect(receiveAutocompleteSuggestions).to.be.calledWith([], [], []);
+            expect(dispatch).to.be.calledWith(receiveAutocompleteSuggestionsAction);
+          });
+      });
     });
 
     describe('fetchAutocompleteProducts()', () => {
@@ -256,6 +330,21 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
             expect(productSearch).to.be.calledWith(query, config);
             expect(extractAutocompleteProducts).to.be.calledWith(response);
             expect(receiveAutocompleteProducts).to.be.calledWith(products);
+            expect(dispatch).to.be.calledWith(receiveAutocompleteProductsAction);
+          });
+      });
+
+      it('should catch error and clear fetching flag', () => {
+        const receiveAutocompleteProductsAction = () => null;
+        const dispatch = spy();
+        const receiveAutocompleteProducts = stub(actions, 'receiveAutocompleteProducts')
+          .returns(receiveAutocompleteProductsAction);
+        const action = actions.fetchAutocompleteProducts('red app', {});
+        flux.clients = { sayt: { productSearch: () => Promise.reject('') } };
+
+        return action(dispatch)
+          .then(() => {
+            expect(receiveAutocompleteProducts).to.be.calledWith([]);
             expect(dispatch).to.be.calledWith(receiveAutocompleteProductsAction);
           });
       });
@@ -319,6 +408,21 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
               });
               expect(dispatch).to.be.calledWith(detailsProduct);
               expect(receiveDetailsProduct).to.be.calledWith(allMeta);
+            });
+        });
+
+        it('should catch error and clear fetching flag', () => {
+          const detailsProduct = '10293';
+          const dispatch = spy();
+          const action = actions.fetchProductDetails('1923');
+          const receiveDetailsProduct = stub(actions, 'receiveDetailsProduct').returns(detailsProduct);
+          stub(Selectors, 'searchRequest').returns({});
+          flux.clients = { bridge: { search: () => Promise.reject('') } };
+
+          return action(dispatch, () => <any>({}))
+            .then(() => {
+              expect(dispatch).to.be.calledWith(detailsProduct);
+              expect(receiveDetailsProduct).to.be.calledWith({});
             });
         });
       });
