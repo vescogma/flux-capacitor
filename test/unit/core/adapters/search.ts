@@ -285,6 +285,14 @@ suite('SearchAdapter', ({ expect, stub }) => {
       expect(extractZone).to.be.calledWith('a')
         .and.calledWith('b');
     });
+
+    it('should default to template with no zones', () => {
+      expect(Adapter.extractTemplate()).to.eql({
+        name: undefined,
+        rule: undefined,
+        zones: {}
+      });
+    });
   });
 
   describe('extractPage()', () => {

@@ -118,7 +118,7 @@ namespace Adapter {
     }
   };
 
-  export const extractTemplate = (template: Template): Store.Template => ({
+  export const extractTemplate = (template: Template = <any>{ zones: [] }): Store.Template => ({
     name: template.name,
     rule: template.ruleName,
     zones: Object.keys(template.zones).reduce((zones, key) =>
