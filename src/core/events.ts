@@ -1,4 +1,3 @@
-export const QUERY_UPDATED = 'query_updated'; // mixed
 export const ORIGINAL_QUERY_UPDATED = 'original_query_updated'; // pre
 export const CORRECTED_QUERY_UPDATED = 'corrected_query_updated'; // post
 export const RELATED_QUERIES_UPDATED = 'related_queries_updated'; // post

@@ -179,12 +179,11 @@ suite('Observer', ({ expect, spy, stub }) => {
       expect(observers.data.details.id).to.be.a('function');
       expect(observers.data.details.product).to.be.a('function');
       expect(observers.data.navigations).to.be.a('function');
-      // expect(observers.data.navigations[INDEXED]).to.be.a('function');
       expect(observers.data.page).to.be.a('function');
       expect(observers.data.page.current).to.be.a('function');
       expect(observers.data.page.sizes).to.be.a('function');
       expect(observers.data.products).to.be.a('function');
-      expect(observers.data.query).to.be.a('function');
+      expect(observers.data.query).to.be.an('object');
       expect(observers.data.query.corrected).to.be.a('function');
       expect(observers.data.query.didYouMean).to.be.a('function');
       expect(observers.data.query.original).to.be.a('function');
@@ -360,12 +359,6 @@ suite('Observer', ({ expect, spy, stub }) => {
       });
 
       describe('query', () => {
-        it('should emit QUERY_UPDATED event', () => {
-          observers.data.query(undefined, OBJ);
-
-          expect(emit).to.be.calledWith(Events.QUERY_UPDATED, OBJ);
-        });
-
         it('should emit CORRECTED_QUERY_UPDATED event', () => {
           observers.data.query.corrected(undefined, OBJ);
 
@@ -419,6 +412,28 @@ suite('Observer', ({ expect, spy, stub }) => {
 
           expect(emit).to.be.calledWith(Events.TEMPLATE_UPDATED, OBJ);
         });
+      });
+    });
+
+    describe('isRunning', () => {
+      let emit;
+      let observers;
+
+      beforeEach(() => {
+        emit = spy();
+        observers = Observer.create(<any>{ emit });
+      });
+
+      it('should emit APP_STARTED event', () => {
+        observers.isRunning(undefined, true);
+
+        expect(emit).to.be.calledWith(Events.APP_STARTED, true);
+      });
+
+      it('should emit APP_KILLED event', () => {
+        observers.isRunning(true, false);
+
+        expect(emit).to.be.calledWith(Events.APP_KILLED, false);
       });
     });
   });

@@ -4,10 +4,12 @@ import Store from '../store';
 
 import data from './data';
 import isFetching from './is-fetching';
+import isRunning from './is-running';
 import session from './session';
 import ui from './ui';
 
 export default redux.combineReducers<Store.State>({
+  isRunning,
   isFetching,
   session,
   data: updateData,

@@ -130,13 +130,13 @@ namespace Observer {
             }
           })(emit(Events.MORE_PRODUCTS_ADDED), emit(Events.PRODUCTS_UPDATED)),
 
-        query: Object.assign(emit(Events.QUERY_UPDATED), {
+        query: {
           corrected: emit(Events.CORRECTED_QUERY_UPDATED),
           didYouMean: emit(Events.DID_YOU_MEANS_UPDATED),
           original: emit(Events.ORIGINAL_QUERY_UPDATED),
           related: emit(Events.RELATED_QUERIES_UPDATED),
           rewrites: emit(Events.QUERY_REWRITES_UPDATED),
-        }),
+        },
 
         recordCount: emit(Events.RECORD_COUNT_UPDATED),
 
