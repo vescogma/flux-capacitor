@@ -273,7 +273,7 @@ suite('Observer', ({ expect, spy, stub }) => {
         it('should emit DETAILS_ID_UPDATED event', () => {
           observers.data.details.id(undefined, OBJ);
 
-          expect(emit).to.be.calledWith(Events.DETAILS_ID_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.DETAILS_UPDATED, OBJ);
         });
 
         it('should emit DETAILS_PRODUCT_UPDATED event', () => {

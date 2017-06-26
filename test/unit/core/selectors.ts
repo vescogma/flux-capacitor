@@ -10,6 +10,7 @@ suite('selectors', ({ expect, stub }) => {
       const originalPageSize = MAX_RECORDS - 1;
       const originalSkip = MAX_RECORDS - remainingRecords;
 
+      stub(Selectors, 'area');
       stub(Selectors, 'fields');
       stub(Selectors, 'query');
       stub(Selectors, 'collection');

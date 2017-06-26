@@ -2,7 +2,7 @@ import Store from './store';
 
 namespace Actions {
   export const UPDATE_AUTOCOMPLETE_QUERY = 'UPDATE_AUTOCOMPLETE_QUERY';
-  export const UPDATE_DETAILS_ID = 'UPDATE_DETAILS_ID';
+  export const UPDATE_DETAILS = 'UPDATE_DETAILS';
   export const UPDATE_SEARCH = 'UPDATE_SEARCH';
   export const SELECT_REFINEMENT = 'SELECT_REFINEMENT';
   export const DESELECT_REFINEMENT = 'DESELECT_REFINEMENT';
@@ -118,8 +118,9 @@ namespace Actions {
   }
 
   export namespace Details {
-    export interface UpdateId extends Base {
+    export interface Update extends Base {
       id: string;
+      title: string;
     }
     export interface ReceiveProduct extends Base {
       product: Store.Product;

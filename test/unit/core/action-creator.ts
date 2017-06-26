@@ -2,6 +2,7 @@ import * as sinon from 'sinon';
 import { Actions, ActionCreator, Selectors } from '../../../src/core';
 import AutocompleteAdapter from '../../../src/core/adapters/autocomplete';
 import SearchAdapter from '../../../src/core/adapters/search';
+import * as Events from '../../../src/core/events';
 import * as utils from '../../../src/core/utils';
 import suite from '../_suite';
 
@@ -20,6 +21,39 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
     describe('linkMapper()', () => {
       it('should return mapped link', () => {
         expect(actions.linkMapper('test')).to.eql({ value: 'test', url: '/search/test' });
+      });
+    });
+  });
+
+  describe('application action creators', () => {
+    const state = { c: 'd' };
+    describe('saveState()', () => {
+      it('should emit HISTORY_SAVE event with state and route', () => {
+        const emit = spy();
+        const route = 'search';
+        actions['flux'] = <any>{
+          emit,
+          store: {
+            getState: () => state,
+          }
+        };
+
+        actions.saveState(route);
+
+        expect(emit).to.be.calledWith(Events.HISTORY_SAVE, { state, route });
+      });
+    });
+
+    describe('refreshState()', () => {
+      it('should return state with type REFRESH_STATE', () => {
+        expect(actions.refreshState(state)).to.eql({ type: Actions.REFRESH_STATE, state });
+      });
+    });
+
+    describe('soFetching()', () => {
+      it('should return type SO_FETCHING with requestType', () => {
+        const requestType = <any>{ d: 'e' };
+        expect(actions.soFetching(requestType)).to.eql({ type: Actions.SO_FETCHING, requestType });
       });
     });
   });
@@ -404,6 +438,9 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
             .then(() => {
               expect(search).to.be.calledWith({
                 ...state,
+                pageSize: 1,
+                query: null,
+                skip: 0,
                 refinements: [{ navigationName: 'id', type: 'Value', value: id }]
               });
               expect(dispatch).to.be.calledWith(detailsProduct);
@@ -561,11 +598,12 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       describe('updateDetailsId()', () => {
         it('should create an UPDATE_CURRENT_PAGE action', () => {
           const id = '123';
+          const title = 'eh';
           const thunk = stub(utils, 'thunk');
 
-          actions.updateDetailsId(id);
+          actions.updateDetails(id, title);
 
-          expect(thunk).to.be.calledWith(Actions.UPDATE_DETAILS_ID, { id });
+          expect(thunk).to.be.calledWith(Actions.UPDATE_DETAILS, { id, title });
         });
       });
 
@@ -641,30 +679,33 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
           const receivePage = stub(actions, 'receivePage').returns(receivePageAction);
           const receiveTemplate = stub(actions, 'receiveTemplate').returns(receiveTemplateAction);
           const receiveCollectionCount = stub(actions, 'receiveCollectionCount').returns(receiveCollectionCountAction);
+          const saveState = stub(actions, 'saveState');
           const thunk = actions.receiveSearchResponse(results);
 
-          thunk(dispatch, getStore);
-
-          expect(receiveRedirect).to.be.calledWith(results.redirect);
-          expect(dispatch).to.be.calledWith(receiveRedirectAction);
-          expect(receiveQuery).to.be.calledWith(query);
-          expect(extractQuery).to.be.calledWith(results, linkMapper);
-          expect(dispatch).to.be.calledWith(receiveQueryAction);
-          expect(receiveProducts).to.be.calledWith(['x', 'x']);
-          expect(extractProduct).to.be.calledWith({ allMeta: { u: 'v' } })
+          thunk(dispatch, getStore).then(() => {
+            expect(receiveRedirect).to.be.calledWith(results.redirect);
+            expect(dispatch).to.be.calledWith(receiveRedirectAction);
+            expect(receiveQuery).to.be.calledWith(query);
+            expect(extractQuery).to.be.calledWith(results, linkMapper);
+            expect(dispatch).to.be.calledWith(receiveQueryAction);
+            expect(receiveProducts).to.be.calledWith(['x', 'x']);
+            expect(extractProduct).to.be.calledWith({ allMeta: { u: 'v' } })
             .and.calledWith({ allMeta: { w: 'x' } });
-          expect(dispatch).to.be.calledWith(receiveProductsAction);
-          expect(receiveNavigations).to.be.calledWith(navigations);
-          expect(combineNavigations).to.be.calledWith(results);
-          expect(dispatch).to.be.calledWith(receiveNavigationsAction);
-          expect(receivePage).to.be.calledWith(page);
-          expect(extractPage).to.be.calledWith(state);
-          expect(dispatch).to.be.calledWith(receivePageAction);
-          expect(receiveTemplate).to.be.calledWith(template);
-          expect(extractTemplate).to.be.calledWith(results.template);
-          expect(dispatch).to.be.calledWith(receiveTemplateAction);
-          expect(receiveCollectionCount).to.be.calledWith(state.data.collections.selected, results.totalRecordCount);
-          expect(dispatch).to.be.calledWith(receiveCollectionCountAction);
+            expect(dispatch).to.be.calledWith(receiveProductsAction);
+            expect(receiveNavigations).to.be.calledWith(navigations);
+            expect(combineNavigations).to.be.calledWith(results);
+            expect(dispatch).to.be.calledWith(receiveNavigationsAction);
+            expect(receivePage).to.be.calledWith(page);
+            expect(extractPage).to.be.calledWith(state);
+            expect(dispatch).to.be.calledWith(receivePageAction);
+            expect(receiveTemplate).to.be.calledWith(template);
+            expect(extractTemplate).to.be.calledWith(results.template);
+            expect(dispatch).to.be.calledWith(receiveTemplateAction);
+            expect(receiveCollectionCount).to.be.calledWith(state.data.collections.selected, results.totalRecordCount);
+            expect(dispatch).to.be.calledWith(receiveCollectionCountAction);
+            expect(saveState).to.be.calledWith('search');
+          });
+
         });
       });
 
@@ -801,11 +842,15 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       describe('receiveDetailsProduct()', () => {
         it('should create a RECEIVE_DETAILS_PRODUCT action', () => {
           const product: any = { a: 'b' };
-          const thunk = stub(utils, 'thunk');
+          const dispatch = spy();
+          const saveState = stub(actions, 'saveState');
 
-          actions.receiveDetailsProduct(product);
+          const action = actions.receiveDetailsProduct(product);
 
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_DETAILS_PRODUCT, { product });
+          action(dispatch);
+
+          expect(dispatch).to.be.calledWith({ type: Actions.RECEIVE_DETAILS_PRODUCT, product });
+          expect(saveState).to.be.calledWith('details');
         });
       });
 

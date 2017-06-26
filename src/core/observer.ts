@@ -94,7 +94,7 @@ namespace Observer {
         },
 
         details: {
-          id: emit(Events.DETAILS_ID_UPDATED),
+          id: emit(Events.DETAILS_UPDATED),
           product: emit(Events.DETAILS_PRODUCT_UPDATED),
         },
 

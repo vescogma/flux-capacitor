@@ -1,14 +1,15 @@
 import FluxCapacitor from '../../flux-capacitor';
+import * as AreaReducer from '../reducers/data/area';
+import * as CollectionsReducer from '../reducers/data/collections';
 import * as PageReducer from '../reducers/data/page';
 import Store from '../store';
-
-export const DEFAULT_COLLECTION = 'default';
 
 namespace Adapter {
 
   export const initialState = (config: FluxCapacitor.Configuration): Partial<Store.State> =>
     ({
       data: <any>{
+        area: Adapter.extractArea(config, AreaReducer.DEFAULT_AREA),
         autocomplete: {
           suggestions: [],
           navigations: [],
@@ -19,7 +20,7 @@ namespace Adapter {
           }
         },
         fields: Adapter.extractFields(config),
-        collections: Adapter.extractCollections(config, DEFAULT_COLLECTION),
+        collections: Adapter.extractCollections(config, CollectionsReducer.DEFAULT_COLLECTION),
         sorts: Adapter.extractSorts(config),
         page: {
           ...PageReducer.DEFAULTS,
@@ -27,6 +28,9 @@ namespace Adapter {
         }
       }
     });
+
+  export const extractArea = (config: FluxCapacitor.Configuration, defaultValue: string) =>
+    config.area || defaultValue;
 
   export const extractFields = (config: FluxCapacitor.Configuration) =>
     config.search.fields || [];

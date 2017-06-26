@@ -68,6 +68,7 @@ namespace Store {
     isFetching: IsFetching;
     session: Session;
     data: {
+      area: string;
       query: Query; // mixed
 
       sorts: SelectableList<Sort>;
@@ -120,7 +121,7 @@ namespace Store {
      * byId key
      */
     name: string; // static
-    total: number; // post
+    total?: number; // post
   }
 
   export interface Sort {
@@ -224,6 +225,7 @@ namespace Store {
 
   export interface Details {
     id?: string; // pre
+    title?: string; // mixed
     product?: Product; // post
   }
 

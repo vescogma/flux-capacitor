@@ -1,6 +1,7 @@
 import { Results } from 'groupby-api';
 import { Dispatch } from 'redux';
 import { QueryTimeAutocompleteConfig, QueryTimeProductSearchConfig } from 'sayt';
+import { Routes } from '.';
 import FluxCapacitor from '../flux-capacitor';
 import Actions from './actions';
 import Adapters from './adapters';
@@ -17,8 +18,8 @@ export default class Creator {
     this.linkMapper = (value: string) => ({ value, url: `${paths.search}/${value}` });
   }
 
-  saveState = () =>
-    this.flux.emit(Events.HISTORY_SAVE, this.flux.store.getState())
+  saveState = (route: string) =>
+    this.flux.emit(Events.HISTORY_SAVE, { state: this.flux.store.getState(), route })
 
   refreshState = (state: any) =>
     ({ type: Actions.REFRESH_STATE, state })
@@ -122,12 +123,18 @@ export default class Creator {
     this.flux.clients.bridge.search({ ...Selectors.searchRequest(getState()), collection })
       .then((res) => dispatch(this.receiveCollectionCount(collection, Adapters.Search.extractRecordCount(res))))
 
-  fetchProductDetails = (id: string) => (dispatch: Dispatch<any>, getState: () => Store.State) =>
-    this.flux.clients.bridge.search({
-      ...Selectors.searchRequest(getState()),
-      refinements: [<any>{ navigationName: 'id', type: 'Value', value: id }]
-    }).then((res) => dispatch(this.receiveDetailsProduct(res.records[0].allMeta)))
-      .catch((err) => dispatch(this.receiveDetailsProduct(<any>{})))
+  fetchProductDetails = (id: string) => (dispatch: Dispatch<any>, getState: () => Store.State) => {
+      if (id) {
+        return this.flux.clients.bridge.search({
+          ...Selectors.searchRequest(getState()),
+          query: null,
+          pageSize: 1,
+          skip: 0,
+          refinements: [<any>{ navigationName: 'id', type: 'Value', value: id }]
+        }).then((res) => dispatch(this.receiveDetailsProduct(res.records[0].allMeta)))
+          .catch((err) => dispatch(this.receiveDetailsProduct(<any>{})));
+      }
+    }
 
   // request action creators
   updateSearch = (search: Actions.Search) =>
@@ -168,9 +175,9 @@ export default class Creator {
       page !== null && state.data.page.current !== page,
       Actions.UPDATE_CURRENT_PAGE, { page })
 
-  updateDetailsId = (id: string) =>
-    thunk<Actions.Details.UpdateId>(
-      Actions.UPDATE_DETAILS_ID, { id })
+  updateDetails = (id: string, title: string) =>
+    thunk<Actions.Details.Update>(
+      Actions.UPDATE_DETAILS, { id, title })
 
   updateAutocompleteQuery = (query: string) =>
     conditional<Actions.Autocomplete.UpdateQuery>((state) =>
@@ -196,8 +203,8 @@ export default class Creator {
         dispatch(this.receiveTemplate(Adapters.Search.extractTemplate(results.template))),
       );
 
-      Promise.all(updates)
-        .then(() => this.saveState());
+      return Promise.all(updates)
+        .then(() => this.saveState(Routes.SEARCH));
     }
 
   receiveQuery = (query: Actions.Query) =>
@@ -249,8 +256,10 @@ export default class Creator {
       Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, { products })
 
   receiveDetailsProduct = (product: Store.Product) =>
-    thunk<Actions.Details.ReceiveProduct>(
-      Actions.RECEIVE_DETAILS_PRODUCT, { product })
+    (dispatch: Dispatch<any>) => {
+      dispatch<any>({ type: Actions.RECEIVE_DETAILS_PRODUCT, product });
+      this.saveState('details');
+    }
 
   // ui action creators
   createComponentState = (tagName: string, id: string, state: any = {}) =>

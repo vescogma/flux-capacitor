@@ -1,5 +1,5 @@
-import { MAX_RECORDS } from './adapters/search';
 import { Request } from 'groupby-api';
+import { MAX_RECORDS } from './adapters/search';
 import Store from './store';
 
 namespace Selectors {
@@ -11,6 +11,7 @@ namespace Selectors {
 
     return <any>{
       pageSize: Math.min(pageSize, MAX_RECORDS - skip),
+      area: Selectors.area(state),
       fields: Selectors.fields(state),
       query: Selectors.query(state),
       collection: Selectors.collection(state),
@@ -19,6 +20,9 @@ namespace Selectors {
       skip
     };
   };
+
+  export const area = (state: Store.State) =>
+    state.data.area;
 
   export const fields = (state: Store.State) =>
     state.data.fields;
@@ -43,6 +47,9 @@ namespace Selectors {
 
   export const products = (state: Store.State) =>
     state.data.products;
+
+  export const details = (state: Store.State) =>
+    state.data.details;
 
   export const selectedRefinements = (state: Store.State) =>
     Selectors.navigations(state)

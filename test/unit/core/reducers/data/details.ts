@@ -26,10 +26,11 @@ suite('details', ({ expect }) => {
     it('should update state on UPDATE_DETAILS_ID', () => {
       const newState = {
         id: product.id,
+        title: product.name,
         product,
       };
 
-      const reducer = details(state, { type: Actions.UPDATE_DETAILS_ID, id: product.id });
+      const reducer = details(state, { type: Actions.UPDATE_DETAILS, id: product.id, title: product.name });
 
       expect(reducer).to.eql(newState);
     });

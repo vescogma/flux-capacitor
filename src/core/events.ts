@@ -28,7 +28,7 @@ export const AUTOCOMPLETE_PRODUCTS_UPDATED = 'autocomplete_products_updated'; //
 export const TEMPLATE_UPDATED = 'template_updated'; // post
 
 // details events
-export const DETAILS_ID_UPDATED = 'details_id_updated'; // pre
+export const DETAILS_UPDATED = 'details_updated'; // pre
 export const DETAILS_PRODUCT_UPDATED = 'details_product_updated'; // post
 
 // page events
@@ -73,3 +73,6 @@ export const TAG_ALIASING = 'tag:aliasing';
 
 // history events
 export const HISTORY_SAVE = 'history:save';
+
+// url events
+export const URL_UPDATED = 'url:updated';

@@ -182,10 +182,11 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     });
 
     describe('details()', () => {
-      it('should call fetchProductDetails() action', () => {
+      it('should call updateDetails() action', () => {
         const id = '123';
+        const title = 'whatev';
 
-        expectDispatch(() => flux.details(id), 'fetchProductDetails', id);
+        expectDispatch(() => flux.details(id, title), 'updateDetails', id, title);
       });
     });
 

@@ -4,9 +4,10 @@ import Action = Actions.Collections;
 
 export type State = Store.Indexed.Selectable<Store.Collection>;
 
+export const DEFAULT_COLLECTION = 'default';
 export const DEFAULTS: State = {
-  allIds: [],
-  byId: {},
+  allIds: [DEFAULT_COLLECTION],
+  byId: { [DEFAULT_COLLECTION]: { name: DEFAULT_COLLECTION } },
 };
 
 export default function updateCollections(state: State = DEFAULTS, action): State {

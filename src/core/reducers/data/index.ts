@@ -1,5 +1,6 @@
 import * as redux from 'redux';
 
+import area from './area';
 import autocomplete from './autocomplete';
 import collections from './collections';
 import details from './details';
@@ -15,6 +16,7 @@ import template from './template';
 import warnings from './warnings';
 
 export default redux.combineReducers({
+  area,
   autocomplete,
   collections,
   details,
