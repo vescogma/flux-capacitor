@@ -64,6 +64,14 @@ export const UI_UPDATED = 'ui:updated';
 export const APP_STARTED = 'app:started';
 export const APP_KILLED = 'app:killed';
 
+// tracker events
+export const BEACON_SEARCH = 'beacon:search';
+export const BEACON_VIEW_PRODUCT = 'beacon:view_product';
+export const BEACON_ADD_TO_CART = 'beacon:add_to_cart';
+export const BEACON_REMOVE_FROM_CART = 'beacon:remove_from_cart';
+export const BEACON_VIEW_CART = 'beacon:view_cart';
+export const BEACON_ORDER = 'beacon:order';
+
 // observer events
 export const OBSERVER_NODE_CHANGED = 'observer:node_changed';
 

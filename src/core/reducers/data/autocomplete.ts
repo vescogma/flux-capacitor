@@ -1,7 +1,9 @@
 import Actions from '../../actions';
 import Store from '../../store';
-import Action = Actions.Autocomplete;
 
+export type Action = Actions.UpdateAutocompleteQuery
+  | Actions.ReceiveAutocompleteSuggestions
+  | Actions.ReceiveAutocompleteProducts;
 export type State = Store.Autocomplete;
 
 export const DEFAULTS: State = {
@@ -11,20 +13,20 @@ export const DEFAULTS: State = {
   suggestions: [],
 };
 
-export default function updateAutocomplete(state: State = DEFAULTS, action): State {
+export default function updateAutocomplete(state: State = DEFAULTS, action: Action): State {
   switch (action.type) {
-    case Actions.UPDATE_AUTOCOMPLETE_QUERY: return updateQuery(state, action);
-    case Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS: return receiveSuggestions(state, action);
-    case Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS: return receiveProducts(state, action);
+    case Actions.UPDATE_AUTOCOMPLETE_QUERY: return updateQuery(state, action.payload);
+    case Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS: return receiveSuggestions(state, action.payload);
+    case Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS: return receiveProducts(state, action.payload);
     default: return state;
   }
 }
 
-export const updateQuery = (state: State, { query }: Action.UpdateQuery) =>
+export const updateQuery = (state: State, query: string) =>
   ({ ...state, query });
 
 // tslint:disable-next-line max-line-length
-export const receiveSuggestions = (state: State, { categoryValues, suggestions, navigations }: Action.ReceiveSuggestions) =>
+export const receiveSuggestions = (state: State, { categoryValues, suggestions, navigations }: Actions.Payload.Autocomplete.Suggestions) =>
   ({
     ...state,
     category: {
@@ -35,5 +37,5 @@ export const receiveSuggestions = (state: State, { categoryValues, suggestions, 
     suggestions,
   });
 
-export const receiveProducts = (state: State, { products }: Action.ReceiveProducts) =>
+export const receiveProducts = (state: State, products: Store.Product[]) =>
   ({ ...state, products });

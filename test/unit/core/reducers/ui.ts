@@ -1,20 +1,16 @@
-import { Actions, ActionCreator, Store } from '../../../../src/core';
+import { Actions, Store } from '../../../../src/core';
 import ui from '../../../../src/core/reducers/ui';
 import suite from '../../_suite';
 
 suite('ui', ({ expect }) => {
-  let actions: ActionCreator;
-
   const global = true;
-  const id = '5';
+  const ID = '5';
   const state: Store.UI = {
     breadcrumbs: {
       global,
-      [id]: 'yeah'
+      [ID]: 'yeah'
     }
-  }
-
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
+  };
 
   describe('updateUi()', () => {
     it('should update state on CREATE_COMPONENT_STATE', () => {
@@ -28,20 +24,21 @@ suite('ui', ({ expect }) => {
         }
       };
 
-      const reducer = ui(state, { type: Actions.CREATE_COMPONENT_STATE, tagName, id, state: idState });
+      // tslint:disable-next-line max-line-length
+      const reducer = ui(state, <any>{ type: Actions.CREATE_COMPONENT_STATE, payload: { tagName, id, state: idState } });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should update state on REMOVE_COMPONENT_STATE', () => {
       const newState = { breadcrumbs: { global } };
-      const reducer = ui(state, { type: Actions.REMOVE_COMPONENT_STATE, tagName: 'breadcrumbs', id });
+      const reducer = ui(state, { type: Actions.REMOVE_COMPONENT_STATE, payload: { tagName: 'breadcrumbs', id: ID } });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should return state on default', () => {
-      const reducer = ui(state, {});
+      const reducer = ui(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

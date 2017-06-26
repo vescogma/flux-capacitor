@@ -1,18 +1,19 @@
 import Actions from '../actions';
 import Store from '../store';
-import Action = Actions.UI;
 
+export type Action = Actions.CreateComponentState
+  | Actions.RemoveComponentState;
 export type State = Store.UI;
 
-export default function updateUi(state: State = {}, action): State {
+export default function updateUi(state: State = {}, action: Action): State {
   switch (action.type) {
-    case Actions.CREATE_COMPONENT_STATE: return createComponentState(state, action);
-    case Actions.REMOVE_COMPONENT_STATE: return removeComponentState(state, action);
+    case Actions.CREATE_COMPONENT_STATE: return createComponentState(state, action.payload);
+    case Actions.REMOVE_COMPONENT_STATE: return removeComponentState(state, action.payload);
     default: return state;
   }
 }
 
-export const createComponentState = (state: State, { tagName, id, state: tagState }: Action.CreateComponentState) =>
+export const createComponentState = (state: State, { tagName, id, state: tagState }: Actions.Payload.Component.State) =>
   ({
     ...state,
     [tagName]: {
@@ -21,7 +22,7 @@ export const createComponentState = (state: State, { tagName, id, state: tagStat
     }
   });
 
-export const removeComponentState = (state: State, { tagName, id }: Action.RemoveComponentState) =>
+export const removeComponentState = (state: State, { tagName, id }: Actions.Payload.Component.Identifier) =>
   ({
     ...state,
     [tagName]: {

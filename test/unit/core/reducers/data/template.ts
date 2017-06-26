@@ -1,9 +1,8 @@
-import { Actions, ActionCreator, Store } from '../../../../../src/core';
+import { Actions, Store } from '../../../../../src/core';
 import template from '../../../../../src/core/reducers/data/template';
 import suite from '../../../_suite';
 
 suite('template', ({ expect }) => {
-  let actions: ActionCreator;
   const state: Store.Template = {
     name: 'idk',
     rule: 'semantish',
@@ -15,11 +14,10 @@ suite('template', ({ expect }) => {
       },
     },
   };
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
 
   describe('updateTemplate()', () => {
     it('should update state on RECEIVE_TEMPLATE', () => {
-      const newState = {
+      const payload: any = {
         name: 'idk2',
         rule: 'semantish2',
         zones: {
@@ -31,13 +29,13 @@ suite('template', ({ expect }) => {
         },
       };
 
-      const reducer = template(state, { type: Actions.RECEIVE_TEMPLATE, template: newState });
+      const reducer = template(state, { type: Actions.RECEIVE_TEMPLATE, payload });
 
-      expect(reducer).to.eql(newState);
+      expect(reducer).to.eql(payload);
     });
 
     it('should return state on default', () => {
-      const reducer = template(state, {});
+      const reducer = template(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

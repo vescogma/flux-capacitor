@@ -1,18 +1,16 @@
-import { Actions, ActionCreator, Store } from '../../../../../src/core';
+import { Actions, Store } from '../../../../../src/core';
 import query from '../../../../../src/core/reducers/data/query';
 import suite from '../../../_suite';
 
 suite('query', ({ expect }) => {
-  let actions: ActionCreator;
   const original = 'yelloww';
   const corrected = 'yellow';
-  const related = [{ value: 'red', url: '/shoes' }];
-  const didYouMean = [{ value: 'yell', url: '/shouting' }];
+  const related = ['red'];
+  const didYouMean = ['yell'];
   const rewrites = ['spelling'];
   const state: Store.Query = {
     original, corrected, related, didYouMean, rewrites,
   };
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
 
   describe('updateQuery()', () => {
     it('should update original state on UPDATE_SEARCH', () => {
@@ -22,13 +20,13 @@ suite('query', ({ expect }) => {
         original: newOriginal,
       };
 
-      const reducer = query(state, { type: Actions.UPDATE_SEARCH, query: newOriginal });
+      const reducer = query(state, { type: Actions.UPDATE_SEARCH, payload: { query: newOriginal } });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should update state on RECEIVE_QUERY', () => {
-      const newQuery = {
+      const payload: any = {
         corrected: 'potato chips',
         related: [],
         didYouMean: [{ value: 'lays potato chips', url: '/chips' }],
@@ -36,16 +34,16 @@ suite('query', ({ expect }) => {
       };
       const newState = {
         ...state,
-        ...newQuery,
+        ...payload,
       };
 
-      const reducer = query(state, { type: Actions.RECEIVE_QUERY, ...newQuery });
+      const reducer = query(state, { type: Actions.RECEIVE_QUERY, payload });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should return state on default', () => {
-      const reducer = query(state, {});
+      const reducer = query(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

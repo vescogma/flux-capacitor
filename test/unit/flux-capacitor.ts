@@ -1,9 +1,11 @@
 import { EventEmitter } from 'eventemitter3';
 import * as groupbyApi from 'groupby-api';
 import * as saytApi from 'sayt';
+import * as sinon from 'sinon';
 import * as core from '../../src/core';
-import ActionCreator from '../../src/core/action-creator';
+import createActions, * as ActionCreator from '../../src/core/action-creator';
 import ConfigAdapter from '../../src/core/adapters/configuration';
+import * as Events from '../../src/core/events';
 import Observer from '../../src/core/observer';
 import Selectors from '../../src/core/selectors';
 import Store from '../../src/core/store';
@@ -14,22 +16,24 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
 
   describe('constructor()', () => {
     it('should initialize action creator', () => {
-      const instance = { a: 'b' };
-      const creator = stub(core, 'ActionCreator').returns(instance);
+      const primedInstance = { a: 'b' };
+      const instance = spy(() => primedInstance);
+      const creator = stub(ActionCreator, 'default').returns(instance);
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
       stub(Store, 'create');
 
       const flux = new FluxCapacitor(<any>{});
 
-      expect(creator.calledWith(flux, { search: '/search' })).to.be.true;
-      expect(flux.actions).to.eq(instance);
+      expect(creator).to.be.calledWith(flux);
+      expect(instance).to.be.calledWith(sinon.match.func);
+      expect(flux.actions).to.eq(primedInstance);
     });
 
     it('should create API clients', () => {
       const clients = { a: 'b' };
       const createClients = stub(FluxCapacitor, 'createClients').returns(clients);
-      stub(core, 'ActionCreator');
+      stub(core, 'createActions');
       stub(Observer, 'listen');
       stub(Store, 'create');
 
@@ -46,17 +50,17 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       const create = stub(Store, 'create').returns(instance);
       const listener = stub(Observer, 'listener').returns(observer);
       stub(FluxCapacitor, 'createClients');
-      stub(core, 'ActionCreator');
+      stub(core, 'createActions');
 
       const flux = new FluxCapacitor(config);
 
       expect(flux.store).to.eq(instance);
-      expect(create.calledWith(config, observer)).to.be.true;
-      expect(listener.calledWith(flux));
+      expect(create).to.be.calledWith(config, observer);
+      expect(listener).to.be.calledWith(flux);
     });
 
     it('should extend EventEmitter', () => {
-      stub(core, 'ActionCreator');
+      stub(core, 'createActions');
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
       stub(Store, 'create');
@@ -67,7 +71,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
 
   describe('actions', () => {
     let flux: FluxCapacitor;
-    let actions: ActionCreator;
+    let actions: typeof FluxCapacitor.prototype.actions;
     let store: any;
 
     function expectDispatch(action: () => void, creatorName: string, ...params: any[]) {
@@ -77,34 +81,40 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
 
       action();
 
-      expect(actionCreator.calledWith(...params)).to.be.true;
-      expect(dispatch.calledWith(action)).to.be.true;
+      expect(actionCreator).to.be.calledWithExactly(...params);
     }
 
     beforeEach(() => {
-      stub(core, 'ActionCreator').returns(actions = <any>{});
+      actions = <any>{};
+      stub(ActionCreator, 'default').returns(() => actions);
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
       stub(Store, 'create').returns(store = {});
       flux = new FluxCapacitor(<any>{});
     });
 
+    describe('saveState()', () => {
+      it('should emit HISTORY_SAVE event with state and route', () => {
+        const state = { a: 'b' };
+        const emit = flux.emit = spy();
+        const route = 'search';
+        flux.store = <any>{ getState: () => state };
+
+        flux.saveState(route);
+
+        expect(emit).to.be.calledWith(Events.HISTORY_SAVE, { state, route });
+      });
+    });
+
     describe('search()', () => {
       it('should updateSearch() action', () => {
         const query = 'black bear';
 
-        expectDispatch(() => flux.search(query), 'updateSearch', { query, clear: true });
+        expectDispatch(() => flux.search(query), 'search', query);
       });
 
       it('should revert to current query value', () => {
-        const query = 'black bear';
-        const state = { a: 'b' };
-        const selectedQuery = 'black bar';
-        const querySelector = stub(Selectors, 'query').returns(selectedQuery);
-        store.getState = () => state;
-
-        expectDispatch(() => flux.search(), 'updateSearch', { query: selectedQuery, clear: true });
-        expect(querySelector.calledWith(state)).to.be.true;
+        expectDispatch(() => flux.search(), 'search', undefined);
       });
     });
 
@@ -132,18 +142,13 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
 
     describe('reset()', () => {
       it('should call updateSearch() action', () => {
-        expectDispatch(() => flux.reset(), 'updateSearch', {
-          query: null,
-          navigationId: undefined,
-          index: undefined,
-          clear: true
-        });
+        expectDispatch(() => flux.reset(), 'resetRecall', undefined, undefined);
       });
     });
 
     describe('resetQuery()', () => {
       it('should call updateSearch() action', () => {
-        expectDispatch(() => flux.resetQuery(), 'updateSearch', { query: null });
+        expectDispatch(() => flux.resetQuery(), 'resetQuery');
       });
     });
 
@@ -226,7 +231,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       it('should call fetchAutocompleteSuggestions() action', () => {
         const query = 'douglas fir';
 
-        expectDispatch(() => flux.saytSuggestions(query), 'fetchAutocompleteSuggestions', query);
+        expectDispatch(() => flux.saytSuggestions(query), 'fetchAutocompleteSuggestions', query, {});
       });
     });
 
@@ -234,7 +239,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       it('should call fetchAutocompleteProducts() action', () => {
         const query = 'maple beans';
 
-        expectDispatch(() => flux.saytProducts(query), 'fetchAutocompleteProducts', query);
+        expectDispatch(() => flux.saytProducts(query), 'fetchAutocompleteProducts', query, {});
       });
     });
   });

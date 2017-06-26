@@ -1,12 +1,8 @@
-import { Actions, ActionCreator, Store } from '../../../../src/core';
+import { Actions, Store } from '../../../../src/core';
 import isRunning from '../../../../src/core/reducers/is-running';
 import suite from '../../_suite';
 
 suite('isRunning', ({ expect }) => {
-  let actions: ActionCreator;
-
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
-
   describe('updateIsRunning()', () => {
     it('should return true on START_APP', () => {
       const newState = true;
@@ -26,7 +22,7 @@ suite('isRunning', ({ expect }) => {
 
     it('should return state on default', () => {
       const state = true;
-      const reducer = isRunning(state, {});
+      const reducer = isRunning(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

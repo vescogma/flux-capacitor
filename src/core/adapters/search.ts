@@ -17,12 +17,9 @@ export const MAX_RECORDS = 10000;
 
 namespace Adapter {
 
-  export const extractQuery = (results: Results, linkMapper: (value: string) => Store.Linkable): Actions.Query => ({
-    corrected: results.correctedQuery,
-    didYouMean: results.didYouMean.map(linkMapper),
-    related: results.relatedQueries.map(linkMapper),
-    rewrites: results.rewrites,
-  });
+  // tslint:disable-next-line max-line-length
+  export const extractQuery = ({ correctedQuery: corrected, didYouMean, relatedQueries: related, rewrites }: Results): Actions.Payload.Query =>
+    ({ corrected, didYouMean, related, rewrites });
 
   export const extractRefinement = ({ type, value, low, high, count: total }: RangeRefinement & ValueRefinement):
     Store.ValueRefinement | Store.RangeRefinement =>
@@ -128,7 +125,7 @@ namespace Adapter {
   export const extractRecordCount = (results: Results) =>
     Math.min(results.totalRecordCount, MAX_RECORDS);
 
-  export const extractPage = (state: Store.State, totalRecords: number): Actions.Page => {
+  export const extractPage = (state: Store.State, totalRecords: number): Actions.Payload.Page => {
     const pageSize = Selectors.pageSize(state);
     const currentPage = state.data.page.current;
     const last = Page.finalPage(pageSize, totalRecords);

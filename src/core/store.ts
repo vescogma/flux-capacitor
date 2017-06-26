@@ -28,7 +28,7 @@ export const SEARCH_CHANGE_ACTIONS = [
 export const idGenerator = (key: string, actions: string[]) =>
   (store) => (next) => (action) => {
     if (actions.includes(action.type)) {
-      return next({ ...action, [key]: uuid.v1() });
+      return next({ ...action, metadata: { ...action.metadata, [key]: uuid.v1() } });
     } else {
       return next(action);
     }
@@ -106,14 +106,9 @@ namespace Store {
   export interface Query {
     original?: string; // pre
     corrected?: string; // post
-    related: Query.Related[]; // post
-    didYouMean: Query.DidYouMean[]; // post
+    related: string[]; // post
+    didYouMean: string[]; // post
     rewrites: string[]; // post
-  }
-
-  export namespace Query {
-    export type Related = Linkable;
-    export type DidYouMean = Linkable;
   }
 
   export interface Collection {
@@ -179,6 +174,7 @@ namespace Store {
   export interface Session {
     recallId?: string;
     searchId?: string;
+    origin?: Actions.Metadata.Tag;
   }
 
   export interface IsFetching {
@@ -297,11 +293,6 @@ namespace Store {
     export interface Selectable<T> extends Indexed<T> {
       selected?: string;
     }
-  }
-
-  export interface Linkable {
-    value: string; // post
-    url: string; // post (generated)
   }
 }
 

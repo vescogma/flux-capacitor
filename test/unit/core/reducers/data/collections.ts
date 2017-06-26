@@ -1,9 +1,8 @@
-import { Actions, ActionCreator, Store } from '../../../../../src/core';
+import { Actions, Store } from '../../../../../src/core';
 import collections from '../../../../../src/core/reducers/data/collections';
 import suite from '../../../_suite';
 
 suite('collections', ({ expect }) => {
-  let actions: ActionCreator;
   const allIds = ['Department', 'Main'];
   const Department = { // tslint:disable-line variable-name
     label: 'All content',
@@ -24,21 +23,20 @@ suite('collections', ({ expect }) => {
     },
     selected,
   };
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
 
   describe('updateCollections()', () => {
     it('should update state on SELECT_COLLECTION', () => {
-      const selectedCollection = 'Department';
+      const payload = 'Department';
       const newState = {
         allIds,
         byId: {
           Department,
           Main,
         },
-        selected: selectedCollection,
+        selected: payload,
       };
 
-      const reducer = collections(state, { type: Actions.SELECT_COLLECTION, id: selectedCollection });
+      const reducer = collections(state, { type: Actions.SELECT_COLLECTION, payload });
 
       expect(reducer).to.eql(newState);
     });
@@ -59,15 +57,17 @@ suite('collections', ({ expect }) => {
 
       const reducer = collections(state, {
         type: Actions.RECEIVE_COLLECTION_COUNT,
-        collection: allIds[0],
-        count: total,
+        payload: {
+          collection: allIds[0],
+          count: total,
+        }
       });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should return state on default', () => {
-      const reducer = collections(state, {});
+      const reducer = collections(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

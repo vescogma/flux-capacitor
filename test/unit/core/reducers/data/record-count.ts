@@ -1,23 +1,21 @@
-import { Actions, ActionCreator, Store } from '../../../../../src/core';
+import { Actions, Store } from '../../../../../src/core';
 import recordCount from '../../../../../src/core/reducers/data/record-count';
 import suite from '../../../_suite';
 
 suite('record-count', ({ expect }) => {
-  let actions: ActionCreator;
   const state = 2934;
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
 
   describe('updateRecordCount()', () => {
     it('should update record count on RECEIVE_PRODUCTS', () => {
-      const newCount = 2039;
+      const payload = 2039;
 
-      const reducer = recordCount(state, { type: Actions.RECEIVE_RECORD_COUNT, recordCount: newCount });
+      const reducer = recordCount(state, { type: Actions.RECEIVE_RECORD_COUNT, payload });
 
-      expect(reducer).to.eql(newCount);
+      expect(reducer).to.eql(payload);
     });
 
     it('should return state on default', () => {
-      const reducer = recordCount(state, {});
+      const reducer = recordCount(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

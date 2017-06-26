@@ -1,8 +1,12 @@
 import Actions from '../../actions';
 import Adapter from '../../adapters/search';
 import Store from '../../store';
-import Action = Actions.Navigation;
 
+export type Action = Actions.UpdateSearch
+  | Actions.ReceiveNavigations
+  | Actions.SelectRefinement
+  | Actions.DeselectRefinement
+  | Actions.ReceiveMoreRefinements;
 export type State = Store.Indexed<Store.Navigation>;
 
 export const DEFAULTS: State = {
@@ -10,31 +14,31 @@ export const DEFAULTS: State = {
   byId: {},
 };
 
-export default function updateNavigations(state: State = DEFAULTS, action) {
+export default function updateNavigations(state: State = DEFAULTS, action: Action) {
   switch (action.type) {
     case Actions.UPDATE_SEARCH:
       // TODO: add case for clear
-      if (action.clear) {
-        return updateSearch(state, action);
+      if (action.payload.clear) {
+        return updateSearch(state, action.payload);
       } else {
         return state;
       }
-    case Actions.RECEIVE_NAVIGATIONS: return receiveNavigations(state, action);
-    case Actions.SELECT_REFINEMENT: return selectRefinement(state, action);
-    case Actions.DESELECT_REFINEMENT: return deselectRefinement(state, action);
-    case Actions.RECEIVE_MORE_REFINEMENTS: return receiveMoreRefinements(state, action);
+    case Actions.RECEIVE_NAVIGATIONS: return receiveNavigations(state, action.payload);
+    case Actions.SELECT_REFINEMENT: return selectRefinement(state, action.payload);
+    case Actions.DESELECT_REFINEMENT: return deselectRefinement(state, action.payload);
+    case Actions.RECEIVE_MORE_REFINEMENTS: return receiveMoreRefinements(state, action.payload);
     default: return state;
   }
 }
 
-export const updateSearch = (state: State, action: Action.UpdateSearch) => {
+export const updateSearch = (state: State, payload: Actions.Payload.Search) => {
   const byId = state.allIds.reduce((navs, nav) =>
     Object.assign(navs, { [nav]: { ...state.byId[nav], selected: [] } }), {});
 
-  if ('navigationId' in action) {
-    const navigationId = action.navigationId;
-    if ('index' in action) {
-      const refinementIndex = action.index;
+  if ('navigationId' in payload) {
+    const navigationId = payload.navigationId;
+    if ('index' in payload) {
+      const refinementIndex = payload.index;
 
       return {
         ...state,
@@ -48,7 +52,7 @@ export const updateSearch = (state: State, action: Action.UpdateSearch) => {
         },
       };
     } else {
-      return addRefinement({ ...state, byId }, action);
+      return addRefinement({ ...state, byId }, <Actions.Payload.Navigation.AddRefinement>payload);
     }
   } else {
     return {
@@ -58,7 +62,7 @@ export const updateSearch = (state: State, action: Action.UpdateSearch) => {
   }
 };
 
-export const receiveNavigations = (state: State, { navigations }: Action.ReceiveNavigations) => {
+export const receiveNavigations = (state: State, navigations: Store.Navigation[]) => {
   const allIds = navigations.map((nav) => nav.field);
   const byId = navigations.reduce((navs, nav) =>
     Object.assign(navs, { [nav.field]: nav }), {});
@@ -69,7 +73,8 @@ export const receiveNavigations = (state: State, { navigations }: Action.Receive
   };
 };
 
-export const selectRefinement = (state: State, { navigationId, index: refinementIndex }: Action.SelectRefinement) => {
+// tslint:disable-next-line max-line-length
+export const selectRefinement = (state: State, { navigationId, index: refinementIndex }: Actions.Payload.Navigation.Refinement) => {
   if (navigationId && refinementIndex != null) {
     return {
       ...state,
@@ -88,7 +93,7 @@ export const selectRefinement = (state: State, { navigationId, index: refinement
 };
 
 // tslint:disable-next-line max-line-length
-export const deselectRefinement = (state: State, { navigationId, index: refinementIndex }: Action.DeselectRefinement) => {
+export const deselectRefinement = (state: State, { navigationId, index: refinementIndex }: Actions.Payload.Navigation.Refinement) => {
   if (navigationId && refinementIndex != null) {
     return {
       ...state,
@@ -105,7 +110,8 @@ export const deselectRefinement = (state: State, { navigationId, index: refineme
   }
 };
 
-export const addRefinement = (state: State, { navigationId, value, low, high, range }: Action.UpdateSearch) => {
+// tslint:disable-next-line max-line-length
+export const addRefinement = (state: State, { navigationId, value, low, high, range }: Actions.Payload.Navigation.AddRefinement) => {
   const refinement: any = range ? { low, high } : { value };
 
   if (navigationId in state.byId) {
@@ -154,7 +160,7 @@ export const addRefinement = (state: State, { navigationId, value, low, high, ra
 };
 
 // tslint:disable-next-line max-line-length
-export const receiveMoreRefinements = (state: State, { navigationId, refinements, selected }: Action.ReceiveMoreRefinements) => {
+export const receiveMoreRefinements = (state: State, { navigationId, refinements, selected }: Actions.Payload.Navigation.MoreRefinements) => {
   if (navigationId && refinements) {
     return {
       ...state,

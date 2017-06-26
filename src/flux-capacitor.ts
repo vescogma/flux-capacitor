@@ -1,19 +1,28 @@
 import { EventEmitter } from 'eventemitter3';
 import { BrowserBridge, Request, Results } from 'groupby-api';
-import { Sayt } from 'sayt';
-import * as core from './core';
+import { Dispatch, Store as ReduxStore } from 'redux';
+import { QueryTimeAutocompleteConfig, QueryTimeProductSearchConfig, Sayt } from 'sayt';
+import createActions from './core/action-creator';
+import Actions from './core/actions';
 import Adapter from './core/adapters/configuration';
+import * as Events from './core/events';
+import Observer from './core/observer';
+import Selectors from './core/selectors';
+import Store from './core/store';
 
 class FluxCapacitor extends EventEmitter {
 
+  // tslint:disable-next-line typedef variable-name
+  __rawActions = createActions(this);
   /**
    * actions for modifying contents of the store
    */
-  actions: core.ActionCreator = new core.ActionCreator(this, { search: '/search' });
+  // tslint:disable-next-line typedef
+  actions = this.__rawActions(() => ({}));
   /**
    * selector functions for extracting data from the store
    */
-  selectors: typeof core.Selectors = core.Selectors;
+  selectors: typeof Selectors = Selectors;
   /**
    * instances of all microservice clients
    */
@@ -21,16 +30,20 @@ class FluxCapacitor extends EventEmitter {
   /**
    * instance of the state store
    */
-  store: core.ReduxStore<core.Store.State> = core.Store.create(this.config, core.Observer.listener(this));
+  store: ReduxStore<Store.State> = Store.create(this.config, Observer.listener(this));
 
   constructor(public config: FluxCapacitor.Configuration) {
     super();
   }
 
+  saveState(route: string) {
+    this.emit(Events.HISTORY_SAVE, { route, state: this.store.getState() });
+  }
+
   /* ACTION SUGAR */
 
-  search(query: string = core.Selectors.query(this.store.getState())) {
-    this.store.dispatch(this.actions.updateSearch({ query, clear: true }));
+  search(query?: string) {
+    this.store.dispatch(this.actions.search(query));
   }
 
   products() {
@@ -45,12 +58,12 @@ class FluxCapacitor extends EventEmitter {
     this.store.dispatch(this.actions.fetchMoreProducts(amount));
   }
 
-  reset(query: string = null, { field: navigationId, index }: { field: string, index: number } = <any>{}) {
-    this.store.dispatch(this.actions.updateSearch({ query, navigationId, index, clear: true }));
+  reset(query?: string, refinement?: { field: string, index: number }) {
+    this.store.dispatch(this.actions.resetRecall(query, refinement));
   }
 
   resetQuery() {
-    this.store.dispatch(this.actions.updateSearch({ query: null }));
+    this.store.dispatch(this.actions.resetQuery());
   }
 
   resize(pageSize: number) {
@@ -104,7 +117,7 @@ class FluxCapacitor extends EventEmitter {
     return {
       bridge: FluxCapacitor.createBridge(flux.config, (err) => {
         const networkConfig = flux.config.network;
-        flux.emit(core.Events.ERROR_BRIDGE, err);
+        flux.emit(Events.ERROR_BRIDGE, err);
         if (networkConfig.errorHandler) {
           networkConfig.errorHandler(err);
         }

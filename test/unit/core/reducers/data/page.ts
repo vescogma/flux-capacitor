@@ -1,9 +1,8 @@
-import { Actions, ActionCreator, Store } from '../../../../../src/core';
+import { Actions, Store } from '../../../../../src/core';
 import page from '../../../../../src/core/reducers/data/page';
 import suite from '../../../_suite';
 
 suite('page', ({ expect }) => {
-  let actions: ActionCreator;
   const current = 3;
   const first = 1;
   const from = 21;
@@ -16,7 +15,6 @@ suite('page', ({ expect }) => {
   const state: Store.Page = {
     first, sizes, current, from
   };
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
 
   describe('updatePage()', () => {
     describe('should reset current state on', () => {
@@ -64,19 +62,19 @@ suite('page', ({ expect }) => {
     });
 
     it('should update current state on UPDATE_CURRENT_PAGE', () => {
-      const currentPage = 20;
+      const payload = 20;
       const newState = {
         ...state,
-        current: currentPage,
+        current: payload,
       };
 
-      const reducer = page(state, { type: Actions.UPDATE_CURRENT_PAGE, page: currentPage });
+      const reducer = page(state, { type: Actions.UPDATE_CURRENT_PAGE, payload });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should update sizes and reset current on UPDATE_PAGE_SIZE', () => {
-      const pageSize = 20;
+      const payload = 20;
       const newState = {
         ...state,
         current: 1,
@@ -86,21 +84,21 @@ suite('page', ({ expect }) => {
         }
       };
 
-      const reducer = page(state, { type: Actions.UPDATE_PAGE_SIZE, size: pageSize });
+      const reducer = page(state, { type: Actions.UPDATE_PAGE_SIZE, payload });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should return state on UPDATE_PAGE_SIZE if selected not among pageSizes', () => {
-      const pageSize = 50;
+      const payload = 50;
 
-      const reducer = page(state, { type: Actions.UPDATE_PAGE_SIZE, size: pageSize });
+      const reducer = page(state, { type: Actions.UPDATE_PAGE_SIZE, payload });
 
       expect(reducer).to.eql(state);
     });
 
     it('should update state on RECEIVE_PAGE', () => {
-      const sentState = {
+      const payload = {
         from: 31,
         last: 49,
         next: 5,
@@ -110,16 +108,16 @@ suite('page', ({ expect }) => {
       const pageSize = 25;
       const newState = {
         ...state,
-        ...sentState,
+        ...payload,
       };
 
-      const reducer = page(state, { type: Actions.RECEIVE_PAGE, ...sentState });
+      const reducer = page(state, { type: Actions.RECEIVE_PAGE, payload });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should return state on default', () => {
-      const reducer = page(state, {});
+      const reducer = page(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

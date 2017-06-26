@@ -1,9 +1,8 @@
-import { Actions, ActionCreator, Store } from '../../../../../src/core';
+import { Actions, Store } from '../../../../../src/core';
 import autocomplete from '../../../../../src/core/reducers/data/autocomplete';
 import suite from '../../../_suite';
 
 suite('autocomplete', ({ expect }) => {
-  let actions: ActionCreator;
   const query = 'brown shoes';
   const category = { field: 'a', values: ['b'] };
   const suggestions = ['e', 'f', 'g'];
@@ -15,20 +14,19 @@ suite('autocomplete', ({ expect }) => {
     navigations,
     suggestions,
   };
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
 
   describe('updateAutocomplete()', () => {
     it('should update query state on UPDATE_AUTOCOMPLETE_QUERY', () => {
-      const newQuery = 'red shoes';
+      const payload = 'red shoes';
       const newState = {
         category,
         products,
-        query: newQuery,
+        query: payload,
         navigations,
         suggestions,
       };
 
-      const reducer = autocomplete(state, { type: Actions.UPDATE_AUTOCOMPLETE_QUERY, query: newQuery });
+      const reducer = autocomplete(state, { type: Actions.UPDATE_AUTOCOMPLETE_QUERY, payload });
 
       expect(reducer).to.eql(newState);
     });
@@ -44,9 +42,11 @@ suite('autocomplete', ({ expect }) => {
 
       const reducer = autocomplete(state, {
         type: Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS,
-        categoryValues,
-        navigations,
-        suggestions,
+        payload: {
+          categoryValues,
+          navigations,
+          suggestions,
+        }
       });
 
       expect(reducer).to.eql(newState);
@@ -61,16 +61,16 @@ suite('autocomplete', ({ expect }) => {
         suggestions,
       };
 
-      const reducer = autocomplete(state, {
+      const reducer = autocomplete(state, <any>{
         type: Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS,
-        products: newProducts,
+        payload: newProducts,
       });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should return state on default', () => {
-      const reducer = autocomplete(state, {});
+      const reducer = autocomplete(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

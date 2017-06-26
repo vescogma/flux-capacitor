@@ -1,59 +1,46 @@
 import * as sinon from 'sinon';
-import { Actions, ActionCreator, Selectors } from '../../../src/core';
+import createActions from '../../../src/core/action-creator';
+import Actions from '../../../src/core/actions';
 import AutocompleteAdapter from '../../../src/core/adapters/autocomplete';
 import SearchAdapter from '../../../src/core/adapters/search';
 import * as Events from '../../../src/core/events';
+import { Request } from '../../../src/core/reducers/is-fetching';
+import Selectors from '../../../src/core/selectors';
 import * as utils from '../../../src/core/utils';
+import FluxCapacitor from '../../../src/flux-capacitor';
 import suite from '../_suite';
 
 suite('ActionCreator', ({ expect, spy, stub }) => {
-  let actions: ActionCreator;
-  const flux: any = { a: 'b' };
+  let actions: typeof FluxCapacitor.prototype.actions;
+  let flux: any;
 
-  beforeEach(() => actions = new ActionCreator(flux, { search: '/search' }));
-
-  describe('constructor()', () => {
-    it('should set properties', () => {
-      expect(actions['flux']).to.eq(flux);
-      expect(actions['linkMapper']).to.be.a('function');
-    });
-
-    describe('linkMapper()', () => {
-      it('should return mapped link', () => {
-        expect(actions.linkMapper('test')).to.eql({ value: 'test', url: '/search/test' });
-      });
-    });
-  });
+  beforeEach(() => actions = createActions(flux = <any>{})(() => null));
 
   describe('application action creators', () => {
     const state = { c: 'd' };
-    describe('saveState()', () => {
-      it('should emit HISTORY_SAVE event with state and route', () => {
-        const emit = spy();
-        const route = 'search';
-        actions['flux'] = <any>{
-          emit,
-          store: {
-            getState: () => state,
-          }
-        };
-
-        actions.saveState(route);
-
-        expect(emit).to.be.calledWith(Events.HISTORY_SAVE, { state, route });
-      });
-    });
 
     describe('refreshState()', () => {
       it('should return state with type REFRESH_STATE', () => {
-        expect(actions.refreshState(state)).to.eql({ type: Actions.REFRESH_STATE, state });
+        const created = { f: 'g' };
+        const createAction = stub(utils, 'action').returns(created);
+
+        const action = actions.refreshState(state);
+
+        expect(createAction).to.be.calledWith(Actions.REFRESH_STATE, state);
+        expect(action).to.eq(created);
       });
     });
 
-    describe('soFetching()', () => {
-      it('should return type SO_FETCHING with requestType', () => {
-        const requestType = <any>{ d: 'e' };
-        expect(actions.soFetching(requestType)).to.eql({ type: Actions.SO_FETCHING, requestType });
+    describe('startFetching()', () => {
+      it('should return type IS_FETCHING with requestType', () => {
+        const requestType = 'search';
+        const created = { f: 'g' };
+        const createAction = stub(utils, 'action').returns(created);
+
+        const action = actions.startFetching(requestType);
+
+        expect(createAction).to.be.calledWith(Actions.IS_FETCHING, requestType);
+        expect(action).to.eq(created);
       });
     });
   });
@@ -179,11 +166,13 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       });
 
       it('should call flux.clients.bridge.search()', () => {
+        const id = '13123';
         const request = { a: 'b' };
-        const response = { c: 'd' };
+        const response = { c: 'd', id };
         const state: any = { isFetching: {} };
         const receiveSearchResponseAction = () => null;
         const dispatch = spy();
+        const emit = flux.emit = spy();
         const search = stub().resolves(response);
         const searchRequest = stub(Selectors, 'searchRequest').returns(request);
         const receiveSearchResponse = stub(actions, 'receiveSearchResponse').returns(receiveSearchResponseAction);
@@ -195,6 +184,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
             expect(searchRequest).to.be.calledWith(state);
             expect(search).to.be.calledWith(request);
             expect(receiveSearchResponse).to.be.calledWith(response);
+            expect(emit).to.be.calledWith(Events.BEACON_SEARCH, id);
             expect(dispatch).to.be.calledWith(receiveSearchResponseAction);
           });
       });
@@ -202,19 +192,25 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       it('should catch error and clear fetching flag', () => {
         const products = ['e', 'f', 'g'];
         const state: any = { isFetching: {} };
-        const receiveProductsAction = () => null;
+        const receiveSearchResponseAction = () => null;
         const dispatch = spy();
-        const selectProducts = stub(Selectors, 'products').returns(products);
-        const receiveProducts = stub(actions, 'receiveProducts').returns(receiveProductsAction);
+        const receiveSearchResponse = stub(actions, 'receiveSearchResponse').returns(receiveSearchResponseAction);
         const action = actions.fetchProducts();
         stub(Selectors, 'searchRequest');
         flux.clients = { bridge: { search: () => Promise.reject('') } };
 
         return action(dispatch, () => state)
           .then(() => {
-            expect(selectProducts).to.be.calledWith(state);
-            expect(receiveProducts).to.be.calledWith(products);
-            expect(dispatch).to.be.calledWith(receiveProductsAction);
+            expect(receiveSearchResponse).to.be.calledWith({
+              availableNavigation: [],
+              selectedNavigation: [],
+              records: [],
+              didYouMean: [],
+              relatedQueries: [],
+              rewrites: [],
+              totalRecordCount: 0
+            });
+            expect(dispatch).to.be.calledWith(receiveSearchResponseAction);
           });
       });
     });
@@ -239,20 +235,22 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       });
 
       it('should fetch more products', () => {
+        const id = '13512';
         const request = { a: 'b' };
-        const response = { c: 'd' };
+        const response = { c: 'd', id };
         const amount = 5;
         const products = [1, 2, 3, 4, 5];
         const state: any = { a: 'b', isFetching: { moreProducts: false } };
         const moreProductsAction = { e: 'f' };
-        const soFetchingAction = { g: 'h' };
+        const startFetchingAction = { g: 'h' };
         const dispatch = spy();
+        const emit = flux.emit = spy();
         const getStore = spy(() => state);
         const search = stub().resolves(response);
         const searchRequest = stub(Selectors, 'searchRequest').returns(request);
         const receiveMoreProducts = stub(actions, 'receiveMoreProducts').returns(moreProductsAction);
         const action = actions.fetchMoreProducts(amount);
-        const soFetching = stub(actions, 'soFetching').returns(soFetchingAction);
+        const startFetching = stub(actions, 'startFetching').returns(startFetchingAction);
         const extractProducts = stub(AutocompleteAdapter, 'extractProducts').callsFake((s) => s);
         stub(Selectors, 'products').returns(products);
         flux.clients = { bridge: { search } };
@@ -260,11 +258,12 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         return action(dispatch, getStore)
           .then(() => {
             expect(search).to.be.calledWith({ ...request, pageSize: amount, skip: products.length });
-            expect(soFetching).to.be.calledWith('moreProducts');
+            expect(startFetching).to.be.calledWith(Request.MORE_PRODUCTS);
             expect(searchRequest).to.be.calledWith(state);
             expect(extractProducts).to.be.calledWith(response);
+            expect(emit).to.be.calledWith(Events.BEACON_SEARCH, id);
             expect(dispatch).to.be.calledTwice
-              .and.calledWith(soFetchingAction)
+              .and.calledWith(startFetchingAction)
               .and.calledWith(moreProductsAction);
           });
       });
@@ -278,7 +277,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const receiveMoreProducts = stub(actions, 'receiveMoreProducts').returns(moreProductsAction);
         const action = actions.fetchMoreProducts(5);
         stub(Selectors, 'searchRequest').returns(request);
-        stub(actions, 'soFetching');
+        stub(actions, 'startFetching');
         stub(Selectors, 'products').returns([]);
         flux.clients = { bridge: { search: () => Promise.reject('') } };
 
@@ -299,7 +298,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
       it('should call flux.clients.sayt.autocomplete()', () => {
         const query = 'red app';
-        const config = { a: 'b' };
+        const config: any = { a: 'b' };
         const response = { c: 'd' };
         const suggestions = ['e', 'f'];
         const categoryValues = ['g', 'h'];
@@ -347,7 +346,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
       it('should call flux.sayt.productSearch()', () => {
         const query = 'red app';
-        const config = { a: 'b' };
+        const config: any = { a: 'b' };
         const response = { c: 'd' };
         const products = ['e', 'f'];
         const receiveAutocompleteProductsAction = () => null;
@@ -395,13 +394,14 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const collection = 'department';
         const state = { a: 'b' };
         const response = { c: 'd' };
+        const collectionCountAction = { e: 'f' };
         const recordCount = 10293;
         const dispatch = spy();
         const getStore = spy(() => state);
         const search = stub().resolves(response);
         const action = actions.fetchCollectionCount(collection);
         const searchRequest = stub(Selectors, 'searchRequest').returns(state);
-        const receiveCollectionCount = stub(actions, 'receiveCollectionCount').returns(response);
+        const receiveCollectionCount = stub(actions, 'receiveCollectionCount').returns(collectionCountAction);
         const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(recordCount);
         flux.clients = { bridge: { search } };
 
@@ -410,6 +410,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
             expect(search).to.be.calledWith({ ...state, collection });
             expect(receiveCollectionCount).to.be.calledWith(collection, recordCount);
             expect(extractRecordCount).to.be.calledWith(response);
+            expect(dispatch).to.be.calledWith(collectionCountAction);
           });
       });
 
@@ -424,11 +425,12 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
           const id = '1923';
           const state = { a: 'b' };
           const allMeta = 'hey';
-          const response = { c: 'd', records: [{ allMeta }] };
+          const record = { allMeta };
           const detailsProduct = '10293';
           const dispatch = spy();
+          const emit = flux.emit = spy();
           const getStore = spy(() => state);
-          const search = stub().resolves(response);
+          const search = stub().resolves({ c: 'd', records: [record] });
           const action = actions.fetchProductDetails(id);
           const searchRequest = stub(Selectors, 'searchRequest').returns(state);
           const receiveDetailsProduct = stub(actions, 'receiveDetailsProduct').returns(detailsProduct);
@@ -443,8 +445,9 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
                 skip: 0,
                 refinements: [{ navigationName: 'id', type: 'Value', value: id }]
               });
-              expect(dispatch).to.be.calledWith(detailsProduct);
+              expect(emit).to.be.calledWith(Events.BEACON_VIEW_PRODUCT, record);
               expect(receiveDetailsProduct).to.be.calledWith(allMeta);
+              expect(dispatch).to.be.calledWith(detailsProduct);
             });
         });
 
@@ -468,44 +471,110 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
     describe('request action creators', () => {
       describe('updateSearch()', () => {
         it('should create an UPDATE_SEARCH action', () => {
-          const search: Actions.Search = { query: 'harry' };
+          const search: Actions.Payload.Search = { query: 'harry' };
           const dispatch = spy();
 
           actions.updateSearch(search)(dispatch);
 
-          expect(dispatch).to.be.calledWith({ type: Actions.UPDATE_SEARCH, ...<any>search });
+          expect(dispatch).to.be.calledWith({ type: Actions.UPDATE_SEARCH, payload: search, metadata: {} });
         });
 
-        it('should not create an UPDATE_SEARCH action when query string is empty', () => {
-          const search: Actions.Search = { query: '' };
+        it('should not dispatch when query string is empty', () => {
+          const search: Actions.Payload.Search = { query: '' };
           const dispatch = () => expect.fail();
 
           actions.updateSearch(search)(dispatch);
         });
 
         it('should trim query string', () => {
-          const search: Actions.Search = { query: '\t  h  a  r\tr  y  \t' };
+          const search: Actions.Payload.Search = { query: '\t  h  a  r\tr  y  \t' };
           const dispatch = spy();
 
           actions.updateSearch(search)(dispatch);
 
-          expect(dispatch).to.be.calledWith({ type: Actions.UPDATE_SEARCH, query: 'h  a  r\tr  y' });
+          // tslint:disable-next-line max-line-length
+          expect(dispatch).to.be.calledWith({ type: Actions.UPDATE_SEARCH, payload: { query: 'h  a  r\tr  y' }, metadata: {} });
         });
 
-        it('should not create an UPDATE_SEARCH action when query string only contains whitespace', () => {
-          const search: Actions.Search = { query: '  \t  ' };
+        it('should not dispatch when query string only contains whitespace', () => {
+          const search: Actions.Payload.Search = { query: '  \t  ' };
           const dispatch = () => expect.fail();
 
           actions.updateSearch(search)(dispatch);
         });
 
         it('should create an UPDATE_SEARCH action with null query', () => {
-          const search: Actions.Search = { query: null };
+          const search: Actions.Payload.Search = { query: null };
           const dispatch = spy();
 
           actions.updateSearch(search)(dispatch);
 
-          expect(dispatch).to.be.calledWith({ type: Actions.UPDATE_SEARCH, query: null });
+          expect(dispatch).to.be.calledWith({ type: Actions.UPDATE_SEARCH, payload: { query: null }, metadata: {} });
+        });
+      });
+
+      describe('search()', () => {
+        it('should call actions.updateSearch()', () => {
+          const query = 'pineapple';
+          const updateSearch = actions.updateSearch = spy();
+
+          actions.search(query);
+
+          expect(updateSearch).to.be.calledWith({ query, clear: true });
+        });
+
+        it('should fall back to current query', () => {
+          const query = 'pineapple';
+          const state = { a: 'b' };
+          const updateSearch = actions.updateSearch = spy();
+          const selectQuery = stub(Selectors, 'query').returns(query);
+          flux.store = { getState: () => state };
+
+          actions.search();
+
+          expect(updateSearch).to.be.calledWith({ query, clear: true });
+          expect(selectQuery).to.be.calledWith(state);
+        });
+      });
+
+      describe('resetRecall()', () => {
+        it('should call actions.updateSearch() with falsey params to clear request state', () => {
+          const updateSearch = actions.updateSearch = spy();
+
+          actions.resetRecall();
+
+          // tslint:disable-next-line max-line-length
+          expect(updateSearch).to.be.calledWith({ query: null, navigationId: undefined, index: undefined, clear: true });
+        });
+
+        it('should call actions.updateSearch() with a query', () => {
+          const query = 'pineapple';
+          const updateSearch = actions.updateSearch = spy();
+
+          actions.resetRecall(query);
+
+          expect(updateSearch).to.be.calledWith({ query, navigationId: undefined, index: undefined, clear: true });
+        });
+
+        it('should call actions.updateSearch() with a query and refinement', () => {
+          const query = 'pineapple';
+          const navigationId = 'brand';
+          const index = 9;
+          const updateSearch = actions.updateSearch = spy();
+
+          actions.resetRecall(query, { field: navigationId, index });
+
+          expect(updateSearch).to.be.calledWith({ query, navigationId, index, clear: true });
+        });
+      });
+
+      describe('resetQuery()', () => {
+        it('should call actions.updateSearch()', () => {
+          const updateSearch = actions.updateSearch = spy();
+
+          actions.resetQuery();
+
+          expect(updateSearch).to.be.calledWith({ query: null });
         });
       });
 
@@ -552,7 +621,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           expect(conditional).to.be.calledWith(sinon.match((predicate) =>
             predicate({ data: { collections: { selected: 'tutorials' } } })),
-            Actions.SELECT_COLLECTION, { id });
+            Actions.SELECT_COLLECTION, id);
         });
       });
 
@@ -565,7 +634,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           expect(conditional).to.be.calledWith(sinon.match((predicate) =>
             predicate({ data: { sorts: { selected: 2 } } })),
-            Actions.SELECT_SORT, { index });
+            Actions.SELECT_SORT, index);
         });
       });
 
@@ -578,7 +647,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           expect(conditional).to.be.calledWith(sinon.match((predicate) =>
             predicate({ data: { page: { sizes: { items: [10, 20, 80], selected: 20 } } } })),
-            Actions.UPDATE_PAGE_SIZE, { size });
+            Actions.UPDATE_PAGE_SIZE, size);
         });
       });
 
@@ -591,7 +660,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           expect(conditional).to.be.calledWith(sinon.match((predicate) =>
             predicate({ data: { page: { current: 3 } } })),
-            Actions.UPDATE_CURRENT_PAGE, { page });
+            Actions.UPDATE_CURRENT_PAGE, page);
         });
       });
 
@@ -616,17 +685,18 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           expect(conditional).to.be.calledWith(sinon.match((predicate) =>
             predicate({ data: { autocomplete: { query: 'Fred Flinsto' } } })),
-            Actions.UPDATE_AUTOCOMPLETE_QUERY, { query });
+            Actions.UPDATE_AUTOCOMPLETE_QUERY, query);
         });
       });
 
       describe('refreshState()', () => {
         it('should create a REFRESH_STATE action', () => {
-          const state = { a: 'b' };
+          const payload = { a: 'b' };
 
-          expect(actions.refreshState(state)).to.eql({
+          expect(actions.refreshState(payload)).to.eql({
+            payload,
             type: Actions.REFRESH_STATE,
-            state
+            metadata: {},
           });
         });
       });
@@ -650,7 +720,6 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
           const receivePageAction = () => null;
           const receiveTemplateAction = () => null;
           const receiveCollectionCountAction = () => null;
-          const linkMapper = actions['linkMapper'] = () => null;
           const results: any = {
             records: [
               { allMeta: { u: 'v' } },
@@ -679,33 +748,34 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
           const receivePage = stub(actions, 'receivePage').returns(receivePageAction);
           const receiveTemplate = stub(actions, 'receiveTemplate').returns(receiveTemplateAction);
           const receiveCollectionCount = stub(actions, 'receiveCollectionCount').returns(receiveCollectionCountAction);
-          const saveState = stub(actions, 'saveState');
+          const saveState = flux.saveState = spy();
           const thunk = actions.receiveSearchResponse(results);
 
-          thunk(dispatch, getStore).then(() => {
-            expect(receiveRedirect).to.be.calledWith(results.redirect);
-            expect(dispatch).to.be.calledWith(receiveRedirectAction);
-            expect(receiveQuery).to.be.calledWith(query);
-            expect(extractQuery).to.be.calledWith(results, linkMapper);
-            expect(dispatch).to.be.calledWith(receiveQueryAction);
-            expect(receiveProducts).to.be.calledWith(['x', 'x']);
-            expect(extractProduct).to.be.calledWith({ allMeta: { u: 'v' } })
-            .and.calledWith({ allMeta: { w: 'x' } });
-            expect(dispatch).to.be.calledWith(receiveProductsAction);
-            expect(receiveNavigations).to.be.calledWith(navigations);
-            expect(combineNavigations).to.be.calledWith(results);
-            expect(dispatch).to.be.calledWith(receiveNavigationsAction);
-            expect(receivePage).to.be.calledWith(page);
-            expect(extractPage).to.be.calledWith(state);
-            expect(dispatch).to.be.calledWith(receivePageAction);
-            expect(receiveTemplate).to.be.calledWith(template);
-            expect(extractTemplate).to.be.calledWith(results.template);
-            expect(dispatch).to.be.calledWith(receiveTemplateAction);
-            expect(receiveCollectionCount).to.be.calledWith(state.data.collections.selected, results.totalRecordCount);
-            expect(dispatch).to.be.calledWith(receiveCollectionCountAction);
-            expect(saveState).to.be.calledWith('search');
-          });
-
+          return thunk(dispatch, getStore)
+            .then(() => {
+              expect(receiveRedirect).to.be.calledWith(results.redirect);
+              expect(dispatch).to.be.calledWith(receiveRedirectAction);
+              expect(receiveQuery).to.be.calledWith(query);
+              expect(extractQuery).to.be.calledWith(results);
+              expect(dispatch).to.be.calledWith(receiveQueryAction);
+              expect(receiveProducts).to.be.calledWith(['x', 'x']);
+              expect(extractProduct).to.be.calledWith({ allMeta: { u: 'v' } })
+                .and.calledWith({ allMeta: { w: 'x' } });
+              expect(dispatch).to.be.calledWith(receiveProductsAction);
+              expect(receiveNavigations).to.be.calledWith(navigations);
+              expect(combineNavigations).to.be.calledWith(results);
+              expect(dispatch).to.be.calledWith(receiveNavigationsAction);
+              expect(receivePage).to.be.calledWith(page);
+              expect(extractPage).to.be.calledWith(state);
+              expect(dispatch).to.be.calledWith(receivePageAction);
+              expect(receiveTemplate).to.be.calledWith(template);
+              expect(extractTemplate).to.be.calledWith(results.template);
+              expect(dispatch).to.be.calledWith(receiveTemplateAction);
+              // tslint:disable-next-line max-line-length
+              expect(receiveCollectionCount).to.be.calledWith(state.data.collections.selected, results.totalRecordCount);
+              expect(dispatch).to.be.calledWith(receiveCollectionCountAction);
+              expect(saveState).to.be.calledWith('search');
+            });
         });
       });
 
@@ -727,7 +797,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           actions.receiveProducts(products);
 
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_PRODUCTS, { products });
+          expect(thunk).to.be.calledWith(Actions.RECEIVE_PRODUCTS, products);
         });
       });
 
@@ -750,7 +820,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           actions.receiveNavigations(navigations);
 
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_NAVIGATIONS, { navigations });
+          expect(thunk).to.be.calledWith(Actions.RECEIVE_NAVIGATIONS, navigations);
         });
       });
 
@@ -772,7 +842,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           actions.receiveTemplate(template);
 
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_TEMPLATE, { template });
+          expect(thunk).to.be.calledWith(Actions.RECEIVE_TEMPLATE, template);
         });
       });
 
@@ -783,7 +853,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           actions.receiveRedirect(redirect);
 
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_REDIRECT, { redirect });
+          expect(thunk).to.be.calledWith(Actions.RECEIVE_REDIRECT, redirect);
         });
       });
 
@@ -824,7 +894,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           actions.receiveMoreProducts(products);
 
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_MORE_PRODUCTS, { products });
+          expect(thunk).to.be.calledWith(Actions.RECEIVE_MORE_PRODUCTS, products);
         });
       });
 
@@ -835,21 +905,24 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
           actions.receiveAutocompleteProducts(products);
 
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, { products });
+          expect(thunk).to.be.calledWith(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, products);
         });
       });
 
       describe('receiveDetailsProduct()', () => {
         it('should create a RECEIVE_DETAILS_PRODUCT action', () => {
           const product: any = { a: 'b' };
+          const created: any = { c: 'd' };
           const dispatch = spy();
-          const saveState = stub(actions, 'saveState');
+          const createAction = stub(utils, 'action').returns(created);
+          const saveState = flux.saveState = spy();
 
           const action = actions.receiveDetailsProduct(product);
 
           action(dispatch);
 
-          expect(dispatch).to.be.calledWith({ type: Actions.RECEIVE_DETAILS_PRODUCT, product });
+          expect(createAction).to.be.calledWith(Actions.RECEIVE_DETAILS_PRODUCT, product);
+          expect(dispatch).to.be.calledWith(created);
           expect(saveState).to.be.calledWith('details');
         });
       });

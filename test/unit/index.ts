@@ -6,8 +6,8 @@ suite('package', ({ expect }) => {
     expect(FluxCapacitor).to.be.ok;
   });
 
-  it('should expose ActionCreator', () => {
-    expect(pkg.ActionCreator).to.be.ok;
+  it('should expose createActions', () => {
+    expect(pkg.createActions).to.be.ok;
   });
 
   it('should expose Store', () => {

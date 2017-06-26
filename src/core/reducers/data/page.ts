@@ -1,7 +1,14 @@
 import Actions from '../../actions';
 import Store from '../../store';
-import Action = Actions.Page;
 
+export type Action = Actions.UpdateSearch
+  | Actions.SelectSort
+  | Actions.SelectCollection
+  | Actions.SelectRefinement
+  | Actions.DeselectRefinement
+  | Actions.UpdateCurrentPage
+  | Actions.UpdatePageSize
+  | Actions.ReceivePage;
 export type State = Store.Page;
 
 export const DEFAULT_PAGE_SIZE = 10;
@@ -15,7 +22,7 @@ export const DEFAULTS: State = {
   },
 };
 
-export default function updatePage(state: State = DEFAULTS, action): State {
+export default function updatePage(state: State = DEFAULTS, action: Action): State {
   switch (action.type) {
     case Actions.UPDATE_SEARCH:
     case Actions.SELECT_SORT:
@@ -23,9 +30,9 @@ export default function updatePage(state: State = DEFAULTS, action): State {
     case Actions.SELECT_REFINEMENT:
     case Actions.DESELECT_REFINEMENT:
       return resetPage(state);
-    case Actions.UPDATE_CURRENT_PAGE: return updateCurrent(state, action);
-    case Actions.UPDATE_PAGE_SIZE: return updateSize(state, action);
-    case Actions.RECEIVE_PAGE: return receivePage(state, action);
+    case Actions.UPDATE_CURRENT_PAGE: return updateCurrent(state, action.payload);
+    case Actions.UPDATE_PAGE_SIZE: return updateSize(state, action.payload);
+    case Actions.RECEIVE_PAGE: return receivePage(state, action.payload);
     default: return state;
   }
 }
@@ -35,15 +42,15 @@ export function resetPage(state: State) {
   return state.current === 1 ? state : { ...state, current: 1 };
 }
 
-export function updateCurrent(state: State, { page: current }: Action.UpdateCurrent) {
+export function updateCurrent(state: State, current: number) {
   return { ...state, current };
 }
 
-export function updateSize(state: State, { size }: Action.UpdateSize) {
+export function updateSize(state: State, size: number) {
   const selected = state.sizes.items.findIndex((pageSize) => pageSize === size);
   return selected === -1 ? state : { ...state, current: 1, sizes: { ...state.sizes, selected } };
 }
 
-export function receivePage(state: State, { from, to, last, next, previous }: Action.ReceivePage) {
+export function receivePage(state: State, { from, to, last, next, previous }: Actions.Payload.Page) {
   return { ...state, from, to, last, next, previous };
 }

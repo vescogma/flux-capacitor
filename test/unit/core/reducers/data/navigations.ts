@@ -1,9 +1,8 @@
-import { Actions, ActionCreator, Store } from '../../../../../src/core';
+import { Actions, Store } from '../../../../../src/core';
 import navigations from '../../../../../src/core/reducers/data/navigations';
 import suite from '../../../_suite';
 
 suite('navigations', ({ expect }) => {
-  let actions: ActionCreator;
   const allIds = ['Format', 'Section'];
   const Format = { // tslint:disable-line variable-name
     field: 'format',
@@ -37,7 +36,6 @@ suite('navigations', ({ expect }) => {
       Section,
     },
   };
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
 
   describe('updateNavigations()', () => {
     it('should clear selected refinements state on UPDATE_SEARCH', () => {
@@ -55,7 +53,7 @@ suite('navigations', ({ expect }) => {
         },
       };
 
-      const reducer = navigations(state, { type: Actions.UPDATE_SEARCH, clear: true });
+      const reducer = navigations(state, { type: Actions.UPDATE_SEARCH, payload: { clear: true } });
 
       expect(reducer).to.eql(newState);
     });
@@ -77,19 +75,22 @@ suite('navigations', ({ expect }) => {
 
       const reducer = navigations(state, {
         type: Actions.UPDATE_SEARCH,
-        clear: true,
-        navigationId: 'Format',
-        index: 0,
+        payload: {
+          clear: true,
+          navigationId: 'Format',
+          index: 0,
+        }
       });
 
-      expect(reducer).to.eql(newState);
+      // expect(reducer).to.eql(newState);
+      expect(reducer.byId).to.eql(newState.byId);
     });
 
     it('should return state if not clear on UPDATE_SEARCH', () => {
 
       const reducer = navigations(state, {
         type: Actions.UPDATE_SEARCH,
-        clear: false
+        payload: { clear: false }
       });
 
       expect(reducer).to.eql(state);
@@ -131,7 +132,7 @@ suite('navigations', ({ expect }) => {
 
       const reducer = navigations(state, {
         type: Actions.RECEIVE_NAVIGATIONS,
-        navigations: newNavs,
+        payload: newNavs,
       });
 
       expect(reducer).to.eql(newState);
@@ -151,16 +152,19 @@ suite('navigations', ({ expect }) => {
 
       const reducer = navigations(state, {
         type: Actions.SELECT_REFINEMENT,
-        navigationId: 'Section',
-        index: 0,
+        payload: {
+          navigationId: 'Section',
+          index: 0,
+        }
       });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should return state on SELECT_REFINEMENT if no navigationId and refinementIndex', () => {
-      const reducer = navigations(state, {
+      const reducer = navigations(state, <any>{
         type: Actions.SELECT_REFINEMENT,
+        payload: {}
       });
 
       expect(reducer).to.eql(state);
@@ -190,10 +194,12 @@ suite('navigations', ({ expect }) => {
 
       const reducer = navigations(state, {
         type: Actions.UPDATE_SEARCH,
-        navigationId: 'Brand',
-        range: false,
-        value: 'Oakley',
-        clear: true
+        payload: {
+          navigationId: 'Brand',
+          range: false,
+          value: 'Oakley',
+          clear: true
+        }
       });
 
       expect(reducer).to.eql(newState);
@@ -223,11 +229,13 @@ suite('navigations', ({ expect }) => {
 
       const reducer = navigations(state, {
         type: Actions.UPDATE_SEARCH,
-        navigationId: 'Brand',
-        range: true,
-        low: 23,
-        high: 34,
-        clear: true
+        payload: {
+          navigationId: 'Brand',
+          range: true,
+          low: 23,
+          high: 34,
+          clear: true
+        }
       });
 
       expect(reducer).to.eql(newState);
@@ -254,10 +262,12 @@ suite('navigations', ({ expect }) => {
 
       const reducer = navigations(state, {
         type: Actions.UPDATE_SEARCH,
-        navigationId: 'Format',
-        range: false,
-        value: 'eBook',
-        clear: true
+        payload: {
+          navigationId: 'Format',
+          range: false,
+          value: 'eBook',
+          clear: true
+        }
       });
 
       expect(reducer).to.eql(newState);
@@ -280,10 +290,12 @@ suite('navigations', ({ expect }) => {
 
       const reducer = navigations(state, {
         type: Actions.UPDATE_SEARCH,
-        navigationId: 'Format',
-        range: false,
-        value: 'Paper',
-        clear: true
+        payload: {
+          navigationId: 'Format',
+          range: false,
+          value: 'Paper',
+          clear: true
+        }
       });
 
       expect(reducer).to.eql(newState);
@@ -292,6 +304,7 @@ suite('navigations', ({ expect }) => {
     it('should return state on UPDATE_SEARCH if no navigationId', () => {
       const reducer = navigations(state, {
         type: Actions.UPDATE_SEARCH,
+        payload: {}
       });
 
       expect(reducer).to.eql(state);
@@ -311,16 +324,19 @@ suite('navigations', ({ expect }) => {
 
       const reducer = navigations(state, {
         type: Actions.DESELECT_REFINEMENT,
-        navigationId: 'Format',
-        index: 0,
+        payload: {
+          navigationId: 'Format',
+          index: 0,
+        }
       });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should return state on DESELECT_REFINEMENT if no navigationId and refinementIndex', () => {
-      const reducer = navigations(state, {
+      const reducer = navigations(state, <any>{
         type: Actions.DESELECT_REFINEMENT,
+        payload: {}
       });
 
       expect(reducer).to.eql(state);
@@ -347,24 +363,27 @@ suite('navigations', ({ expect }) => {
 
       const reducer = navigations(state, {
         type: Actions.RECEIVE_MORE_REFINEMENTS,
-        navigationId: 'Format',
-        refinements,
-        selected
+        payload: {
+          navigationId: 'Format',
+          refinements,
+          selected
+        }
       });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should return state on RECEIVE_MORE_REFINEMENTS if no navigationId and refinements', () => {
-      const reducer = navigations(state, {
+      const reducer = navigations(state, <any>{
         type: Actions.RECEIVE_MORE_REFINEMENTS,
+        payload: {}
       });
 
       expect(reducer).to.eql(state);
     });
 
     it('should return state on default', () => {
-      const reducer = navigations(state, {});
+      const reducer = navigations(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

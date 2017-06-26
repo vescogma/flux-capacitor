@@ -1,9 +1,8 @@
-import { Actions, ActionCreator, Store } from '../../../../../src/core';
+import { Actions, Store } from '../../../../../src/core';
 import details from '../../../../../src/core/reducers/data/details';
 import suite from '../../../_suite';
 
 suite('details', ({ expect }) => {
-  let actions: ActionCreator;
   const id = '19283';
   const product = {
     id: '19293',
@@ -20,8 +19,6 @@ suite('details', ({ expect }) => {
     product,
   };
 
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
-
   describe('updateDetails()', () => {
     it('should update state on UPDATE_DETAILS_ID', () => {
       const newState = {
@@ -30,7 +27,13 @@ suite('details', ({ expect }) => {
         product,
       };
 
-      const reducer = details(state, { type: Actions.UPDATE_DETAILS, id: product.id, title: product.name });
+      const reducer = details(state, {
+        type: Actions.UPDATE_DETAILS,
+        payload: {
+          id: product.id,
+          title: product.name
+        }
+      });
 
       expect(reducer).to.eql(newState);
     });
@@ -41,13 +44,13 @@ suite('details', ({ expect }) => {
         product: product2,
       };
 
-      const reducer = details(state, { type: Actions.RECEIVE_DETAILS_PRODUCT, product: product2 });
+      const reducer = details(state, { type: Actions.RECEIVE_DETAILS_PRODUCT, payload: product2 });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should return state on default', () => {
-      const reducer = details(state, {});
+      const reducer = details(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

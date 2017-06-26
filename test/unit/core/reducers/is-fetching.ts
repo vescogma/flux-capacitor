@@ -1,9 +1,8 @@
-import { Actions, ActionCreator, Store } from '../../../../src/core';
+import { Actions, Store } from '../../../../src/core';
 import isFetching from '../../../../src/core/reducers/is-fetching';
 import suite from '../../_suite';
 
 suite('isFetching', ({ expect }) => {
-  let actions: ActionCreator;
   const moreRefinements = true;
   const moreProducts = true;
   const search = true;
@@ -18,10 +17,9 @@ suite('isFetching', ({ expect }) => {
     autocompleteProducts,
     details
   };
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
 
   describe('updateIsFetching()', () => {
-    it('should update state on SO_FETCHING', () => {
+    it('should update state on IS_FETCHING', () => {
       const newState = {
         moreRefinements,
         moreProducts,
@@ -31,7 +29,7 @@ suite('isFetching', ({ expect }) => {
         details
       };
 
-      const reducer = isFetching(state, { type: Actions.SO_FETCHING, requestType: 'autocompleteSuggestions' });
+      const reducer = isFetching(state, { type: Actions.IS_FETCHING, payload: 'autocompleteSuggestions' });
 
       expect(reducer).to.eql(newState);
     });
@@ -91,6 +89,7 @@ suite('isFetching', ({ expect }) => {
         details
       };
 
+      // tslint:disable-next-line max-line-length
       const reducer = isFetching({ ...state, autocompleteProducts: true }, { type: Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS });
 
       expect(reducer).to.eql(newState);
@@ -127,7 +126,7 @@ suite('isFetching', ({ expect }) => {
     });
 
     it('should return state on default', () => {
-      const reducer = isFetching(state, {});
+      const reducer = isFetching(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

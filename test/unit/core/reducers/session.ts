@@ -1,28 +1,25 @@
-import { Actions, ActionCreator, Store } from '../../../../src/core';
+import { Actions, Store } from '../../../../src/core';
 import session from '../../../../src/core/reducers/session';
 import suite from '../../_suite';
 
 suite('session', ({ expect }) => {
-  let actions: ActionCreator;
 
-  const recallId = 'aksd';
-  const searchId = 'aslkf';
+  const RECALL_ID = 'aksd';
+  const SEARCH_ID = 'aslkf';
   const state: Store.Session = {
-    recallId,
-    searchId
-  }
-
-  beforeEach(() => actions = new ActionCreator(<any>{}, <any>{}));
+    recallId: RECALL_ID,
+    searchId: SEARCH_ID
+  };
 
   describe('updateSession()', () => {
     it('should update state when recallId in action', () => {
       const recallId = 'new thingay';
       const newState = {
         recallId,
-        searchId
+        searchId: SEARCH_ID
       };
 
-      const reducer = session(state, { recallId });
+      const reducer = session(state, <any>{ metadata: { recallId } });
 
       expect(reducer).to.eql(newState);
     });
@@ -30,11 +27,11 @@ suite('session', ({ expect }) => {
     it('should update state when searchId in action', () => {
       const searchId = 'new stuffs';
       const newState = {
-        recallId,
+        recallId: RECALL_ID,
         searchId
       };
 
-      const reducer = session(state, { searchId });
+      const reducer = session(state, <any>{ metadata: { searchId } });
 
       expect(reducer).to.eql(newState);
     });
@@ -42,18 +39,15 @@ suite('session', ({ expect }) => {
     it('should update state when both recallId and searchId in action', () => {
       const recallId = 'thingomojigjog';
       const searchId = 'new stuffys';
-      const newState = {
-        recallId,
-        searchId
-      };
+      const newState = { recallId, searchId };
 
-      const reducer = session(state, { searchId, recallId });
+      const reducer = session(state, <any>{ metadata: { searchId, recallId } });
 
       expect(reducer).to.eql(newState);
     });
 
     it('should return state on default', () => {
-      const reducer = session(state, {});
+      const reducer = session(state, <any>{});
 
       expect(reducer).to.eql(state);
     });

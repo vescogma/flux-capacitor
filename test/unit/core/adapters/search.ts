@@ -13,20 +13,15 @@ suite('SearchAdapter', ({ expect, stub }) => {
         relatedQueries: ['c', 'd'],
         rewrites: ['e', 'f'],
       };
-      const linkMapper = stub().returns('x');
 
-      const query = Adapter.extractQuery(results, linkMapper);
+      const query = Adapter.extractQuery(results);
 
       expect(query).to.eql({
         corrected: 'apple pie',
-        didYouMean: ['x', 'x'],
-        related: ['x', 'x'],
+        didYouMean: ['a', 'b'],
+        related: ['c', 'd'],
         rewrites: ['e', 'f'],
       });
-      expect(linkMapper).to.be.calledWith('a');
-      expect(linkMapper).to.be.calledWith('b');
-      expect(linkMapper).to.be.calledWith('c');
-      expect(linkMapper).to.be.calledWith('d');
     });
   });
 
