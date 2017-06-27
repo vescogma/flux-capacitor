@@ -44,7 +44,7 @@ namespace Store {
       idGenerator('searchId', SEARCH_CHANGE_ACTIONS)
     ];
 
-    if (process.env.NODE_ENV === 'development' && (((config.services || {}).logging || {}).debug || {}).flux) {
+    if (process.env.NODE_ENV === 'development' && ((((<any>config).services || {}).logging || {}).debug || {}).flux) {
       const logger = require('redux-logger').default;
 
       middleware.push(logger);

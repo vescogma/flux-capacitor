@@ -266,11 +266,6 @@ namespace FluxCapacitor {
      * network request configuration
      */
     network?: Bridge.Configuration;
-
-    /**
-     * logging configuration hack
-     */
-    services?: { logging?: { debug?: { flux?: boolean } } };
   }
 
   export namespace Bridge {
