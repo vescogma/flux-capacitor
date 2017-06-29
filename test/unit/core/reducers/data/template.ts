@@ -39,5 +39,11 @@ suite('template', ({ expect }) => {
 
       expect(reducer).to.eql(state);
     });
+
+    it('should have default empty state', () => {
+      const reducer = template(undefined, <any>{});
+
+      expect(reducer).to.eql({});
+    });
   });
 });

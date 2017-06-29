@@ -89,7 +89,7 @@ namespace Actions {
   export const SHUTDOWN_APP = 'SHUTDOWN_APP';
   export type ShutdownApp = Action<typeof SHUTDOWN_APP>;
   export const REFRESH_STATE = 'REFRESH_STATE';
-  export type RefreshState = Action<typeof REFRESH_STATE, object>;
+  export type RefreshState = Action<typeof REFRESH_STATE, any>;
 
   export namespace Payload {
     export namespace Component {
