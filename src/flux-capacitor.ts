@@ -1,10 +1,11 @@
 import { EventEmitter } from 'eventemitter3';
-import { BrowserBridge, Request, Results } from 'groupby-api';
-import { Dispatch, Store as ReduxStore } from 'redux';
+import { BrowserBridge, Results } from 'groupby-api';
+import { Store as ReduxStore } from 'redux';
 import { QueryTimeAutocompleteConfig, QueryTimeProductSearchConfig, Sayt } from 'sayt';
 import createActions from './core/action-creator';
 import Actions from './core/actions';
 import Adapter from './core/adapters/configuration';
+import Configuration from './core/configuration';
 import * as Events from './core/events';
 import Observer from './core/observer';
 import Selectors from './core/selectors';
@@ -26,13 +27,13 @@ class FluxCapacitor extends EventEmitter {
   /**
    * instances of all microservice clients
    */
-  clients: FluxCapacitor.Clients = FluxCapacitor.createClients(this);
+  clients: Configuration.Clients = FluxCapacitor.createClients(this);
   /**
    * instance of the state store
    */
   store: ReduxStore<Store.State> = Store.create(this.config, Observer.listener(this));
 
-  constructor(public config: FluxCapacitor.Configuration) {
+  constructor(public config: Configuration) {
     super();
   }
 
@@ -103,11 +104,11 @@ class FluxCapacitor extends EventEmitter {
   }
 
   saytSuggestions(query: string) {
-    this.store.dispatch(this.actions.fetchAutocompleteSuggestions(query, {}));
+    this.store.dispatch(this.actions.fetchAutocompleteSuggestions(query));
   }
 
   saytProducts(query: string) {
-    this.store.dispatch(this.actions.fetchAutocompleteProducts(query, {}));
+    this.store.dispatch(this.actions.fetchAutocompleteProducts(query));
   }
 
   /**
@@ -129,7 +130,7 @@ class FluxCapacitor extends EventEmitter {
   /**
    * create instance of Searchandiser API client
    */
-  static createBridge(config: FluxCapacitor.Configuration, errorHandler: (err: Error) => void) {
+  static createBridge(config: Configuration, errorHandler: (err: Error) => void) {
     const networkConfig = config.network;
     const bridge = new BrowserBridge(config.customerId, networkConfig.https, networkConfig);
     if (networkConfig.headers) {
@@ -143,166 +144,12 @@ class FluxCapacitor extends EventEmitter {
   /**
    * create instance of SAYT API client
    */
-  static createSayt(config: FluxCapacitor.Configuration) {
-    const saytConfig = config.autocomplete;
-
+  static createSayt(config: Configuration) {
     return new Sayt(<any>{
-      autocomplete: { language: saytConfig.language || config.language },
-      collection: saytConfig.collection || Adapter.extractCollection(config),
-      productSearch: { area: saytConfig.area || config.area },
+      collection: Adapter.extractAutocompleteCollection(config) || Adapter.extractCollection(config),
       subdomain: config.customerId,
     });
   }
-}
-
-namespace FluxCapacitor {
-  export interface Configuration {
-    /**
-     * GroupBy customer ID
-     */
-    customerId: string;
-    /**
-     * ID unique to the viewer of the rendered page
-     */
-    visitorId?: string;
-    /**
-     * ID unique to the session of the viewer of the rendered page
-     */
-    sessionId?: string;
-
-    /**
-     * area of search data
-     */
-    area?: string;
-    /**
-     * input language for the search engine
-     */
-    language?: string;
-    /**
-     * collection of search data or collection options
-     */
-    collection?: ValueOptions<string>;
-
-    /**
-     * state initial configuration for SAYT
-     */
-    autocomplete?: {
-      /**
-       * area override
-       */
-      area?: string;
-      /**
-       * collection override
-       */
-      collection?: string;
-      /**
-       * language override
-       */
-      language?: string;
-      /**
-       * category field used to render sayt results
-       */
-      category?: string;
-      /**
-       * number of suggestions to request
-       */
-      suggestionCount?: number;
-      /**
-       * number of navigations to request
-       */
-      navigationCount?: number;
-      /**
-       * number of products to request
-       */
-      productCount?: number;
-      /**
-       * map of field to label, also restricts displayed navigations if provided
-       */
-      navigations?: { [field: string]: string };
-      /**
-       * default request values
-       */
-      defaults?: object;
-      /**
-       * override any computed request value
-       */
-      overrides?: object;
-    };
-
-    /**
-     * state initial configuration for Searchandiser
-     */
-    search?: {
-      /**
-       * product fields to request
-       * auto-generated from structure if not provided
-       */
-      fields?: string[];
-      /**
-       * number of products to request or sort options and default
-       */
-      pageSize?: ValueOptions<number>;
-      /**
-       * sorting of products or sort options and default
-       */
-      sort?: ValueOptions<{
-        /**
-         * field path to sort on
-         */
-        field: string;
-        descending?: boolean;
-      }>;
-      /**
-       * default request values
-       */
-      defaults?: Request;
-      /**
-       * override any computed request value
-       */
-      overrides?: Request;
-    };
-
-    /**
-     * network request configuration
-     */
-    network?: Bridge.Configuration;
-  }
-
-  export namespace Bridge {
-    export interface Configuration {
-      /**
-       * map of headers to send with search requests
-       */
-      headers?: { [key: string]: string };
-      /**
-       * send requests over HTTPS
-       */
-      https?: boolean;
-      /**
-       * connection timeout for search requests
-       */
-      timeout?: number;
-      /**
-       * global request error handler
-       */
-      errorHandler?: (error: Error) => void;
-      /**
-       * add SkipCache header to search requests
-       */
-      skipCache?: boolean;
-      /**
-       * add SkipSemantish header to search requests
-       */
-      skipSemantish?: boolean;
-    }
-  }
-
-  export interface Clients {
-    bridge: BrowserBridge;
-    sayt: Sayt;
-  }
-
-  export type ValueOptions<T> = T | { options: T[], default: T };
 }
 
 export default FluxCapacitor;

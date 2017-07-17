@@ -1,6 +1,7 @@
 import createActions from './action-creator';
 import Actions from './actions';
 import Adapters from './adapters';
+import Configuration from './configuration';
 import * as Events from './events';
 import Observer from './observer';
 import reducer from './reducers';
@@ -15,6 +16,7 @@ export {
   DEFAULT_COLLECTION,
   Actions,
   Adapters,
+  Configuration,
   Events,
   ReduxStore,
   Routes,

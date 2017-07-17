@@ -231,7 +231,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       it('should call fetchAutocompleteSuggestions() action', () => {
         const query = 'douglas fir';
 
-        expectDispatch(() => flux.saytSuggestions(query), 'fetchAutocompleteSuggestions', query, {});
+        expectDispatch(() => flux.saytSuggestions(query), 'fetchAutocompleteSuggestions', query);
       });
     });
 
@@ -239,7 +239,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       it('should call fetchAutocompleteProducts() action', () => {
         const query = 'maple beans';
 
-        expectDispatch(() => flux.saytProducts(query), 'fetchAutocompleteProducts', query, {});
+        expectDispatch(() => flux.saytProducts(query), 'fetchAutocompleteProducts', query);
       });
     });
   });
@@ -300,10 +300,8 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     describe('createSayt()', () => {
       it('should create a new Sayt', () => {
         const customerId = 'mycustomer';
-        const language = 'en';
         const collection = 'products';
-        const area = 'development';
-        const saytConfig = { language, collection, area };
+        const saytConfig = { collection };
         const saytClient = { a: 'b' };
         const sayt = stub(saytApi, 'Sayt').returns(saytClient);
 
@@ -312,18 +310,14 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
         expect(created).to.eq(saytClient);
         expect(sayt).to.be.calledWith({
           collection,
-          autocomplete: { language },
-          productSearch: { area },
           subdomain: customerId,
         });
       });
 
       it('should fallback to defaults', () => {
         const customerId = 'othercustomer';
-        const language = 'fr';
         const collection = 'international';
-        const area = 'development';
-        const config = { language, customerId, area, autocomplete: {} };
+        const config = { customerId, autocomplete: {} };
         const sayt = stub(saytApi, 'Sayt').returns({});
         const extractCollection = stub(ConfigAdapter, 'extractCollection').returns(collection);
 
@@ -331,8 +325,6 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
 
         expect(sayt).to.be.calledWith({
           collection,
-          autocomplete: { language },
-          productSearch: { area },
           subdomain: customerId,
         });
       });

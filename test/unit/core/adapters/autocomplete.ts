@@ -1,8 +1,10 @@
 import Adapter from '../../../../src/core/adapters/autocomplete';
+import ConfigAdapter from '../../../../src/core/adapters/configuration';
 import SearchAdapter from '../../../../src/core/adapters/search';
 import suite from '../../_suite';
 
-suite('SearchAdapter', ({ expect, stub }) => {
+suite('Autocomplete Adapter', ({ expect, stub }) => {
+
   describe('extractSuggestions()', () => {
     it('should remap search term values', () => {
       const response = { result: { searchTerms: [{ value: 'a' }, { value: 'b' }] } };
@@ -69,6 +71,52 @@ suite('SearchAdapter', ({ expect, stub }) => {
       expect(products).to.eql(['x', 'x']);
       expect(extractProduct).to.be.calledWith('a');
       expect(extractProduct).to.be.calledWith('b');
+    });
+  });
+
+  describe('extractArea()', () => {
+    const area = 'myArea';
+
+    it('should call extractAutocompleteArea()', () => {
+      const config: any = { a: 'b' };
+      const extractAutocompleteArea = stub(ConfigAdapter, 'extractAutocompleteArea').returns(area);
+
+      expect(Adapter.extractArea(config)).to.eq(area);
+
+      expect(extractAutocompleteArea).to.be.calledWith(config);
+    });
+
+    it('should fall back to global area', () => {
+      const config: any = { a: 'b' };
+      const extractArea = stub(ConfigAdapter, 'extractArea').returns(area);
+      stub(ConfigAdapter, 'extractAutocompleteArea');
+
+      expect(Adapter.extractArea(config)).to.eq(area);
+
+      expect(extractArea).to.be.calledWith(config);
+    });
+  });
+
+  describe('extractLanguage()', () => {
+    const language = 'en';
+
+    it('should call extractAutocompleteLanguage()', () => {
+      const config: any = { a: 'b' };
+      const extractAutocompleteLanguage = stub(ConfigAdapter, 'extractAutocompleteLanguage').returns(language);
+
+      expect(Adapter.extractLanguage(config)).to.eq(language);
+
+      expect(extractAutocompleteLanguage).to.be.calledWith(config);
+    });
+
+    it('should fall back to global language', () => {
+      const config: any = { a: 'b' };
+      const extractLanguage = stub(ConfigAdapter, 'extractLanguage').returns(language);
+      stub(ConfigAdapter, 'extractAutocompleteLanguage');
+
+      expect(Adapter.extractLanguage(config)).to.eq(language);
+
+      expect(extractLanguage).to.be.calledWith(config);
     });
   });
 });

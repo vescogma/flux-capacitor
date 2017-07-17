@@ -27,7 +27,7 @@ export function createActions(flux: FluxCapacitor) {
           const state = getState();
           if (Selectors.hasMoreRefinements(state, navigationId)) {
             dispatch(actions.startFetching(Request.MORE_REFINEMENTS));
-            return flux.clients.bridge.refinements(Selectors.searchRequest(state), navigationId)
+            return flux.clients.bridge.refinements(Selectors.searchRequest(state, flux.config), navigationId)
               .then(({ navigation: { name, refinements } }) => {
                 const navigation = Selectors.navigation(state, name);
                 const navigationType = navigation.range ? 'Range' : 'Value';
@@ -56,7 +56,7 @@ export function createActions(flux: FluxCapacitor) {
           const state = getState();
           if (!state.isFetching.search) {
             dispatch(actions.startFetching(Request.PRODUCTS));
-            return flux.clients.bridge.search(Selectors.searchRequest(state))
+            return flux.clients.bridge.search(Selectors.searchRequest(state, flux.config))
               .then((res) => {
                 flux.emit(Events.BEACON_SEARCH, res['id']);
                 return dispatch(actions.receiveSearchResponse(res));
@@ -79,7 +79,7 @@ export function createActions(flux: FluxCapacitor) {
           if (!state.isFetching.moreProducts) {
             dispatch(actions.startFetching(Request.MORE_PRODUCTS));
             return flux.clients.bridge.search({
-              ...Selectors.searchRequest(state),
+              ...Selectors.searchRequest(state, flux.config),
               pageSize: amount,
               skip: Selectors.products(state).length
             }).then((res) => {
@@ -91,11 +91,11 @@ export function createActions(flux: FluxCapacitor) {
           }
         },
 
-      fetchAutocompleteSuggestions: (query: string, config: QueryTimeAutocompleteConfig): Actions.Thunk<any> =>
+      fetchAutocompleteSuggestions: (query: string): Actions.Thunk<any> =>
         (dispatch, getState) => {
           if (query) {
             dispatch(actions.startFetching(Request.AUTOCOMPLETE_SUGGESTIONS));
-            return flux.clients.sayt.autocomplete(query, config)
+            return flux.clients.sayt.autocomplete(query, Selectors.autocompleteSuggestionsRequest(flux.config))
               .then((res) => {
                 const category = getState().data.autocomplete.category.field;
                 const {
@@ -110,11 +110,11 @@ export function createActions(flux: FluxCapacitor) {
           }
         },
 
-      fetchAutocompleteProducts: (query: string, config: QueryTimeProductSearchConfig): Actions.Thunk<any> =>
+      fetchAutocompleteProducts: (query: string): Actions.Thunk<any> =>
         (dispatch) => {
           if (query) {
             dispatch(actions.startFetching(Request.AUTOCOMPLETE_PRODUCTS));
-            return flux.clients.sayt.productSearch(query, config)
+            return flux.clients.sayt.productSearch(query, Selectors.autocompleteProductsRequest(flux.config))
               .then((res) => {
                 const products = Adapters.Autocomplete.extractProducts(res);
                 dispatch(actions.receiveAutocompleteProducts(products));
@@ -126,14 +126,14 @@ export function createActions(flux: FluxCapacitor) {
 
       fetchCollectionCount: (collection: string): Actions.Thunk<any> =>
         (dispatch, getState) =>
-          flux.clients.bridge.search({ ...Selectors.searchRequest(getState()), collection })
+          flux.clients.bridge.search({ ...Selectors.searchRequest(getState(), flux.config), collection })
             .then((res) => dispatch(
               actions.receiveCollectionCount(collection, Adapters.Search.extractRecordCount(res)))),
 
       fetchProductDetails: (id: string): Actions.Thunk<any> =>
         (dispatch, getState) => {
           return flux.clients.bridge.search({
-            ...Selectors.searchRequest(getState()),
+            ...Selectors.searchRequest(getState(), flux.config),
             query: null,
             pageSize: 1,
             skip: 0,

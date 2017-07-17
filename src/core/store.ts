@@ -1,9 +1,9 @@
 import { applyMiddleware, createStore, Store as ReduxStore } from 'redux';
 import thunk from 'redux-thunk';
 import * as uuid from 'uuid';
-import FluxCapacitor from '../flux-capacitor';
 import Actions from './actions';
 import Adapter from './adapters/configuration';
+import Configuration from './configuration';
 import reducer from './reducers';
 import * as PageReducer from './reducers/data/page';
 
@@ -37,7 +37,7 @@ export const idGenerator = (key: string, actions: string[]) =>
 namespace Store {
 
   // tslint:disable-next-line max-line-length
-  export function create(config: FluxCapacitor.Configuration, listener?: (store: ReduxStore<State>) => () => void): ReduxStore<State> {
+  export function create(config: Configuration, listener?: (store: ReduxStore<State>) => () => void): ReduxStore<State> {
     const middleware = [
       thunk,
       idGenerator('recallId', RECALL_CHANGE_ACTIONS),

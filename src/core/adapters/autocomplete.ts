@@ -1,6 +1,14 @@
+import Configuration from '../configuration';
+import Config from './configuration';
 import Search from './search';
 
 namespace Adapter {
+
+  export const extractLanguage = (config: Configuration) =>
+    Config.extractAutocompleteLanguage(config) || Config.extractLanguage(config);
+
+  export const extractArea = (config: Configuration) =>
+    Config.extractAutocompleteArea(config) || Config.extractArea(config);
 
   // tslint:disable-next-line max-line-length
   export const extractSuggestions = ({ result }: any, category: string) => {

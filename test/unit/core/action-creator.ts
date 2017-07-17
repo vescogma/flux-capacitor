@@ -291,30 +291,33 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
     describe('fetchAutocompleteSuggestions()', () => {
       it('should return a thunk', () => {
-        const thunk = actions.fetchAutocompleteSuggestions('', {});
+        const thunk = actions.fetchAutocompleteSuggestions('');
 
         expect(thunk).to.be.a('function');
       });
 
       it('should call flux.clients.sayt.autocomplete()', () => {
         const query = 'red app';
-        const config: any = { a: 'b' };
+        const config = { a: 'b' };
+        const fluxConfig = flux.config = { i: 'j' };
         const response = { c: 'd' };
         const suggestions = ['e', 'f'];
         const categoryValues = ['g', 'h'];
         const receiveAutocompleteSuggestionsAction = () => null;
         const dispatch = spy();
         const autocomplete = stub().resolves(response);
+        const autocompleteSuggestionsRequest = stub(Selectors, 'autocompleteSuggestionsRequest').returns(config);
         const extractAutocompleteSuggestions = stub(AutocompleteAdapter, 'extractSuggestions')
           .returns({ suggestions, categoryValues });
         const receiveAutocompleteSuggestions = stub(actions, 'receiveAutocompleteSuggestions')
           .returns(receiveAutocompleteSuggestionsAction);
-        const action = actions.fetchAutocompleteSuggestions(query, config);
+        const action = actions.fetchAutocompleteSuggestions(query);
         flux.clients = { sayt: { autocomplete } };
 
         return action(dispatch, () => <any>({ data: { autocomplete: { category: { field: 'brand' } } } }))
           .then(() => {
             expect(autocomplete).to.be.calledWith(query, config);
+            expect(autocompleteSuggestionsRequest).to.be.calledWith(fluxConfig);
             expect(extractAutocompleteSuggestions).to.be.calledWith(response);
             expect(receiveAutocompleteSuggestions).to.be.calledWith(suggestions, categoryValues);
             expect(dispatch).to.be.calledWith(receiveAutocompleteSuggestionsAction);
@@ -326,7 +329,8 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const dispatch = spy();
         const receiveAutocompleteSuggestions = stub(actions, 'receiveAutocompleteSuggestions')
           .returns(receiveAutocompleteSuggestionsAction);
-        const action = actions.fetchAutocompleteSuggestions('red app', {});
+        const action = actions.fetchAutocompleteSuggestions('red app');
+        stub(Selectors, 'autocompleteSuggestionsRequest');
         flux.clients = { sayt: { autocomplete: () => Promise.reject('') } };
 
         return action(dispatch, () => <any>({ data: { autocomplete: { category: { field: 'brand' } } } }))
@@ -339,28 +343,31 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
     describe('fetchAutocompleteProducts()', () => {
       it('should return a thunk', () => {
-        const thunk = actions.fetchAutocompleteProducts('', {});
+        const thunk = actions.fetchAutocompleteProducts('');
 
         expect(thunk).to.be.a('function');
       });
 
       it('should call flux.sayt.productSearch()', () => {
         const query = 'red app';
-        const config: any = { a: 'b' };
+        const config = { a: 'b' };
+        const fluxConfig = flux.config = { g: 'h' };
         const response = { c: 'd' };
         const products = ['e', 'f'];
         const receiveAutocompleteProductsAction = () => null;
         const dispatch = spy();
         const productSearch = stub().resolves(response);
+        const autocompleteProductsRequest = stub(Selectors, 'autocompleteProductsRequest').returns(config);
         const extractAutocompleteProducts = stub(AutocompleteAdapter, 'extractProducts').returns(products);
         const receiveAutocompleteProducts = stub(actions, 'receiveAutocompleteProducts')
           .returns(receiveAutocompleteProductsAction);
-        const action = actions.fetchAutocompleteProducts(query, config);
+        const action = actions.fetchAutocompleteProducts(query);
         flux.clients = { sayt: { productSearch } };
 
         return action(dispatch)
           .then(() => {
             expect(productSearch).to.be.calledWith(query, config);
+            expect(autocompleteProductsRequest).to.be.calledWith(fluxConfig);
             expect(extractAutocompleteProducts).to.be.calledWith(response);
             expect(receiveAutocompleteProducts).to.be.calledWith(products);
             expect(dispatch).to.be.calledWith(receiveAutocompleteProductsAction);
@@ -372,7 +379,8 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const dispatch = spy();
         const receiveAutocompleteProducts = stub(actions, 'receiveAutocompleteProducts')
           .returns(receiveAutocompleteProductsAction);
-        const action = actions.fetchAutocompleteProducts('red app', {});
+        const action = actions.fetchAutocompleteProducts('red app');
+        stub(Selectors, 'autocompleteProductsRequest');
         flux.clients = { sayt: { productSearch: () => Promise.reject('') } };
 
         return action(dispatch)

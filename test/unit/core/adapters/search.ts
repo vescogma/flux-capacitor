@@ -3,7 +3,7 @@ import Adapter from '../../../../src/core/adapters/search';
 import Selectors from '../../../../src/core/selectors';
 import suite from '../../_suite';
 
-suite('SearchAdapter', ({ expect, stub }) => {
+suite('Search Adapter', ({ expect, stub }) => {
 
   describe('extractQuery()', () => {
     it('should convert results to query structure', () => {

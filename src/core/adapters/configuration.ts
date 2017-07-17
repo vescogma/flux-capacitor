@@ -1,4 +1,4 @@
-import FluxCapacitor from '../../flux-capacitor';
+import Configuration from '../configuration';
 import * as AreaReducer from '../reducers/data/area';
 import * as CollectionsReducer from '../reducers/data/collections';
 import * as PageReducer from '../reducers/data/page';
@@ -6,7 +6,7 @@ import Store from '../store';
 
 namespace Adapter {
 
-  export const initialState = (config: FluxCapacitor.Configuration): Partial<Store.State> =>
+  export const initialState = (config: Configuration): Partial<Store.State> =>
     ({
       data: <any>{
         area: Adapter.extractArea(config, AreaReducer.DEFAULT_AREA),
@@ -29,17 +29,44 @@ namespace Adapter {
       }
     });
 
-  export const extractArea = (config: FluxCapacitor.Configuration, defaultValue: string) =>
+  export const extractArea = (config: Configuration, defaultValue?: string) =>
     config.area || defaultValue;
 
-  export const extractFields = (config: FluxCapacitor.Configuration) =>
+  export const extractAutocompleteArea = (config: Configuration) =>
+    config.autocomplete.area;
+
+  export const extractFields = (config: Configuration) =>
     config.search.fields || [];
+
+  export const extractLanguage = (config: Configuration) =>
+    config.language;
+
+  export const extractAutocompleteLanguage = (config: Configuration) =>
+    config.autocomplete.language;
 
   /**
    * extract current collection from config
    */
-  export const extractCollection = (config: FluxCapacitor.Configuration) =>
+  export const extractCollection = (config: Configuration) =>
     typeof config.collection === 'object' ? config.collection.default : config.collection;
+
+  export const extractAutocompleteCollection = (config: Configuration) =>
+    config.autocomplete.collection;
+
+  export const extractAutocompleteSuggestionCount = (config: Configuration) =>
+    config.autocomplete.suggestionCount;
+
+  export const extractAutocompleteProductCount = (config: Configuration) =>
+    config.autocomplete.productCount;
+
+  export const extractAutocompleteNavigationCount = (config: Configuration) =>
+    config.autocomplete.navigationCount;
+
+  export const isAutocompleteAlphabeticallySorted = (config: Configuration) =>
+    config.autocomplete.alphabetical;
+
+  export const isAutocompleteMatchingFuzzily = (config: Configuration) =>
+    config.autocomplete.fuzzy;
 
   export const extractIndexedState = (state: string | { options: string[], default: string }) => {
     if (typeof state === 'object') {
@@ -50,7 +77,7 @@ namespace Adapter {
   };
 
   // tslint:disable-next-line max-line-length
-  export const extractCollections = (config: FluxCapacitor.Configuration, defaultValue: string): Store.Indexed.Selectable<Store.Collection> => {
+  export const extractCollections = (config: Configuration, defaultValue: string): Store.Indexed.Selectable<Store.Collection> => {
     const { selected, allIds } = Adapter.extractIndexedState(config.collection || defaultValue);
 
     return {
@@ -61,7 +88,7 @@ namespace Adapter {
   };
 
   // tslint:disable-next-line max-line-length
-  export const extractPageSizes = (config: FluxCapacitor.Configuration, defaultValue: number): Store.SelectableList<number> => {
+  export const extractPageSizes = (config: Configuration, defaultValue: number): Store.SelectableList<number> => {
     const state = config.search.pageSize || defaultValue;
     if (typeof state === 'object') {
       const selected = state.default;
@@ -74,7 +101,7 @@ namespace Adapter {
     }
   };
 
-  export const extractSorts = (config: FluxCapacitor.Configuration): Store.SelectableList<Store.Sort> => {
+  export const extractSorts = (config: Configuration): Store.SelectableList<Store.Sort> => {
     const state = config.search.sort;
     if (typeof state === 'object' && ('options' in state || 'default' in state)) {
       const selected: Store.Sort = (<{ default: Store.Sort }>state).default || <any>{};
@@ -88,7 +115,7 @@ namespace Adapter {
     }
   };
 
-  export const extractSaytCategoryField = (config: FluxCapacitor.Configuration) => {
+  export const extractSaytCategoryField = (config: Configuration) => {
     return config.autocomplete.category;
   };
 }
