@@ -17,19 +17,20 @@ export const rootReducer = redux.combineReducers<Store.State>({
   ui,
 });
 
-export default (state: any, action: Action) => {
+export default (state: Store.State, action: Action) => {
   switch (action.type) {
     case Actions.REFRESH_STATE: return updateState(state, action);
     default: return rootReducer(state, action);
   }
 };
 
-export const updateState = (state: any, { payload }: Actions.RefreshState) => {
+export const updateState = (state: Store.State, { payload }: Actions.RefreshState) => {
   return {
     ...payload,
     session: state.session,
     data: {
       ...payload.data,
+      autocomplete: state.data.autocomplete,
       details: {
         ...payload.data.details,
         id: state.data.details.id
