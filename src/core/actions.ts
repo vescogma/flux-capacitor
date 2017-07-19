@@ -1,11 +1,13 @@
+import { Results } from 'groupby-api';
 import { Dispatch } from 'redux';
 import Store from './store';
 
 namespace Actions {
-  export interface Action<S, T = never, M extends Metadata | {} = any> {
+  export interface Action<S, T = any, M extends Metadata | {} = any> {
     type: S;
     payload?: T;
-    metadata?: M;
+    meta?: M;
+    error?: boolean;
   }
 
   export interface Metadata {
@@ -44,9 +46,27 @@ namespace Actions {
   export const UPDATE_CURRENT_PAGE = 'UPDATE_CURRENT_PAGE';
   export type UpdateCurrentPage = Action<typeof UPDATE_CURRENT_PAGE, number>;
 
+  // fetch actions
+  export const FETCH_MORE_REFINEMENTS = 'FETCH_MORE_REFINEMENTS';
+  export type FetchMoreRefinements = Action<typeof FETCH_MORE_REFINEMENTS, string>;
+  export const FETCH_PRODUCTS = 'FETCH_PRODUCTS';
+  export type FetchProducts = Action<typeof FETCH_PRODUCTS>;
+  export const FETCH_MORE_PRODUCTS = 'FETCH_MORE_PRODUCTS';
+  export type FetchMoreProducts = Action<typeof FETCH_MORE_PRODUCTS, number>;
+  export const FETCH_AUTOCOMPLETE_SUGGESTIONS = 'FETCH_AUTOCOMPLETE_SUGGESTIONS';
+  export type FetchAutocompleteSuggestions = Action<typeof FETCH_AUTOCOMPLETE_SUGGESTIONS, string>;
+  export const FETCH_AUTOCOMPLETE_PRODUCTS = 'FETCH_AUTOCOMPLETE_PRODUCTS';
+  export type FetchAutocompleteProducts = Action<typeof FETCH_AUTOCOMPLETE_PRODUCTS, string>;
+  export const FETCH_COLLECTION_COUNT = 'FETCH_COLLECTION_COUNT';
+  export type FetchCollectionCount = Action<typeof FETCH_COLLECTION_COUNT, string>;
+  export const FETCH_PRODUCT_DETAILS = 'FETCH_PRODUCT_DETAILS';
+  export type FetchProductDetails = Action<typeof FETCH_PRODUCT_DETAILS, string>;
+
   // response actions
   export const RECEIVE_MORE_REFINEMENTS = 'RECEIVE_MORE_REFINEMENTS';
   export type ReceiveMoreRefinements = Action<typeof RECEIVE_MORE_REFINEMENTS, Payload.Navigation.MoreRefinements>;
+  export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS';
+  export type ReceiveProducts = Action<typeof RECEIVE_PRODUCTS, Results>;
   export const RECEIVE_MORE_PRODUCTS = 'RECEIVE_MORE_PRODUCTS';
   export type ReceiveMoreProducts = Action<typeof RECEIVE_MORE_PRODUCTS, Store.Product[]>;
   export const RECEIVE_AUTOCOMPLETE_SUGGESTIONS = 'RECEIVE_AUTOCOMPLETE_SUGGESTIONS';
@@ -58,8 +78,8 @@ namespace Actions {
   export type ReceiveDetailsProduct = Action<typeof RECEIVE_DETAILS_PRODUCT, Store.Product>;
   export const RECEIVE_QUERY = 'RECEIVE_QUERY';
   export type ReceiveQuery = Action<typeof RECEIVE_QUERY, Payload.Query>;
-  export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS';
-  export type ReceiveProducts = Action<typeof RECEIVE_PRODUCTS, Store.Product[]>;
+  export const RECEIVE_PRODUCT_RECORDS = 'RECEIVE_PRODUCT_RECORDS';
+  export type ReceiveProductRecords = Action<typeof RECEIVE_PRODUCT_RECORDS, Store.Product[]>;
   export const RECEIVE_COLLECTION_COUNT = 'RECEIVE_COLLECTION_COUNT';
   export type ReceiveCollectionCount = Action<typeof RECEIVE_COLLECTION_COUNT, Payload.Collection.Count>;
   export const RECEIVE_NAVIGATIONS = 'RECEIVE_NAVIGATIONS';
@@ -72,10 +92,6 @@ namespace Actions {
   export type ReceiveTemplate = Action<typeof RECEIVE_TEMPLATE, Store.Template>;
   export const RECEIVE_REDIRECT = 'RECEIVE_REDIRECT';
   export type ReceiveRedirect = Action<typeof RECEIVE_REDIRECT, string>;
-
-  // request status
-  export const IS_FETCHING = 'IS_FETCHING';
-  export type IsFetching = Action<typeof IS_FETCHING, keyof Store.IsFetching>;
 
   // ui
   export const CREATE_COMPONENT_STATE = 'CREATE_COMPONENT_STATE';

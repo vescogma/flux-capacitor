@@ -22,35 +22,37 @@ suite('Configuration Adapter', ({ expect, stub }) => {
 
       expect(Adapter.initialState(config)).to.eql({
         data: {
-          area: DEFAULT_AREA,
-          autocomplete: {
-            suggestions: [],
-            navigations: [],
-            products: [],
-            category: {
-              field: category,
-              values: []
-            }
-          },
-          fields: [],
-          collections: {
-            selected: DEFAULT_COLLECTION,
-            allIds: [DEFAULT_COLLECTION],
-            byId: {
-              [DEFAULT_COLLECTION]: {
-                name: DEFAULT_COLLECTION
+          present: {
+            area: DEFAULT_AREA,
+            autocomplete: {
+              suggestions: [],
+              navigations: [],
+              products: [],
+              category: {
+                field: category,
+                values: []
               }
-            }
-          },
-          sorts: {
-            selected: 0,
-            items: [sort]
-          },
-          page: {
-            ...PageReducer.DEFAULTS,
-            sizes: {
+            },
+            fields: [],
+            collections: {
+              selected: DEFAULT_COLLECTION,
+              allIds: [DEFAULT_COLLECTION],
+              byId: {
+                [DEFAULT_COLLECTION]: {
+                  name: DEFAULT_COLLECTION
+                }
+              }
+            },
+            sorts: {
               selected: 0,
-              items: [PageReducer.DEFAULT_PAGE_SIZE]
+              items: [sort]
+            },
+            page: {
+              ...PageReducer.DEFAULTS,
+              sizes: {
+                selected: 0,
+                items: [PageReducer.DEFAULT_PAGE_SIZE]
+              }
             }
           }
         }
@@ -87,38 +89,40 @@ suite('Configuration Adapter', ({ expect, stub }) => {
       };
       const state = {
         data: {
-          area,
-          autocomplete: {
-            suggestions: [],
-            navigations: [],
-            products: [],
-            category: {
-              field: category,
-              values: []
-            }
-          },
-          fields,
-          collections: {
-            selected: collection.default,
-            allIds: collection.options,
-            byId: {
-              [collection.options[0]]: {
-                name: collection.options[0]
-              },
-              [collection.options[1]]: {
-                name: collection.options[1]
+          present: {
+            area,
+            autocomplete: {
+              suggestions: [],
+              navigations: [],
+              products: [],
+              category: {
+                field: category,
+                values: []
               }
-            }
-          },
-          sorts: {
-            selected: 0,
-            items: sort.options
-          },
-          page: {
-            ...PageReducer.DEFAULTS,
-            sizes: {
-              selected: 2,
-              items: pageSize.options
+            },
+            fields,
+            collections: {
+              selected: collection.default,
+              allIds: collection.options,
+              byId: {
+                [collection.options[0]]: {
+                  name: collection.options[0]
+                },
+                [collection.options[1]]: {
+                  name: collection.options[1]
+                }
+              }
+            },
+            sorts: {
+              selected: 0,
+              items: sort.options
+            },
+            page: {
+              ...PageReducer.DEFAULTS,
+              sizes: {
+                selected: 2,
+                items: pageSize.options
+              }
             }
           }
         }

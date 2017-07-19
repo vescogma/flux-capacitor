@@ -1,20 +1,35 @@
 import * as sinon from 'sinon';
 import createActions from '../../../src/core/action-creator';
 import Actions from '../../../src/core/actions';
-import AutocompleteAdapter from '../../../src/core/adapters/autocomplete';
 import SearchAdapter from '../../../src/core/adapters/search';
-import * as Events from '../../../src/core/events';
-import { Request } from '../../../src/core/reducers/is-fetching';
 import Selectors from '../../../src/core/selectors';
 import * as utils from '../../../src/core/utils';
 import FluxCapacitor from '../../../src/flux-capacitor';
 import suite from '../_suite';
+
+const ACTION = { y: 'z' };
 
 suite('ActionCreator', ({ expect, spy, stub }) => {
   let actions: typeof FluxCapacitor.prototype.actions;
   let flux: any;
 
   beforeEach(() => actions = createActions(flux = <any>{})(() => null));
+
+  // tslint:disable-next-line max-line-length
+  function expectAction<T>(fn: () => Actions.Action<T, any>, type: T, payload?: any, metadataTest?: (meta: any) => any) {
+    const createAction = stub(utils, 'action').returns(ACTION);
+
+    const action = fn();
+
+    expect(action).to.eq(ACTION);
+    const args: any[] = [type, payload];
+    if (metadataTest) {
+      args.push(sinon.match(metadataTest));
+    } else {
+      args.push(sinon.match.any);
+    }
+    expect(createAction).to.be.calledWithExactly(...args);
+  }
 
   describe('application action creators', () => {
     const state = { c: 'd' };
@@ -30,921 +45,536 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         expect(action).to.eq(created);
       });
     });
-
-    describe('startFetching()', () => {
-      it('should return type IS_FETCHING with requestType', () => {
-        const requestType = 'search';
-        const created = { f: 'g' };
-        const createAction = stub(utils, 'action').returns(created);
-
-        const action = actions.startFetching(requestType);
-
-        expect(createAction).to.be.calledWith(Actions.IS_FETCHING, requestType);
-        expect(action).to.eq(created);
-      });
-    });
   });
 
   describe('fetch action creators', () => {
     describe('fetchMoreRefinements()', () => {
-      it('should return a thunk', () => {
-        const thunk = actions.fetchMoreRefinements('brand');
-
-        expect(thunk).to.be.a('function');
-      });
-
-      it('should not fetch if more refinements not available', () => {
+      it('should return an action', () => {
         const navigationId = 'brand';
-        const state = { a: 'b' };
-        const dispatch = spy();
-        const getStore = spy(() => state);
-        const hasMoreRefinements = stub(Selectors, 'hasMoreRefinements').returns(false);
-        const action = actions.fetchMoreRefinements(navigationId);
 
-        action(dispatch, getStore);
-
-        expect(getStore).to.be.called;
-        expect(hasMoreRefinements).to.be.calledWith(state, navigationId);
-        expect(dispatch).to.not.be.called;
-      });
-
-      it('should fetch more refinements', () => {
-        const name = 'brand';
-        const state: any = { a: 'b' };
-        const search = { e: 'f' };
-        const action = actions.fetchMoreRefinements(name);
-        const refinements = stub().resolves({ navigation: { name, refinements: ['c', 'd'] } });
-        const searchRequest = stub(Selectors, 'searchRequest').returns(search);
-        stub(Selectors, 'navigation').returns({ refinements: [] });
-        stub(Selectors, 'hasMoreRefinements').returns(true);
-        stub(actions, 'receiveMoreRefinements');
-        stub(SearchAdapter, 'extractRefinement').callsFake((s) => s);
-        flux.clients = { bridge: { refinements } };
-
-        return action(() => null, () => state)
-          .then(() => {
-            expect(searchRequest).to.be.calledWith(state);
-            expect(refinements).to.be.calledWith(search, name);
-          });
-      });
-
-      it('should store more refinements result', () => {
-        const name = 'brand';
-        const state: any = { a: 'b' };
-        const moreRefinementsAction = { e: 'f' };
-        const action = actions.fetchMoreRefinements(name);
-        const dispatch = spy();
-        const extractRefinement = stub(SearchAdapter, 'extractRefinement').callsFake((value) => value);
-        const receiveMoreRefinements = stub(actions, 'receiveMoreRefinements').returns(moreRefinementsAction);
-        stub(Selectors, 'navigation').returns({ refinements: [] });
-        stub(Selectors, 'hasMoreRefinements').returns(true);
-        stub(Selectors, 'searchRequest');
-        flux.clients = {
-          bridge: {
-            refinements: stub().resolves({ navigation: { name, refinements: ['c', 'd'] } })
-          }
-        };
-
-        return action(dispatch, () => state)
-          .then(() => {
-            expect(extractRefinement).to.be.calledWith('c')
-              .and.calledWith('d');
-            expect(receiveMoreRefinements).to.be.calledWith(name, ['c', 'd'], []);
-            expect(dispatch).to.be.calledWith(moreRefinementsAction);
-          });
-      });
-
-      it('should apply selected refinements', () => {
-        const name = 'brand';
-        const state: any = { a: 'b' };
-        const moreRefinementsAction = { e: 'f' };
-        const action = actions.fetchMoreRefinements(name);
-        const dispatch = spy();
-        const extractRefinement = stub(SearchAdapter, 'extractRefinement').callsFake((value) => value);
-        const receiveMoreRefinements = stub(actions, 'receiveMoreRefinements').returns(moreRefinementsAction);
-        stub(SearchAdapter, 'refinementsMatch').returns(true);
-        stub(Selectors, 'navigation').returns({ refinements: ['a', 'b', 'c'], selected: [1, 2] });
-        stub(Selectors, 'hasMoreRefinements').returns(true);
-        stub(Selectors, 'searchRequest');
-        flux.clients = {
-          bridge: {
-            refinements: stub().resolves({ navigation: { name, refinements: ['c', 'd'] }, selected: [0, 3] })
-          }
-        };
-
-        return action(dispatch, () => state)
-          .then(() => {
-            expect(extractRefinement).to.be.calledWith('c')
-              .and.calledWith('d');
-            expect(receiveMoreRefinements).to.be.calledWith(name, ['c', 'd'], [0, 1]);
-            expect(dispatch).to.be.calledWith(moreRefinementsAction);
-          });
-      });
-
-      it('should catch error and clear fetching flag', () => {
-        const moreRefinementsAction = { e: 'f' };
-        const action = actions.fetchMoreRefinements('brand');
-        const dispatch = spy();
-        const receiveMoreRefinements = stub(actions, 'receiveMoreRefinements').returns(moreRefinementsAction);
-        stub(Selectors, 'searchRequest');
-        stub(Selectors, 'hasMoreRefinements').returns(true);
-        flux.clients = { bridge: { refinements: () => Promise.reject('') } };
-
-        return action(dispatch, () => <any>({}))
-          .then(() => {
-            expect(receiveMoreRefinements).to.be.calledWith(null, [], []);
-            expect(dispatch).to.be.calledWith(moreRefinementsAction);
-          });
+        expectAction(() => actions.fetchMoreRefinements(navigationId), Actions.FETCH_MORE_REFINEMENTS, navigationId);
       });
     });
 
     describe('fetchProducts()', () => {
-      it('should return a thunk', () => {
-        const thunk = actions.fetchProducts();
-
-        expect(thunk).to.be.a('function');
-      });
-
-      it('should call flux.clients.bridge.search()', () => {
-        const id = '13123';
-        const request = { a: 'b' };
-        const response = { c: 'd', id };
-        const state: any = { isFetching: {} };
-        const receiveSearchResponseAction = () => null;
-        const dispatch = spy();
-        const emit = flux.emit = spy();
-        const search = stub().resolves(response);
-        const searchRequest = stub(Selectors, 'searchRequest').returns(request);
-        const receiveSearchResponse = stub(actions, 'receiveSearchResponse').returns(receiveSearchResponseAction);
-        const action = actions.fetchProducts();
-        flux.clients = { bridge: { search } };
-
-        return action(dispatch, () => state)
-          .then(() => {
-            expect(searchRequest).to.be.calledWith(state);
-            expect(search).to.be.calledWith(request);
-            expect(receiveSearchResponse).to.be.calledWith(response);
-            expect(emit).to.be.calledWith(Events.BEACON_SEARCH, id);
-            expect(dispatch).to.be.calledWith(receiveSearchResponseAction);
-          });
-      });
-
-      it('should catch error and clear fetching flag', () => {
-        const products = ['e', 'f', 'g'];
-        const state: any = { isFetching: {} };
-        const receiveSearchResponseAction = () => null;
-        const dispatch = spy();
-        const receiveSearchResponse = stub(actions, 'receiveSearchResponse').returns(receiveSearchResponseAction);
-        const action = actions.fetchProducts();
-        stub(Selectors, 'searchRequest');
-        flux.clients = { bridge: { search: () => Promise.reject('') } };
-
-        return action(dispatch, () => state)
-          .then(() => {
-            expect(receiveSearchResponse).to.be.calledWith({
-              availableNavigation: [],
-              selectedNavigation: [],
-              records: [],
-              didYouMean: [],
-              relatedQueries: [],
-              rewrites: [],
-              totalRecordCount: 0
-            });
-            expect(dispatch).to.be.calledWith(receiveSearchResponseAction);
-          });
+      it('should return an action', () => {
+        expectAction(() => actions.fetchProducts(), Actions.FETCH_PRODUCTS, null);
       });
     });
 
     describe('fetchMoreProducts()', () => {
-      it('should return a thunk', () => {
-        const thunk = actions.fetchMoreProducts(10);
+      it('should return an action', () => {
+        const amount = 15;
 
-        expect(thunk).to.be.a('function');
-      });
-
-      it('should not fetch if already fetching', () => {
-        const state = { a: 'b', isFetching: { moreProducts: true } };
-        const dispatch = spy();
-        const getStore = spy(() => state);
-        const action = actions.fetchMoreProducts(20);
-
-        action(dispatch, getStore);
-
-        expect(getStore).to.be.called;
-        expect(dispatch).to.not.be.called;
-      });
-
-      it('should fetch more products', () => {
-        const id = '13512';
-        const request = { a: 'b' };
-        const response = { c: 'd', id };
-        const amount = 5;
-        const products = [1, 2, 3, 4, 5];
-        const state: any = { a: 'b', isFetching: { moreProducts: false } };
-        const moreProductsAction = { e: 'f' };
-        const startFetchingAction = { g: 'h' };
-        const dispatch = spy();
-        const emit = flux.emit = spy();
-        const getStore = spy(() => state);
-        const search = stub().resolves(response);
-        const searchRequest = stub(Selectors, 'searchRequest').returns(request);
-        const receiveMoreProducts = stub(actions, 'receiveMoreProducts').returns(moreProductsAction);
-        const action = actions.fetchMoreProducts(amount);
-        const startFetching = stub(actions, 'startFetching').returns(startFetchingAction);
-        const extractProducts = stub(AutocompleteAdapter, 'extractProducts').callsFake((s) => s);
-        stub(Selectors, 'products').returns(products);
-        flux.clients = { bridge: { search } };
-
-        return action(dispatch, getStore)
-          .then(() => {
-            expect(search).to.be.calledWith({ ...request, pageSize: amount, skip: products.length });
-            expect(startFetching).to.be.calledWith(Request.MORE_PRODUCTS);
-            expect(searchRequest).to.be.calledWith(state);
-            expect(extractProducts).to.be.calledWith(response);
-            expect(emit).to.be.calledWith(Events.BEACON_SEARCH, id);
-            expect(dispatch).to.be.calledTwice
-              .and.calledWith(startFetchingAction)
-              .and.calledWith(moreProductsAction);
-          });
-      });
-
-      it('should catch error and clear fetching flag', () => {
-        const request = { a: 'b' };
-        const response = { c: 'd' };
-        const moreProductsAction = { e: 'f' };
-        const state: any = { a: 'b', isFetching: { moreProducts: false } };
-        const dispatch = spy();
-        const receiveMoreProducts = stub(actions, 'receiveMoreProducts').returns(moreProductsAction);
-        const action = actions.fetchMoreProducts(5);
-        stub(Selectors, 'searchRequest').returns(request);
-        stub(actions, 'startFetching');
-        stub(Selectors, 'products').returns([]);
-        flux.clients = { bridge: { search: () => Promise.reject('') } };
-
-        return action(dispatch, () => state)
-          .then(() => {
-            expect(receiveMoreProducts).to.be.calledWith([]);
-            expect(dispatch).to.be.calledWith(moreProductsAction);
-          });
+        expectAction(() => actions.fetchMoreProducts(amount), Actions.FETCH_MORE_PRODUCTS, amount);
       });
     });
 
     describe('fetchAutocompleteSuggestions()', () => {
-      it('should return a thunk', () => {
-        const thunk = actions.fetchAutocompleteSuggestions('');
+      it('should return an action', () => {
+        const query = 'barbie';
 
-        expect(thunk).to.be.a('function');
-      });
-
-      it('should call flux.clients.sayt.autocomplete()', () => {
-        const query = 'red app';
-        const config = { a: 'b' };
-        const fluxConfig = flux.config = { i: 'j' };
-        const response = { c: 'd' };
-        const suggestions = ['e', 'f'];
-        const categoryValues = ['g', 'h'];
-        const receiveAutocompleteSuggestionsAction = () => null;
-        const dispatch = spy();
-        const autocomplete = stub().resolves(response);
-        const autocompleteSuggestionsRequest = stub(Selectors, 'autocompleteSuggestionsRequest').returns(config);
-        const extractAutocompleteSuggestions = stub(AutocompleteAdapter, 'extractSuggestions')
-          .returns({ suggestions, categoryValues });
-        const receiveAutocompleteSuggestions = stub(actions, 'receiveAutocompleteSuggestions')
-          .returns(receiveAutocompleteSuggestionsAction);
-        const action = actions.fetchAutocompleteSuggestions(query);
-        flux.clients = { sayt: { autocomplete } };
-
-        return action(dispatch, () => <any>({ data: { autocomplete: { category: { field: 'brand' } } } }))
-          .then(() => {
-            expect(autocomplete).to.be.calledWith(query, config);
-            expect(autocompleteSuggestionsRequest).to.be.calledWith(fluxConfig);
-            expect(extractAutocompleteSuggestions).to.be.calledWith(response);
-            expect(receiveAutocompleteSuggestions).to.be.calledWith(suggestions, categoryValues);
-            expect(dispatch).to.be.calledWith(receiveAutocompleteSuggestionsAction);
-          });
-      });
-
-      it('should catch error and clear fetching flag', () => {
-        const receiveAutocompleteSuggestionsAction = () => null;
-        const dispatch = spy();
-        const receiveAutocompleteSuggestions = stub(actions, 'receiveAutocompleteSuggestions')
-          .returns(receiveAutocompleteSuggestionsAction);
-        const action = actions.fetchAutocompleteSuggestions('red app');
-        stub(Selectors, 'autocompleteSuggestionsRequest');
-        flux.clients = { sayt: { autocomplete: () => Promise.reject('') } };
-
-        return action(dispatch, () => <any>({ data: { autocomplete: { category: { field: 'brand' } } } }))
-          .then(() => {
-            expect(receiveAutocompleteSuggestions).to.be.calledWith([], [], []);
-            expect(dispatch).to.be.calledWith(receiveAutocompleteSuggestionsAction);
-          });
+        expectAction(() => actions.fetchAutocompleteSuggestions(query), Actions.FETCH_AUTOCOMPLETE_SUGGESTIONS, query);
       });
     });
 
     describe('fetchAutocompleteProducts()', () => {
-      it('should return a thunk', () => {
-        const thunk = actions.fetchAutocompleteProducts('');
+      it('should return an action', () => {
+        const query = 'barbie';
 
-        expect(thunk).to.be.a('function');
-      });
-
-      it('should call flux.sayt.productSearch()', () => {
-        const query = 'red app';
-        const config = { a: 'b' };
-        const fluxConfig = flux.config = { g: 'h' };
-        const response = { c: 'd' };
-        const products = ['e', 'f'];
-        const receiveAutocompleteProductsAction = () => null;
-        const dispatch = spy();
-        const productSearch = stub().resolves(response);
-        const autocompleteProductsRequest = stub(Selectors, 'autocompleteProductsRequest').returns(config);
-        const extractAutocompleteProducts = stub(AutocompleteAdapter, 'extractProducts').returns(products);
-        const receiveAutocompleteProducts = stub(actions, 'receiveAutocompleteProducts')
-          .returns(receiveAutocompleteProductsAction);
-        const action = actions.fetchAutocompleteProducts(query);
-        flux.clients = { sayt: { productSearch } };
-
-        return action(dispatch)
-          .then(() => {
-            expect(productSearch).to.be.calledWith(query, config);
-            expect(autocompleteProductsRequest).to.be.calledWith(fluxConfig);
-            expect(extractAutocompleteProducts).to.be.calledWith(response);
-            expect(receiveAutocompleteProducts).to.be.calledWith(products);
-            expect(dispatch).to.be.calledWith(receiveAutocompleteProductsAction);
-          });
-      });
-
-      it('should catch error and clear fetching flag', () => {
-        const receiveAutocompleteProductsAction = () => null;
-        const dispatch = spy();
-        const receiveAutocompleteProducts = stub(actions, 'receiveAutocompleteProducts')
-          .returns(receiveAutocompleteProductsAction);
-        const action = actions.fetchAutocompleteProducts('red app');
-        stub(Selectors, 'autocompleteProductsRequest');
-        flux.clients = { sayt: { productSearch: () => Promise.reject('') } };
-
-        return action(dispatch)
-          .then(() => {
-            expect(receiveAutocompleteProducts).to.be.calledWith([]);
-            expect(dispatch).to.be.calledWith(receiveAutocompleteProductsAction);
-          });
+        expectAction(() => actions.fetchAutocompleteProducts(query), Actions.FETCH_AUTOCOMPLETE_PRODUCTS, query);
       });
     });
 
     describe('fetchCollectionCount()', () => {
-      it('should return a thunk', () => {
-        const thunk = actions.fetchCollectionCount('');
+      it('should return an action', () => {
+        const collection = 'products';
 
-        expect(thunk).to.be.a('function');
-      });
-
-      it('should call flux.clients.bridge.search()', () => {
-        const collection = 'department';
-        const state = { a: 'b' };
-        const response = { c: 'd' };
-        const collectionCountAction = { e: 'f' };
-        const recordCount = 10293;
-        const dispatch = spy();
-        const getStore = spy(() => state);
-        const search = stub().resolves(response);
-        const action = actions.fetchCollectionCount(collection);
-        const searchRequest = stub(Selectors, 'searchRequest').returns(state);
-        const receiveCollectionCount = stub(actions, 'receiveCollectionCount').returns(collectionCountAction);
-        const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(recordCount);
-        flux.clients = { bridge: { search } };
-
-        return action(dispatch, getStore)
-          .then(() => {
-            expect(search).to.be.calledWith({ ...state, collection });
-            expect(receiveCollectionCount).to.be.calledWith(collection, recordCount);
-            expect(extractRecordCount).to.be.calledWith(response);
-            expect(dispatch).to.be.calledWith(collectionCountAction);
-          });
-      });
-
-      describe('fetchProductDetails()', () => {
-        it('should return a thunk', () => {
-          const thunk = actions.fetchProductDetails('');
-
-          expect(thunk).to.be.a('function');
-        });
-
-        it('should call flux.clients.bridge.search()', () => {
-          const id = '1923';
-          const state = { a: 'b' };
-          const allMeta = 'hey';
-          const record = { allMeta };
-          const detailsProduct = '10293';
-          const dispatch = spy();
-          const emit = flux.emit = spy();
-          const getStore = spy(() => state);
-          const search = stub().resolves({ c: 'd', records: [record] });
-          const action = actions.fetchProductDetails(id);
-          const searchRequest = stub(Selectors, 'searchRequest').returns(state);
-          const receiveDetailsProduct = stub(actions, 'receiveDetailsProduct').returns(detailsProduct);
-          flux.clients = { bridge: { search } };
-
-          return action(dispatch, getStore)
-            .then(() => {
-              expect(search).to.be.calledWith({
-                ...state,
-                pageSize: 1,
-                query: null,
-                skip: 0,
-                refinements: [{ navigationName: 'id', type: 'Value', value: id }]
-              });
-              expect(emit).to.be.calledWith(Events.BEACON_VIEW_PRODUCT, record);
-              expect(receiveDetailsProduct).to.be.calledWith(allMeta);
-              expect(dispatch).to.be.calledWith(detailsProduct);
-            });
-        });
-
-        it('should catch error and clear fetching flag', () => {
-          const detailsProduct = '10293';
-          const dispatch = spy();
-          const action = actions.fetchProductDetails('1923');
-          const receiveDetailsProduct = stub(actions, 'receiveDetailsProduct').returns(detailsProduct);
-          stub(Selectors, 'searchRequest').returns({});
-          flux.clients = { bridge: { search: () => Promise.reject('') } };
-
-          return action(dispatch, () => <any>({}))
-            .then(() => {
-              expect(dispatch).to.be.calledWith(detailsProduct);
-              expect(receiveDetailsProduct).to.be.calledWith({});
-            });
-        });
+        expectAction(() => actions.fetchCollectionCount(collection), Actions.FETCH_COLLECTION_COUNT, collection);
       });
     });
 
-    describe('request action creators', () => {
-      describe('updateSearch()', () => {
-        it('should create an UPDATE_SEARCH action', () => {
-          const search: Actions.Payload.Search = { query: 'harry' };
-          const dispatch = spy();
+    describe('fetchProductDetails()', () => {
+      it('should return an action', () => {
+        const id = '12345';
 
-          actions.updateSearch(search)(dispatch);
+        expectAction(() => actions.fetchProductDetails(id), Actions.FETCH_PRODUCT_DETAILS, id);
+      });
+    });
+  });
 
-          expect(dispatch).to.be.calledWith({ type: Actions.UPDATE_SEARCH, payload: search, metadata: {} });
-        });
+  describe('request action creators', () => {
+    describe('updateSearch()', () => {
+      it('should return an action with validation', () => {
+        const search: any = { a: 'b' };
 
-        it('should not dispatch when query string is empty', () => {
-          const search: Actions.Payload.Search = { query: '' };
-          const dispatch = () => expect.fail();
+        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH,
+          { ...search, query: undefined },
+          (meta) => {
+            expect(meta.validator.payload.func({})).to.be.false;
+            expect(meta.validator.payload.func({ query: '' })).to.be.false;
+            expect(meta.validator.payload.func({ query: undefined })).to.be.false;
+            return expect(meta.validator.payload.func({ query: null })).to.be.true;
+          });
+      });
 
-          actions.updateSearch(search)(dispatch);
-        });
+      it('should trim query', () => {
+        const search: any = { query: '  untrimmed \n \r  ' };
 
-        it('should trim query string', () => {
-          const search: Actions.Payload.Search = { query: '\t  h  a  r\tr  y  \t' };
-          const dispatch = spy();
+        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH,
+          { query: 'untrimmed' });
+      });
+    });
 
-          actions.updateSearch(search)(dispatch);
+    describe('search()', () => {
+      it('should call actions.updateSearch()', () => {
+        const query = 'pineapple';
+        const updateSearch = actions.updateSearch = spy();
 
-          // tslint:disable-next-line max-line-length
-          expect(dispatch).to.be.calledWith({ type: Actions.UPDATE_SEARCH, payload: { query: 'h  a  r\tr  y' }, metadata: {} });
-        });
+        actions.search(query);
 
-        it('should not dispatch when query string only contains whitespace', () => {
-          const search: Actions.Payload.Search = { query: '  \t  ' };
-          const dispatch = () => expect.fail();
+        expect(updateSearch).to.be.calledWithExactly({ query, clear: true });
+      });
 
-          actions.updateSearch(search)(dispatch);
-        });
+      it('should fall back to current query', () => {
+        const query = 'pineapple';
+        const state = { a: 'b' };
+        const updateSearch = actions.updateSearch = spy();
+        const selectQuery = stub(Selectors, 'query').returns(query);
+        flux.store = { getState: () => state };
 
-        it('should create an UPDATE_SEARCH action with null query', () => {
-          const search: Actions.Payload.Search = { query: null };
-          const dispatch = spy();
+        actions.search();
 
-          actions.updateSearch(search)(dispatch);
+        expect(updateSearch).to.be.calledWithExactly({ query, clear: true });
+        expect(selectQuery).to.be.calledWithExactly(state);
+      });
+    });
 
-          expect(dispatch).to.be.calledWith({ type: Actions.UPDATE_SEARCH, payload: { query: null }, metadata: {} });
+    describe('resetRecall()', () => {
+      it('should call actions.updateSearch() with falsey params to clear request state', () => {
+        const updateSearch = actions.updateSearch = spy();
+
+        actions.resetRecall();
+
+        // tslint:disable-next-line max-line-length
+        expect(updateSearch).to.be.calledWithExactly({ query: null, navigationId: undefined, index: undefined, clear: true });
+      });
+
+      it('should call actions.updateSearch() with a query', () => {
+        const query = 'pineapple';
+        const updateSearch = actions.updateSearch = spy();
+
+        actions.resetRecall(query);
+
+        expect(updateSearch).to.be.calledWithExactly({ query, navigationId: undefined, index: undefined, clear: true });
+      });
+
+      it('should call actions.updateSearch() with a query and refinement', () => {
+        const query = 'pineapple';
+        const navigationId = 'brand';
+        const index = 9;
+        const updateSearch = actions.updateSearch = spy();
+
+        actions.resetRecall(query, { field: navigationId, index });
+
+        expect(updateSearch).to.be.calledWithExactly({ query, navigationId, index, clear: true });
+      });
+    });
+
+    describe('resetQuery()', () => {
+      it('should call actions.updateSearch()', () => {
+        const updateSearch = actions.updateSearch = spy();
+
+        actions.resetQuery();
+
+        expect(updateSearch).to.be.calledWithExactly({ query: null });
+      });
+    });
+
+    describe('selectRefinement()', () => {
+      it('should return an action', () => {
+        const isRefinementDeselected = stub(Selectors, 'isRefinementDeselected').returns(true);
+        const navigationId = 'colour';
+        const index = 30;
+        const state = { a: 'b' };
+
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.selectRefinement(navigationId, index), Actions.SELECT_REFINEMENT, { navigationId, index }, (meta) => {
+          expect(meta.validator.payload.func(null, state)).to.be.true;
+          return expect(isRefinementDeselected).to.be.calledWithExactly(state, navigationId, index);
         });
       });
 
-      describe('search()', () => {
-        it('should call actions.updateSearch()', () => {
-          const query = 'pineapple';
-          const updateSearch = actions.updateSearch = spy();
+      it('should invalidate action when refinement not selectable', () => {
+        stub(Selectors, 'isRefinementDeselected').returns(false);
 
-          actions.search(query);
-
-          expect(updateSearch).to.be.calledWith({ query, clear: true });
-        });
-
-        it('should fall back to current query', () => {
-          const query = 'pineapple';
-          const state = { a: 'b' };
-          const updateSearch = actions.updateSearch = spy();
-          const selectQuery = stub(Selectors, 'query').returns(query);
-          flux.store = { getState: () => state };
-
-          actions.search();
-
-          expect(updateSearch).to.be.calledWith({ query, clear: true });
-          expect(selectQuery).to.be.calledWith(state);
-        });
-      });
-
-      describe('resetRecall()', () => {
-        it('should call actions.updateSearch() with falsey params to clear request state', () => {
-          const updateSearch = actions.updateSearch = spy();
-
-          actions.resetRecall();
-
-          // tslint:disable-next-line max-line-length
-          expect(updateSearch).to.be.calledWith({ query: null, navigationId: undefined, index: undefined, clear: true });
-        });
-
-        it('should call actions.updateSearch() with a query', () => {
-          const query = 'pineapple';
-          const updateSearch = actions.updateSearch = spy();
-
-          actions.resetRecall(query);
-
-          expect(updateSearch).to.be.calledWith({ query, navigationId: undefined, index: undefined, clear: true });
-        });
-
-        it('should call actions.updateSearch() with a query and refinement', () => {
-          const query = 'pineapple';
-          const navigationId = 'brand';
-          const index = 9;
-          const updateSearch = actions.updateSearch = spy();
-
-          actions.resetRecall(query, { field: navigationId, index });
-
-          expect(updateSearch).to.be.calledWith({ query, navigationId, index, clear: true });
-        });
-      });
-
-      describe('resetQuery()', () => {
-        it('should call actions.updateSearch()', () => {
-          const updateSearch = actions.updateSearch = spy();
-
-          actions.resetQuery();
-
-          expect(updateSearch).to.be.calledWith({ query: null });
-        });
-      });
-
-      describe('selectRefinement()', () => {
-        it('should create a SELECT_REFINEMENT action', () => {
-          const navigationId = 'brand';
-          const index = 3;
-          const state = { a: 'b' };
-          const conditional = stub(utils, 'conditional');
-          const isRefinementDeselected = stub(Selectors, 'isRefinementDeselected');
-
-          actions.selectRefinement(navigationId, index);
-
-          expect(conditional).to.be.calledWith(sinon.match((predicate) => {
-            predicate(state);
-            return expect(isRefinementDeselected.calledWith(state, navigationId, index)).to.be.true;
-          }), Actions.SELECT_REFINEMENT, { navigationId, index });
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.selectRefinement('colour', 30), Actions.SELECT_REFINEMENT, { navigationId: 'colour', index: 30 }, (meta) => {
+          return expect(meta.validator.payload.func(null, {})).to.be.false;
         });
       });
 
       describe('deselectRefinement()', () => {
-        it('should create a DESELECT_REFINEMENT action', () => {
-          const navigationId = 'brand';
-          const index = 3;
+        it('should return an action', () => {
+          const isRefinementSelected = stub(Selectors, 'isRefinementSelected').returns(true);
+          const navigationId = 'colour';
+          const index = 30;
           const state = { a: 'b' };
-          const conditional = stub(utils, 'conditional');
-          const isRefinementSelected = stub(Selectors, 'isRefinementSelected');
 
-          actions.deselectRefinement(navigationId, index);
+          // tslint:disable-next-line max-line-length
+          expectAction(() => actions.deselectRefinement(navigationId, index), Actions.DESELECT_REFINEMENT, { navigationId, index }, (meta) => {
+            expect(meta.validator.payload.func(null, state)).to.be.true;
+            return expect(isRefinementSelected).to.be.calledWithExactly(state, navigationId, index);
+          });
+        });
 
-          expect(conditional).to.be.calledWith(sinon.match((predicate) => {
-            predicate(state);
-            return expect(isRefinementSelected.calledWith(state, navigationId, index)).to.be.true;
-          }), Actions.DESELECT_REFINEMENT, { navigationId, index });
+        it('should invalidate action when refinement not deselectable', () => {
+          stub(Selectors, 'isRefinementSelected').returns(false);
+
+          // tslint:disable-next-line max-line-length
+          expectAction(() => actions.deselectRefinement('colour', 30), Actions.DESELECT_REFINEMENT, { navigationId: 'colour', index: 30 }, (meta) => {
+            return expect(meta.validator.payload.func(null, {})).to.be.false;
+          });
         });
       });
 
       describe('selectCollection()', () => {
-        it('should create a SELECT_COLLECTION action', () => {
-          const id = 'products';
-          const conditional = stub(utils, 'conditional');
+        it('should return an action', () => {
+          const collection = 'otherCollection';
+          const state = { a: 'b' };
+          const selectCollection = stub(Selectors, 'collection').returns('someCollection');
 
-          actions.selectCollection(id);
+          expectAction(() => actions.selectCollection(collection), Actions.SELECT_COLLECTION, collection, (meta) => {
+            expect(meta.validator.payload.func(null, state)).to.be.true;
+            return expect(selectCollection).to.be.calledWith(state);
+          });
+        });
 
-          expect(conditional).to.be.calledWith(sinon.match((predicate) =>
-            predicate({ data: { collections: { selected: 'tutorials' } } })),
-            Actions.SELECT_COLLECTION, id);
+        it('should invalidate action if collection is already selected', () => {
+          const collection = 'otherCollection';
+          stub(Selectors, 'collection').returns(collection);
+
+          expectAction(() => actions.selectCollection(collection), Actions.SELECT_COLLECTION, collection, (meta) => {
+            return expect(meta.validator.payload.func(null, { a: 'b' })).to.be.false;
+          });
         });
       });
 
-      describe('updateSorts()', () => {
-        it('should create a UPDATE_SORTS action', () => {
-          const index = 1;
-          const conditional = stub(utils, 'conditional');
+      describe('selectSort()', () => {
+        it('should return an action', () => {
+          const index = 9;
+          const state = { a: 'b' };
+          const sortIndex = stub(Selectors, 'sortIndex').returns(2);
 
-          actions.selectSort(index);
+          expectAction(() => actions.selectSort(index), Actions.SELECT_SORT, index, (meta) => {
+            expect(meta.validator.payload.func(null, state)).to.be.true;
+            return expect(sortIndex).to.be.calledWith(state);
+          });
+        });
 
-          expect(conditional).to.be.calledWith(sinon.match((predicate) =>
-            predicate({ data: { sorts: { selected: 2 } } })),
-            Actions.SELECT_SORT, index);
+        it('should invalidate action if sort is already selected', () => {
+          const index = 9;
+          stub(Selectors, 'sortIndex').returns(index);
+
+          expectAction(() => actions.selectSort(index), Actions.SELECT_SORT, index, (meta) => {
+            return expect(meta.validator.payload.func(null, { a: 'b' })).to.be.false;
+          });
         });
       });
 
       describe('updatePageSize()', () => {
-        it('should create an UPDATE_PAGE_SIZE action', () => {
-          const size = 34;
-          const conditional = stub(utils, 'conditional');
+        it('should return an action', () => {
+          const pageSize = stub(Selectors, 'pageSize').returns(14);
+          const size = 12;
+          const state = { a: 'b' };
 
-          actions.updatePageSize(size);
+          expectAction(() => actions.updatePageSize(size), Actions.UPDATE_PAGE_SIZE, size, (meta) => {
+            expect(meta.validator.payload.func(null, state)).to.be.true;
+            return expect(pageSize).to.be.calledWithExactly(state);
+          });
+        });
 
-          expect(conditional).to.be.calledWith(sinon.match((predicate) =>
-            predicate({ data: { page: { sizes: { items: [10, 20, 80], selected: 20 } } } })),
-            Actions.UPDATE_PAGE_SIZE, size);
+        it('should invalidate action if selected page size is the same', () => {
+          const size = 12;
+          stub(Selectors, 'pageSize').returns(size);
+
+          expectAction(() => actions.updatePageSize(size), Actions.UPDATE_PAGE_SIZE, size, (meta) => {
+            return expect(meta.validator.payload.func(null, {})).to.be.false;
+          });
         });
       });
 
       describe('updateCurrentPage()', () => {
-        it('should create an UPDATE_CURRENT_PAGE action', () => {
-          const page = 4;
-          const conditional = stub(utils, 'conditional');
+        it('should return an action', () => {
+          const page = 5;
+          const state = { a: 'b' };
+          const pageSelector = stub(Selectors, 'page').returns(8);
 
-          actions.updateCurrentPage(page);
+          expectAction(() => actions.updateCurrentPage(page), Actions.UPDATE_CURRENT_PAGE, page, (meta) => {
+            expect(meta.validator.payload.func(null, state)).to.be.true;
+            return expect(pageSelector).to.be.calledWith(state);
+          });
+        });
 
-          expect(conditional).to.be.calledWith(sinon.match((predicate) =>
-            predicate({ data: { page: { current: 3 } } })),
-            Actions.UPDATE_CURRENT_PAGE, page);
+        it('should invalidate action if page is the same as current page', () => {
+          const page = 5;
+          stub(Selectors, 'page').returns(page);
+
+          expectAction(() => actions.updateCurrentPage(page), Actions.UPDATE_CURRENT_PAGE, page, (meta) => {
+            return expect(meta.validator.payload.func(null, { a: 'b' })).to.be.false;
+          });
+        });
+
+        it('should invalidate action if page is null', () => {
+          expectAction(() => actions.updateCurrentPage(null), Actions.UPDATE_CURRENT_PAGE, null, (meta) => {
+            return expect(meta.validator.payload.func(null, {})).to.be.false;
+          });
         });
       });
 
-      describe('updateDetailsId()', () => {
-        it('should create an UPDATE_CURRENT_PAGE action', () => {
-          const id = '123';
-          const title = 'eh';
-          const thunk = stub(utils, 'thunk');
+      describe('updateDetails()', () => {
+        it('should return an action', () => {
+          const id = '4123';
+          const title = 'my-product';
 
-          actions.updateDetails(id, title);
-
-          expect(thunk).to.be.calledWith(Actions.UPDATE_DETAILS, { id, title });
+          expectAction(() => actions.updateDetails(id, title), Actions.UPDATE_DETAILS, { id, title });
         });
       });
 
       describe('updateAutocompleteQuery()', () => {
-        it('should create an UPDATE_AUTOCOMPLETE_QUERY action', () => {
-          const query = 'William Shake';
-          const conditional = stub(utils, 'conditional');
+        it('should return an action', () => {
+          const query = 'pink elephant';
+          const state = { a: 'b' };
+          const autocompleteQuery = stub(Selectors, 'autocompleteQuery').returns('red elephant');
 
-          actions.updateAutocompleteQuery(query);
-
-          expect(conditional).to.be.calledWith(sinon.match((predicate) =>
-            predicate({ data: { autocomplete: { query: 'Fred Flinsto' } } })),
-            Actions.UPDATE_AUTOCOMPLETE_QUERY, query);
-        });
-      });
-
-      describe('refreshState()', () => {
-        it('should create a REFRESH_STATE action', () => {
-          const payload = { a: 'b' };
-
-          expect(actions.refreshState(payload)).to.eql({
-            payload,
-            type: Actions.REFRESH_STATE,
-            metadata: {},
+          // tslint:disable-next-line max-line-length
+          expectAction(() => actions.updateAutocompleteQuery(query), Actions.UPDATE_AUTOCOMPLETE_QUERY, query, (meta) => {
+            expect(meta.validator.payload.func(null, state)).to.be.true;
+            return expect(autocompleteQuery).to.be.calledWith(state);
           });
+        });
+
+        it('should invalidate action if queries are the same', () => {
+          const query = 'pink elephant';
+          const state = { a: 'b' };
+          stub(Selectors, 'autocompleteQuery').returns(query);
+
+          // tslint:disable-next-line max-line-length
+          expectAction(() => actions.updateAutocompleteQuery(query), Actions.UPDATE_AUTOCOMPLETE_QUERY, query, (meta) =>
+            expect(meta.validator.payload.func(null, state)).to.be.false);
         });
       });
     });
 
     describe('response action creators', () => {
-      describe('receiveSearchResponse()', () => {
-        it('should return a thunk', () => {
-          const results: any = {};
-
-          const thunk = actions.receiveSearchResponse(results);
-
-          expect(thunk).to.be.a('function');
-        });
-
-        it('should dispatch actions', () => {
-          const receiveRedirectAction = () => null;
-          const receiveQueryAction = () => null;
-          const receiveProductsAction = () => null;
-          const receiveNavigationsAction = () => null;
-          const receivePageAction = () => null;
-          const receiveTemplateAction = () => null;
-          const receiveCollectionCountAction = () => null;
+      describe('receiveProducts()', () => {
+        it('should return a batch action', () => {
+          const receiveQueryAction = { aa: 'bb' };
+          const receiveProductRecordsAction = { cc: 'dd' };
+          const receiveNavigationsAction = { ee: 'ff' };
+          const receiveRecordCountAction = { gg: 'hh' };
+          const receiveCollectionCountAction = { ii: 'jj' };
+          const receivePageAction = { kk: 'll' };
+          const receiveTemplateAction = { mm: 'nn' };
           const results: any = {
-            records: [
-              { allMeta: { u: 'v' } },
-              { allMeta: { w: 'x' } },
-            ],
-            redirect: 'page.html',
-            template: { m: 'n' },
-            totalRecordCount: 41,
+            records: ['a', 'b'],
+            template: { c: 'd' },
           };
-          const query: any = { y: 'z' };
-          const navigations: any[] = ['a', 'b'];
-          const page: any = { p: 'q' };
-          const template: any = { c: 'd' };
-          const state: any = { data: { collections: { selected: 'products' } } };
-          const getStore = () => state;
-          const dispatch = spy();
+          const query: any = { e: 'f' };
+          const state: any = { g: 'h' };
+          const action = { i: 'j' };
+          const navigations: any[] = ['k', 'l'];
+          const page: any = { m: 'n' };
+          const template: any = { o: 'p' };
+          const recordCount = 24;
+          const collection = 'myProducts';
+          const createAction = stub(utils, 'action').returns(action);
           const extractQuery = stub(SearchAdapter, 'extractQuery').returns(query);
           const combineNavigations = stub(SearchAdapter, 'combineNavigations').returns(navigations);
           const extractProduct = stub(SearchAdapter, 'extractProduct').returns('x');
           const extractPage = stub(SearchAdapter, 'extractPage').returns(page);
           const extractTemplate = stub(SearchAdapter, 'extractTemplate').returns(template);
-          const receiveRedirect = stub(actions, 'receiveRedirect').returns(receiveRedirectAction);
-          const receiveQuery = stub(actions, 'receiveQuery').returns(receiveQueryAction);
-          const receiveProducts = stub(actions, 'receiveProducts').returns(receiveProductsAction);
-          const receiveNavigations = stub(actions, 'receiveNavigations').returns(receiveNavigationsAction);
-          const receivePage = stub(actions, 'receivePage').returns(receivePageAction);
-          const receiveTemplate = stub(actions, 'receiveTemplate').returns(receiveTemplateAction);
-          const receiveCollectionCount = stub(actions, 'receiveCollectionCount').returns(receiveCollectionCountAction);
-          const saveState = flux.saveState = spy();
-          const thunk = actions.receiveSearchResponse(results);
+          const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(recordCount);
+          const selectCollection = stub(Selectors, 'collection').returns(collection);
+          const receiveQuery = actions.receiveQuery = spy(() => receiveQueryAction);
+          const receiveProductRecords = actions.receiveProductRecords = spy(() => receiveProductRecordsAction);
+          const receiveNavigations = actions.receiveNavigations = spy(() => receiveNavigationsAction);
+          const receiveRecordCount = actions.receiveRecordCount = spy(() => receiveRecordCountAction);
+          const receiveCollectionCount = actions.receiveCollectionCount = spy(() => receiveCollectionCountAction);
+          const receivePage = actions.receivePage = spy(() => receivePageAction);
+          const receiveTemplate = actions.receiveTemplate = spy(() => receiveTemplateAction);
+          flux.store = { getState: () => state };
 
-          return thunk(dispatch, getStore)
-            .then(() => {
-              expect(receiveRedirect).to.be.calledWith(results.redirect);
-              expect(dispatch).to.be.calledWith(receiveRedirectAction);
-              expect(receiveQuery).to.be.calledWith(query);
-              expect(extractQuery).to.be.calledWith(results);
-              expect(dispatch).to.be.calledWith(receiveQueryAction);
-              expect(receiveProducts).to.be.calledWith(['x', 'x']);
-              expect(extractProduct).to.be.calledWith({ allMeta: { u: 'v' } })
-                .and.calledWith({ allMeta: { w: 'x' } });
-              expect(dispatch).to.be.calledWith(receiveProductsAction);
-              expect(receiveNavigations).to.be.calledWith(navigations);
-              expect(combineNavigations).to.be.calledWith(results);
-              expect(dispatch).to.be.calledWith(receiveNavigationsAction);
-              expect(receivePage).to.be.calledWith(page);
-              expect(extractPage).to.be.calledWith(state);
-              expect(dispatch).to.be.calledWith(receivePageAction);
-              expect(receiveTemplate).to.be.calledWith(template);
-              expect(extractTemplate).to.be.calledWith(results.template);
-              expect(dispatch).to.be.calledWith(receiveTemplateAction);
-              // tslint:disable-next-line max-line-length
-              expect(receiveCollectionCount).to.be.calledWith(state.data.collections.selected, results.totalRecordCount);
-              expect(dispatch).to.be.calledWith(receiveCollectionCountAction);
-              expect(saveState).to.be.calledWith('search');
-            });
+          const batchAction = actions.receiveProducts(results);
+
+          expect(createAction).to.be.calledWith(Actions.RECEIVE_PRODUCTS, results);
+          expect(receiveQuery).to.be.calledWith(query);
+          expect(receiveProductRecords).to.be.calledWith(['x', 'x']);
+          expect(receiveNavigations).to.be.calledWith(navigations);
+          expect(receiveRecordCount).to.be.calledWith(recordCount);
+          expect(receiveTemplate).to.be.calledWith(template);
+          expect(receiveCollectionCount).to.be.calledWith({ collection, count: recordCount });
+          expect(receivePage).to.be.calledWith(page);
+          expect(extractRecordCount).to.be.calledWith(results);
+          expect(extractQuery).to.be.calledWith(results);
+          expect(extractProduct).to.be.calledWith('a')
+            .and.calledWith('b');
+          expect(combineNavigations).to.be.calledWith(results);
+          expect(selectCollection).to.be.calledWith(state);
+          expect(extractPage).to.be.calledWith(state);
+          expect(extractTemplate).to.be.calledWith(results.template);
+          expect(batchAction).to.eql([
+            action,
+            receiveQueryAction,
+            receiveProductRecordsAction,
+            receiveNavigationsAction,
+            receiveRecordCountAction,
+            receiveCollectionCountAction,
+            receivePageAction,
+            receiveTemplateAction
+          ]);
+        });
+
+        it('should return an action', () => {
+          const results: any = {
+            records: ['a', 'b'],
+            template: { c: 'd' },
+          };
+          const action = { e: 'f', error: true };
+          const createAction = stub(utils, 'action').returns(action);
+
+          const batchAction = actions.receiveProducts(results);
+
+          expect(createAction).to.be.calledWith(Actions.RECEIVE_PRODUCTS, results);
+          expect(batchAction).to.eql(action);
         });
       });
 
       describe('receiveQuery()', () => {
-        it('should create a RECEIVE_QUERY action', () => {
+        it('should return an action', () => {
           const query: any = { a: 'b' };
-          const thunk = stub(utils, 'thunk');
 
-          actions.receiveQuery(query);
-
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_QUERY, query);
+          expectAction(() => actions.receiveQuery(query), Actions.RECEIVE_QUERY, query);
         });
       });
 
-      describe('receiveProducts()', () => {
-        it('should create a RECEIVE_PRODUCTS action', () => {
+      describe('receiveProductRecords()', () => {
+        it('should return an action', () => {
           const products: any = ['a', 'b'];
-          const thunk = stub(utils, 'thunk');
 
-          actions.receiveProducts(products);
-
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_PRODUCTS, products);
+          expectAction(() => actions.receiveProductRecords(products), Actions.RECEIVE_PRODUCT_RECORDS, products);
         });
       });
 
       describe('receiveCollectionCount()', () => {
-        it('should create a RECEIVE_NAVIGATIONS action', () => {
-          const collection = 'products';
-          const count = 10;
-          const thunk = stub(utils, 'thunk');
+        it('should return an action', () => {
+          const count = {
+            collection: 'products',
+            count: 10
+          };
 
-          actions.receiveCollectionCount(collection, count);
-
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_COLLECTION_COUNT, { collection, count });
+          // tslint:disable-next-line max-line-length
+          expectAction(() => actions.receiveCollectionCount(count), Actions.RECEIVE_COLLECTION_COUNT, count);
         });
       });
 
       describe('receiveNavigations()', () => {
-        it('should create a RECEIVE_NAVIGATIONS action', () => {
+        it('should return an action', () => {
           const navigations: any[] = ['a', 'b'];
-          const thunk = stub(utils, 'thunk');
 
-          actions.receiveNavigations(navigations);
-
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_NAVIGATIONS, navigations);
+          expectAction(() => actions.receiveNavigations(navigations), Actions.RECEIVE_NAVIGATIONS, navigations);
         });
       });
 
       describe('receivePage()', () => {
-        it('should create a RECEIVE_PAGE action', () => {
+        it('should return an action', () => {
           const page: any = { a: 'b' };
-          const thunk = stub(utils, 'thunk');
 
-          actions.receivePage(page);
-
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_PAGE, page);
+          expectAction(() => actions.receivePage(page), Actions.RECEIVE_PAGE, page);
         });
       });
 
       describe('receiveTemplate()', () => {
-        it('should create a RECEIVE_PAGE action', () => {
+        it('should return an action', () => {
           const template: any = { a: 'b' };
-          const thunk = stub(utils, 'thunk');
 
-          actions.receiveTemplate(template);
+          expectAction(() => actions.receiveTemplate(template), Actions.RECEIVE_TEMPLATE, template);
+        });
+      });
 
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_TEMPLATE, template);
+      describe('receiveRecordCount()', () => {
+        it('should return an action', () => {
+          const recordCount = 49;
+
+          expectAction(() => actions.receiveRecordCount(recordCount), Actions.RECEIVE_RECORD_COUNT, recordCount);
         });
       });
 
       describe('receiveRedirect()', () => {
-        it('should create a RECEIVE_PAGE action', () => {
+        it('should return an action', () => {
           const redirect = 'page.html';
-          const thunk = stub(utils, 'thunk');
 
-          actions.receiveRedirect(redirect);
-
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_REDIRECT, redirect);
+          expectAction(() => actions.receiveRedirect(redirect), Actions.RECEIVE_REDIRECT, redirect);
         });
       });
 
       describe('receiveMoreRefinements()', () => {
-        it('should create a RECEIVE_MORE_REFINEMENTS action', () => {
+        it('should return an action', () => {
           const navigationId = 'brand';
           const refinements: any[] = ['a', 'b'];
           const selected = [1, 7];
-          const thunk = stub(utils, 'thunk');
 
-          actions.receiveMoreRefinements(navigationId, refinements, selected);
-
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_MORE_REFINEMENTS, { navigationId, refinements, selected });
-        });
-      });
-
-      describe('receiveAutocompleteSuggestions()', () => {
-        it('should create a RECEIVE_AUTOCOMPLETE_SUGGESTIONS action', () => {
-          const suggestions = ['a', 'b'];
-          const categoryValues = ['c', 'd'];
-          const navigations: any[] = ['e', 'f'];
-          const thunk = stub(utils, 'thunk');
-
-          actions.receiveAutocompleteSuggestions(suggestions, categoryValues, navigations);
-
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS, {
-            suggestions,
-            categoryValues,
-            navigations
+          // tslint:disable-next-line max-line-length
+          expectAction(() => actions.receiveMoreRefinements(navigationId, refinements, selected), Actions.RECEIVE_MORE_REFINEMENTS, {
+            navigationId,
+            refinements,
+            selected
           });
         });
       });
 
+      describe('receiveAutocompleteSuggestions()', () => {
+        it('should return an action', () => {
+          const suggestions: any = { a: 'b' };
+
+          // tslint:disable-next-line max-line-length
+          expectAction(() => actions.receiveAutocompleteSuggestions(suggestions), Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS, suggestions);
+        });
+      });
+
       describe('receiveMoreProducts()', () => {
-        it('should create a RECEIVE_MORE_PRODUCTS action', () => {
+        it('should return an action', () => {
           const products: any[] = ['a', 'b'];
-          const thunk = stub(utils, 'thunk');
 
-          actions.receiveMoreProducts(products);
-
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_MORE_PRODUCTS, products);
+          expectAction(() => actions.receiveMoreProducts(products), Actions.RECEIVE_MORE_PRODUCTS, products);
         });
       });
 
       describe('receiveAutocompleteProducts()', () => {
-        it('should create a RECEIVE_AUTOCOMPLETE_PRODUCTS action', () => {
+        it('should return an action', () => {
           const products: any[] = ['a', 'b'];
-          const thunk = stub(utils, 'thunk');
 
-          actions.receiveAutocompleteProducts(products);
-
-          expect(thunk).to.be.calledWith(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, products);
+          // tslint:disable-next-line max-line-length
+          expectAction(() => actions.receiveAutocompleteProducts(products), Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, products);
         });
       });
 
       describe('receiveDetailsProduct()', () => {
-        it('should create a RECEIVE_DETAILS_PRODUCT action', () => {
+        it('should return an action', () => {
           const product: any = { a: 'b' };
-          const created: any = { c: 'd' };
-          const dispatch = spy();
-          const createAction = stub(utils, 'action').returns(created);
-          const saveState = flux.saveState = spy();
 
-          const action = actions.receiveDetailsProduct(product);
-
-          action(dispatch);
-
-          expect(createAction).to.be.calledWith(Actions.RECEIVE_DETAILS_PRODUCT, product);
-          expect(dispatch).to.be.calledWith(created);
-          expect(saveState).to.be.calledWith('details');
+          expectAction(() => actions.receiveDetailsProduct(product), Actions.RECEIVE_DETAILS_PRODUCT, product);
         });
       });
 
       describe('createComponentState()', () => {
-        it('should create a CREATE_COMPONENT_STATE action', () => {
+        it('should return an action', () => {
           const tagName = 'my-tag';
           const id = '123';
           const state = { a: 'b' };
-          const thunk = stub(utils, 'thunk');
 
-          actions.createComponentState(tagName, id, state);
-
-          expect(thunk).to.be.calledWith(Actions.CREATE_COMPONENT_STATE, { tagName, id, state });
+          // tslint:disable-next-line max-line-length
+          expectAction(() => actions.createComponentState(tagName, id, state), Actions.CREATE_COMPONENT_STATE, { tagName, id, state });
         });
       });
 
@@ -952,13 +582,25 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         it('should create a CREATE_COMPONENT_STATE action', () => {
           const tagName = 'my-tag';
           const id = '123';
-          const thunk = stub(utils, 'thunk');
 
-          actions.removeComponentState(tagName, id);
-
-          expect(thunk).to.be.calledWith(Actions.REMOVE_COMPONENT_STATE, { tagName, id });
+          // tslint:disable-next-line max-line-length
+          expectAction(() => actions.removeComponentState(tagName, id), Actions.REMOVE_COMPONENT_STATE, { tagName, id });
         });
       });
+    });
+  });
+
+  describe('refreshState()', () => {
+    it('should create a REFRESH_STATE action', () => {
+      const payload = { a: 'b' };
+
+      expectAction(() => actions.refreshState(payload), Actions.REFRESH_STATE, payload);
+    });
+  });
+
+  describe('startApp()', () => {
+    it('should return an action', () => {
+      expectAction(() => actions.startApp(), Actions.START_APP);
     });
   });
 });

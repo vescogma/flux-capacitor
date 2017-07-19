@@ -9,22 +9,24 @@ namespace Adapter {
   export const initialState = (config: Configuration): Partial<Store.State> =>
     ({
       data: <any>{
-        area: Adapter.extractArea(config, AreaReducer.DEFAULT_AREA),
-        autocomplete: {
-          suggestions: [],
-          navigations: [],
-          products: [],
-          category: {
-            field: Adapter.extractSaytCategoryField(config),
-            values: []
+        present: {
+          area: Adapter.extractArea(config, AreaReducer.DEFAULT_AREA),
+          autocomplete: {
+            suggestions: [],
+            navigations: [],
+            products: [],
+            category: {
+              field: Adapter.extractSaytCategoryField(config),
+              values: []
+            }
+          },
+          fields: Adapter.extractFields(config),
+          collections: Adapter.extractCollections(config, CollectionsReducer.DEFAULT_COLLECTION),
+          sorts: Adapter.extractSorts(config),
+          page: {
+            ...PageReducer.DEFAULTS,
+            sizes: Adapter.extractPageSizes(config, PageReducer.DEFAULT_PAGE_SIZE)
           }
-        },
-        fields: Adapter.extractFields(config),
-        collections: Adapter.extractCollections(config, CollectionsReducer.DEFAULT_COLLECTION),
-        sorts: Adapter.extractSorts(config),
-        page: {
-          ...PageReducer.DEFAULTS,
-          sizes: Adapter.extractPageSizes(config, PageReducer.DEFAULT_PAGE_SIZE)
         }
       }
     });

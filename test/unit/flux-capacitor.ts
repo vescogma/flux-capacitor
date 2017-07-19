@@ -7,7 +7,6 @@ import createActions, * as ActionCreator from '../../src/core/action-creator';
 import ConfigAdapter from '../../src/core/adapters/configuration';
 import * as Events from '../../src/core/events';
 import Observer from '../../src/core/observer';
-import Selectors from '../../src/core/selectors';
 import Store from '../../src/core/store';
 import FluxCapacitor from '../../src/flux-capacitor';
 import suite from './_suite';
@@ -55,7 +54,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       const flux = new FluxCapacitor(config);
 
       expect(flux.store).to.eq(instance);
-      expect(create).to.be.calledWith(config, observer);
+      expect(create).to.be.calledWith(flux, observer);
       expect(listener).to.be.calledWith(flux);
     });
 

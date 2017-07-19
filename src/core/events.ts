@@ -48,6 +48,7 @@ export const REDIRECT = 'redirect';
 
 // error events
 export const ERROR_BRIDGE = 'error:bridge';
+export const ERROR_FETCH_ACTION = 'error:fetch_action';
 
 // fetch complete events
 export const FETCH_SEARCH_DONE = 'fetch:search:done';

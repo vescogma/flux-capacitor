@@ -1,5 +1,5 @@
 import PageAdapter from '../../../../src/core/adapters/page';
-import Adapter from '../../../../src/core/adapters/search';
+import Adapter, { MAX_RECORDS } from '../../../../src/core/adapters/search';
 import Selectors from '../../../../src/core/selectors';
 import suite from '../../_suite';
 
@@ -300,18 +300,18 @@ suite('Search Adapter', ({ expect, stub }) => {
       const to = 30;
       const size = 21;
       const total = 999;
-      const state: any = { data: { page: { current } } };
-      const pageInfo = { c: 'd' };
+      const state: any = { a: 'b' };
       const pageSize = stub(Selectors, 'pageSize').returns(size);
+      const page = stub(Selectors, 'page').returns(current);
       const finalPage = stub(PageAdapter, 'finalPage').returns(last);
       const fromResult = stub(PageAdapter, 'fromResult').returns(from);
       const toResult = stub(PageAdapter, 'toResult').returns(to);
       const nextPage = stub(PageAdapter, 'nextPage').returns(next);
       const previousPage = stub(PageAdapter, 'previousPage').returns(previous);
 
-      const page = Adapter.extractPage(state, total);
+      const pageInfo = Adapter.extractPage(state, total);
 
-      expect(page).to.eql({
+      expect(pageInfo).to.eql({
         from,
         to,
         last,
@@ -319,6 +319,7 @@ suite('Search Adapter', ({ expect, stub }) => {
         previous
       });
       expect(pageSize).to.be.calledWith(state);
+      expect(page).to.be.calledWith(state);
       expect(finalPage).to.be.calledWith(size, total);
       expect(fromResult).to.be.calledWith(current, size);
       expect(toResult).to.be.calledWith(current, size, total);
@@ -332,6 +333,18 @@ suite('Search Adapter', ({ expect, stub }) => {
       const allMeta = { a: 'b' };
 
       expect(Adapter.extractProduct({ allMeta })).to.eq(allMeta);
+    });
+  });
+
+  describe('extractRecordCount()', () => {
+    it('should return the totalRecordCount', () => {
+      const totalRecordCount = 43;
+
+      expect(Adapter.extractRecordCount(<any>{ totalRecordCount })).to.eq(totalRecordCount);
+    });
+
+    it('should return the maximum total record count', () => {
+      expect(Adapter.extractRecordCount(<any>{ totalRecordCount: MAX_RECORDS + 1 })).to.eq(MAX_RECORDS);
     });
   });
 });

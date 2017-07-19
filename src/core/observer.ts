@@ -2,17 +2,6 @@ import { Store as ReduxStore } from 'redux';
 import FluxCapacitor from '../flux-capacitor';
 import * as Events from './events';
 import Store from './store';
-import { rayify } from './utils';
-
-export const DETAIL_QUERY_INDICATOR = 'gbiDetailQuery';
-export const FETCH_EVENTS = {
-  autocompleteProducts: Events.FETCH_AUTOCOMPLETE_PRODUCTS_DONE,
-  autocompleteSuggestions: Events.FETCH_AUTOCOMPLETE_SUGGESTIONS_DONE,
-  details: Events.FETCH_DETAILS_DONE,
-  moreRefinements: Events.FETCH_MORE_REFINEMENTS_DONE,
-  moreProducts: Events.FETCH_MORE_PRODUCTS_DONE,
-  search: Events.FETCH_SEARCH_DONE,
-};
 
 type Observer = (oldState: any, newState: any, path: string) => void;
 
@@ -63,88 +52,94 @@ namespace Observer {
   }
 
   export function create(flux: FluxCapacitor) {
-    const emit = (event: string) => (_, newValue, path) => {
-      flux.emit(event, newValue);
-      flux.emit(Events.OBSERVER_NODE_CHANGED, { event, path, value: newValue });
+    const emit = (event: string) => (_, value: any, path: string) => {
+      flux.emit(event, value);
+      flux.emit(Events.OBSERVER_NODE_CHANGED, { event, path, value });
     };
 
     return {
       data: {
-        autocomplete: ((emitSuggestionsUpdated: Observer, emitQueryUpdated: Observer, emitProductsUpdated: Observer) =>
-          (oldState: Store.Autocomplete, newState: Store.Autocomplete, path: string) => {
-            if (oldState !== newState) {
-              if (oldState.suggestions !== newState.suggestions
-                || oldState.category !== newState.category
-                || oldState.navigations !== newState.navigations) {
-                emitSuggestionsUpdated(oldState, newState, path);
-              }
-              if (oldState.query !== newState.query) {
-                emitQueryUpdated(oldState.query, newState.query, `${path}.query`);
-              }
-              if (oldState.products !== newState.products) {
-                emitProductsUpdated(oldState.products, newState.products, `${path}.products`);
-              }
-            }
-            // tslint:disable-next-line max-line-length
-          })(emit(Events.AUTOCOMPLETE_SUGGESTIONS_UPDATED), emit(Events.AUTOCOMPLETE_QUERY_UPDATED), emit(Events.AUTOCOMPLETE_PRODUCTS_UPDATED)),
-
-        collections: {
-          byId: Observer.indexed(emit(Events.COLLECTION_UPDATED)),
-          selected: emit(Events.SELECTED_COLLECTION_UPDATED),
-        },
-
-        details: {
-          id: emit(Events.DETAILS_UPDATED),
-          product: emit(Events.DETAILS_PRODUCT_UPDATED),
-        },
-
-        navigations: ((emitIndexUpdated) =>
-          (oldState: Store.Indexed<Store.Navigation>, newState: Store.Indexed<Store.Navigation>, path) => {
-            if (oldState.allIds !== newState.allIds) {
-              emitIndexUpdated(oldState, newState, path);
-            } else {
-              newState.allIds.forEach((id) => {
-                const oldNavigation = oldState.byId[id];
-                const newNavigation = newState.byId[id];
-                if (oldNavigation.selected !== newNavigation.selected
-                  || oldNavigation.refinements !== newNavigation.refinements) {
-                  // tslint:disable-next-line max-line-length
-                  emit(`${Events.SELECTED_REFINEMENTS_UPDATED}:${id}`)(oldNavigation, newNavigation, `${path}.byId.${id}`);
+        present: {
+          // tslint:disable-next-line max-line-length
+          autocomplete: ((emitSuggestionsUpdated: Observer, emitQueryUpdated: Observer, emitProductsUpdated: Observer) =>
+            (oldState: Store.Autocomplete, newState: Store.Autocomplete, path: string) => {
+              if (oldState !== newState) {
+                if (oldState.suggestions !== newState.suggestions
+                  || oldState.category !== newState.category
+                  || oldState.navigations !== newState.navigations) {
+                  emitSuggestionsUpdated(oldState, newState, path);
                 }
-              });
-            }
-          })(emit(Events.NAVIGATIONS_UPDATED)),
+                if (oldState.query !== newState.query) {
+                  emitQueryUpdated(oldState.query, newState.query, `${path}.query`);
+                }
+                if (oldState.products !== newState.products) {
+                  emitProductsUpdated(oldState.products, newState.products, `${path}.products`);
+                }
+              }
+            })(
+            emit(Events.AUTOCOMPLETE_SUGGESTIONS_UPDATED),
+            emit(Events.AUTOCOMPLETE_QUERY_UPDATED),
+            emit(Events.AUTOCOMPLETE_PRODUCTS_UPDATED)
+            ),
 
-        page: Object.assign(emit(Events.PAGE_UPDATED), {
-          current: emit(Events.CURRENT_PAGE_UPDATED),
-          sizes: emit(Events.PAGE_SIZE_UPDATED)
-        }),
+          collections: {
+            byId: Observer.indexed(emit(Events.COLLECTION_UPDATED)),
+            selected: emit(Events.SELECTED_COLLECTION_UPDATED),
+          },
 
-        products: ((emitMoreProductsAdded, emitProductsUpdated) =>
-          (oldState: Store.Product[], newState: Store.Product[], path) => {
-            const oldLength = oldState.length;
-            if (oldLength < newState.length && oldState[0] === newState[0]) {
-              emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
-            } else {
-              emitProductsUpdated(oldState, newState, path);
-            }
-          })(emit(Events.MORE_PRODUCTS_ADDED), emit(Events.PRODUCTS_UPDATED)),
+          details: {
+            id: emit(Events.DETAILS_UPDATED),
+            product: emit(Events.DETAILS_PRODUCT_UPDATED),
+          },
 
-        query: {
-          corrected: emit(Events.CORRECTED_QUERY_UPDATED),
-          didYouMean: emit(Events.DID_YOU_MEANS_UPDATED),
-          original: emit(Events.ORIGINAL_QUERY_UPDATED),
-          related: emit(Events.RELATED_QUERIES_UPDATED),
-          rewrites: emit(Events.QUERY_REWRITES_UPDATED),
+          navigations: ((emitIndexUpdated: Observer) =>
+            (oldState: Store.Indexed<Store.Navigation>, newState: Store.Indexed<Store.Navigation>, path: string) => {
+              if (oldState.allIds !== newState.allIds) {
+                emitIndexUpdated(oldState, newState, path);
+              } else {
+                newState.allIds.forEach((id) => {
+                  const oldNavigation = oldState.byId[id];
+                  const newNavigation = newState.byId[id];
+                  if (oldNavigation.selected !== newNavigation.selected
+                    || oldNavigation.refinements !== newNavigation.refinements) {
+                    // tslint:disable-next-line max-line-length
+                    emit(`${Events.SELECTED_REFINEMENTS_UPDATED}:${id}`)(oldNavigation, newNavigation, `${path}.byId.${id}`);
+                  }
+                });
+              }
+            })(emit(Events.NAVIGATIONS_UPDATED)),
+
+          page: Object.assign(emit(Events.PAGE_UPDATED), {
+            current: emit(Events.CURRENT_PAGE_UPDATED),
+            sizes: emit(Events.PAGE_SIZE_UPDATED)
+          }),
+
+          products: ((emitMoreProductsAdded: Observer, emitProductsUpdated: Observer) =>
+            (oldState: Store.Product[], newState: Store.Product[], path: string) => {
+              const oldLength = oldState.length;
+              if (oldLength < newState.length && oldState[0] === newState[0]) {
+                emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
+              } else {
+                emitProductsUpdated(oldState, newState, path);
+              }
+            })(emit(Events.MORE_PRODUCTS_ADDED), emit(Events.PRODUCTS_UPDATED)),
+
+          query: {
+            corrected: emit(Events.CORRECTED_QUERY_UPDATED),
+            didYouMean: emit(Events.DID_YOU_MEANS_UPDATED),
+            original: emit(Events.ORIGINAL_QUERY_UPDATED),
+            related: emit(Events.RELATED_QUERIES_UPDATED),
+            rewrites: emit(Events.QUERY_REWRITES_UPDATED),
+          },
+
+          recordCount: emit(Events.RECORD_COUNT_UPDATED),
+
+          redirect: emit(Events.REDIRECT),
+
+          sorts: emit(Events.SORTS_UPDATED),
+
+          template: emit(Events.TEMPLATE_UPDATED),
         },
-
-        recordCount: emit(Events.RECORD_COUNT_UPDATED),
-
-        reditect: emit(Events.REDIRECT),
-
-        sorts: emit(Events.SORTS_UPDATED),
-
-        template: emit(Events.TEMPLATE_UPDATED),
       },
       isRunning: (oldState, newState, path) => {
         if (newState) {
@@ -153,13 +148,6 @@ namespace Observer {
           emit(Events.APP_KILLED)(oldState, newState, path);
         }
       },
-      isFetching: (oldState, newState) =>
-        Object.keys(newState)
-          .forEach((key) => {
-            if (!oldState[key] && newState[key]) {
-              flux.emit(FETCH_EVENTS[key]);
-            }
-          }),
       session: {
         recallId: emit(Events.RECALL_CHANGED),
         searchId: emit(Events.SEARCH_CHANGED)

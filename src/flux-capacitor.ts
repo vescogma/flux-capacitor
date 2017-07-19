@@ -1,7 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import { BrowserBridge, Results } from 'groupby-api';
 import { Store as ReduxStore } from 'redux';
-import { QueryTimeAutocompleteConfig, QueryTimeProductSearchConfig, Sayt } from 'sayt';
+import { Sayt } from 'sayt';
 import createActions from './core/action-creator';
 import Actions from './core/actions';
 import Adapter from './core/adapters/configuration';
@@ -31,7 +31,7 @@ class FluxCapacitor extends EventEmitter {
   /**
    * instance of the state store
    */
-  store: ReduxStore<Store.State> = Store.create(this.config, Observer.listener(this));
+  store: ReduxStore<Store.State> = Store.create(this, Observer.listener(this));
 
   constructor(public config: Configuration) {
     super();

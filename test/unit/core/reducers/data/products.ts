@@ -16,7 +16,7 @@ suite('products', ({ expect }) => {
         { id: '34392', allMeta: { price: 30, title: 'a really interesting another book' } },
       ];
 
-      const reducer = products(state, { type: Actions.RECEIVE_PRODUCTS, payload });
+      const reducer = products(state, { type: Actions.RECEIVE_PRODUCT_RECORDS, payload });
 
       expect(reducer).to.eql(payload);
     });

@@ -1,47 +1,26 @@
-import { applyMiddleware, createStore, Store as ReduxStore } from 'redux';
-import thunk from 'redux-thunk';
-import * as uuid from 'uuid';
-import Actions from './actions';
-import Adapter from './adapters/configuration';
-import Configuration from './configuration';
-import reducer from './reducers';
-import * as PageReducer from './reducers/data/page';
+import { reduxBatch } from '@manaflair/redux-batch';
+import { applyMiddleware, compose, createStore, Store as ReduxStore } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import * as validatorMiddleware from 'redux-validator';
+import FluxCapacitor from '../../flux-capacitor';
+import Actions from '../actions';
+import Adapter from '../adapters/configuration';
+import reducer from '../reducers';
+import createSagas, { SAGA_CREATORS } from '../sagas';
+import createMiddleware, { MIDDLEWARE_CREATORS } from './middleware';
 
 export { ReduxStore };
-
-export const RECALL_CHANGE_ACTIONS = [
-  Actions.UPDATE_SEARCH,
-  Actions.SELECT_REFINEMENT,
-  Actions.DESELECT_REFINEMENT,
-];
-
-export const SEARCH_CHANGE_ACTIONS = [
-  Actions.UPDATE_SEARCH,
-  Actions.SELECT_REFINEMENT,
-  Actions.DESELECT_REFINEMENT,
-  Actions.SELECT_COLLECTION,
-  Actions.SELECT_SORT,
-  Actions.UPDATE_PAGE_SIZE,
-  Actions.UPDATE_CURRENT_PAGE,
-];
-
-export const idGenerator = (key: string, actions: string[]) =>
-  (store) => (next) => (action) => {
-    if (actions.includes(action.type)) {
-      return next({ ...action, metadata: { ...action.metadata, [key]: uuid.v1() } });
-    } else {
-      return next(action);
-    }
-  };
 
 namespace Store {
 
   // tslint:disable-next-line max-line-length
-  export function create(config: Configuration, listener?: (store: ReduxStore<State>) => () => void): ReduxStore<State> {
+  export function create(flux: FluxCapacitor, listener?: (store: ReduxStore<State>) => () => void): ReduxStore<State> {
+    const { config } = flux;
+    const sagaMiddleware = createSagaMiddleware();
     const middleware = [
-      thunk,
-      idGenerator('recallId', RECALL_CHANGE_ACTIONS),
-      idGenerator('searchId', SEARCH_CHANGE_ACTIONS)
+      validatorMiddleware(),
+      ...createMiddleware(MIDDLEWARE_CREATORS, flux),
+      sagaMiddleware,
     ];
 
     if (process.env.NODE_ENV === 'development' && ((((<any>config).services || {}).logging || {}).debug || {}).flux) {
@@ -53,8 +32,10 @@ namespace Store {
     const store = createStore<State>(
       reducer,
       <any>Adapter.initialState(config),
-      applyMiddleware(...middleware),
+      compose(reduxBatch, applyMiddleware(...middleware), reduxBatch),
     );
+
+    createSagas(SAGA_CREATORS, flux).forEach(sagaMiddleware.run);
 
     if (listener) {
       store.subscribe(listener(store));
@@ -68,32 +49,38 @@ namespace Store {
     isFetching: IsFetching;
     session: Session;
     data: {
-      area: string;
-      query: Query; // mixed
-
-      sorts: SelectableList<Sort>;
-      products: Product[]; // post
-      collections: Indexed.Selectable<Collection>; // mixed
-      navigations: Indexed<Navigation>; // mixed
-
-      autocomplete: Autocomplete; // mixed
-
-      page: Page; // mixed
-
-      template?: Template; // post
-
-      details: Details; // mixed
-
-      recordCount: number; // post
-
-      redirect?: string; // post
-
-      fields: string[]; // static
-
-      errors: string[]; // post
-      warnings: string[]; // post
+      past: Data[];
+      present: Data;
+      future: Data[];
     };
     ui: UI;
+  }
+
+  export interface Data {
+    area: string;
+    query: Query; // mixed
+
+    sorts: SelectableList<Sort>;
+    products: Product[]; // post
+    collections: Indexed.Selectable<Collection>; // mixed
+    navigations: Indexed<Navigation>; // mixed
+
+    autocomplete: Autocomplete; // mixed
+
+    page: Page; // mixed
+
+    template?: Template; // post
+
+    details: Details; // mixed
+
+    recordCount: number; // post
+
+    redirect?: string; // post
+
+    fields: string[]; // static
+
+    errors: string[]; // post
+    warnings: string[]; // post
   }
 
   export interface UI {

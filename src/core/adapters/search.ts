@@ -127,7 +127,7 @@ namespace Adapter {
 
   export const extractPage = (state: Store.State, totalRecords: number): Actions.Payload.Page => {
     const pageSize = Selectors.pageSize(state);
-    const currentPage = state.data.page.current;
+    const currentPage = Selectors.page(state);
     const last = Page.finalPage(pageSize, totalRecords);
     const from = Page.fromResult(currentPage, pageSize);
     const to = Page.toResult(currentPage, pageSize, totalRecords);

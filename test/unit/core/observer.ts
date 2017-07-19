@@ -1,6 +1,6 @@
 import * as sinon from 'sinon';
 import * as Events from '../../../src/core/events';
-import Observer, { DETAIL_QUERY_INDICATOR } from '../../../src/core/observer';
+import Observer from '../../../src/core/observer';
 import suite from '../_suite';
 
 suite('Observer', ({ expect, spy, stub }) => {
@@ -168,30 +168,31 @@ suite('Observer', ({ expect, spy, stub }) => {
   describe('create()', () => {
     it('should return an observer tree', () => {
       const observers = Observer.create(<any>{});
+      const present = observers.data.present;
 
       expect(observers).to.be.an('object');
-      expect(observers.data).to.be.an('object');
-      expect(observers.data.autocomplete).to.be.a('function');
-      expect(observers.data.collections).to.be.an('object');
-      expect(observers.data.collections.byId).to.be.a('function');
-      expect(observers.data.collections.selected).to.be.a('function');
-      expect(observers.data.details).to.be.an('object');
-      expect(observers.data.details.id).to.be.a('function');
-      expect(observers.data.details.product).to.be.a('function');
-      expect(observers.data.navigations).to.be.a('function');
-      expect(observers.data.page).to.be.a('function');
-      expect(observers.data.page.current).to.be.a('function');
-      expect(observers.data.page.sizes).to.be.a('function');
-      expect(observers.data.products).to.be.a('function');
-      expect(observers.data.query).to.be.an('object');
-      expect(observers.data.query.corrected).to.be.a('function');
-      expect(observers.data.query.didYouMean).to.be.a('function');
-      expect(observers.data.query.original).to.be.a('function');
-      expect(observers.data.query.related).to.be.a('function');
-      expect(observers.data.query.rewrites).to.be.a('function');
-      expect(observers.data.reditect).to.be.a('function');
-      expect(observers.data.sorts).to.be.a('function');
-      expect(observers.data.template).to.be.a('function');
+      expect(present).to.be.an('object');
+      expect(present.autocomplete).to.be.a('function');
+      expect(present.collections).to.be.an('object');
+      expect(present.collections.byId).to.be.a('function');
+      expect(present.collections.selected).to.be.a('function');
+      expect(present.details).to.be.an('object');
+      expect(present.details.id).to.be.a('function');
+      expect(present.details.product).to.be.a('function');
+      expect(present.navigations).to.be.a('function');
+      expect(present.page).to.be.a('function');
+      expect(present.page.current).to.be.a('function');
+      expect(present.page.sizes).to.be.a('function');
+      expect(present.products).to.be.a('function');
+      expect(present.query).to.be.an('object');
+      expect(present.query.corrected).to.be.a('function');
+      expect(present.query.didYouMean).to.be.a('function');
+      expect(present.query.original).to.be.a('function');
+      expect(present.query.related).to.be.a('function');
+      expect(present.query.rewrites).to.be.a('function');
+      expect(present.redirect).to.be.a('function');
+      expect(present.sorts).to.be.a('function');
+      expect(present.template).to.be.a('function');
     });
 
     describe('data', () => {
@@ -210,7 +211,7 @@ suite('Observer', ({ expect, spy, stub }) => {
           const oldState = { suggestions: 'idk' };
           const newState = { suggestions: 'im different o wow' };
 
-          observers.data.autocomplete(oldState, newState, path);
+          observers.data.present.autocomplete(oldState, newState, path);
 
           expect(emit).to.be.calledWith(Events.AUTOCOMPLETE_SUGGESTIONS_UPDATED);
         });
@@ -219,7 +220,7 @@ suite('Observer', ({ expect, spy, stub }) => {
           const oldState = { category: 'idk' };
           const newState = { category: 'im different o wow' };
 
-          observers.data.autocomplete(oldState, newState, path);
+          observers.data.present.autocomplete(oldState, newState, path);
 
           expect(emit).to.be.calledWith(Events.AUTOCOMPLETE_SUGGESTIONS_UPDATED);
         });
@@ -228,7 +229,7 @@ suite('Observer', ({ expect, spy, stub }) => {
           const oldState = { navigations: 'idk' };
           const newState = { navigations: 'im different o wow' };
 
-          observers.data.autocomplete(oldState, newState, path);
+          observers.data.present.autocomplete(oldState, newState, path);
 
           expect(emit).to.be.calledWith(Events.AUTOCOMPLETE_SUGGESTIONS_UPDATED);
         });
@@ -237,7 +238,7 @@ suite('Observer', ({ expect, spy, stub }) => {
           const oldState = { query: 'idk' };
           const newState = { query: 'im different o wow' };
 
-          observers.data.autocomplete(oldState, newState, path);
+          observers.data.present.autocomplete(oldState, newState, path);
 
           expect(emit).to.be.calledWith(Events.AUTOCOMPLETE_QUERY_UPDATED);
         });
@@ -246,7 +247,7 @@ suite('Observer', ({ expect, spy, stub }) => {
           const oldState = { products: 'idk' };
           const newState = { products: 'im different o wow' };
 
-          observers.data.autocomplete(oldState, newState, path);
+          observers.data.present.autocomplete(oldState, newState, path);
 
           expect(emit).to.be.calledWith(Events.AUTOCOMPLETE_PRODUCTS_UPDATED);
         });
@@ -256,14 +257,14 @@ suite('Observer', ({ expect, spy, stub }) => {
         it('should emit COLLECTION_UPDATED event', () => {
           const indexed = stub(Observer, 'indexed').returns('eyy');
           observers = Observer.create(<any>{ emit });
-          const byId = observers.data.collections.byId;
+          const byId = observers.data.present.collections.byId;
 
           expect(byId).to.eq('eyy');
           expect(indexed).to.be.calledWith(sinon.match.func);
         });
 
         it('should emit SELECTED_COLLECTION_UPDATED event', () => {
-          observers.data.collections.selected(undefined, OBJ);
+          observers.data.present.collections.selected(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.SELECTED_COLLECTION_UPDATED, OBJ);
         });
@@ -271,13 +272,13 @@ suite('Observer', ({ expect, spy, stub }) => {
 
       describe('details', () => {
         it('should emit DETAILS_ID_UPDATED event', () => {
-          observers.data.details.id(undefined, OBJ);
+          observers.data.present.details.id(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.DETAILS_UPDATED, OBJ);
         });
 
         it('should emit DETAILS_PRODUCT_UPDATED event', () => {
-          observers.data.details.product(undefined, OBJ);
+          observers.data.present.details.product(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.DETAILS_PRODUCT_UPDATED, OBJ);
         });
@@ -286,7 +287,7 @@ suite('Observer', ({ expect, spy, stub }) => {
       describe('navigations', () => {
         it('should emit NAVIGATIONS_UPDATED event', () => {
           const newNavigations = { allIds: ['c', 'd'] };
-          observers.data.navigations({ allIds: ['a', 'b'] }, newNavigations);
+          observers.data.present.navigations({ allIds: ['a', 'b'] }, newNavigations);
 
           expect(emit).to.be.calledWith(Events.NAVIGATIONS_UPDATED, newNavigations);
         });
@@ -301,7 +302,7 @@ suite('Observer', ({ expect, spy, stub }) => {
             allIds,
             byId: { a: {}, b: {}, c: { selected: [] } }
           };
-          observers.data.navigations(oldNavigations, newNavigations);
+          observers.data.present.navigations(oldNavigations, newNavigations);
 
           expect(emit).to.be.calledWith(`${Events.SELECTED_REFINEMENTS_UPDATED}:c`, newNavigations.byId.c);
         });
@@ -316,7 +317,7 @@ suite('Observer', ({ expect, spy, stub }) => {
             allIds,
             byId: { a: {}, b: {}, c: { refinements: [] } }
           };
-          observers.data.navigations(oldNavigations, newNavigations);
+          observers.data.present.navigations(oldNavigations, newNavigations);
 
           expect(emit).to.be.calledWith(`${Events.SELECTED_REFINEMENTS_UPDATED}:c`, newNavigations.byId.c);
         });
@@ -324,19 +325,19 @@ suite('Observer', ({ expect, spy, stub }) => {
 
       describe('page', () => {
         it('should emit PAGE_UPDATED event', () => {
-          observers.data.page(undefined, OBJ);
+          observers.data.present.page(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.PAGE_UPDATED, OBJ);
         });
 
         it('should emit CURRENT_PAGE_UPDATED event', () => {
-          observers.data.page.current(undefined, OBJ);
+          observers.data.present.page.current(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.CURRENT_PAGE_UPDATED, OBJ);
         });
 
         it('should emit PAGE_SIZE_UPDATED event', () => {
-          observers.data.page.sizes(undefined, OBJ);
+          observers.data.present.page.sizes(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.PAGE_SIZE_UPDATED, OBJ);
         });
@@ -345,14 +346,14 @@ suite('Observer', ({ expect, spy, stub }) => {
       describe('products', () => {
         it('should emit PRODUCTS_UPDATED event', () => {
           const newProducts = [];
-          observers.data.products([], newProducts);
+          observers.data.present.products([], newProducts);
 
           expect(emit).to.be.calledWith(Events.PRODUCTS_UPDATED, newProducts);
         });
 
         it('should emit PRODUCTS_UPDATED event', () => {
           const newProducts = ['a', 'b'];
-          observers.data.products(['a'], newProducts);
+          observers.data.present.products(['a'], newProducts);
 
           expect(emit).to.be.calledWith(Events.MORE_PRODUCTS_ADDED, ['b']);
         });
@@ -360,31 +361,31 @@ suite('Observer', ({ expect, spy, stub }) => {
 
       describe('query', () => {
         it('should emit CORRECTED_QUERY_UPDATED event', () => {
-          observers.data.query.corrected(undefined, OBJ);
+          observers.data.present.query.corrected(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.CORRECTED_QUERY_UPDATED, OBJ);
         });
 
         it('should emit DID_YOU_MEANS_UPDATED event', () => {
-          observers.data.query.didYouMean(undefined, OBJ);
+          observers.data.present.query.didYouMean(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.DID_YOU_MEANS_UPDATED, OBJ);
         });
 
         it('should emit ORIGINAL_QUERY_UPDATED event', () => {
-          observers.data.query.original(undefined, OBJ);
+          observers.data.present.query.original(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.ORIGINAL_QUERY_UPDATED, OBJ);
         });
 
         it('should emit RELATED_QUERIES_UPDATED event', () => {
-          observers.data.query.related(undefined, OBJ);
+          observers.data.present.query.related(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.RELATED_QUERIES_UPDATED, OBJ);
         });
 
         it('should emit QUERY_REWRITES_UPDATED event', () => {
-          observers.data.query.rewrites(undefined, OBJ);
+          observers.data.present.query.rewrites(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.QUERY_REWRITES_UPDATED, OBJ);
         });
@@ -392,7 +393,7 @@ suite('Observer', ({ expect, spy, stub }) => {
 
       describe('reditect', () => {
         it('should emit REDIRECT event', () => {
-          observers.data.reditect(undefined, OBJ);
+          observers.data.present.redirect(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.REDIRECT, OBJ);
         });
@@ -400,7 +401,7 @@ suite('Observer', ({ expect, spy, stub }) => {
 
       describe('sorts', () => {
         it('should emit SORTS_UPDATED event', () => {
-          observers.data.sorts(undefined, OBJ);
+          observers.data.present.sorts(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.SORTS_UPDATED, OBJ);
         });
@@ -408,7 +409,7 @@ suite('Observer', ({ expect, spy, stub }) => {
 
       describe('template', () => {
         it('should emit TEMPLATE_UPDATED event', () => {
-          observers.data.template(undefined, OBJ);
+          observers.data.present.template(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.TEMPLATE_UPDATED, OBJ);
         });

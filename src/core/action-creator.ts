@@ -1,14 +1,10 @@
 import { Results } from 'groupby-api';
-import { Dispatch } from 'redux';
-import { QueryTimeAutocompleteConfig, QueryTimeProductSearchConfig } from 'sayt';
 import FluxCapacitor from '../flux-capacitor';
 import Actions from './actions';
-import Adapters from './adapters';
-import * as Events from './events';
-import { Request } from './reducers/is-fetching';
+import SearchAdapter from './adapters/search';
 import Selectors from './selectors';
 import Store from './store';
-import { action, conditional, thunk, Routes } from './utils';
+import { action } from './utils';
 
 export function createActions(flux: FluxCapacitor) {
 
@@ -18,140 +14,39 @@ export function createActions(flux: FluxCapacitor) {
       refreshState: (state: any): Actions.RefreshState =>
         action(Actions.REFRESH_STATE, state, metadata),
 
-      startFetching: (requestType: keyof Store.IsFetching): Actions.IsFetching =>
-        action(Actions.IS_FETCHING, requestType, metadata),
-
       // fetch action creators
-      fetchMoreRefinements: (navigationId: string): Actions.Thunk<any> =>
-        (dispatch, getState) => {
-          const state = getState();
-          if (Selectors.hasMoreRefinements(state, navigationId)) {
-            dispatch(actions.startFetching(Request.MORE_REFINEMENTS));
-            return flux.clients.bridge.refinements(Selectors.searchRequest(state, flux.config), navigationId)
-              .then(({ navigation: { name, refinements } }) => {
-                const navigation = Selectors.navigation(state, name);
-                const navigationType = navigation.range ? 'Range' : 'Value';
-                // tslint:disable-next-line max-line-length
-                const selectedRefinements = navigation.refinements.filter((_, index) => navigation.selected.includes(index));
-                const remapped = refinements.map(Adapters.Search.extractRefinement);
+      fetchMoreRefinements: (navigationId: string): Actions.FetchMoreRefinements =>
+        action(Actions.FETCH_MORE_REFINEMENTS, navigationId, metadata),
 
-                const selected = [];
-                remapped.forEach((refinement, index) => {
-                  // tslint:disable-next-line max-line-length
-                  const found = selectedRefinements.findIndex((ref) => Adapters.Search.refinementsMatch(<any>refinement, <any>ref, navigationType));
-                  if (found !== -1) {
-                    selected.push(index);
-                  }
-                });
+      fetchProducts: (): Actions.FetchProducts =>
+        action(Actions.FETCH_PRODUCTS, null, metadata),
 
-                return dispatch(actions.receiveMoreRefinements(name, remapped, selected));
-              })
-              // this action won't change the state other than to clear fetching flag
-              .catch((err) => dispatch(actions.receiveMoreRefinements(null, [], [])));
-          }
-        },
+      fetchMoreProducts: (amount: number): Actions.FetchMoreProducts =>
+        action(Actions.FETCH_MORE_PRODUCTS, amount, metadata),
 
-      fetchProducts: (): Actions.Thunk<any> =>
-        (dispatch, getState) => {
-          const state = getState();
-          if (!state.isFetching.search) {
-            dispatch(actions.startFetching(Request.PRODUCTS));
-            return flux.clients.bridge.search(Selectors.searchRequest(state, flux.config))
-              .then((res) => {
-                flux.emit(Events.BEACON_SEARCH, res['id']);
-                return dispatch(actions.receiveSearchResponse(res));
-              })
-              .catch((err) => dispatch(actions.receiveSearchResponse(<any>{
-                availableNavigation: [],
-                selectedNavigation: [],
-                records: [],
-                didYouMean: [],
-                relatedQueries: [],
-                rewrites: [],
-                totalRecordCount: 0
-              })));
-          }
-        },
+      fetchAutocompleteSuggestions: (query: string): Actions.FetchAutocompleteSuggestions =>
+        action(Actions.FETCH_AUTOCOMPLETE_SUGGESTIONS, query, metadata),
 
-      fetchMoreProducts: (amount: number): Actions.Thunk<any> =>
-        (dispatch, getState) => {
-          const state = getState();
-          if (!state.isFetching.moreProducts) {
-            dispatch(actions.startFetching(Request.MORE_PRODUCTS));
-            return flux.clients.bridge.search({
-              ...Selectors.searchRequest(state, flux.config),
-              pageSize: amount,
-              skip: Selectors.products(state).length
-            }).then((res) => {
-              flux.emit(Events.BEACON_SEARCH, res['id']);
-              const products = Adapters.Autocomplete.extractProducts(res);
-              return dispatch(actions.receiveMoreProducts(products));
-              // this action will add 0 new products but clear the fetching flag
-            }).catch((err) => dispatch(actions.receiveMoreProducts([])));
-          }
-        },
+      fetchAutocompleteProducts: (query: string): Actions.FetchAutocompleteProducts =>
+        action(Actions.FETCH_AUTOCOMPLETE_PRODUCTS, query, metadata),
 
-      fetchAutocompleteSuggestions: (query: string): Actions.Thunk<any> =>
-        (dispatch, getState) => {
-          if (query) {
-            dispatch(actions.startFetching(Request.AUTOCOMPLETE_SUGGESTIONS));
-            return flux.clients.sayt.autocomplete(query, Selectors.autocompleteSuggestionsRequest(flux.config))
-              .then((res) => {
-                const category = getState().data.autocomplete.category.field;
-                const {
-                  suggestions,
-                  categoryValues,
-                  navigations
-                } = Adapters.Autocomplete.extractSuggestions(res, category);
-                dispatch(actions.receiveAutocompleteSuggestions(suggestions, categoryValues, navigations));
-              })
-              // this action will clear autocomplete suggestions fetching flag
-              .catch((err) => dispatch(actions.receiveAutocompleteSuggestions([], [], [])));
-          }
-        },
+      fetchCollectionCount: (collection: string): Actions.FetchCollectionCount =>
+        action(Actions.FETCH_COLLECTION_COUNT, collection, metadata),
 
-      fetchAutocompleteProducts: (query: string): Actions.Thunk<any> =>
-        (dispatch) => {
-          if (query) {
-            dispatch(actions.startFetching(Request.AUTOCOMPLETE_PRODUCTS));
-            return flux.clients.sayt.productSearch(query, Selectors.autocompleteProductsRequest(flux.config))
-              .then((res) => {
-                const products = Adapters.Autocomplete.extractProducts(res);
-                dispatch(actions.receiveAutocompleteProducts(products));
-              })
-              // this action will clear autocomplete products fetching flag
-              .catch((err) => dispatch(actions.receiveAutocompleteProducts([])));
-          }
-        },
-
-      fetchCollectionCount: (collection: string): Actions.Thunk<any> =>
-        (dispatch, getState) =>
-          flux.clients.bridge.search({ ...Selectors.searchRequest(getState(), flux.config), collection })
-            .then((res) => dispatch(
-              actions.receiveCollectionCount(collection, Adapters.Search.extractRecordCount(res)))),
-
-      fetchProductDetails: (id: string): Actions.Thunk<any> =>
-        (dispatch, getState) => {
-          return flux.clients.bridge.search({
-            ...Selectors.searchRequest(getState(), flux.config),
-            query: null,
-            pageSize: 1,
-            skip: 0,
-            refinements: [<any>{ navigationName: 'id', type: 'Value', value: id }]
-          }).then(({ records: [record] }) => {
-            flux.emit(Events.BEACON_VIEW_PRODUCT, record);
-            return dispatch(actions.receiveDetailsProduct(record.allMeta));
-          }).catch((err) => dispatch(actions.receiveDetailsProduct(<any>{})));
-        },
+      fetchProductDetails: (id: string): Actions.FetchProductDetails =>
+        action(Actions.FETCH_PRODUCT_DETAILS, id, metadata),
 
       // request action creators
-      updateSearch: (search: Actions.Payload.Search): Actions.Thunk<Actions.UpdateSearch> =>
-        (dispatch) => {
-          const query = search.query && search.query.trim();
-          if (query || query === null) {
-            dispatch(action(Actions.UPDATE_SEARCH, { ...<any>search, query }, metadata));
+      updateSearch: (search: Actions.Payload.Search): Actions.UpdateSearch =>
+        action(Actions.UPDATE_SEARCH, { ...<any>search, query: search.query && search.query.trim() }, {
+          ...metadata,
+          validator: {
+            payload: {
+              func: ({ query }) => !!query || query === null,
+              msg: 'search term is empty'
+            }
           }
-        },
+        }),
 
       search: (query: string = Selectors.query(flux.store.getState())) =>
         actions.updateSearch({ query, clear: true }),
@@ -161,118 +56,160 @@ export function createActions(flux: FluxCapacitor) {
 
       resetQuery: () => actions.updateSearch({ query: null }),
 
-      selectRefinement: (navigationId: string, index: number): Actions.Thunk<Actions.SelectRefinement> =>
-        conditional((state) =>
-          Selectors.isRefinementDeselected(state, navigationId, index),
-          Actions.SELECT_REFINEMENT, { navigationId, index }, metadata),
+      selectRefinement: (navigationId: string, index: number): Actions.SelectRefinement =>
+        action(Actions.SELECT_REFINEMENT, { navigationId, index }, {
+          ...metadata,
+          validator: {
+            payload: {
+              func: (_, state) => Selectors.isRefinementDeselected(state, navigationId, index),
+              msg: 'navigation does not exist or refinement is already selected'
+            }
+          }
+        }),
 
-      deselectRefinement: (navigationId: string, index: number): Actions.Thunk<Actions.DeselectRefinement> =>
-        conditional((state) =>
-          Selectors.isRefinementSelected(state, navigationId, index),
-          Actions.DESELECT_REFINEMENT, { navigationId, index }, metadata),
+      deselectRefinement: (navigationId: string, index: number): Actions.DeselectRefinement =>
+        action(Actions.DESELECT_REFINEMENT, { navigationId, index }, {
+          ...metadata,
+          validator: {
+            payload: {
+              func: (_, state) => Selectors.isRefinementSelected(state, navigationId, index),
+              msg: 'navigation does not exist or refinement is not selected'
+            }
+          }
+        }),
 
-      selectCollection: (id: string): Actions.Thunk<Actions.SelectCollection> =>
-        conditional((state) =>
-          state.data.collections.selected !== id,
-          Actions.SELECT_COLLECTION, id, metadata),
+      selectCollection: (id: string): Actions.SelectCollection =>
+        action(Actions.SELECT_COLLECTION, id, {
+          ...metadata,
+          validator: {
+            payload: {
+              func: (_, state) => Selectors.collection(state) !== id,
+              msg: 'collection is already selected'
+            }
+          }
+        }),
 
-      selectSort: (index: number): Actions.Thunk<Actions.SelectSort> =>
-        conditional((state) =>
-          state.data.sorts.selected !== index,
-          Actions.SELECT_SORT, index, metadata),
+      selectSort: (index: number): Actions.SelectSort =>
+        action(Actions.SELECT_SORT, index, {
+          ...metadata,
+          validator: {
+            payload: {
+              func: (_, state) => Selectors.sortIndex(state) !== index,
+              msg: 'sort is already selected'
+            }
+          }
+        }),
 
-      updatePageSize: (size: number): Actions.Thunk<Actions.UpdatePageSize> =>
-        conditional((state) =>
-          Selectors.pageSize(state) !== size,
-          Actions.UPDATE_PAGE_SIZE, size, metadata),
+      updatePageSize: (size: number): Actions.UpdatePageSize =>
+        action(Actions.UPDATE_PAGE_SIZE, size, {
+          ...metadata,
+          validator: {
+            payload: {
+              func: (_, state) => Selectors.pageSize(state) !== size,
+              msg: 'page size is already selected'
+            }
+          }
+        }),
 
-      updateCurrentPage: (page: number): Actions.Thunk<Actions.UpdateCurrentPage> =>
-        conditional((state) =>
-          page !== null && state.data.page.current !== page,
-          Actions.UPDATE_CURRENT_PAGE, page, metadata),
+      updateCurrentPage: (page: number): Actions.UpdateCurrentPage =>
+        action(Actions.UPDATE_CURRENT_PAGE, page, {
+          ...metadata,
+          validator: {
+            payload: {
+              func: (_, state) => page !== null && Selectors.page(state) !== page,
+              msg: 'page size is already selected'
+            }
+          }
+        }),
 
-      updateDetails: (id: string, title: string): Actions.Thunk<Actions.UpdateDetails> =>
-        thunk(Actions.UPDATE_DETAILS, { id, title }, metadata),
+      updateDetails: (id: string, title: string): Actions.UpdateDetails =>
+        action(Actions.UPDATE_DETAILS, { id, title }, metadata),
 
-      updateAutocompleteQuery: (query: string): Actions.Thunk<Actions.UpdateAutocompleteQuery> =>
-        conditional((state) =>
-          state.data.autocomplete.query !== query,
-          Actions.UPDATE_AUTOCOMPLETE_QUERY, query, metadata),
+      updateAutocompleteQuery: (query: string): Actions.UpdateAutocompleteQuery =>
+        action(Actions.UPDATE_AUTOCOMPLETE_QUERY, query, {
+          ...metadata,
+          validator: {
+            payload: {
+              func: (_, state) => Selectors.autocompleteQuery(state) !== query,
+              msg: 'suggestions for query have already been requested'
+            }
+          }
+        }),
 
       // response action creators
-      receiveSearchResponse: (results: Results): Actions.Thunk<any> =>
-        (dispatch, getState) => {
-          const updates = [];
-          const state = getState();
-          if (results.redirect) {
-            updates.push(dispatch(actions.receiveRedirect(results.redirect)));
-          }
-          const recordCount = Adapters.Search.extractRecordCount(results);
-          updates.push(
-            dispatch(actions.receiveQuery(Adapters.Search.extractQuery(results))),
-            dispatch(actions.receiveProducts(results.records.map(Adapters.Search.extractProduct))),
-            dispatch(actions.receiveNavigations(Adapters.Search.combineNavigations(results))),
-            dispatch(actions.receiveRecordCount(recordCount)),
-            dispatch(actions.receiveCollectionCount(Selectors.collection(state), recordCount)),
-            dispatch(actions.receivePage(Adapters.Search.extractPage(state, recordCount))),
-            dispatch(actions.receiveTemplate(Adapters.Search.extractTemplate(results.template))),
-          );
+      receiveQuery: (query: Actions.Payload.Query): Actions.ReceiveQuery =>
+        action(Actions.RECEIVE_QUERY, query, metadata),
 
-          return Promise.all(updates)
-            .then(() => flux.saveState(Routes.SEARCH));
-        },
+      receiveProducts: (res: Results): Actions.Action<string, any>[] | Actions.ReceiveProducts => {
+        const receiveProducts = action(Actions.RECEIVE_PRODUCTS, res, metadata);
 
-      receiveQuery: (query: Actions.Payload.Query): Actions.Thunk<Actions.ReceiveQuery> =>
-        thunk(Actions.RECEIVE_QUERY, query, metadata),
+        // a passthrough to allow error to propagate to middleware
+        if (receiveProducts.error) {
+          return receiveProducts;
+        } else {
+          const state = flux.store.getState();
+          const recordCount = SearchAdapter.extractRecordCount(res);
 
-      receiveProducts: (products: Store.Product[]): Actions.Thunk<Actions.ReceiveProducts> =>
-        thunk(Actions.RECEIVE_PRODUCTS, products, metadata),
+          return [
+            receiveProducts,
+            actions.receiveQuery(SearchAdapter.extractQuery(res)),
+            actions.receiveProductRecords(res.records.map(SearchAdapter.extractProduct)),
+            actions.receiveNavigations(SearchAdapter.combineNavigations(res)),
+            actions.receiveRecordCount(recordCount),
+            actions.receiveCollectionCount({
+              collection: Selectors.collection(state),
+              count: recordCount
+            }),
+            actions.receivePage(SearchAdapter.extractPage(state, recordCount)),
+            actions.receiveTemplate(SearchAdapter.extractTemplate(res.template)),
+          ];
+        }
+      },
 
-      receiveCollectionCount: (collection: string, count: number): Actions.Thunk<Actions.ReceiveCollectionCount> =>
-        thunk(Actions.RECEIVE_COLLECTION_COUNT, { collection, count }, metadata),
+      receiveProductRecords: (products: Store.Product[]): Actions.ReceiveProductRecords =>
+        action(Actions.RECEIVE_PRODUCT_RECORDS, products, metadata),
 
-      receiveNavigations: (navigations: Store.Navigation[]): Actions.Thunk<Actions.ReceiveNavigations> =>
-        thunk(Actions.RECEIVE_NAVIGATIONS, navigations, metadata),
+      receiveCollectionCount: (count: Actions.Payload.Collection.Count): Actions.ReceiveCollectionCount =>
+        action(Actions.RECEIVE_COLLECTION_COUNT, count, metadata),
 
-      receivePage: (page: Actions.Payload.Page): Actions.Thunk<Actions.ReceivePage> =>
-        thunk(Actions.RECEIVE_PAGE, page, metadata),
+      receiveNavigations: (navigations: Store.Navigation[]): Actions.ReceiveNavigations =>
+        action(Actions.RECEIVE_NAVIGATIONS, navigations, metadata),
 
-      receiveTemplate: (template: Store.Template): Actions.Thunk<Actions.ReceiveTemplate> =>
-        thunk(Actions.RECEIVE_TEMPLATE, template, metadata),
+      receivePage: (page: Actions.Payload.Page): Actions.ReceivePage =>
+        action(Actions.RECEIVE_PAGE, page, metadata),
 
-      receiveRecordCount: (recordCount: number): Actions.Thunk<Actions.ReceiveRecordCount> =>
-        thunk(Actions.RECEIVE_RECORD_COUNT, recordCount, metadata),
+      receiveTemplate: (template: Store.Template): Actions.ReceiveTemplate =>
+        action(Actions.RECEIVE_TEMPLATE, template, metadata),
 
-      receiveRedirect: (redirect: string): Actions.Thunk<Actions.ReceiveRedirect> =>
-        thunk(Actions.RECEIVE_REDIRECT, redirect, metadata),
+      receiveRecordCount: (recordCount: number): Actions.ReceiveRecordCount =>
+        action(Actions.RECEIVE_RECORD_COUNT, recordCount, metadata),
+
+      receiveRedirect: (redirect: string): Actions.ReceiveRedirect =>
+        action(Actions.RECEIVE_REDIRECT, redirect, metadata),
 
       // tslint:disable-next-line max-line-length
-      receiveMoreRefinements: (navigationId: string, refinements: Store.Refinement[], selected: number[]): Actions.Thunk<Actions.ReceiveMoreRefinements> =>
-        thunk(Actions.RECEIVE_MORE_REFINEMENTS, { navigationId, refinements, selected }, metadata),
+      receiveMoreRefinements: (navigationId: string, refinements: Store.Refinement[], selected: number[]): Actions.ReceiveMoreRefinements =>
+        action(Actions.RECEIVE_MORE_REFINEMENTS, { navigationId, refinements, selected }, metadata),
 
       // tslint:disable-next-line max-line-length
-      receiveAutocompleteSuggestions: (suggestions: string[], categoryValues: string[], navigations: Store.Autocomplete.Navigation[]): Actions.Thunk<Actions.ReceiveAutocompleteSuggestions> =>
-        thunk(Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS, { suggestions, categoryValues, navigations }, metadata),
+      receiveAutocompleteSuggestions: (suggestions: Actions.Payload.Autocomplete.Suggestions): Actions.ReceiveAutocompleteSuggestions =>
+        action(Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS, suggestions, metadata),
 
-      receiveMoreProducts: (products: Store.Product[]): Actions.Thunk<Actions.ReceiveMoreProducts> =>
-        thunk(Actions.RECEIVE_MORE_PRODUCTS, products, metadata),
+      receiveMoreProducts: (products: Store.Product[]): Actions.ReceiveMoreProducts =>
+        action(Actions.RECEIVE_MORE_PRODUCTS, products, metadata),
 
-      receiveAutocompleteProducts: (products: Store.Product[]): Actions.Thunk<Actions.ReceiveAutocompleteProducts> =>
-        thunk(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, products, metadata),
+      receiveAutocompleteProducts: (products: Store.Product[]): Actions.ReceiveAutocompleteProducts =>
+        action(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, products, metadata),
 
-      receiveDetailsProduct: (product: Store.Product): Actions.Thunk<Actions.ReceiveDetailsProduct> =>
-        (dispatch: Dispatch<Actions.ReceiveDetailsProduct>) => {
-          dispatch(action(Actions.RECEIVE_DETAILS_PRODUCT, product, metadata));
-          flux.saveState(Routes.DETAILS);
-        },
+      receiveDetailsProduct: (product: Store.Product): Actions.ReceiveDetailsProduct =>
+        action(Actions.RECEIVE_DETAILS_PRODUCT, product, metadata),
 
       // ui action creators
-      // tslint:disable-next-line max-line-length
-      createComponentState: (tagName: string, id: string, state: any = {}): Actions.Thunk<Actions.CreateComponentState> =>
-        thunk(Actions.CREATE_COMPONENT_STATE, { tagName, id, state }, metadata),
+      createComponentState: (tagName: string, id: string, state: any = {}): Actions.CreateComponentState =>
+        action(Actions.CREATE_COMPONENT_STATE, { tagName, id, state }, metadata),
 
-      removeComponentState: (tagName: string, id: string): Actions.Thunk<Actions.RemoveComponentState> =>
-        thunk(Actions.REMOVE_COMPONENT_STATE, { tagName, id }, metadata),
+      removeComponentState: (tagName: string, id: string): Actions.RemoveComponentState =>
+        action(Actions.REMOVE_COMPONENT_STATE, { tagName, id }, metadata),
 
       // app action creators
       startApp: (): Actions.StartApp =>
