@@ -16,7 +16,7 @@ namespace Adapter {
     const navigations = result.navigations || [];
     return {
       categoryValues: category && searchTerms[0] ? Adapter.extractCategoryValues(searchTerms[0], category) : [],
-      suggestions: searchTerms.map(({ value }) => value),
+      suggestions: searchTerms.map(({ value }) => ({ value })),
       navigations: navigations.map(({ name: field, values: refinements }) => ({ field, refinements }))
     };
   };
@@ -26,6 +26,8 @@ namespace Adapter {
     (additionalInfo || {})[category] || [];
 
   export const extractProducts = ({ result: { products } }: any) => products.map(Search.extractProduct);
+
+  export const mergeSuggestions = (suggestions: Array<{ value: string }>, recommendations: RecommendationsResponse) => 
 }
 
 export default Adapter;

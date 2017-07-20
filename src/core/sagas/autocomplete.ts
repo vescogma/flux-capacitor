@@ -15,12 +15,23 @@ export namespace Tasks {
         query,
         Selectors.autocompleteSuggestionsRequest(flux.config)
       );
+      // tslint:disable-next-line max-line-length
       const requestTrending = yield effects.fork(fetch, `https://${flux.config.customerId}.groupbycloud.com/wisdom/v2/recommendations/searches/_getPopular`, {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          matchPartial: {
+            and: [{
+              search: { query }
+            }]
+          }
+        })
       });
-      // const suggestions = Adapter.extractSuggestions(res, field);
+      const suggestions = Adapter.extractSuggestions(res, field);
 
-      // yield effects.put(flux.actions.receiveAutocompleteSuggestions(suggestions));
+      yield effects.put(flux.actions.receiveAutocompleteSuggestions(suggestions));
     } catch (e) {
       yield effects.put(flux.actions.receiveAutocompleteSuggestions(e));
     }
