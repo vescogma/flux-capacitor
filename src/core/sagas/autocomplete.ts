@@ -45,14 +45,34 @@ export namespace Tasks {
 
   export function* fetchProducts(flux: FluxCapacitor, action: Actions.FetchAutocompleteProducts) {
     try {
-      const res = yield effects.call(
+      const requestProducts = effects.call(
         [flux.clients.sayt, flux.clients.sayt.productSearch],
         action.payload,
         Selectors.autocompleteProductsRequest(flux.config)
       );
-      const products = Adapter.extractProducts(res);
 
-      yield effects.put(flux.actions.receiveAutocompleteProducts(products));
+      // tslint:disable-next-line max-line-length
+      const trendingUrl = `https://${flux.config.customerId}.groupbycloud.com/wisdom/v2/public/recommendations/products/_getTrending`;
+      const requestTrending = effects.call(fetch, trendingUrl, {
+        method: 'POST',
+        body: JSON.stringify({
+          size: flux.config.autocomplete.suggestionTrendingCount,
+          type: 'viewProduct',
+          target: 'productId',
+          matchPartial: {
+            and: [{
+              search: {
+                query: action.payload
+              }
+            }]
+          }
+        })
+      });
+
+      const [results, trending] = yield effects.all([requestProducts, requestTrending]);
+      const productsSuggestions = Adapter.extractProducts(results);
+
+      yield effects.put(flux.actions.receiveAutocompleteProducts(productsSuggestions));
     } catch (e) {
       yield effects.put(flux.actions.receiveAutocompleteProducts(e));
     }

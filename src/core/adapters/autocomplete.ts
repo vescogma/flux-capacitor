@@ -32,6 +32,10 @@ namespace Adapter {
   export const mergeSuggestions = (suggestions: Array<{ value: string }>, recommendations: RecommendationsResponse) => {
     return [...recommendations.result.map(({ query }) => ({ value: query, trending: true })), ...suggestions];
   };
+
+  export const mergeProducts = (suggestions, recommendations) => {
+    return [...recommendations, ...suggestions];
+  };
 }
 
 export default Adapter;
