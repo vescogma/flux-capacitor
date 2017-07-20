@@ -18,7 +18,7 @@ export namespace Tasks {
         Selectors.autocompleteSuggestionsRequest(flux.config)
       );
       // tslint:disable-next-line max-line-length
-      const trendingUrl = `https://${flux.config.customerId}.groupbycloud.com/wisdom/v2/recommendations/searches/_getPopular`;
+      const trendingUrl = `https://${flux.config.customerId}.groupbycloud.com/wisdom/v2/public/recommendations/searches/_getPopular`;
       const requestTrending = effects.call(fetch, trendingUrl, {
         method: 'POST',
         body: JSON.stringify({
@@ -32,7 +32,7 @@ export namespace Tasks {
       });
       const [results, trending] = yield effects.all([requestSuggestions, requestTrending]);
       const autocompleteSuggestions = Adapter.extractSuggestions(results, field);
-      const trendingSuggestions = Adapter.mergeSuggestions(autocompleteSuggestions.suggestions, trending);
+      const trendingSuggestions = Adapter.mergeSuggestions(autocompleteSuggestions.suggestions, yield trending.json());
 
       yield effects.put(flux.actions.receiveAutocompleteSuggestions({
         ...autocompleteSuggestions,
