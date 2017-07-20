@@ -53,6 +53,10 @@ interface Configuration {
      */
     suggestionCount?: number;
     /**
+     * number of trending suggestions to request
+     */
+    suggestionTrendingCount?: number;
+    /**
      * number of navigations to request
      */
     navigationCount?: number;

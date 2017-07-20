@@ -1,3 +1,4 @@
+import { RecommendationsResponse } from '../types';
 import Configuration from '../configuration';
 import Config from './configuration';
 import Search from './search';
@@ -27,7 +28,9 @@ namespace Adapter {
 
   export const extractProducts = ({ result: { products } }: any) => products.map(Search.extractProduct);
 
-  export const mergeSuggestions = (suggestions: Array<{ value: string }>, recommendations: RecommendationsResponse) => 
+  export const mergeSuggestions = (suggestions: Array<{ value: string }>, recommendations: RecommendationsResponse) => {
+    return [recommendations.result.map(({ query }) => ({ value: query, trending: true })), ...suggestions]
+  }
 }
 
 export default Adapter;

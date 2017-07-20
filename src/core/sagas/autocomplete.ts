@@ -22,6 +22,7 @@ export namespace Tasks {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          size: flux.config.autocomplete.suggestionTrendingCount,
           matchPartial: {
             and: [{
               search: { query }
@@ -29,7 +30,9 @@ export namespace Tasks {
           }
         })
       });
-      const suggestions = Adapter.extractSuggestions(res, field);
+      const [results, trending]= yield effects.join(requestSuggestions, requestTrending);
+      const suggestions = Adapter.extractSuggestions(results, field);
+      const trendingSuggestions = Adapter.mergeSuggestions(suggestions.suggestions, trending);
 
       yield effects.put(flux.actions.receiveAutocompleteSuggestions(suggestions));
     } catch (e) {
