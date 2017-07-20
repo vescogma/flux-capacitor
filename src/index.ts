@@ -1,3 +1,5 @@
+import './polyfills';
+
 import FluxCapacitor from './flux-capacitor';
 
 export * from './core';

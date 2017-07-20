@@ -1,3 +1,4 @@
+import 'isomorphic-fetch';
 import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
@@ -9,14 +10,17 @@ export namespace Tasks {
   export function* fetchSuggestions(flux: FluxCapacitor, { payload: query }: Actions.FetchAutocompleteSuggestions) {
     try {
       const field = yield effects.select(Selectors.autocompleteCategoryField);
-      const res = yield effects.call(
+      const requestSuggestions = yield effects.fork(
         [flux.clients.sayt, flux.clients.sayt.autocomplete],
         query,
         Selectors.autocompleteSuggestionsRequest(flux.config)
       );
-      const suggestions = Adapter.extractSuggestions(res, field);
+      const requestTrending = yield effects.fork(fetch, `https://${flux.config.customerId}.groupbycloud.com/wisdom/v2/recommendations/searches/_getPopular`, {
+        method: 'POST'
+      });
+      // const suggestions = Adapter.extractSuggestions(res, field);
 
-      yield effects.put(flux.actions.receiveAutocompleteSuggestions(suggestions));
+      // yield effects.put(flux.actions.receiveAutocompleteSuggestions(suggestions));
     } catch (e) {
       yield effects.put(flux.actions.receiveAutocompleteSuggestions(e));
     }
