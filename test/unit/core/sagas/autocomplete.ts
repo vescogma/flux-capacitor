@@ -27,21 +27,24 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const sayt = { autocomplete };
         const query = 'rain boots';
         const field = 'popularity';
+        const customerId = 'myCustomer';
         const suggestionTrendingCount = 10;
-        const config = { a: 'b', customerId: '1293', autocomplete: { suggestionTrendingCount } };
+        const config = { a: 'b', customerId, autocomplete: { suggestionTrendingCount } };
         const receiveAutocompleteSuggestionsAction: any = { c: 'd' };
         const receiveAutocompleteSuggestions = spy(() => receiveAutocompleteSuggestionsAction);
         const flux: any = { clients: { sayt }, actions: { receiveAutocompleteSuggestions }, config };
         const suggestions = { e: 'f', suggestions: {} };
         const request = { g: 'h' };
         const response = { i: 'j' };
-        const trendingResponse = { k: 'l' };
+        const trendingResponseValue = { o: 'p' };
+        const trendingBodyPromise = Promise.resolve();
+        const trendingResponse = { json: () => trendingBodyPromise };
         const mergedSuggestions = { m: 'n' };
         const autocompleteSuggestionsRequest = stub(Selectors, 'autocompleteSuggestionsRequest').returns(request);
         const extractSuggestions = stub(Adapter, 'extractSuggestions').returns(suggestions);
         const mergeSuggestions = stub(Adapter, 'mergeSuggestions').returns(mergedSuggestions);
         // tslint:disable-next-line max-line-length
-        const trendingUrl = `https://${flux.config.customerId}.groupbycloud.com/wisdom/v2/recommendations/searches/_getPopular`;
+        const trendingUrl = `https://${customerId}.groupbycloud.com/wisdom/v2/public/recommendations/searches/_getPopular`;
         const postRequest = {
           method: 'POST',
           body: JSON.stringify({
@@ -59,9 +62,10 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         expect(task.next().value).to.eql(effects.select(Selectors.autocompleteCategoryField));
         // tslint:disable-next-line max-line-length
         expect(task.next(field).value).to.eql(effects.all([effects.call([sayt, autocomplete], query, request), effects.call(fetch, trendingUrl, postRequest)]));
-        expect(task.next([response, trendingResponse]).value).to.eql(effects.put(receiveAutocompleteSuggestionsAction));
+        expect(task.next([response, trendingResponse]).value).to.eql(trendingBodyPromise);
+        expect(task.next(trendingResponseValue).value).to.eql(effects.put(receiveAutocompleteSuggestionsAction));
         expect(extractSuggestions).to.be.calledWithExactly(response, field);
-        expect(mergeSuggestions).to.be.calledWithExactly(suggestions.suggestions, trendingResponse);
+        expect(mergeSuggestions).to.be.calledWithExactly(suggestions.suggestions, trendingResponseValue);
         // tslint:disable-next-line max-line-length
         expect(receiveAutocompleteSuggestions).to.be.calledWithExactly({...suggestions, suggestions: mergedSuggestions });
         expect(autocompleteSuggestionsRequest).to.be.calledWith(config);
