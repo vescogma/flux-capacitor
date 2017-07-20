@@ -248,7 +248,7 @@ namespace Store {
 
   export interface Autocomplete {
     query?: string; // pre
-    suggestions: string[]; // post
+    suggestions: Autocomplete.Suggestion[]; // post
     category: Autocomplete.Category; // static & post
     navigations: Autocomplete.Navigation[]; // post
     products: Product[]; // post
@@ -263,6 +263,11 @@ namespace Store {
     export interface Navigation {
       field: string;
       refinements: string[];
+    }
+
+    export interface Suggestion {
+      value: string;
+      trending?: boolean;
     }
   }
 

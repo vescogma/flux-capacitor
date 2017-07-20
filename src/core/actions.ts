@@ -146,7 +146,7 @@ namespace Actions {
 
     export namespace Autocomplete {
       export interface Suggestions {
-        suggestions: Array<{ value: string, trending?: boolean }>;
+        suggestions: Store.Autocomplete.Suggestion[];
         categoryValues: string[];
         navigations: Store.Autocomplete.Navigation[];
       }

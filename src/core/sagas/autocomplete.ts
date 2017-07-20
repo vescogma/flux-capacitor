@@ -6,17 +6,20 @@ import Adapter from '../adapters/autocomplete';
 import Selectors from '../selectors';
 import Store from '../store';
 
+declare function fetch();
+
 export namespace Tasks {
   export function* fetchSuggestions(flux: FluxCapacitor, { payload: query }: Actions.FetchAutocompleteSuggestions) {
     try {
       const field = yield effects.select(Selectors.autocompleteCategoryField);
-      const requestSuggestions = yield effects.fork(
+      const requestSuggestions = effects.call(
         [flux.clients.sayt, flux.clients.sayt.autocomplete],
         query,
         Selectors.autocompleteSuggestionsRequest(flux.config)
       );
       // tslint:disable-next-line max-line-length
-      const requestTrending = yield effects.fork(fetch, `https://${flux.config.customerId}.groupbycloud.com/wisdom/v2/recommendations/searches/_getPopular`, {
+      const trendingUrl = `https://${flux.config.customerId}.groupbycloud.com/wisdom/v2/recommendations/searches/_getPopular`;
+      const requestTrending = effects.call(fetch, trendingUrl, {
         method: 'POST',
         body: JSON.stringify({
           size: flux.config.autocomplete.suggestionTrendingCount,
@@ -27,7 +30,7 @@ export namespace Tasks {
           }
         })
       });
-      const [results, trending] = yield effects.join(requestSuggestions, requestTrending);
+      const [results, trending] = yield effects.all([requestSuggestions, requestTrending]);
       const autocompleteSuggestions = Adapter.extractSuggestions(results, field);
       const trendingSuggestions = Adapter.mergeSuggestions(autocompleteSuggestions.suggestions, trending);
 
