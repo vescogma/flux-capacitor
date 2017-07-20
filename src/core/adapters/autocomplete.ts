@@ -1,5 +1,6 @@
-import { RecommendationsResponse } from '../types';
+import Actions from '../actions';
 import Configuration from '../configuration';
+import { RecommendationsResponse } from '../types';
 import Config from './configuration';
 import Search from './search';
 
@@ -12,7 +13,7 @@ namespace Adapter {
     Config.extractAutocompleteArea(config) || Config.extractArea(config);
 
   // tslint:disable-next-line max-line-length
-  export const extractSuggestions = ({ result }: any, category: string) => {
+  export const extractSuggestions = ({ result }: any, category: string): Actions.Payload.Autocomplete.Suggestions => {
     const searchTerms = result.searchTerms || [];
     const navigations = result.navigations || [];
     return {
@@ -29,8 +30,8 @@ namespace Adapter {
   export const extractProducts = ({ result: { products } }: any) => products.map(Search.extractProduct);
 
   export const mergeSuggestions = (suggestions: Array<{ value: string }>, recommendations: RecommendationsResponse) => {
-    return [recommendations.result.map(({ query }) => ({ value: query, trending: true })), ...suggestions]
-  }
+    return [...recommendations.result.map(({ query }) => ({ value: query, trending: true })), ...suggestions];
+  };
 }
 
 export default Adapter;

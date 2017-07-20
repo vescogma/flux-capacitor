@@ -18,9 +18,6 @@ export namespace Tasks {
       // tslint:disable-next-line max-line-length
       const requestTrending = yield effects.fork(fetch, `https://${flux.config.customerId}.groupbycloud.com/wisdom/v2/recommendations/searches/_getPopular`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({
           size: flux.config.autocomplete.suggestionTrendingCount,
           matchPartial: {
@@ -30,11 +27,14 @@ export namespace Tasks {
           }
         })
       });
-      const [results, trending]= yield effects.join(requestSuggestions, requestTrending);
-      const suggestions = Adapter.extractSuggestions(results, field);
-      const trendingSuggestions = Adapter.mergeSuggestions(suggestions.suggestions, trending);
+      const [results, trending] = yield effects.join(requestSuggestions, requestTrending);
+      const autocompleteSuggestions = Adapter.extractSuggestions(results, field);
+      const trendingSuggestions = Adapter.mergeSuggestions(autocompleteSuggestions.suggestions, trending);
 
-      yield effects.put(flux.actions.receiveAutocompleteSuggestions(suggestions));
+      yield effects.put(flux.actions.receiveAutocompleteSuggestions({
+        ...autocompleteSuggestions,
+        suggestions: trendingSuggestions
+      }));
     } catch (e) {
       yield effects.put(flux.actions.receiveAutocompleteSuggestions(e));
     }
