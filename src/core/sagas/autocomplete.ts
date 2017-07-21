@@ -58,14 +58,7 @@ export namespace Tasks {
         body: JSON.stringify({
           size: flux.config.autocomplete.suggestionTrendingCount,
           type: 'viewProduct',
-          target: 'productId',
-          matchPartial: {
-            and: [{
-              search: {
-                query: action.payload
-              }
-            }]
-          }
+          target: 'productId'
         })
       });
 
