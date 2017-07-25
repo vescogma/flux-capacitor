@@ -300,14 +300,16 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       it('should create a new Sayt', () => {
         const customerId = 'mycustomer';
         const collection = 'products';
+        const https = true;
         const saytConfig = { collection };
         const saytClient = { a: 'b' };
         const sayt = stub(saytApi, 'Sayt').returns(saytClient);
 
-        const created = FluxCapacitor.createSayt(<any>{ customerId, autocomplete: saytConfig });
+        const created = FluxCapacitor.createSayt(<any>{ customerId, autocomplete: saytConfig, network: { https } });
 
         expect(created).to.eq(saytClient);
         expect(sayt).to.be.calledWith({
+          https,
           collection,
           subdomain: customerId,
         });
@@ -316,13 +318,14 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       it('should fallback to defaults', () => {
         const customerId = 'othercustomer';
         const collection = 'international';
-        const config = { customerId, autocomplete: {} };
+        const config = { customerId, autocomplete: {}, network: {} };
         const sayt = stub(saytApi, 'Sayt').returns({});
         const extractCollection = stub(ConfigAdapter, 'extractCollection').returns(collection);
 
         FluxCapacitor.createSayt(config);
 
         expect(sayt).to.be.calledWith({
+          https: undefined,
           collection,
           subdomain: customerId,
         });

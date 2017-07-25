@@ -145,7 +145,9 @@ class FluxCapacitor extends EventEmitter {
    * create instance of SAYT API client
    */
   static createSayt(config: Configuration) {
+    const networkConfig = config.network;
     return new Sayt(<any>{
+      https: networkConfig.https,
       collection: Adapter.extractAutocompleteCollection(config) || Adapter.extractCollection(config),
       subdomain: config.customerId,
     });
