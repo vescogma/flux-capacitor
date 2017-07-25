@@ -5,7 +5,7 @@ import suite from '../../../_suite';
 suite('autocomplete', ({ expect }) => {
   const query = 'brown shoes';
   const category = { field: 'a', values: ['b'] };
-  const suggestions = ['e', 'f', 'g'];
+  const suggestions = [{ value: 'e' }, { value: 'f' }, { value: 'g' }];
   const navigations = [];
   const products = [];
   const state: Store.Autocomplete = {

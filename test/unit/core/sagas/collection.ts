@@ -1,8 +1,8 @@
 import * as effects from 'redux-saga/effects';
 import Actions from '../../../../src/core/actions';
 import Adapters from '../../../../src/core/adapters';
+import Requests from '../../../../src/core/requests';
 import sagaCreator, { Tasks } from '../../../../src/core/sagas/collection';
-import Selectors from '../../../../src/core/selectors';
 import suite from '../../_suite';
 
 suite('collection saga', ({ expect, spy, stub }) => {
@@ -36,7 +36,7 @@ suite('collection saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchCount(flux, <any>{ payload: collection });
 
-        expect(task.next().value).to.eql(effects.select(Selectors.searchRequest, config));
+        expect(task.next().value).to.eql(effects.select(Requests.search, config));
         expect(task.next(request).value).to.eql(effects.call([bridge, search], { e: 'f', collection }));
         expect(task.next(response).value).to.eql(effects.put(receiveCollectionCountAction));
         expect(receiveCollectionCount).to.be.calledWithExactly({ collection, count: recordCount });

@@ -9,6 +9,7 @@ import navigations from './navigations';
 import page from './page';
 import products from './products';
 import query from './query';
+import recommendations from './recommendations';
 import recordCount from './record-count';
 import redirect from './redirect';
 import sorts from './sorts';
@@ -26,6 +27,7 @@ export default redux.combineReducers({
   page,
   products,
   query,
+  recommendations,
   recordCount,
   redirect,
   sorts,

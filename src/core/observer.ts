@@ -132,6 +132,10 @@ namespace Observer {
             rewrites: emit(Events.QUERY_REWRITES_UPDATED),
           },
 
+          recommendations: {
+            products: emit(Events.RECOMMENDATIONS_PRODUCTS_UPDATED)
+          },
+
           recordCount: emit(Events.RECORD_COUNT_UPDATED),
 
           redirect: emit(Events.REDIRECT),
@@ -150,7 +154,8 @@ namespace Observer {
       },
       session: {
         recallId: emit(Events.RECALL_CHANGED),
-        searchId: emit(Events.SEARCH_CHANGED)
+        searchId: emit(Events.SEARCH_CHANGED),
+        location: emit(Events.LOCATION_UPDATED)
       },
       ui: emit(Events.UI_UPDATED)
     };

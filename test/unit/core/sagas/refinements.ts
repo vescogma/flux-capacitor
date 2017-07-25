@@ -1,8 +1,8 @@
 import * as effects from 'redux-saga/effects';
 import Actions from '../../../../src/core/actions';
 import Adapter from '../../../../src/core/adapters/refinements';
+import Requests from '../../../../src/core/requests';
 import sagaCreator, { Tasks } from '../../../../src/core/sagas/refinements';
-import Selectors from '../../../../src/core/selectors';
 import * as utils from '../../../../src/core/utils';
 import suite from '../../_suite';
 
@@ -35,7 +35,7 @@ suite('refinements saga', ({ expect, spy, stub }) => {
         const state = { i: 'j' };
         const results = { o: 'p' };
         const flux: any = { clients: { bridge }, actions: { receiveMoreRefinements }, config };
-        const searchRequest = stub(Selectors, 'searchRequest').returns(request);
+        const searchRequest = stub(Requests, 'search').returns(request);
         const mergeRefinements = stub(Adapter, 'mergeRefinements').returns({
           navigationId,
           refinements: mergedRefinements,

@@ -8,57 +8,6 @@ import Store from './store';
 
 namespace Selectors {
 
-  export const searchRequest = (state: Store.State, config: AppConfig): Request => {
-    const sort = Selectors.sort(state);
-    const pageSize = Selectors.pageSize(state);
-    const skip = Selectors.skip(state, pageSize);
-    const request: Partial<Request> = {
-      pageSize: Math.min(pageSize, MAX_RECORDS - skip),
-      area: Selectors.area(state),
-      fields: Selectors.fields(state),
-      query: Selectors.query(state),
-      collection: Selectors.collection(state),
-      refinements: Selectors.selectedRefinements(state),
-      skip
-    };
-
-    const language = Configuration.extractLanguage(config);
-    if (language) {
-      request.language = language;
-    }
-    if (sort) {
-      request.sort = <any>Selectors.requestSort(sort);
-    }
-
-    return <Request>{
-      ...config.search.defaults,
-      ...request,
-      ...config.search.overrides,
-    };
-  };
-
-  export const autocompleteSuggestionsRequest = (config: AppConfig): QueryTimeAutocompleteConfig => {
-    return {
-      ...config.autocomplete.defaults.suggestions,
-      language: Autocomplete.extractLanguage(config),
-      numSearchTerms: Configuration.extractAutocompleteSuggestionCount(config),
-      numNavigations: Configuration.extractAutocompleteNavigationCount(config),
-      sortAlphabetically: Configuration.isAutocompleteAlphabeticallySorted(config),
-      fuzzyMatch: Configuration.isAutocompleteMatchingFuzzily(config),
-      ...config.autocomplete.overrides.suggestions,
-    };
-  };
-
-  export const autocompleteProductsRequest = (config: AppConfig): QueryTimeProductSearchConfig => {
-    return {
-      ...config.autocomplete.defaults.products,
-      language: Autocomplete.extractLanguage(config),
-      area: Autocomplete.extractArea(config),
-      numProducts: Configuration.extractAutocompleteProductCount(config),
-      ...config.autocomplete.overrides.products,
-    };
-  };
-
   export const area = (state: Store.State) =>
     state.data.present.area;
 
@@ -178,6 +127,12 @@ namespace Selectors {
 
   export const autocompleteNavigations = (state: Store.State) =>
     Selectors.autocomplete(state).navigations;
+
+  export const location = (state: Store.State) =>
+    state.session.location;
+
+  export const recommendationsProducts = (state: Store.State) =>
+    state.data.present.recommendations.products;
 }
 
 export default Selectors;

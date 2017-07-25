@@ -63,12 +63,13 @@
     "start-simple-cli": "^4.1.1",
     "tslint": "^5.5.0",
     "tslint-config-groupby": "^1.0.0",
-    "typescript": "^2.4.1"
+    "typescript": "^2.4.2"
   },
   "dependencies": {
     "@manaflair/redux-batch": "^0.1.0",
     "@types/redux-logger": "^3.0.0",
     "eventemitter3": "^2.0.3",
+    "fetch-ponyfill": "^4.1.0",
     "groupby-api": "^2.0.1",
     "redux": "^3.7.0",
     "redux-logger": "^3.0.6",

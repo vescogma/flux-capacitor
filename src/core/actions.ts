@@ -61,6 +61,8 @@ namespace Actions {
   export type FetchCollectionCount = Action<typeof FETCH_COLLECTION_COUNT, string>;
   export const FETCH_PRODUCT_DETAILS = 'FETCH_PRODUCT_DETAILS';
   export type FetchProductDetails = Action<typeof FETCH_PRODUCT_DETAILS, string>;
+  export const FETCH_RECOMMENDATIONS_PRODUCTS = 'FETCH_RECOMMENDATIONS_PRODUCTS';
+  export type FetchRecommendationsProducts = Action<typeof FETCH_RECOMMENDATIONS_PRODUCTS, string>;
 
   // response actions
   export const RECEIVE_MORE_REFINEMENTS = 'RECEIVE_MORE_REFINEMENTS';
@@ -70,7 +72,7 @@ namespace Actions {
   export const RECEIVE_MORE_PRODUCTS = 'RECEIVE_MORE_PRODUCTS';
   export type ReceiveMoreProducts = Action<typeof RECEIVE_MORE_PRODUCTS, Store.Product[]>;
   export const RECEIVE_AUTOCOMPLETE_SUGGESTIONS = 'RECEIVE_AUTOCOMPLETE_SUGGESTIONS';
-  // tslint:disable-next-line
+  // tslint:disable-next-line max-line-length
   export type ReceiveAutocompleteSuggestions = Action<typeof RECEIVE_AUTOCOMPLETE_SUGGESTIONS, Payload.Autocomplete.Suggestions>;
   export const RECEIVE_AUTOCOMPLETE_PRODUCTS = 'RECEIVE_AUTOCOMPLETE_PRODUCTS';
   export type ReceiveAutocompleteProducts = Action<typeof RECEIVE_AUTOCOMPLETE_PRODUCTS, Store.Product[]>;
@@ -92,12 +94,18 @@ namespace Actions {
   export type ReceiveTemplate = Action<typeof RECEIVE_TEMPLATE, Store.Template>;
   export const RECEIVE_REDIRECT = 'RECEIVE_REDIRECT';
   export type ReceiveRedirect = Action<typeof RECEIVE_REDIRECT, string>;
+  export const RECEIVE_RECOMMENDATIONS_PRODUCTS = 'RECEIVE_RECOMMENDATIONS_PRODUCTS';
+  export type ReceiveRecommendationsProducts = Action<typeof RECEIVE_RECOMMENDATIONS_PRODUCTS, Store.Product[]>;
 
   // ui
   export const CREATE_COMPONENT_STATE = 'CREATE_COMPONENT_STATE';
   export type CreateComponentState = Action<typeof CREATE_COMPONENT_STATE, Payload.Component.State>;
   export const REMOVE_COMPONENT_STATE = 'REMOVE_COMPONENT_STATE';
   export type RemoveComponentState = Action<typeof REMOVE_COMPONENT_STATE, Payload.Component.Identifier>;
+
+  // session
+  export const UPDATE_LOCATION = 'UPDATE_LOCATION';
+  export type UpdateLocation = Action<typeof UPDATE_LOCATION, Store.Geolocation>;
 
   // app
   export const START_APP = 'START_APP';
@@ -146,7 +154,7 @@ namespace Actions {
 
     export namespace Autocomplete {
       export interface Suggestions {
-        suggestions: string[];
+        suggestions: Store.Autocomplete.Suggestion[];
         categoryValues: string[];
         navigations: Store.Autocomplete.Navigation[];
       }

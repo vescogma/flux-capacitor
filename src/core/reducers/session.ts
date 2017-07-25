@@ -4,19 +4,28 @@ import Store from '../store';
 export type Action = Actions.Action<string, any, Actions.Metadata>;
 export type State = Store.Session;
 
-export default function updateSession(state: State = {}, { meta = <Actions.Metadata>{} }: Action): State {
-  if ('recallId' in meta) {
-    state = updateRecallId(state, meta);
-  }
-  if ('searchId' in meta) {
-    state = updateSearchId(state, meta);
-  }
-  if ('tag' in meta) {
-    state = updateOrigin(state, meta);
-  }
+// tslint:disable-next-line max-line-length
+export default function updateSession(state: State = {}, { type, payload, meta = <Actions.Metadata>{} }: Action): State {
+  switch (type) {
+    case Actions.UPDATE_LOCATION: return updateLocation(state, payload);
+    default: {
+      if ('recallId' in meta) {
+        state = updateRecallId(state, meta);
+      }
+      if ('searchId' in meta) {
+        state = updateSearchId(state, meta);
+      }
+      if ('tag' in meta) {
+        state = updateOrigin(state, meta);
+      }
 
-  return state;
+      return state;
+    }
+  }
 }
+
+export const updateLocation = (state: State, location: Store.Geolocation) =>
+  ({ ...state, location });
 
 export const updateRecallId = (state: State, { recallId }: Actions.Metadata) =>
   ({ ...state, recallId });

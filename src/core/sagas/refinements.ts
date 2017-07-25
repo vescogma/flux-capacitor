@@ -2,7 +2,7 @@ import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import Adapter from '../adapters/refinements';
-import Selectors from '../selectors';
+import Requests from '../requests';
 import Store from '../store';
 import * as utils from '../utils';
 
@@ -12,7 +12,7 @@ export namespace Tasks {
       const state: Store.State = yield effects.select();
       const res = yield effects.call(
         [flux.clients.bridge, flux.clients.bridge.refinements],
-        Selectors.searchRequest(state, flux.config),
+        Requests.search(state, flux.config),
         action.payload
       );
       const { navigationId, refinements, selected } = Adapter.mergeRefinements(res, state);

@@ -73,6 +73,8 @@ namespace Store {
 
     details: Details; // mixed
 
+    recommendations: Recommendations; // mixed
+
     recordCount: number; // post
 
     redirect?: string; // post
@@ -161,6 +163,7 @@ namespace Store {
   export interface Session {
     recallId?: string;
     searchId?: string;
+    location?: Geolocation;
     origin?: Actions.Metadata.Tag;
   }
 
@@ -212,6 +215,10 @@ namespace Store {
     product?: Product; // post
   }
 
+  export interface Recommendations {
+    products: Product[];
+  }
+
   export interface Product {
     id: string; // post
     [key: string]: any; // post
@@ -248,7 +255,7 @@ namespace Store {
 
   export interface Autocomplete {
     query?: string; // pre
-    suggestions: string[]; // post
+    suggestions: Autocomplete.Suggestion[]; // post
     category: Autocomplete.Category; // static & post
     navigations: Autocomplete.Navigation[]; // post
     products: Product[]; // post
@@ -263,6 +270,11 @@ namespace Store {
     export interface Navigation {
       field: string;
       refinements: string[];
+    }
+
+    export interface Suggestion {
+      value: string;
+      trending?: boolean;
     }
   }
 
@@ -280,6 +292,11 @@ namespace Store {
     export interface Selectable<T> extends Indexed<T> {
       selected?: string;
     }
+  }
+
+  export interface Geolocation {
+    latitude: number;
+    longitude: number;
   }
 }
 

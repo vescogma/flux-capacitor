@@ -2,14 +2,14 @@ import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import * as Events from '../events';
-import Selectors from '../selectors';
+import Requests from '../requests';
 import Store from '../store';
 import * as utils from '../utils';
 
 export namespace Tasks {
   export function* fetchProductDetails(flux: FluxCapacitor, { payload: id }: Actions.FetchProductDetails) {
     try {
-      const request = yield effects.select(Selectors.searchRequest, flux.config);
+      const request = yield effects.select(Requests.search, flux.config);
       const { records } = yield effects.call(
         [flux.clients.bridge, flux.clients.bridge.search],
         {

@@ -2,6 +2,7 @@ import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import * as Events from '../events';
+import Requests from '../requests';
 import Selectors from '../selectors';
 import Store from '../store';
 import * as utils from '../utils';
@@ -9,7 +10,7 @@ import * as utils from '../utils';
 export namespace Tasks {
   export function* fetchProducts(flux: FluxCapacitor, action: Actions.FetchProducts) {
     try {
-      const request = yield effects.select(Selectors.searchRequest, flux.config);
+      const request = yield effects.select(Requests.search, flux.config);
       const res = yield effects.call([flux.clients.bridge, flux.clients.bridge.search], request);
 
       if (res.redirect) {
@@ -30,7 +31,7 @@ export namespace Tasks {
       const { records: products, id } = yield effects.call(
         [flux.clients.bridge, flux.clients.bridge.search],
         {
-          ...Selectors.searchRequest(state, flux.config),
+          ...Requests.search(state, flux.config),
           pageSize: action.payload,
           skip: Selectors.products(state).length
         }

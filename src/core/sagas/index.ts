@@ -4,6 +4,7 @@ import autocomplete from './autocomplete';
 import collection from './collection';
 import productDetails from './product-details';
 import products from './products';
+import recommendations from './recommendations';
 import refinements from './refinements';
 
 export type SagaCreator = (flux: FluxCapacitor) => () => IterableIterator<ForkEffect>;
@@ -13,6 +14,7 @@ export const SAGA_CREATORS = [
   collection,
   productDetails,
   products,
+  recommendations,
   refinements
 ];
 

@@ -168,9 +168,15 @@ suite('Observer', ({ expect, spy, stub }) => {
   describe('create()', () => {
     it('should return an observer tree', () => {
       const observers = Observer.create(<any>{});
-      const present = observers.data.present;
+      const { ui, isRunning, session, data: { present } } = observers;
 
       expect(observers).to.be.an('object');
+      expect(isRunning).to.be.a('function');
+      expect(ui).to.be.a('function');
+      expect(session).to.be.an('object');
+      expect(session.location).to.be.a('function');
+      expect(session.searchId).to.be.a('function');
+      expect(session.recallId).to.be.a('function');
       expect(present).to.be.an('object');
       expect(present.autocomplete).to.be.a('function');
       expect(present.collections).to.be.an('object');
@@ -190,6 +196,8 @@ suite('Observer', ({ expect, spy, stub }) => {
       expect(present.query.original).to.be.a('function');
       expect(present.query.related).to.be.a('function');
       expect(present.query.rewrites).to.be.a('function');
+      expect(present.recommendations).to.be.an('object');
+      expect(present.recommendations.products).to.be.a('function');
       expect(present.redirect).to.be.a('function');
       expect(present.sorts).to.be.a('function');
       expect(present.template).to.be.a('function');
@@ -391,7 +399,15 @@ suite('Observer', ({ expect, spy, stub }) => {
         });
       });
 
-      describe('reditect', () => {
+      describe('recommendations', () => {
+        it('should emit RECOMMENDATIONS_PRODUCTS_UPDATED event', () => {
+          observers.data.present.recommendations.products(undefined, OBJ);
+
+          expect(emit).to.be.calledWith(Events.RECOMMENDATIONS_PRODUCTS_UPDATED, OBJ);
+        });
+      });
+
+      describe('redirect', () => {
         it('should emit REDIRECT event', () => {
           observers.data.present.redirect(undefined, OBJ);
 
@@ -435,6 +451,41 @@ suite('Observer', ({ expect, spy, stub }) => {
         observers.isRunning(true, false);
 
         expect(emit).to.be.calledWith(Events.APP_KILLED, false);
+      });
+    });
+  });
+
+  describe('session', () => {
+    const OBJ = { a: 'b' };
+    let emit;
+    let observers;
+
+    beforeEach(() => {
+      emit = spy();
+      observers = Observer.create(<any>{ emit });
+    });
+
+    describe('recallId', () => {
+      it('should emit RECALL_CHANGED event', () => {
+        observers.session.recallId(undefined, OBJ);
+
+        expect(emit).to.be.calledWith(Events.RECALL_CHANGED, OBJ);
+      });
+    });
+
+    describe('searchId', () => {
+      it('should emit SORTS_UPDATED event', () => {
+        observers.session.searchId(undefined, OBJ);
+
+        expect(emit).to.be.calledWith(Events.SEARCH_CHANGED, OBJ);
+      });
+    });
+
+    describe('location', () => {
+      it('should emit LOCATION_UPDATED event', () => {
+        observers.session.location(undefined, OBJ);
+
+        expect(emit).to.be.calledWith(Events.LOCATION_UPDATED, OBJ);
       });
     });
   });

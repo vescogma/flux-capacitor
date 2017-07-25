@@ -101,6 +101,12 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         expectAction(() => actions.fetchProductDetails(id), Actions.FETCH_PRODUCT_DETAILS, id);
       });
     });
+
+    describe('fetchRecommendationsProducts()', () => {
+      it('should return an action', () => {
+        expectAction(() => actions.fetchRecommendationsProducts(), Actions.FETCH_RECOMMENDATIONS_PRODUCTS, null);
+      });
+    });
   });
 
   describe('request action creators', () => {
@@ -399,228 +405,247 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         });
       });
     });
+  });
 
-    describe('response action creators', () => {
-      describe('receiveProducts()', () => {
-        it('should return a batch action', () => {
-          const receiveQueryAction = { aa: 'bb' };
-          const receiveProductRecordsAction = { cc: 'dd' };
-          const receiveNavigationsAction = { ee: 'ff' };
-          const receiveRecordCountAction = { gg: 'hh' };
-          const receiveCollectionCountAction = { ii: 'jj' };
-          const receivePageAction = { kk: 'll' };
-          const receiveTemplateAction = { mm: 'nn' };
-          const results: any = {
-            records: ['a', 'b'],
-            template: { c: 'd' },
-          };
-          const query: any = { e: 'f' };
-          const state: any = { g: 'h' };
-          const action = { i: 'j' };
-          const navigations: any[] = ['k', 'l'];
-          const page: any = { m: 'n' };
-          const template: any = { o: 'p' };
-          const recordCount = 24;
-          const collection = 'myProducts';
-          const createAction = stub(utils, 'action').returns(action);
-          const extractQuery = stub(SearchAdapter, 'extractQuery').returns(query);
-          const combineNavigations = stub(SearchAdapter, 'combineNavigations').returns(navigations);
-          const extractProduct = stub(SearchAdapter, 'extractProduct').returns('x');
-          const extractPage = stub(SearchAdapter, 'extractPage').returns(page);
-          const extractTemplate = stub(SearchAdapter, 'extractTemplate').returns(template);
-          const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(recordCount);
-          const selectCollection = stub(Selectors, 'collection').returns(collection);
-          const receiveQuery = actions.receiveQuery = spy(() => receiveQueryAction);
-          const receiveProductRecords = actions.receiveProductRecords = spy(() => receiveProductRecordsAction);
-          const receiveNavigations = actions.receiveNavigations = spy(() => receiveNavigationsAction);
-          const receiveRecordCount = actions.receiveRecordCount = spy(() => receiveRecordCountAction);
-          const receiveCollectionCount = actions.receiveCollectionCount = spy(() => receiveCollectionCountAction);
-          const receivePage = actions.receivePage = spy(() => receivePageAction);
-          const receiveTemplate = actions.receiveTemplate = spy(() => receiveTemplateAction);
-          flux.store = { getState: () => state };
+  describe('response action creators', () => {
+    describe('receiveProducts()', () => {
+      it('should return a batch action', () => {
+        const receiveQueryAction = { aa: 'bb' };
+        const receiveProductRecordsAction = { cc: 'dd' };
+        const receiveNavigationsAction = { ee: 'ff' };
+        const receiveRecordCountAction = { gg: 'hh' };
+        const receiveCollectionCountAction = { ii: 'jj' };
+        const receivePageAction = { kk: 'll' };
+        const receiveTemplateAction = { mm: 'nn' };
+        const results: any = {
+          records: ['a', 'b'],
+          template: { c: 'd' },
+        };
+        const query: any = { e: 'f' };
+        const state: any = { g: 'h' };
+        const action = { i: 'j' };
+        const navigations: any[] = ['k', 'l'];
+        const page: any = { m: 'n' };
+        const template: any = { o: 'p' };
+        const recordCount = 24;
+        const collection = 'myProducts';
+        const createAction = stub(utils, 'action').returns(action);
+        const extractQuery = stub(SearchAdapter, 'extractQuery').returns(query);
+        const combineNavigations = stub(SearchAdapter, 'combineNavigations').returns(navigations);
+        const extractProduct = stub(SearchAdapter, 'extractProduct').returns('x');
+        const extractPage = stub(SearchAdapter, 'extractPage').returns(page);
+        const extractTemplate = stub(SearchAdapter, 'extractTemplate').returns(template);
+        const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(recordCount);
+        const selectCollection = stub(Selectors, 'collection').returns(collection);
+        const receiveQuery = actions.receiveQuery = spy(() => receiveQueryAction);
+        const receiveProductRecords = actions.receiveProductRecords = spy(() => receiveProductRecordsAction);
+        const receiveNavigations = actions.receiveNavigations = spy(() => receiveNavigationsAction);
+        const receiveRecordCount = actions.receiveRecordCount = spy(() => receiveRecordCountAction);
+        const receiveCollectionCount = actions.receiveCollectionCount = spy(() => receiveCollectionCountAction);
+        const receivePage = actions.receivePage = spy(() => receivePageAction);
+        const receiveTemplate = actions.receiveTemplate = spy(() => receiveTemplateAction);
+        flux.store = { getState: () => state };
 
-          const batchAction = actions.receiveProducts(results);
+        const batchAction = actions.receiveProducts(results);
 
-          expect(createAction).to.be.calledWith(Actions.RECEIVE_PRODUCTS, results);
-          expect(receiveQuery).to.be.calledWith(query);
-          expect(receiveProductRecords).to.be.calledWith(['x', 'x']);
-          expect(receiveNavigations).to.be.calledWith(navigations);
-          expect(receiveRecordCount).to.be.calledWith(recordCount);
-          expect(receiveTemplate).to.be.calledWith(template);
-          expect(receiveCollectionCount).to.be.calledWith({ collection, count: recordCount });
-          expect(receivePage).to.be.calledWith(page);
-          expect(extractRecordCount).to.be.calledWith(results);
-          expect(extractQuery).to.be.calledWith(results);
-          expect(extractProduct).to.be.calledWith('a')
-            .and.calledWith('b');
-          expect(combineNavigations).to.be.calledWith(results);
-          expect(selectCollection).to.be.calledWith(state);
-          expect(extractPage).to.be.calledWith(state);
-          expect(extractTemplate).to.be.calledWith(results.template);
-          expect(batchAction).to.eql([
-            action,
-            receiveQueryAction,
-            receiveProductRecordsAction,
-            receiveNavigationsAction,
-            receiveRecordCountAction,
-            receiveCollectionCountAction,
-            receivePageAction,
-            receiveTemplateAction
-          ]);
-        });
-
-        it('should return an action', () => {
-          const results: any = {
-            records: ['a', 'b'],
-            template: { c: 'd' },
-          };
-          const action = { e: 'f', error: true };
-          const createAction = stub(utils, 'action').returns(action);
-
-          const batchAction = actions.receiveProducts(results);
-
-          expect(createAction).to.be.calledWith(Actions.RECEIVE_PRODUCTS, results);
-          expect(batchAction).to.eql(action);
-        });
+        expect(createAction).to.be.calledWith(Actions.RECEIVE_PRODUCTS, results);
+        expect(receiveQuery).to.be.calledWith(query);
+        expect(receiveProductRecords).to.be.calledWith(['x', 'x']);
+        expect(receiveNavigations).to.be.calledWith(navigations);
+        expect(receiveRecordCount).to.be.calledWith(recordCount);
+        expect(receiveTemplate).to.be.calledWith(template);
+        expect(receiveCollectionCount).to.be.calledWith({ collection, count: recordCount });
+        expect(receivePage).to.be.calledWith(page);
+        expect(extractRecordCount).to.be.calledWith(results);
+        expect(extractQuery).to.be.calledWith(results);
+        expect(extractProduct).to.be.calledWith('a')
+          .and.calledWith('b');
+        expect(combineNavigations).to.be.calledWith(results);
+        expect(selectCollection).to.be.calledWith(state);
+        expect(extractPage).to.be.calledWith(state);
+        expect(extractTemplate).to.be.calledWith(results.template);
+        expect(batchAction).to.eql([
+          action,
+          receiveQueryAction,
+          receiveProductRecordsAction,
+          receiveNavigationsAction,
+          receiveRecordCountAction,
+          receiveCollectionCountAction,
+          receivePageAction,
+          receiveTemplateAction
+        ]);
       });
 
-      describe('receiveQuery()', () => {
-        it('should return an action', () => {
-          const query: any = { a: 'b' };
+      it('should return an action', () => {
+        const results: any = {
+          records: ['a', 'b'],
+          template: { c: 'd' },
+        };
+        const action = { e: 'f', error: true };
+        const createAction = stub(utils, 'action').returns(action);
 
-          expectAction(() => actions.receiveQuery(query), Actions.RECEIVE_QUERY, query);
+        const batchAction = actions.receiveProducts(results);
+
+        expect(createAction).to.be.calledWith(Actions.RECEIVE_PRODUCTS, results);
+        expect(batchAction).to.eql(action);
+      });
+    });
+
+    describe('receiveQuery()', () => {
+      it('should return an action', () => {
+        const query: any = { a: 'b' };
+
+        expectAction(() => actions.receiveQuery(query), Actions.RECEIVE_QUERY, query);
+      });
+    });
+
+    describe('receiveProductRecords()', () => {
+      it('should return an action', () => {
+        const products: any = ['a', 'b'];
+
+        expectAction(() => actions.receiveProductRecords(products), Actions.RECEIVE_PRODUCT_RECORDS, products);
+      });
+    });
+
+    describe('receiveCollectionCount()', () => {
+      it('should return an action', () => {
+        const count = {
+          collection: 'products',
+          count: 10
+        };
+
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.receiveCollectionCount(count), Actions.RECEIVE_COLLECTION_COUNT, count);
+      });
+    });
+
+    describe('receiveNavigations()', () => {
+      it('should return an action', () => {
+        const navigations: any[] = ['a', 'b'];
+
+        expectAction(() => actions.receiveNavigations(navigations), Actions.RECEIVE_NAVIGATIONS, navigations);
+      });
+    });
+
+    describe('receivePage()', () => {
+      it('should return an action', () => {
+        const page: any = { a: 'b' };
+
+        expectAction(() => actions.receivePage(page), Actions.RECEIVE_PAGE, page);
+      });
+    });
+
+    describe('receiveTemplate()', () => {
+      it('should return an action', () => {
+        const template: any = { a: 'b' };
+
+        expectAction(() => actions.receiveTemplate(template), Actions.RECEIVE_TEMPLATE, template);
+      });
+    });
+
+    describe('receiveRecordCount()', () => {
+      it('should return an action', () => {
+        const recordCount = 49;
+
+        expectAction(() => actions.receiveRecordCount(recordCount), Actions.RECEIVE_RECORD_COUNT, recordCount);
+      });
+    });
+
+    describe('receiveRedirect()', () => {
+      it('should return an action', () => {
+        const redirect = 'page.html';
+
+        expectAction(() => actions.receiveRedirect(redirect), Actions.RECEIVE_REDIRECT, redirect);
+      });
+    });
+
+    describe('receiveMoreRefinements()', () => {
+      it('should return an action', () => {
+        const navigationId = 'brand';
+        const refinements: any[] = ['a', 'b'];
+        const selected = [1, 7];
+
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.receiveMoreRefinements(navigationId, refinements, selected), Actions.RECEIVE_MORE_REFINEMENTS, {
+          navigationId,
+          refinements,
+          selected
         });
       });
+    });
 
-      describe('receiveProductRecords()', () => {
-        it('should return an action', () => {
-          const products: any = ['a', 'b'];
+    describe('receiveAutocompleteSuggestions()', () => {
+      it('should return an action', () => {
+        const suggestions: any = { a: 'b' };
 
-          expectAction(() => actions.receiveProductRecords(products), Actions.RECEIVE_PRODUCT_RECORDS, products);
-        });
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.receiveAutocompleteSuggestions(suggestions), Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS, suggestions);
       });
+    });
 
-      describe('receiveCollectionCount()', () => {
-        it('should return an action', () => {
-          const count = {
-            collection: 'products',
-            count: 10
-          };
+    describe('receiveMoreProducts()', () => {
+      it('should return an action', () => {
+        const products: any[] = ['a', 'b'];
 
-          // tslint:disable-next-line max-line-length
-          expectAction(() => actions.receiveCollectionCount(count), Actions.RECEIVE_COLLECTION_COUNT, count);
-        });
+        expectAction(() => actions.receiveMoreProducts(products), Actions.RECEIVE_MORE_PRODUCTS, products);
       });
+    });
 
-      describe('receiveNavigations()', () => {
-        it('should return an action', () => {
-          const navigations: any[] = ['a', 'b'];
+    describe('receiveAutocompleteProducts()', () => {
+      it('should return an action', () => {
+        const products: any[] = ['a', 'b'];
 
-          expectAction(() => actions.receiveNavigations(navigations), Actions.RECEIVE_NAVIGATIONS, navigations);
-        });
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.receiveAutocompleteProducts(products), Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, products);
       });
+    });
 
-      describe('receivePage()', () => {
-        it('should return an action', () => {
-          const page: any = { a: 'b' };
+    describe('receiveDetailsProduct()', () => {
+      it('should return an action', () => {
+        const product: any = { a: 'b' };
 
-          expectAction(() => actions.receivePage(page), Actions.RECEIVE_PAGE, page);
-        });
+        expectAction(() => actions.receiveDetailsProduct(product), Actions.RECEIVE_DETAILS_PRODUCT, product);
       });
+    });
 
-      describe('receiveTemplate()', () => {
-        it('should return an action', () => {
-          const template: any = { a: 'b' };
+    describe('receiveRecommendationsProducts()', () => {
+      it('should return an action', () => {
+        const products: any[] = ['a', 'b', 'c'];
 
-          expectAction(() => actions.receiveTemplate(template), Actions.RECEIVE_TEMPLATE, template);
-        });
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.receiveRecommendationsProducts(products), Actions.RECEIVE_RECOMMENDATIONS_PRODUCTS, products);
       });
+    });
+  });
 
-      describe('receiveRecordCount()', () => {
-        it('should return an action', () => {
-          const recordCount = 49;
+  describe('ui action creators', () => {
+    describe('createComponentState()', () => {
+      it('should return an action', () => {
+        const tagName = 'my-tag';
+        const id = '123';
+        const state = { a: 'b' };
 
-          expectAction(() => actions.receiveRecordCount(recordCount), Actions.RECEIVE_RECORD_COUNT, recordCount);
-        });
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.createComponentState(tagName, id, state), Actions.CREATE_COMPONENT_STATE, { tagName, id, state });
       });
+    });
 
-      describe('receiveRedirect()', () => {
-        it('should return an action', () => {
-          const redirect = 'page.html';
+    describe('removeComponentState()', () => {
+      it('should create a CREATE_COMPONENT_STATE action', () => {
+        const tagName = 'my-tag';
+        const id = '123';
 
-          expectAction(() => actions.receiveRedirect(redirect), Actions.RECEIVE_REDIRECT, redirect);
-        });
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.removeComponentState(tagName, id), Actions.REMOVE_COMPONENT_STATE, { tagName, id });
       });
+    });
+  });
 
-      describe('receiveMoreRefinements()', () => {
-        it('should return an action', () => {
-          const navigationId = 'brand';
-          const refinements: any[] = ['a', 'b'];
-          const selected = [1, 7];
+  describe('updateLocation()', () => {
+    it('should return an action', () => {
+      const location: any = { a: 'b' };
 
-          // tslint:disable-next-line max-line-length
-          expectAction(() => actions.receiveMoreRefinements(navigationId, refinements, selected), Actions.RECEIVE_MORE_REFINEMENTS, {
-            navigationId,
-            refinements,
-            selected
-          });
-        });
-      });
-
-      describe('receiveAutocompleteSuggestions()', () => {
-        it('should return an action', () => {
-          const suggestions: any = { a: 'b' };
-
-          // tslint:disable-next-line max-line-length
-          expectAction(() => actions.receiveAutocompleteSuggestions(suggestions), Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS, suggestions);
-        });
-      });
-
-      describe('receiveMoreProducts()', () => {
-        it('should return an action', () => {
-          const products: any[] = ['a', 'b'];
-
-          expectAction(() => actions.receiveMoreProducts(products), Actions.RECEIVE_MORE_PRODUCTS, products);
-        });
-      });
-
-      describe('receiveAutocompleteProducts()', () => {
-        it('should return an action', () => {
-          const products: any[] = ['a', 'b'];
-
-          // tslint:disable-next-line max-line-length
-          expectAction(() => actions.receiveAutocompleteProducts(products), Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, products);
-        });
-      });
-
-      describe('receiveDetailsProduct()', () => {
-        it('should return an action', () => {
-          const product: any = { a: 'b' };
-
-          expectAction(() => actions.receiveDetailsProduct(product), Actions.RECEIVE_DETAILS_PRODUCT, product);
-        });
-      });
-
-      describe('createComponentState()', () => {
-        it('should return an action', () => {
-          const tagName = 'my-tag';
-          const id = '123';
-          const state = { a: 'b' };
-
-          // tslint:disable-next-line max-line-length
-          expectAction(() => actions.createComponentState(tagName, id, state), Actions.CREATE_COMPONENT_STATE, { tagName, id, state });
-        });
-      });
-
-      describe('removeComponentState()', () => {
-        it('should create a CREATE_COMPONENT_STATE action', () => {
-          const tagName = 'my-tag';
-          const id = '123';
-
-          // tslint:disable-next-line max-line-length
-          expectAction(() => actions.removeComponentState(tagName, id), Actions.REMOVE_COMPONENT_STATE, { tagName, id });
-        });
-      });
+      expectAction(() => actions.updateLocation(location), Actions.UPDATE_LOCATION, location);
     });
   });
 

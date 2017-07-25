@@ -7,11 +7,11 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
 
   describe('extractSuggestions()', () => {
     it('should remap search term values', () => {
-      const response = { result: { searchTerms: [{ value: 'a' }, { value: 'b' }] } };
+      const response = { result: { searchTerms: [{ value: 'a' }, { value: 'b', test: 'ignore me' }] } };
 
       const { suggestions } = Adapter.extractSuggestions(response, '');
 
-      expect(suggestions).to.eql(['a', 'b']);
+      expect(suggestions).to.eql([{ value: 'a'}, { value: 'b'}]);
     });
 
     it('should extract category values', () => {
@@ -117,6 +117,15 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
       expect(Adapter.extractLanguage(config)).to.eq(language);
 
       expect(extractLanguage).to.be.calledWith(config);
+    });
+  });
+
+  describe('mergeSuggestions()', () => {
+    it('should return an array of recommendations and suggestions', () => {
+      const suggestions = [{ value: 'a' }, { value: 'b' }];
+      const recommendations = <any>{ result: [{ query: 'test' }, { query: 'idk' }] };
+      const result = [{ value: 'test', trending: true }, { value: 'idk', trending: true }, ...suggestions];
+      expect(Adapter.mergeSuggestions(suggestions, recommendations)).to.eql(result);
     });
   });
 });

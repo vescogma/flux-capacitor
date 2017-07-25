@@ -2,21 +2,70 @@ import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import Adapter from '../adapters/autocomplete';
+import RecommendationsAdapter from '../adapters/recommendations';
+import Configuration from '../configuration';
+import Requests from '../requests';
 import Selectors from '../selectors';
 import Store from '../store';
+import { fetch } from '../utils';
 
 export namespace Tasks {
+  // tslint:disable-next-line max-line-length
   export function* fetchSuggestions(flux: FluxCapacitor, { payload: query }: Actions.FetchAutocompleteSuggestions) {
     try {
-      const field = yield effects.select(Selectors.autocompleteCategoryField);
-      const res = yield effects.call(
+      const state = yield effects.select();
+      const field = Selectors.autocompleteCategoryField(state);
+      const location = Selectors.location(state);
+      const suggestionsRequest = effects.call(
         [flux.clients.sayt, flux.clients.sayt.autocomplete],
         query,
-        Selectors.autocompleteSuggestionsRequest(flux.config)
+        Requests.autocompleteSuggestions(flux.config)
       );
-      const suggestions = Adapter.extractSuggestions(res, field);
+      const config = flux.config.autocomplete.recommendations;
+      // fall back to default mode "popular" if not provided
+      // "popular" default will likely provide the most consistently strong data
+      const suggestionMode = Configuration.RECOMMENDATION_MODES[config.suggestionMode || 'popular'];
+      // tslint:disable-next-line max-line-length
+      const trendingUrl = `${RecommendationsAdapter.buildUrl(flux.config.customerId)}/searches/_get${suggestionMode}`;
+      const trendingBody: any = {
+        size: config.suggestionCount,
+        matchPartial: {
+          and: [{
+            search: { query }
+          }]
+        }
+      };
+      if (location) {
+        trendingBody.matchExact = {
+          and: [{
+            visit: {
+              generated: {
+                geo: {
+                  location: {
+                    distance: '100km',
+                    center: {
+                      lat: location.latitude,
+                      lon: location.longitude
+                    }
+                  }
+                }
+              }
+            }
+          }]
+        };
+      }
+      const trendingRequest = effects.call(fetch, trendingUrl, {
+        method: 'POST',
+        body: JSON.stringify(trendingBody)
+      });
+      const [results, trending] = yield effects.all([suggestionsRequest, trendingRequest]);
+      const autocompleteSuggestions = Adapter.extractSuggestions(results, field);
+      const trendingSuggestions = Adapter.mergeSuggestions(autocompleteSuggestions.suggestions, yield trending.json());
 
-      yield effects.put(flux.actions.receiveAutocompleteSuggestions(suggestions));
+      yield effects.put(flux.actions.receiveAutocompleteSuggestions({
+        ...autocompleteSuggestions,
+        suggestions: trendingSuggestions
+      }));
     } catch (e) {
       yield effects.put(flux.actions.receiveAutocompleteSuggestions(e));
     }
@@ -27,7 +76,7 @@ export namespace Tasks {
       const res = yield effects.call(
         [flux.clients.sayt, flux.clients.sayt.productSearch],
         action.payload,
-        Selectors.autocompleteProductsRequest(flux.config)
+        Requests.autocompleteProducts(flux.config)
       );
       const products = Adapter.extractProducts(res);
 

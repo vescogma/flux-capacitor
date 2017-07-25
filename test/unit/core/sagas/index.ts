@@ -3,6 +3,7 @@ import autocomplete from '../../../../src/core/sagas/autocomplete';
 import collection from '../../../../src/core/sagas/collection';
 import productDetails from '../../../../src/core/sagas/product-details';
 import products from '../../../../src/core/sagas/products';
+import recommendations from '../../../../src/core/sagas/recommendations';
 import refinements from '../../../../src/core/sagas/refinements';
 import suite from '../../_suite';
 
@@ -15,6 +16,7 @@ suite('sagas', ({ expect, spy, stub }) => {
         collection,
         productDetails,
         products,
+        recommendations,
         refinements
       ]);
     });

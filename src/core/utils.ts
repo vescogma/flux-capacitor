@@ -1,4 +1,7 @@
+import * as fetchPonyfill from 'fetch-ponyfill';
 import Actions from './actions';
+
+export const { fetch } = fetchPonyfill();
 
 // tslint:disable-next-line variable-name
 export const Routes = {

@@ -2,6 +2,7 @@ import * as effects from 'redux-saga/effects';
 import { ActionCreators } from 'redux-undo';
 import Actions from '../../../../src/core/actions';
 import * as Events from '../../../../src/core/events';
+import Requests from '../../../../src/core/requests';
 import sagaCreator, { Tasks } from '../../../../src/core/sagas/products';
 import Selectors from '../../../../src/core/selectors';
 import { Routes } from '../../../../src/core/utils';
@@ -41,7 +42,7 @@ suite('products saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchProducts(flux, action);
 
-        expect(task.next().value).to.eql(effects.select(Selectors.searchRequest, config));
+        expect(task.next().value).to.eql(effects.select(Requests.search, config));
         expect(task.next(request).value).to.eql(effects.call([bridge, search], request));
         expect(task.next(response).value).to.eql(effects.put(receiveProductsAction));
         expect(emit).to.be.calledWithExactly(Events.BEACON_SEARCH, id);
@@ -105,7 +106,7 @@ suite('products saga', ({ expect, spy, stub }) => {
         const records = ['g', 'h'];
         const results = { records, id };
         const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveMoreProducts } };
-        stub(Selectors, 'searchRequest').returns({ e: 'f' });
+        stub(Requests, 'search').returns({ e: 'f' });
         stub(Selectors, 'products').returns(['a', 'b', 'c']);
 
         const task = Tasks.fetchMoreProducts(flux, action);

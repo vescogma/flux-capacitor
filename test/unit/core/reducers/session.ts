@@ -1,4 +1,4 @@
-import { Store } from '../../../../src/core';
+import { Actions, Store } from '../../../../src/core';
 import session from '../../../../src/core/reducers/session';
 import suite from '../../_suite';
 
@@ -46,6 +46,18 @@ suite('session', ({ expect }) => {
       };
 
       const reducer = session(state, <any>{ meta: { tag: origin } });
+
+      expect(reducer).to.eql(newState);
+    });
+
+    it('should update state on UPDATE_LOCATION', () => {
+      const location = { a: 'b' };
+      const newState = {
+        ...state,
+        location
+      };
+
+      const reducer = session(state, <any>{ type: Actions.UPDATE_LOCATION, payload: location });
 
       expect(reducer).to.eql(newState);
     });
