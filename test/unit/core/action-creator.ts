@@ -105,11 +105,11 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
   describe('request action creators', () => {
     describe('updateSearch()', () => {
-      it('should return an action with validation', () => {
-        const search: any = { a: 'b' };
+      it('should return an action with validation if search contains query', () => {
+        const search: any = { a: 'b', query: 'q' };
 
         expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH,
-          { ...search, query: undefined },
+          search,
           (meta) => {
             expect(meta.validator.payload.func({})).to.be.false;
             expect(meta.validator.payload.func({ query: '' })).to.be.false;
@@ -118,11 +118,45 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
           });
       });
 
+      it('should return an action with validation if search does not contain query', () => {
+        const search: any = { a: 'b' };
+
+        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH,
+          search,
+          (meta) => {
+            expect(meta.validator.payload.func({})).to.be.true;
+            return expect(meta.validator.payload.func({ query: 'q' })).to.be.true;
+          });
+      });
+
       it('should trim query', () => {
         const search: any = { query: '  untrimmed \n \r  ' };
 
         expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH,
           { query: 'untrimmed' });
+      });
+    });
+
+    describe('addRefinement()', () => {
+      it('should update a value refinement when two parameters are provided', () => {
+        const updateSearch = actions.updateSearch = spy();
+        const navigationId = 'book';
+        const value = 'a';
+
+        actions.addRefinement(navigationId, value);
+
+        expect(updateSearch).to.be.calledWith({ navigationId, value });
+      });
+
+      it('should update a range refinement when three parameters are provided', () => {
+        const updateSearch = actions.updateSearch = spy();
+        const navigationId = 'book';
+        const low = 0;
+        const high = 1;
+
+        actions.addRefinement(navigationId, low, high);
+
+        expect(updateSearch).to.be.calledWith({ navigationId, low, high, range: true });
       });
     });
 

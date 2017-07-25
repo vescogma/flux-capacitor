@@ -18,8 +18,8 @@ export default function updateQuery(state: State = DEFAULTS, action: Action): St
   }
 }
 
-export const updateOriginal = (state: State, { query: original }: Actions.Payload.Search) =>
-  ({ ...state, original });
+export const updateOriginal = (state: State, payload: Actions.Payload.Search) =>
+  'query' in payload ? ({ ...state, original: payload.query }) : state;
 
 export const receiveQuery = (state: State, { corrected, didYouMean, related, rewrites }: Actions.Payload.Query) =>
   ({ ...state, corrected, didYouMean, related, rewrites });

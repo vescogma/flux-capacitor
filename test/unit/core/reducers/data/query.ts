@@ -13,7 +13,7 @@ suite('query', ({ expect }) => {
   };
 
   describe('updateQuery()', () => {
-    it('should update original state on UPDATE_SEARCH', () => {
+    it('should update original state on UPDATE_SEARCH if query is in payload', () => {
       const newOriginal = 'potatoes';
       const newState = {
         ...state,
@@ -23,6 +23,12 @@ suite('query', ({ expect }) => {
       const reducer = query(state, { type: Actions.UPDATE_SEARCH, payload: { query: newOriginal } });
 
       expect(reducer).to.eql(newState);
+    });
+
+    it('should update original state on UPDATE_SEARCH if query is not in payload', () => {
+      const reducer = query(state, { type: Actions.UPDATE_SEARCH, payload: {} });
+
+      expect(reducer).to.eql(state);
     });
 
     it('should update state on RECEIVE_QUERY', () => {

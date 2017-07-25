@@ -16,13 +16,7 @@ export const DEFAULTS: State = {
 
 export default function updateNavigations(state: State = DEFAULTS, action: Action) {
   switch (action.type) {
-    case Actions.UPDATE_SEARCH:
-      // TODO: add case for clear
-      if (action.payload.clear) {
-        return updateSearch(state, action.payload);
-      } else {
-        return state;
-      }
+    case Actions.UPDATE_SEARCH: return updateSearch(state, action.payload);
     case Actions.RECEIVE_NAVIGATIONS: return receiveNavigations(state, action.payload);
     case Actions.SELECT_REFINEMENT: return selectRefinement(state, action.payload);
     case Actions.DESELECT_REFINEMENT: return deselectRefinement(state, action.payload);
@@ -37,7 +31,7 @@ export const updateSearch = (state: State, payload: Actions.Payload.Search) => {
 
   if ('navigationId' in payload) {
     const navigationId = payload.navigationId;
-    if ('index' in payload) {
+    if ('index' in payload && payload.clear) {
       const refinementIndex = payload.index;
 
       return {
@@ -54,11 +48,13 @@ export const updateSearch = (state: State, payload: Actions.Payload.Search) => {
     } else {
       return addRefinement({ ...state, byId }, <Actions.Payload.Navigation.AddRefinement>payload);
     }
-  } else {
+  } else if (payload.clear) {
     return {
       ...state,
       byId,
     };
+  } else {
+    return state;
   }
 };
 

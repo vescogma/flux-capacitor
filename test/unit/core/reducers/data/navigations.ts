@@ -301,13 +301,36 @@ suite('navigations', ({ expect }) => {
       expect(reducer).to.eql(newState);
     });
 
-    it('should return state on UPDATE_SEARCH if no navigationId', () => {
+    it('should return state on UPDATE_SEARCH if no navigationId and payload clear is falsy', () => {
       const reducer = navigations(state, {
         type: Actions.UPDATE_SEARCH,
         payload: {}
       });
 
       expect(reducer).to.eql(state);
+    });
+
+    it('should return state on UPDATE_SEARCH if no navigationId and payload clear is truth', () => {
+      const newState = {
+        allIds,
+        byId: {
+          Section: {
+            ...Section,
+            selected: []
+          },
+          Format: {
+            ...Format,
+            selected: []
+          }
+        }
+      };
+
+      const reducer = navigations(state, {
+        type: Actions.UPDATE_SEARCH,
+        payload: { clear: true }
+      });
+
+      expect(reducer).to.eql(newState);
     });
 
     it('should remove selected refinement state on DESELECT_REFINEMENT', () => {
