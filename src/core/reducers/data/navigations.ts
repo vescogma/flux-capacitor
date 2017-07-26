@@ -26,33 +26,19 @@ export default function updateNavigations(state: State = DEFAULTS, action: Actio
 }
 
 export const updateSearch = (state: State, payload: Actions.Payload.Search) => {
-  const byId = state.allIds.reduce((navs, nav) =>
-    Object.assign(navs, { [nav]: { ...state.byId[nav], selected: [] } }), {});
+  if (payload.clear) {
+    const byId = state.allIds.reduce((navs, nav) =>
+      Object.assign(navs, { [nav]: { ...state.byId[nav], selected: [] } }), {});
+
+    state = { ...state, byId };
+  }
 
   if ('navigationId' in payload) {
-    const navigationId = payload.navigationId;
-    if ('index' in payload && payload.clear) {
-      const refinementIndex = payload.index;
-
-      return {
-        ...state,
-        byId: {
-          ...byId,
-          [navigationId]: {
-            ...state.byId[navigationId],
-            // TODO: maybe check if already there
-            selected: [refinementIndex],
-          },
-        },
-      };
+    if ('index' in payload) {
+      return addRefinementByIndex(state, payload);
     } else {
-      return addRefinement({ ...state, byId }, <Actions.Payload.Navigation.AddRefinement>payload);
+      return addRefinement(state, <Actions.Payload.Navigation.AddRefinement>payload);
     }
-  } else if (payload.clear) {
-    return {
-      ...state,
-      byId,
-    };
   } else {
     return state;
   }
@@ -78,7 +64,6 @@ export const selectRefinement = (state: State, { navigationId, index: refinement
         ...state.byId,
         [navigationId]: {
           ...state.byId[navigationId],
-          // TODO: maybe check if already there
           selected: state.byId[navigationId].selected.concat(refinementIndex),
         },
       },
@@ -104,6 +89,21 @@ export const deselectRefinement = (state: State, { navigationId, index: refineme
   } else {
     return state;
   }
+};
+
+// tslint:disable-next-line max-line-length
+export const addRefinementByIndex = (state: State, { navigationId, index: refinementIndex }: Actions.Payload.Search) => {
+
+  return {
+    ...state,
+    byId: {
+      ...state.byId,
+      [navigationId]: {
+        ...state.byId[navigationId],
+        selected: [refinementIndex],
+      },
+    },
+  };
 };
 
 // tslint:disable-next-line max-line-length

@@ -144,25 +144,29 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
     });
 
     describe('addRefinement()', () => {
+      const action = { a: 'b' };
+
       it('should update a value refinement when two parameters are provided', () => {
-        const updateSearch = actions.updateSearch = spy();
         const navigationId = 'book';
         const value = 'a';
+        const updateSearch = stub(actions, 'updateSearch').returns(action);
 
-        actions.addRefinement(navigationId, value);
+        const result = actions.addRefinement(navigationId, value);
 
-        expect(updateSearch).to.be.calledWith({ navigationId, value });
+        expect(result).to.be.eq(action);
+        expect(updateSearch).to.be.calledWithExactly({ navigationId, value });
       });
 
       it('should update a range refinement when three parameters are provided', () => {
-        const updateSearch = actions.updateSearch = spy();
         const navigationId = 'book';
         const low = 0;
         const high = 1;
+        const updateSearch = stub(actions, 'updateSearch').returns(action);
 
-        actions.addRefinement(navigationId, low, high);
+        const result = actions.addRefinement(navigationId, low, high);
 
-        expect(updateSearch).to.be.calledWith({ navigationId, low, high, range: true });
+        expect(result).to.be.eq(action);
+        expect(updateSearch).to.be.calledWithExactly({ navigationId, low, high, range: true });
       });
     });
 

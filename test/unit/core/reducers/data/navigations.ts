@@ -82,12 +82,10 @@ suite('navigations', ({ expect }) => {
         }
       });
 
-      // expect(reducer).to.eql(newState);
-      expect(reducer.byId).to.eql(newState.byId);
+      expect(reducer).to.eql(newState);
     });
 
     it('should return state if not clear on UPDATE_SEARCH', () => {
-
       const reducer = navigations(state, {
         type: Actions.UPDATE_SEARCH,
         payload: { clear: false }
@@ -209,14 +207,8 @@ suite('navigations', ({ expect }) => {
       const newState = {
         allIds: ['Format', 'Section', 'Brand'],
         byId: {
-          Format: {
-            ...Format,
-            selected: []
-          },
-          Section: {
-            ...Section,
-            selected: []
-          },
+          Format,
+          Section,
           Brand: {
             field: 'Brand',
             label: 'Brand',
@@ -233,8 +225,7 @@ suite('navigations', ({ expect }) => {
           navigationId: 'Brand',
           range: true,
           low: 23,
-          high: 34,
-          clear: true
+          high: 34
         }
       });
 
@@ -242,6 +233,33 @@ suite('navigations', ({ expect }) => {
     });
 
     it('should add refinement to existing navigation on UPDATE_SEARCH', () => {
+      const newState = {
+        allIds,
+        byId: {
+          Section,
+          Format: {
+            ...Format,
+            refinements: [
+              ...Format.refinements,
+              { value: 'eBook' }
+            ],
+            selected: [0, 2, 3]
+          }
+        }
+      };
+
+      const reducer = navigations(state, {
+        type: Actions.UPDATE_SEARCH,
+        payload: {
+          navigationId: 'Format',
+          value: 'eBook'
+        }
+      });
+
+      expect(reducer).to.eql(newState);
+    });
+
+    it('should add refinement and clear extisting refinements on UPDATE_SEARCH', () => {
       const newState = {
         allIds,
         byId: {
@@ -264,7 +282,6 @@ suite('navigations', ({ expect }) => {
         type: Actions.UPDATE_SEARCH,
         payload: {
           navigationId: 'Format',
-          range: false,
           value: 'eBook',
           clear: true
         }
@@ -277,13 +294,10 @@ suite('navigations', ({ expect }) => {
       const newState = {
         allIds,
         byId: {
-          Section: {
-            ...Section,
-            selected: []
-          },
+          Section,
           Format: {
             ...Format,
-            selected: [1]
+            selected: [0, 2, 1]
           }
         }
       };
@@ -293,8 +307,7 @@ suite('navigations', ({ expect }) => {
         payload: {
           navigationId: 'Format',
           range: false,
-          value: 'Paper',
-          clear: true
+          value: 'Paper'
         }
       });
 
