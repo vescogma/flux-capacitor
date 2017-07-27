@@ -26,11 +26,25 @@ export default function updateNavigations(state: State = DEFAULTS, action: Actio
 }
 
 export const updateSearch = (state: State, payload: Actions.Payload.Search) => {
-  if (payload.clear) {
-    const byId = state.allIds.reduce((navs, nav) =>
-      Object.assign(navs, { [nav]: { ...state.byId[nav], selected: [] } }), {});
+  if (payload.clear in state.byId) {
+    const navigationId = <string>payload.clear;
 
-    state = { ...state, byId };
+    state = {
+      ...state,
+      byId: {
+        ...state.byId,
+        [navigationId]: {
+          ...state.byId[navigationId],
+          selected: []
+        }
+      }
+    };
+  } else if (payload.clear) {
+    state = {
+      ...state,
+      byId: state.allIds.reduce((navs, nav) =>
+        Object.assign(navs, { [nav]: { ...state.byId[nav], selected: [] } }), {})
+    };
   }
 
   if ('navigationId' in payload) {

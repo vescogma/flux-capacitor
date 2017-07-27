@@ -290,6 +290,28 @@ suite('navigations', ({ expect }) => {
       expect(reducer).to.eql(newState);
     });
 
+    it('should only clear specified navigation on UPDATE_SEARCH', () => {
+      const newState = {
+        allIds,
+        byId: {
+          Section,
+          Format: {
+            ...Format,
+            selected: []
+          }
+        }
+      };
+
+      const reducer = navigations(state, {
+        type: Actions.UPDATE_SEARCH,
+        payload: {
+          clear: 'Format'
+        }
+      });
+
+      expect(reducer).to.eql(newState);
+    });
+
     it('should select existing refinement on UPDATE_SEARCH', () => {
       const newState = {
         allIds,

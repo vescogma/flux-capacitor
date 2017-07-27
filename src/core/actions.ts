@@ -149,7 +149,7 @@ namespace Actions {
        * if true, replace refinements with the provided ones
        * if false, add the provided refinements
        */
-      clear?: boolean;
+      clear?: boolean | string;
     }
 
     export namespace Autocomplete {

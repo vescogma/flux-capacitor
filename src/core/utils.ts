@@ -24,3 +24,16 @@ export const action = <P, T extends string, M extends Actions.Metadata | {} = {}
   }
   return builtAction;
 };
+
+export const refinementPayload = (field: string, valueOrLow: any, high: any = null) =>
+  typeof high === 'number' ?
+    {
+      navigationId: field,
+      low: valueOrLow,
+      high,
+      range: true
+    } :
+    {
+      navigationId: field,
+      value: valueOrLow
+    };

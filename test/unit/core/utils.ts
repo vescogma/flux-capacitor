@@ -45,4 +45,21 @@ suite('utils', ({ expect, spy }) => {
       expect(utils.action(ACTION, payload, meta)).to.eql({ type: ACTION, payload, meta, error: true });
     });
   });
+
+  describe('refinementPayload()', () => {
+    it('should create a value refinement payload', () => {
+      const navigationId = 'brand';
+      const value = 'arm and hammer';
+
+      expect(utils.refinementPayload(navigationId, value)).to.eql({ navigationId, value });
+    });
+
+    it('should create a range refinement payload', () => {
+      const navigationId = 'brand';
+      const low = 14;
+      const high = 49;
+
+      expect(utils.refinementPayload(navigationId, low, high)).to.eql({ navigationId, low, high, range: true });
+    });
+  });
 });

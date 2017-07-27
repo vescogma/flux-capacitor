@@ -4,7 +4,7 @@ import Actions from './actions';
 import SearchAdapter from './adapters/search';
 import Selectors from './selectors';
 import Store from './store';
-import { action } from './utils';
+import { action, refinementPayload } from './utils';
 
 export function createActions(flux: FluxCapacitor) {
 
@@ -54,21 +54,11 @@ export function createActions(flux: FluxCapacitor) {
             }
           }),
 
-      addRefinement: (field: string, valueOrLow: any, high: any = null) => {
-        if (typeof high === 'number') {
-          return actions.updateSearch({
-            navigationId: field,
-            low: valueOrLow,
-            high,
-            range: true
-          });
-        } else {
-          return actions.updateSearch({
-            navigationId: field,
-            value: valueOrLow
-          });
-        }
-      },
+      addRefinement: (field: string, valueOrLow: any, high: any = null) =>
+        actions.updateSearch(refinementPayload(field, valueOrLow, high)),
+
+      switchRefinement: (field: string, valueOrLow: any, high: any = null) =>
+        actions.updateSearch({ ...refinementPayload(field, valueOrLow, high), clear: field }),
 
       search: (query: string = Selectors.query(flux.store.getState())) =>
         actions.updateSearch({ query, clear: true }),
