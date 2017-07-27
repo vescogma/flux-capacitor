@@ -105,11 +105,11 @@ namespace Configuration {
     /**
      * default request values
      */
-    defaults?: Partial<Request>;
+    defaults?: Partial<Request> | ((request: Partial<Request>) => Partial<Request>);
     /**
      * override any computed request value
      */
-    overrides?: Partial<Request>;
+    overrides?: Partial<Request> | ((request: Partial<Request>) => Partial<Request>);
   }
 
   export interface Autocomplete {
@@ -162,15 +162,17 @@ namespace Configuration {
      * default request values
      */
     defaults?: {
-      suggestions?: QueryTimeAutocompleteConfig;
-      products?: QueryTimeProductSearchConfig;
+      // tslint:disable-next-line max-line-length
+      suggestions?: QueryTimeAutocompleteConfig | ((config: QueryTimeAutocompleteConfig) => QueryTimeAutocompleteConfig);
+      products?: QueryTimeProductSearchConfig | ((config: QueryTimeProductSearchConfig) => QueryTimeProductSearchConfig);
     };
     /**
      * override any computed request value
      */
     overrides?: {
-      suggestions?: QueryTimeAutocompleteConfig;
-      products?: QueryTimeProductSearchConfig;
+      // tslint:disable-next-line max-line-length
+      suggestions?: QueryTimeAutocompleteConfig | ((config: QueryTimeAutocompleteConfig) => QueryTimeAutocompleteConfig);
+      products?: QueryTimeProductSearchConfig | ((config: QueryTimeProductSearchConfig) => QueryTimeProductSearchConfig);
     };
   }
 

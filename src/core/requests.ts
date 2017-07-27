@@ -31,32 +31,33 @@ namespace Requests {
       request.sort = <any>Selectors.requestSort(sort);
     }
 
-    return <Request>{
-      ...config.search.defaults,
-      ...request,
-      ...config.search.overrides,
-    };
+    return <Request>Requests.chain(config.search.defaults, request, config.search.overrides);
   };
 
   export const autocompleteSuggestions = (config: AppConfig): QueryTimeAutocompleteConfig =>
-    ({
-      ...config.autocomplete.defaults.suggestions,
+    Requests.chain(config.autocomplete.defaults.suggestions, {
       language: Autocomplete.extractLanguage(config),
       numSearchTerms: Configuration.extractAutocompleteSuggestionCount(config),
       numNavigations: Configuration.extractAutocompleteNavigationCount(config),
       sortAlphabetically: Configuration.isAutocompleteAlphabeticallySorted(config),
-      fuzzyMatch: Configuration.isAutocompleteMatchingFuzzily(config),
-      ...config.autocomplete.overrides.suggestions,
-    });
+      fuzzyMatch: Configuration.isAutocompleteMatchingFuzzily(config)
+    }, config.autocomplete.overrides.suggestions);
 
   export const autocompleteProducts = (config: AppConfig): QueryTimeProductSearchConfig =>
-    ({
-      ...config.autocomplete.defaults.products,
+    Requests.chain(config.autocomplete.defaults.products, {
       language: Autocomplete.extractLanguage(config),
       area: Autocomplete.extractArea(config),
-      numProducts: Configuration.extractAutocompleteProductCount(config),
-      ...config.autocomplete.overrides.products,
-    });
+      numProducts: Configuration.extractAutocompleteProductCount(config)
+    }, config.autocomplete.overrides.products);
+
+  export const chain = (...objs: Array<object | ((obj: object) => object)>) =>
+    objs.reduce((final, obj) => {
+      if (typeof obj === 'function') {
+        return obj(final) || final;
+      } else {
+        return Object.assign(final, obj);
+      }
+    }, {});
 }
 
 export default Requests;

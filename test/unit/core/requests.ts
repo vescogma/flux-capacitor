@@ -89,6 +89,8 @@ suite('requests', ({ expect, stub }) => {
       const language = 'en';
       const suggestionCount = 31;
       const navigationCount = 3;
+      const defaults = { a: 'b' };
+      const overrides = { c: 'd' };
       const config: any = {
         autocomplete: {
           area,
@@ -97,62 +99,23 @@ suite('requests', ({ expect, stub }) => {
           navigationCount,
           alphabetical: true,
           fuzzy: true,
-          defaults: {},
-          overrides: {},
+          defaults: { suggestions: defaults },
+          overrides: { suggestions: overrides },
         }
       };
+      const chained = { e: 'f' };
+      const chain = stub(Requests, 'chain').returns(chained);
 
       const request = Requests.autocompleteSuggestions(config);
 
-      expect(request).to.eql({
+      expect(request).to.eql(chained);
+      expect(chain).to.be.calledWithExactly(defaults, {
         language,
         numSearchTerms: suggestionCount,
         numNavigations: navigationCount,
         sortAlphabetically: true,
         fuzzyMatch: true,
-      });
-    });
-
-    it('should apply overrides', () => {
-      const language = 'fr';
-      const config: any = {
-        autocomplete: {
-          language: 'en',
-          defaults: {},
-          overrides: { suggestions: { language } },
-        }
-      };
-
-      const request: any = Requests.autocompleteSuggestions(config);
-
-      expect(request.language).to.eq(language);
-    });
-
-    it('should apply defaults', () => {
-      const config: any = {
-        autocomplete: {
-          defaults: { suggestions: { c: 'd' } },
-          overrides: {},
-        }
-      };
-
-      const request: any = Requests.autocompleteSuggestions(config);
-
-      expect(request.c).to.eq('d');
-    });
-
-    it('should override defaults', () => {
-      const config: any = {
-        autocomplete: {
-          defaults: { suggestions: { c: 'd' } },
-          overrides: { suggestions: { a: 'b', c: 'd1' } },
-        }
-      };
-
-      const request: any = Requests.autocompleteSuggestions(config);
-
-      expect(request.a).to.eq('b');
-      expect(request.c).to.eq('d1');
+      }, overrides);
     });
   });
 
@@ -161,65 +124,38 @@ suite('requests', ({ expect, stub }) => {
       const area = 'myArea';
       const language = 'en';
       const productCount = 41;
+      const defaults = { a: 'b' };
+      const overrides = { c: 'd' };
       const config: any = {
         autocomplete: {
           area,
           language,
           productCount,
-          defaults: {},
-          overrides: {},
+          defaults: { products: defaults },
+          overrides: { products: overrides },
         }
       };
+      const chained = { e: 'f' };
+      const chain = stub(Requests, 'chain').returns(chained);
 
       const request = Requests.autocompleteProducts(config);
 
-      expect(request).to.eql({
+      expect(request).to.eql(chained);
+      expect(chain).to.be.calledWith(defaults, {
         area,
         language,
-        numProducts: productCount
-      });
+        numProducts: productCount,
+      }, overrides);
+    });
+  });
+
+  describe('chain()', () => {
+    it('should apply transformations and merge objects', () => {
+      expect(Requests.chain({ a: 'b' }, (x) => ({ ...x, c: 'd' }), { e: 'f' })).to.eql({ a: 'b', c: 'd', e: 'f' });
     });
 
-    it('should apply overrides', () => {
-      const language = 'fr';
-      const config: any = {
-        autocomplete: {
-          language: 'en',
-          defaults: {},
-          overrides: { products: { language } },
-        }
-      };
-
-      const request: any = Requests.autocompleteProducts(config);
-
-      expect(request.language).to.eq(language);
-    });
-
-    it('should apply defaults', () => {
-      const config: any = {
-        autocomplete: {
-          defaults: { products: { c: 'd' } },
-          overrides: {},
-        }
-      };
-
-      const request: any = Requests.autocompleteProducts(config);
-
-      expect(request.c).to.eq('d');
-    });
-
-    it('should override defaults', () => {
-      const config: any = {
-        autocomplete: {
-          defaults: { products: { c: 'd' } },
-          overrides: { products: { a: 'b', c: 'd1' } },
-        }
-      };
-
-      const request: any = Requests.autocompleteProducts(config);
-
-      expect(request.a).to.eq('b');
-      expect(request.c).to.eq('d1');
+    it('should merge source if tranformation returned falsey', () => {
+      expect(Requests.chain({ a: 'b' }, (x) => null, { e: 'f' })).to.eql({ a: 'b', e: 'f' });
     });
   });
 });
