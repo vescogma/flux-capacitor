@@ -80,6 +80,35 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         task.next();
       });
 
+      it('should skip trending if suggestionCount is 0', () => {
+        const autocomplete = () => null;
+        const sayt = { autocomplete };
+        const query = 'rain boots';
+        const field = 'popularity';
+        const customerId = 'myCustomer';
+        const recommendations = { suggestionCount: 0 };
+        const config = { a: 'b', customerId, autocomplete: { recommendations } };
+        const receiveAutocompleteSuggestionsAction: any = { c: 'd' };
+        const receiveAutocompleteSuggestions = spy(() => receiveAutocompleteSuggestionsAction);
+        const flux: any = { clients: { sayt }, actions: { receiveAutocompleteSuggestions }, config };
+        const suggestions = { e: 'f', suggestions: {} };
+        const request = { g: 'h' };
+        const response = { i: 'j' };
+        const state = { s: 't' };
+        stub(Requests, 'autocompleteSuggestions').returns(request);
+        stub(Selectors, 'location');
+        stub(Selectors, 'autocompleteCategoryField');
+        stub(Adapter, 'extractSuggestions').returns(suggestions);
+
+        const task = Tasks.fetchSuggestions(flux, <any>{ payload: query });
+
+        task.next();
+        expect(task.next(state).value).to.eql(effects.all([effects.call([sayt, autocomplete], query, request)]));
+        expect(task.next([response]).value).to.eql(effects.put(receiveAutocompleteSuggestionsAction));
+        expect(receiveAutocompleteSuggestions).to.be.calledWithExactly(suggestions);
+        task.next();
+      });
+
       it('should make request against specified endpoint', () => {
         const autocomplete = () => null;
         const sayt = { autocomplete };

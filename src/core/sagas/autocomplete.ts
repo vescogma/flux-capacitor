@@ -58,14 +58,21 @@ export namespace Tasks {
         method: 'POST',
         body: JSON.stringify(trendingBody)
       });
-      const [results, trending] = yield effects.all([suggestionsRequest, trendingRequest]);
-      const autocompleteSuggestions = Adapter.extractSuggestions(results, field);
-      const trendingSuggestions = Adapter.mergeSuggestions(autocompleteSuggestions.suggestions, yield trending.json());
+      const requests = [suggestionsRequest];
+      if (config.suggestionCount > 0) {
+        requests.push(trendingRequest);
+      }
 
-      yield effects.put(flux.actions.receiveAutocompleteSuggestions({
-        ...autocompleteSuggestions,
-        suggestions: trendingSuggestions
-      }));
+      const responses = yield effects.all(requests);
+      const autocompleteSuggestions = Adapter.extractSuggestions(responses[0], field);
+      const suggestions = config.suggestionCount > 0 ?
+        {
+          ...autocompleteSuggestions,
+          suggestions: Adapter.mergeSuggestions(autocompleteSuggestions.suggestions, yield responses[1].json())
+        } :
+        autocompleteSuggestions;
+
+      yield effects.put(flux.actions.receiveAutocompleteSuggestions(suggestions));
     } catch (e) {
       yield effects.put(flux.actions.receiveAutocompleteSuggestions(e));
     }
