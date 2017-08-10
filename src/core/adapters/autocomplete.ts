@@ -9,8 +9,14 @@ namespace Adapter {
   export const extractLanguage = (config: Configuration) =>
     Config.extractAutocompleteLanguage(config) || Config.extractLanguage(config);
 
+  export const extractProductLanguage = (config: Configuration) =>
+    Config.extractAutocompleteProductLanguage(config) || Adapter.extractLanguage(config);
+
   export const extractArea = (config: Configuration) =>
     Config.extractAutocompleteArea(config) || Config.extractArea(config);
+
+  export const extractProductArea = (config: Configuration) =>
+    Config.extractAutocompleteProductArea(config) || Adapter.extractArea(config);
 
   // tslint:disable-next-line max-line-length
   export const extractSuggestions = ({ result }: any, category: string): Actions.Payload.Autocomplete.Suggestions => {

@@ -451,10 +451,8 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const receiveCollectionCountAction = { ii: 'jj' };
         const receivePageAction = { kk: 'll' };
         const receiveTemplateAction = { mm: 'nn' };
-        const results: any = {
-          records: ['a', 'b'],
-          template: { c: 'd' },
-        };
+        const products = ['x', 'x'];
+        const results: any = { template: { c: 'd' } };
         const query: any = { e: 'f' };
         const state: any = { g: 'h' };
         const action = { i: 'j' };
@@ -466,10 +464,10 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const createAction = stub(utils, 'action').returns(action);
         const extractQuery = stub(SearchAdapter, 'extractQuery').returns(query);
         const combineNavigations = stub(SearchAdapter, 'combineNavigations').returns(navigations);
-        const extractProduct = stub(SearchAdapter, 'extractProduct').returns('x');
         const extractPage = stub(SearchAdapter, 'extractPage').returns(page);
         const extractTemplate = stub(SearchAdapter, 'extractTemplate').returns(template);
         const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(recordCount);
+        const extractProducts = stub(SearchAdapter, 'extractProducts').returns(products);
         const selectCollection = stub(Selectors, 'collection').returns(collection);
         const receiveQuery = actions.receiveQuery = spy(() => receiveQueryAction);
         const receiveProductRecords = actions.receiveProductRecords = spy(() => receiveProductRecordsAction);
@@ -492,8 +490,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         expect(receivePage).to.be.calledWith(page);
         expect(extractRecordCount).to.be.calledWith(results);
         expect(extractQuery).to.be.calledWith(results);
-        expect(extractProduct).to.be.calledWith('a')
-          .and.calledWith('b');
+        expect(extractProducts).to.be.calledWith(results);
         expect(combineNavigations).to.be.calledWith(results);
         expect(selectCollection).to.be.calledWith(state);
         expect(extractPage).to.be.calledWith(state);

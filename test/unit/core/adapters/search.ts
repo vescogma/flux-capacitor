@@ -328,6 +328,23 @@ suite('Search Adapter', ({ expect, stub }) => {
     });
   });
 
+  describe('extractProducts()', () => {
+    it('should return the products remapped using extractProduct()', () => {
+      const allMeta1 = { a: 'b' };
+      const allMeta2 = { c: 'd' };
+      const allMeta3 = { e: 'f' };
+      const results: any = {
+        records: [
+          { allMeta: allMeta1 },
+          { allMeta: allMeta2 },
+          { allMeta: allMeta3 }
+        ]
+      };
+
+      expect(Adapter.extractProducts(results)).to.eql([allMeta1, allMeta2, allMeta3]);
+    });
+  });
+
   describe('extractProduct()', () => {
     it('should return the allMeta property', () => {
       const allMeta = { a: 'b' };

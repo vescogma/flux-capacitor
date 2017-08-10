@@ -137,10 +137,6 @@ namespace Configuration {
      * number of navigations to request
      */
     navigationCount?: number;
-    /**
-     * number of products to request
-     */
-    productCount?: number;
     // TODO: this should go in the tag configuration as it is for display only
     /**
      * map of field to label, also restricts displayed navigations if provided
@@ -154,6 +150,10 @@ namespace Configuration {
      * whether to use fuzzy matching for suggestion results
      */
     fuzzy?: boolean;
+    /**
+     * autocomplete products settings
+     */
+    products?: Configuration.Autocomplete.Products;
     /**
      * recommendations API settings
      */
@@ -190,6 +190,25 @@ namespace Configuration {
        * set to true to enable location-specific autocomplete recommendations
        */
       location: boolean;
+    }
+
+    export interface Products {
+      /**
+       * area override
+       */
+      area?: string;
+      /**
+       * collection override
+       */
+      collection?: string;
+      /**
+       * language override
+       */
+      language?: string;
+      /**
+       * number of products to request
+       */
+      count: number;
     }
   }
 

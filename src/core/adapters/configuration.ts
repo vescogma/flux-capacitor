@@ -37,6 +37,9 @@ namespace Adapter {
   export const extractAutocompleteArea = (config: Configuration) =>
     config.autocomplete.area;
 
+  export const extractAutocompleteProductArea = (config: Configuration) =>
+    config.autocomplete.products.area;
+
   export const extractFields = (config: Configuration) =>
     config.search.fields || [];
 
@@ -45,6 +48,9 @@ namespace Adapter {
 
   export const extractAutocompleteLanguage = (config: Configuration) =>
     config.autocomplete.language;
+
+  export const extractAutocompleteProductLanguage = (config: Configuration) =>
+    config.autocomplete.products.language;
 
   /**
    * extract current collection from config
@@ -59,7 +65,7 @@ namespace Adapter {
     config.autocomplete.suggestionCount;
 
   export const extractAutocompleteProductCount = (config: Configuration) =>
-    config.autocomplete.productCount;
+    config.autocomplete.products.count;
 
   export const extractAutocompleteNavigationCount = (config: Configuration) =>
     config.autocomplete.navigationCount;

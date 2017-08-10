@@ -43,11 +43,12 @@ namespace Requests {
       fuzzyMatch: Configuration.isAutocompleteMatchingFuzzily(config)
     }, config.autocomplete.overrides.suggestions);
 
-  export const autocompleteProducts = (config: AppConfig): QueryTimeProductSearchConfig =>
+  export const autocompleteProducts = (state: Store.State, config: AppConfig): QueryTimeProductSearchConfig =>
     Requests.chain(config.autocomplete.defaults.products, {
-      language: Autocomplete.extractLanguage(config),
-      area: Autocomplete.extractArea(config),
-      numProducts: Configuration.extractAutocompleteProductCount(config)
+      ...Requests.search(state, config),
+      language: Autocomplete.extractProductLanguage(config),
+      area: Autocomplete.extractProductArea(config),
+      pageSize: Configuration.extractAutocompleteProductCount(config)
     }, config.autocomplete.overrides.products);
 
   export const chain = (...objs: Array<object | ((obj: object) => object)>) =>

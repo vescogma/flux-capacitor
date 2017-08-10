@@ -1,6 +1,7 @@
 import * as effects from 'redux-saga/effects';
 import Actions from '../../../../src/core/actions';
 import Adapter from '../../../../src/core/adapters/autocomplete';
+import SearchAdapter from '../../../../src/core/adapters/search';
 import Requests from '../../../../src/core/requests';
 import sagaCreator, { Tasks } from '../../../../src/core/sagas/autocomplete';
 import Selectors from '../../../../src/core/selectors';
@@ -224,23 +225,24 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
     });
 
     describe('fetchProducts()', () => {
-      it('should return sayt products', () => {
-        const productSearch = () => null;
-        const sayt = { productSearch };
+      it('should return products', () => {
+        const search = () => null;
+        const bridge = { search };
         const query = 'umbrellas';
         const action: any = { payload: query };
         const receiveAutocompleteProductsAction: any = { c: 'd' };
         const receiveAutocompleteProducts = spy(() => receiveAutocompleteProductsAction);
-        const flux: any = { clients: { sayt }, actions: { receiveAutocompleteProducts } };
         const products = ['e', 'f'];
         const request = { g: 'h' };
         const response = { i: 'j' };
-        const autocompleteProductsRequest = stub(Requests, 'autocompleteProducts').returns(request);
-        const extractProducts = stub(Adapter, 'extractProducts').returns(products);
+        const config: any = { k: 'l' };
+        const flux: any = { clients: { bridge }, actions: { receiveAutocompleteProducts }, config };
+        const extractProducts = stub(SearchAdapter, 'extractProducts').returns(products);
 
         const task = Tasks.fetchProducts(flux, action);
 
-        expect(task.next().value).to.eql(effects.call([sayt, productSearch], query, request));
+        expect(task.next().value).to.eql(effects.select(Requests.autocompleteProducts, config));
+        expect(task.next(request).value).to.eql(effects.call([bridge, search], { ...request, query }));
         expect(task.next(response).value).to.eql(effects.put(receiveAutocompleteProductsAction));
         expect(extractProducts).to.be.calledWith(response);
         expect(receiveAutocompleteProducts).to.be.calledWith(products);

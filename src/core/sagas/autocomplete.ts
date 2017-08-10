@@ -3,6 +3,7 @@ import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import Adapter from '../adapters/autocomplete';
 import RecommendationsAdapter from '../adapters/recommendations';
+import SearchAdapter from '../adapters/search';
 import Configuration from '../configuration';
 import Requests from '../requests';
 import Selectors from '../selectors';
@@ -80,12 +81,15 @@ export namespace Tasks {
 
   export function* fetchProducts(flux: FluxCapacitor, action: Actions.FetchAutocompleteProducts) {
     try {
+      const request = yield effects.select(Requests.autocompleteProducts, flux.config);
       const res = yield effects.call(
-        [flux.clients.sayt, flux.clients.sayt.productSearch],
-        action.payload,
-        Requests.autocompleteProducts(flux.config)
+        [flux.clients.bridge, flux.clients.bridge.search],
+        {
+          ...request,
+          query: action.payload
+        }
       );
-      const products = Adapter.extractProducts(res);
+      const products = SearchAdapter.extractProducts(res);
 
       yield effects.put(flux.actions.receiveAutocompleteProducts(products));
     } catch (e) {

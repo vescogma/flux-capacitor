@@ -130,21 +130,24 @@ suite('requests', ({ expect, stub }) => {
         autocomplete: {
           area,
           language,
-          productCount,
+          products: { count: productCount },
           defaults: { products: defaults },
           overrides: { products: overrides },
         }
       };
       const chained = { e: 'f' };
+      const state: any = {};
       const chain = stub(Requests, 'chain').returns(chained);
+      const search = stub(Requests, 'search').returns({ i: 'j' });
 
-      const request = Requests.autocompleteProducts(config);
+      const request = Requests.autocompleteProducts(state, config);
 
       expect(request).to.eql(chained);
       expect(chain).to.be.calledWith(defaults, {
+        i: 'j',
         area,
         language,
-        numProducts: productCount,
+        pageSize: productCount,
       }, overrides);
     });
   });
