@@ -262,6 +262,26 @@ suite('selectors', ({ expect, stub }) => {
     });
   });
 
+  describe('selectedRefinements()', () => {
+    it('should return selected refinements', () => {
+      const state: any = { a: 'b' };
+      const navigations = [
+        { selected: [0, 1], range: true, field: 'Main', refinements: [{ low: 0, high: 5 }, { low: 10, high: 20 }] },
+        { selected: [0], range: false, field: 'Main stuff', refinements: [{ value: 'idk' }, { value: 'test' }] }
+      ];
+      const selectedRefinements = [
+        // tslint:disable-next-line max-line-length
+        { navigationName: navigations[0].field, type: 'Range', high: navigations[0].refinements[0]['high'], low: navigations[0].refinements[0]['low'] },
+        // tslint:disable-next-line max-line-length
+        { navigationName: navigations[0].field, type: 'Range', high: navigations[0].refinements[1]['high'], low: navigations[0].refinements[1]['low'] },
+        { navigationName: navigations[1].field, type: 'Value', value: navigations[1].refinements[0]['value'] }
+      ];
+      stub(Selectors, 'navigations').returns(navigations);
+
+      expect(Selectors.selectedRefinements(state)).to.eql(selectedRefinements);
+    });
+  });
+
   describe('navigations()', () => {
     it('should return indexed navigations data', () => {
       const navigations = { allIds: ['a', 'b', 'c'] };
@@ -379,6 +399,35 @@ suite('selectors', ({ expect, stub }) => {
       expect(Selectors.recommendationsProducts(<any>{
         data: { present: { recommendations: { products } } }
       })).to.eq(products);
+    });
+  });
+
+  describe('uiTagName()', () => {
+    it('should return ui tagName state', () => {
+      const tagName = 'gb-navigation';
+      const state = { a: 'b' };
+
+      expect(Selectors.uiTagStates(<any>{ ui: { [tagName]: state } }, tagName)).to.eq(state);
+    });
+  });
+
+  describe('tagId()', () => {
+    it('should return ui tag id state', () => {
+      const tagName = 'gb-navigation-display';
+      const id = 'Main';
+      const tagIdState = { c: 'd' };
+      const state: any = { ui: { [tagName]: { [id]: tagIdState } } };
+
+      expect(Selectors.uiTagState(state, tagName, id)).to.eq(tagIdState);
+    });
+
+    it('should not throw', () => {
+      const tagName = 'gb-navigation-display';
+      const id = 'Main';
+      const tagIdState = { c: 'd' };
+      const state: any = { ui: { } };
+
+      expect(() => Selectors.uiTagState(state, tagName, id)).to.not.throw();
     });
   });
 });

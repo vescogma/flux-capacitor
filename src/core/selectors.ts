@@ -138,6 +138,12 @@ namespace Selectors {
 
   export const recommendationsProducts = (state: Store.State) =>
     state.data.present.recommendations.products;
+
+  export const uiTagStates = (state: Store.State, tagName: string) =>
+    state.ui[tagName];
+
+  export const uiTagState = (state: Store.State, tagName: string, id: string) =>
+    (Selectors.uiTagStates(state, tagName) || {})[id];
 }
 
 export default Selectors;
