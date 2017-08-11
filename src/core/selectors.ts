@@ -17,6 +17,11 @@ namespace Selectors {
   export const query = (state: Store.State) =>
     state.data.present.query.original;
 
+  export const currentQuery = (state: Store.State) => {
+    const query = state.data.present.query;
+    return query.corrected || query.original;
+  };
+
   export const collections = (state: Store.State) =>
     state.data.present.collections;
 

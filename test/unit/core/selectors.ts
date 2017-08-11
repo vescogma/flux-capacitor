@@ -101,6 +101,29 @@ suite('selectors', ({ expect, stub }) => {
     });
   });
 
+  describe('currentQuery()', () => {
+    it('should return the original query', () => {
+      const query = 'pineyapple';
+
+      expect(Selectors.currentQuery(<any>{ data: { present: { query: { original: query } } } })).to.eq(query);
+    });
+
+    it('should return the corrected query', () => {
+      const query = 'pineyappley';
+
+      expect(Selectors.currentQuery(<any>{
+        data: {
+          present: {
+            query: {
+              original: 'test',
+              corrected: query
+            }
+          }
+        }
+      })).to.eq(query);
+    });
+  });
+
   describe('collections()', () => {
     it('should return indexed collections data', () => {
       const collections = { a: 'b' };
