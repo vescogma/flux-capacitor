@@ -1,10 +1,23 @@
 {
+  "ignore": [
+    "**/node_modules/**",
+    "**/docs/**"
+  ],
+  "test": [
+    "**/test/**"
+  ],
+  "critics": {
+    "lint": {
+      "engine": "tslint"
+    }
+  },
   "dependencies": {
     "unused-ignores": [
       "uuid",
       "redux-logger",
       "redux-thunk",
-      "@types/*"
+      "@types/*",
+      "fetch-ponyfill"
     ]
   }
 }
