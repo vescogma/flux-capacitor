@@ -9,6 +9,8 @@ import reducer from '../reducers';
 import createSagas, { SAGA_CREATORS } from '../sagas';
 import createMiddleware, { MIDDLEWARE_CREATORS } from './middleware';
 
+declare const __REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+
 export { ReduxStore };
 
 namespace Store {
@@ -29,10 +31,11 @@ namespace Store {
       middleware.push(logger);
     }
 
+    const composeEnhancers = __REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
     const store = createStore<State>(
       reducer,
       <any>Adapter.initialState(config),
-      compose(reduxBatch, applyMiddleware(...middleware), reduxBatch),
+      composeEnhancers(reduxBatch, applyMiddleware(...middleware), reduxBatch),
     );
 
     createSagas(SAGA_CREATORS, flux).forEach(sagaMiddleware.run);
