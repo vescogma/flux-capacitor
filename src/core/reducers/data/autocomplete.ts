@@ -3,7 +3,8 @@ import Store from '../../store';
 
 export type Action = Actions.UpdateAutocompleteQuery
   | Actions.ReceiveAutocompleteSuggestions
-  | Actions.ReceiveAutocompleteProducts;
+  | Actions.ReceiveAutocompleteProductRecords
+  | Actions.ReceiveAutocompleteTemplate;
 export type State = Store.Autocomplete;
 
 export const DEFAULTS: State = {
@@ -17,7 +18,8 @@ export default function updateAutocomplete(state: State = DEFAULTS, action: Acti
   switch (action.type) {
     case Actions.UPDATE_AUTOCOMPLETE_QUERY: return updateQuery(state, action.payload);
     case Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS: return receiveSuggestions(state, action.payload);
-    case Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS: return receiveProducts(state, action.payload);
+    case Actions.RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS: return receiveProductRecords(state, action.payload);
+    case Actions.RECEIVE_AUTOCOMPLETE_TEMPLATE: return receiveTemplate(state, action.payload);
     default: return state;
   }
 }
@@ -37,5 +39,8 @@ export const receiveSuggestions = (state: State, { categoryValues, suggestions, 
     suggestions,
   });
 
-export const receiveProducts = (state: State, products: Store.Product[]) =>
+export const receiveProductRecords = (state: State, products: Store.Product[]) =>
   ({ ...state, products });
+
+export const receiveTemplate = (state: State, template: Store.Template) =>
+  ({ ...state, template });

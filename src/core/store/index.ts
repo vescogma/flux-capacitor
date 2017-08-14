@@ -259,6 +259,7 @@ namespace Store {
     category: Autocomplete.Category; // static & post
     navigations: Autocomplete.Navigation[]; // post
     products: Product[]; // post
+    template?: Template; // post
   }
 
   export namespace Autocomplete {

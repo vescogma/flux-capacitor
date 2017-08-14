@@ -52,7 +52,7 @@ suite('autocomplete', ({ expect }) => {
       expect(reducer).to.eql(newState);
     });
 
-    it('should update state on RECEIVE_AUTOCOMPLETE_PRODUCTS', () => {
+    it('should update state on RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS', () => {
       const newProducts = [1, 2, 3];
       const newState = {
         category,
@@ -62,8 +62,26 @@ suite('autocomplete', ({ expect }) => {
       };
 
       const reducer = autocomplete(state, <any>{
-        type: Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS,
+        type: Actions.RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS,
         payload: newProducts,
+      });
+
+      expect(reducer).to.eql(newState);
+    });
+
+    it('should update state on RECEIVE_AUTOCOMPLETE_TEMPLATE', () => {
+      const newTemplate = { a: 'b' };
+      const newState = {
+        category,
+        products,
+        template: newTemplate,
+        navigations,
+        suggestions,
+      };
+
+      const reducer = autocomplete(state, <any>{
+        type: Actions.RECEIVE_AUTOCOMPLETE_TEMPLATE,
+        payload: newTemplate,
       });
 
       expect(reducer).to.eql(newState);

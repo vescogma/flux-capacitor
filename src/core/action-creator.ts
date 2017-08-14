@@ -4,7 +4,7 @@ import Actions from './actions';
 import SearchAdapter from './adapters/search';
 import Selectors from './selectors';
 import Store from './store';
-import { action, refinementPayload } from './utils';
+import { action, handleError, refinementPayload } from './utils';
 
 export function createActions(flux: FluxCapacitor) {
 
@@ -158,10 +158,7 @@ export function createActions(flux: FluxCapacitor) {
       receiveProducts: (res: Results): Actions.Action<string, any>[] | Actions.ReceiveProducts => {
         const receiveProducts = action(Actions.RECEIVE_PRODUCTS, res, metadata);
 
-        // a passthrough to allow error to propagate to middleware
-        if (receiveProducts.error) {
-          return receiveProducts;
-        } else {
+        return handleError(receiveProducts, () => {
           const state = flux.store.getState();
           const recordCount = SearchAdapter.extractRecordCount(res);
 
@@ -178,7 +175,7 @@ export function createActions(flux: FluxCapacitor) {
             actions.receivePage(SearchAdapter.extractPage(state, recordCount)),
             actions.receiveTemplate(SearchAdapter.extractTemplate(res.template)),
           ];
-        }
+        });
       },
 
       receiveProductRecords: (products: Store.Product[]): Actions.ReceiveProductRecords =>
@@ -213,8 +210,21 @@ export function createActions(flux: FluxCapacitor) {
       receiveMoreProducts: (products: Store.Product[]): Actions.ReceiveMoreProducts =>
         action(Actions.RECEIVE_MORE_PRODUCTS, products, metadata),
 
-      receiveAutocompleteProducts: (products: Store.Product[]): Actions.ReceiveAutocompleteProducts =>
-        action(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, products, metadata),
+      receiveAutocompleteProducts: (res: Results): Actions.ReceiveAutocompleteProducts => {
+        const receiveProducts = action(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, res, metadata);
+
+        return handleError(receiveProducts, () => [
+          receiveProducts,
+          actions.receiveAutocompleteProductRecords(SearchAdapter.extractProducts(res)),
+          actions.receiveAutocompleteTemplate(SearchAdapter.extractTemplate(res.template)),
+        ]);
+      },
+
+      receiveAutocompleteProductRecords: (products: Store.Product[]): Actions.ReceiveAutocompleteProductRecords =>
+        action(Actions.RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS, products, metadata),
+
+      receiveAutocompleteTemplate: (template: Store.Template): Actions.ReceiveAutocompleteTemplate =>
+        action(Actions.RECEIVE_AUTOCOMPLETE_TEMPLATE, template, metadata),
 
       receiveDetailsProduct: (product: Store.Product): Actions.ReceiveDetailsProduct =>
         action(Actions.RECEIVE_DETAILS_PRODUCT, product, metadata),

@@ -89,9 +89,8 @@ export namespace Tasks {
           query: action.payload
         }
       );
-      const products = SearchAdapter.extractProducts(res);
 
-      yield effects.put(flux.actions.receiveAutocompleteProducts(products));
+      yield effects.put(flux.actions.receiveAutocompleteProducts(res));
     } catch (e) {
       yield effects.put(flux.actions.receiveAutocompleteProducts(e));
     }

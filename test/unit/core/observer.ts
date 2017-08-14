@@ -251,13 +251,22 @@ suite('Observer', ({ expect, spy, stub }) => {
           expect(emit).to.be.calledWith(Events.AUTOCOMPLETE_QUERY_UPDATED);
         });
 
-        it('should emit AUTOCOMPLETE_PRODUCTS_UPDATED event when queries differ', () => {
+        it('should emit AUTOCOMPLETE_PRODUCTS_UPDATED event when products differ', () => {
           const oldState = { products: 'idk' };
           const newState = { products: 'im different o wow' };
 
           observers.data.present.autocomplete(oldState, newState, path);
 
           expect(emit).to.be.calledWith(Events.AUTOCOMPLETE_PRODUCTS_UPDATED);
+        });
+
+        it('should emit AUTOCOMPLETE_TEMPLATE_UPDATED event when templates differ', () => {
+          const oldState = { template: 'idk' };
+          const newState = { template: 'im different o wow' };
+
+          observers.data.present.autocomplete(oldState, newState, path);
+
+          expect(emit).to.be.calledWith(Events.AUTOCOMPLETE_TEMPLATE_UPDATED);
         });
       });
 

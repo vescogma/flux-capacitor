@@ -237,15 +237,13 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const response = { i: 'j' };
         const config: any = { k: 'l' };
         const flux: any = { clients: { bridge }, actions: { receiveAutocompleteProducts }, config };
-        const extractProducts = stub(SearchAdapter, 'extractProducts').returns(products);
 
         const task = Tasks.fetchProducts(flux, action);
 
         expect(task.next().value).to.eql(effects.select(Requests.autocompleteProducts, config));
         expect(task.next(request).value).to.eql(effects.call([bridge, search], { ...request, query }));
         expect(task.next(response).value).to.eql(effects.put(receiveAutocompleteProductsAction));
-        expect(extractProducts).to.be.calledWith(response);
-        expect(receiveAutocompleteProducts).to.be.calledWith(products);
+        expect(receiveAutocompleteProducts).to.be.calledWith(response);
         task.next();
       });
 

@@ -464,7 +464,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const receivePageAction = { kk: 'll' };
         const receiveTemplateAction = { mm: 'nn' };
         const products = ['x', 'x'];
-        const results: any = { template: { c: 'd' } };
+        const results: any = {};
         const query: any = { e: 'f' };
         const state: any = { g: 'h' };
         const action = { i: 'j' };
@@ -520,11 +520,8 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       });
 
       it('should return an action', () => {
-        const results: any = {
-          records: ['a', 'b'],
-          template: { c: 'd' },
-        };
-        const action = { e: 'f', error: true };
+        const results: any = { a: 'b' };
+        const action = { error: true };
         const createAction = stub(utils, 'action').returns(action);
 
         const batchAction = actions.receiveProducts(results);
@@ -635,11 +632,59 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
     });
 
     describe('receiveAutocompleteProducts()', () => {
+      it('should return a batch action', () => {
+        const template: any = { a: 'b' };
+        const response: any = { template };
+        const products: any[] = ['c', 'd'];
+        const receiveAutocompleteProductRecordsAction = { e: 'f' };
+        const receiveAutocompleteTemplateAction = { g: 'h' };
+        const action = { i: 'j' };
+        const createAction = stub(utils, 'action').returns(action);
+        const extractProducts = stub(SearchAdapter, 'extractProducts').returns(products);
+        const extractTemplate = stub(SearchAdapter, 'extractTemplate').returns(template);
+        // tslint:disable-next-line max-line-length
+        const receiveAutocompleteProductRecords = actions.receiveAutocompleteProductRecords = spy(() => receiveAutocompleteProductRecordsAction);
+        const receiveAutocompleteTemplate = actions.receiveAutocompleteTemplate = spy(() => receiveAutocompleteTemplateAction);
+
+        const batchAction = actions.receiveAutocompleteProducts(response);
+
+        expect(createAction).to.be.calledWith(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, response);
+        expect(receiveAutocompleteProductRecords).to.be.calledWith(products);
+        expect(receiveAutocompleteTemplate).to.be.calledWith(template);
+        expect(batchAction).to.eql([
+          action,
+          receiveAutocompleteProductRecordsAction,
+          receiveAutocompleteTemplateAction
+        ]);
+      });
+
+      it('should return an action', () => {
+        const results: any = {};
+        const action = { a: 'b', error: true };
+        const createAction = stub(utils, 'action').returns(action);
+
+        const batchAction = actions.receiveAutocompleteProducts(results);
+
+        expect(createAction).to.be.calledWith(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, results);
+        expect(batchAction).to.eql(action);
+      });
+    });
+
+    describe('receiveAutocompleteTemplate()', () => {
+      it('should return an action', () => {
+        const template: any = { a: 'b' };
+
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.receiveAutocompleteTemplate(template), Actions.RECEIVE_AUTOCOMPLETE_TEMPLATE, template);
+      });
+    });
+
+    describe('receiveAutocompleteProductRecords()', () => {
       it('should return an action', () => {
         const products: any[] = ['a', 'b'];
 
         // tslint:disable-next-line max-line-length
-        expectAction(() => actions.receiveAutocompleteProducts(products), Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, products);
+        expectAction(() => actions.receiveAutocompleteProductRecords(products), Actions.RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS, products);
       });
     });
 

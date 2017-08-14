@@ -37,3 +37,8 @@ export const refinementPayload = (field: string, valueOrLow: any, high: any = nu
       navigationId: field,
       value: valueOrLow
     };
+
+// a passthrough to allow error to propagate to middleware
+// tslint:disable-next-line max-line-length
+export const handleError = (action: Actions.Action<any>,  createAction: () => any) =>
+  action.error ? action :  createAction();

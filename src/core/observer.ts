@@ -61,7 +61,7 @@ namespace Observer {
       data: {
         present: {
           // tslint:disable-next-line max-line-length
-          autocomplete: ((emitSuggestionsUpdated: Observer, emitQueryUpdated: Observer, emitProductsUpdated: Observer) =>
+          autocomplete: ((emitSuggestionsUpdated: Observer, emitQueryUpdated: Observer, emitProductsUpdated: Observer, emitTemplateUpdated: Observer) =>
             (oldState: Store.Autocomplete, newState: Store.Autocomplete, path: string) => {
               if (oldState !== newState) {
                 if (oldState.suggestions !== newState.suggestions
@@ -75,11 +75,15 @@ namespace Observer {
                 if (oldState.products !== newState.products) {
                   emitProductsUpdated(oldState.products, newState.products, `${path}.products`);
                 }
+                if (oldState.template !== newState.template) {
+                  emitTemplateUpdated(oldState.template, newState.template, `${path}.template`);
+                }
               }
             })(
             emit(Events.AUTOCOMPLETE_SUGGESTIONS_UPDATED),
             emit(Events.AUTOCOMPLETE_QUERY_UPDATED),
-            emit(Events.AUTOCOMPLETE_PRODUCTS_UPDATED)
+            emit(Events.AUTOCOMPLETE_PRODUCTS_UPDATED),
+            emit(Events.AUTOCOMPLETE_TEMPLATE_UPDATED)
             ),
 
           collections: {

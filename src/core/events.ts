@@ -23,6 +23,7 @@ export const SELECTED_REFINEMENTS_UPDATED = 'selected_refinements_updated'; // p
 export const AUTOCOMPLETE_QUERY_UPDATED = 'autocomplete_query_updated'; // pre
 export const AUTOCOMPLETE_SUGGESTIONS_UPDATED = 'autocomplete_suggestions_updated'; // post
 export const AUTOCOMPLETE_PRODUCTS_UPDATED = 'autocomplete_products_updated'; // post
+export const AUTOCOMPLETE_TEMPLATE_UPDATED = 'autocomplete_template_updated'; // post
 
 // template events
 export const TEMPLATE_UPDATED = 'template_updated'; // post
