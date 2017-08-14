@@ -111,6 +111,7 @@
 								<li class="tsd-kind-variable"><a href="globals.html#autocomplete_products_updated" class="tsd-kind-icon">AUTOCOMPLETE_<wbr>PRODUCTS_<wbr>UPDATED</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#autocomplete_query_updated" class="tsd-kind-icon">AUTOCOMPLETE_<wbr>QUERY_<wbr>UPDATED</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#autocomplete_suggestions_updated" class="tsd-kind-icon">AUTOCOMPLETE_<wbr>SUGGESTIONS_<wbr>UPDATED</a></li>
+								<li class="tsd-kind-variable"><a href="globals.html#autocomplete_template_updated" class="tsd-kind-icon">AUTOCOMPLETE_<wbr>TEMPLATE_<wbr>UPDATED</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#beacon_add_to_cart" class="tsd-kind-icon">BEACON_<wbr>ADD_<wbr>TO_<wbr>CART</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#beacon_order" class="tsd-kind-icon">BEACON_<wbr>ORDER</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#beacon_remove_from_cart" class="tsd-kind-icon">BEACON_<wbr>REMOVE_<wbr>FROM_<wbr>CART</a></li>
@@ -173,6 +174,7 @@
 								<li class="tsd-kind-function"><a href="globals.html#createsagas" class="tsd-kind-icon">create<wbr>Sagas</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#deselectrefinement" class="tsd-kind-icon">deselect<wbr>Refinement</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#errorhandler" class="tsd-kind-icon">error<wbr>Handler</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#handleerror" class="tsd-kind-icon">handle<wbr>Error</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#idgenerator" class="tsd-kind-icon">id<wbr>Generator</a></li>
 								<li class="tsd-kind-function tsd-has-type-parameter"><a href="globals.html#rayify" class="tsd-kind-icon">rayify</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#receivecount" class="tsd-kind-icon">receive<wbr>Count</a></li>
@@ -180,9 +182,10 @@
 								<li class="tsd-kind-function"><a href="globals.html#receivenavigations" class="tsd-kind-icon">receive<wbr>Navigations</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#receivepage" class="tsd-kind-icon">receive<wbr>Page</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#receiveproduct" class="tsd-kind-icon">receive<wbr>Product</a></li>
-								<li class="tsd-kind-function"><a href="globals.html#receiveproducts" class="tsd-kind-icon">receive<wbr>Products</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#receiveproductrecords" class="tsd-kind-icon">receive<wbr>Product<wbr>Records</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#receivequery" class="tsd-kind-icon">receive<wbr>Query</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#receivesuggestions" class="tsd-kind-icon">receive<wbr>Suggestions</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#receivetemplate" class="tsd-kind-icon">receive<wbr>Template</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#refinementpayload" class="tsd-kind-icon">refinement<wbr>Payload</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#removecomponentstate" class="tsd-kind-icon">remove<wbr>Component<wbr>State</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#resetpage" class="tsd-kind-icon">reset<wbr>Page</a></li>
@@ -237,22 +240,22 @@
 					<div class="tsd-signature tsd-kind-icon">Action<span class="tsd-signature-symbol">:</span> <a href="modules/actions.html#refreshstate" class="tsd-signature-type">RefreshState</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/collections.ts#L4">src/core/reducers/data/collections.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L4">src/core/reducers/data/page.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L4">src/core/reducers/data/autocomplete.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/details.ts#L4">src/core/reducers/data/details.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L5">src/core/reducers/data/navigations.ts:5</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/products.ts#L4">src/core/reducers/data/products.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/query.ts#L4">src/core/reducers/data/query.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/recommendations.ts#L4">src/core/reducers/data/recommendations.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/record-count.ts#L3">src/core/reducers/data/record-count.ts:3</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/redirect.ts#L3">src/core/reducers/data/redirect.ts:3</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/sorts.ts#L4">src/core/reducers/data/sorts.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/template.ts#L4">src/core/reducers/data/template.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/is-running.ts#L4">src/core/reducers/is-running.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/session.ts#L4">src/core/reducers/session.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/ui.ts#L4">src/core/reducers/ui.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/index.ts#L10">src/core/reducers/index.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/collections.ts#L4">src/core/reducers/data/collections.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L4">src/core/reducers/data/page.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L4">src/core/reducers/data/autocomplete.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/details.ts#L4">src/core/reducers/data/details.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L5">src/core/reducers/data/navigations.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/products.ts#L4">src/core/reducers/data/products.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/query.ts#L4">src/core/reducers/data/query.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/recommendations.ts#L4">src/core/reducers/data/recommendations.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/record-count.ts#L3">src/core/reducers/data/record-count.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/redirect.ts#L3">src/core/reducers/data/redirect.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/sorts.ts#L4">src/core/reducers/data/sorts.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/template.ts#L4">src/core/reducers/data/template.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/is-running.ts#L4">src/core/reducers/is-running.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/session.ts#L4">src/core/reducers/session.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/ui.ts#L4">src/core/reducers/ui.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/index.ts#L10">src/core/reducers/index.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -262,7 +265,7 @@
 					<div class="tsd-signature tsd-kind-icon">Saga<wbr>Creator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/sagas/index.ts#L10">src/core/sagas/index.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/sagas/index.ts#L10">src/core/sagas/index.ts:10</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -305,23 +308,23 @@
 					<div class="tsd-signature tsd-kind-icon">State<span class="tsd-signature-symbol">:</span> <a href="interfaces/store.ui.html" class="tsd-signature-type">UI</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/collections.ts#L5">src/core/reducers/data/collections.ts:5</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L12">src/core/reducers/data/page.ts:12</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L7">src/core/reducers/data/autocomplete.ts:7</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/details.ts#L5">src/core/reducers/data/details.ts:5</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/errors.ts#L1">src/core/reducers/data/errors.ts:1</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L10">src/core/reducers/data/navigations.ts:10</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/products.ts#L5">src/core/reducers/data/products.ts:5</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/query.ts#L5">src/core/reducers/data/query.ts:5</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/recommendations.ts#L5">src/core/reducers/data/recommendations.ts:5</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/record-count.ts#L4">src/core/reducers/data/record-count.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/redirect.ts#L4">src/core/reducers/data/redirect.ts:4</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/sorts.ts#L5">src/core/reducers/data/sorts.ts:5</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/template.ts#L5">src/core/reducers/data/template.ts:5</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/warnings.ts#L1">src/core/reducers/data/warnings.ts:1</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/is-running.ts#L5">src/core/reducers/is-running.ts:5</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/session.ts#L5">src/core/reducers/session.ts:5</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/ui.ts#L7">src/core/reducers/ui.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/collections.ts#L5">src/core/reducers/data/collections.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L12">src/core/reducers/data/page.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L8">src/core/reducers/data/autocomplete.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/details.ts#L5">src/core/reducers/data/details.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/errors.ts#L1">src/core/reducers/data/errors.ts:1</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L10">src/core/reducers/data/navigations.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/products.ts#L5">src/core/reducers/data/products.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/query.ts#L5">src/core/reducers/data/query.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/recommendations.ts#L5">src/core/reducers/data/recommendations.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/record-count.ts#L4">src/core/reducers/data/record-count.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/redirect.ts#L4">src/core/reducers/data/redirect.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/sorts.ts#L5">src/core/reducers/data/sorts.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/template.ts#L5">src/core/reducers/data/template.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/warnings.ts#L1">src/core/reducers/data/warnings.ts:1</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/is-running.ts#L5">src/core/reducers/is-running.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/session.ts#L5">src/core/reducers/session.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/ui.ts#L7">src/core/reducers/ui.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -334,7 +337,7 @@
 					<div class="tsd-signature tsd-kind-icon">APP_<wbr>KILLED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"app:killed"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;app:killed&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L61">src/core/events.ts:61</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L62">src/core/events.ts:62</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -344,7 +347,7 @@
 					<div class="tsd-signature tsd-kind-icon">APP_<wbr>STARTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"app:started"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;app:started&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L60">src/core/events.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L61">src/core/events.ts:61</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -354,7 +357,7 @@
 					<div class="tsd-signature tsd-kind-icon">AUTOCOMPLETE_<wbr>PRODUCTS_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"autocomplete_products_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;autocomplete_products_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L25">src/core/events.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L25">src/core/events.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -364,7 +367,7 @@
 					<div class="tsd-signature tsd-kind-icon">AUTOCOMPLETE_<wbr>QUERY_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"autocomplete_query_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;autocomplete_query_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L23">src/core/events.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L23">src/core/events.ts:23</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -374,7 +377,17 @@
 					<div class="tsd-signature tsd-kind-icon">AUTOCOMPLETE_<wbr>SUGGESTIONS_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"autocomplete_suggestions_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;autocomplete_suggestions_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L24">src/core/events.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L24">src/core/events.ts:24</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="autocomplete_template_updated" class="tsd-anchor"></a>
+					<h3>AUTOCOMPLETE_<wbr>TEMPLATE_<wbr>UPDATED</h3>
+					<div class="tsd-signature tsd-kind-icon">AUTOCOMPLETE_<wbr>TEMPLATE_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"autocomplete_template_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;autocomplete_template_updated&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L26">src/core/events.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -384,7 +397,7 @@
 					<div class="tsd-signature tsd-kind-icon">BEACON_<wbr>ADD_<wbr>TO_<wbr>CART<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"beacon:add_to_cart"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;beacon:add_to_cart&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L69">src/core/events.ts:69</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L70">src/core/events.ts:70</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -394,7 +407,7 @@
 					<div class="tsd-signature tsd-kind-icon">BEACON_<wbr>ORDER<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"beacon:order"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;beacon:order&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L72">src/core/events.ts:72</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L73">src/core/events.ts:73</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -404,7 +417,7 @@
 					<div class="tsd-signature tsd-kind-icon">BEACON_<wbr>REMOVE_<wbr>FROM_<wbr>CART<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"beacon:remove_from_cart"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;beacon:remove_from_cart&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L70">src/core/events.ts:70</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L71">src/core/events.ts:71</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -414,7 +427,7 @@
 					<div class="tsd-signature tsd-kind-icon">BEACON_<wbr>SEARCH<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"beacon:search"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;beacon:search&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L67">src/core/events.ts:67</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L68">src/core/events.ts:68</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -424,7 +437,7 @@
 					<div class="tsd-signature tsd-kind-icon">BEACON_<wbr>VIEW_<wbr>CART<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"beacon:view_cart"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;beacon:view_cart&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L71">src/core/events.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L72">src/core/events.ts:72</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -434,7 +447,7 @@
 					<div class="tsd-signature tsd-kind-icon">BEACON_<wbr>VIEW_<wbr>PRODUCT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"beacon:view_product"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;beacon:view_product&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L68">src/core/events.ts:68</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L69">src/core/events.ts:69</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -444,7 +457,7 @@
 					<div class="tsd-signature tsd-kind-icon">COLLECTION_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"collection_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;collection_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L15">src/core/events.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L15">src/core/events.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -454,7 +467,7 @@
 					<div class="tsd-signature tsd-kind-icon">CORRECTED_<wbr>QUERY_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"corrected_query_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;corrected_query_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L2">src/core/events.ts:2</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L2">src/core/events.ts:2</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -464,7 +477,7 @@
 					<div class="tsd-signature tsd-kind-icon">CURRENT_<wbr>PAGE_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"current_page_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;current_page_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L37">src/core/events.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L38">src/core/events.ts:38</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -474,7 +487,7 @@
 					<div class="tsd-signature tsd-kind-icon">DEFAULT_<wbr>AREA<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Production"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;Production&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/area.ts#L3">src/core/reducers/data/area.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/area.ts#L3">src/core/reducers/data/area.ts:3</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -484,7 +497,7 @@
 					<div class="tsd-signature tsd-kind-icon">DEFAULT_<wbr>COLLECTION<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"default"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;default&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/collections.ts#L7">src/core/reducers/data/collections.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/collections.ts#L7">src/core/reducers/data/collections.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -494,7 +507,7 @@
 					<div class="tsd-signature tsd-kind-icon">DEFAULT_<wbr>PAGE_<wbr>SIZE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">10</span><span class="tsd-signature-symbol"> =&nbsp;10</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L14">src/core/reducers/data/page.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L14">src/core/reducers/data/page.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -504,7 +517,7 @@
 					<div class="tsd-signature tsd-kind-icon">DETAILS_<wbr>PRODUCT_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"details_product_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;details_product_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L32">src/core/events.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L33">src/core/events.ts:33</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -514,7 +527,7 @@
 					<div class="tsd-signature tsd-kind-icon">DETAILS_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"details_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;details_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L31">src/core/events.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L32">src/core/events.ts:32</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -524,7 +537,7 @@
 					<div class="tsd-signature tsd-kind-icon">DID_<wbr>YOU_<wbr>MEANS_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"did_you_means_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;did_you_means_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L4">src/core/events.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L4">src/core/events.ts:4</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -534,7 +547,7 @@
 					<div class="tsd-signature tsd-kind-icon">ERROR_<wbr>BRIDGE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"error:bridge"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;error:bridge&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L53">src/core/events.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L54">src/core/events.ts:54</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -544,7 +557,7 @@
 					<div class="tsd-signature tsd-kind-icon">ERROR_<wbr>FETCH_<wbr>ACTION<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"error:fetch_action"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;error:fetch_action&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L54">src/core/events.ts:54</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L55">src/core/events.ts:55</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -554,7 +567,7 @@
 					<div class="tsd-signature tsd-kind-icon">HISTORY_<wbr>SAVE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"history:save"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;history:save&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L82">src/core/events.ts:82</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L83">src/core/events.ts:83</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -564,7 +577,7 @@
 					<div class="tsd-signature tsd-kind-icon">LOCATION_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"location:updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;location:updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L64">src/core/events.ts:64</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L65">src/core/events.ts:65</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -574,7 +587,7 @@
 					<div class="tsd-signature tsd-kind-icon">MAX_<wbr>RECORDS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">10000</span><span class="tsd-signature-symbol"> =&nbsp;10000</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/adapters/search.ts#L16">src/core/adapters/search.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/adapters/search.ts#L16">src/core/adapters/search.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -584,7 +597,7 @@
 					<div class="tsd-signature tsd-kind-icon">MIDDLEWARE_<wbr>CREATORS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">(Anonymous function)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[idGenerator(&#x27;recallId&#x27;, RECALL_CHANGE_ACTIONS),idGenerator(&#x27;searchId&#x27;, SEARCH_CHANGE_ACTIONS),errorHandler]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/store/middleware.ts#L22">src/core/store/middleware.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/store/middleware.ts#L22">src/core/store/middleware.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -594,7 +607,7 @@
 					<div class="tsd-signature tsd-kind-icon">MORE_<wbr>PRODUCTS_<wbr>ADDED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"more_products_added"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;more_products_added&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L12">src/core/events.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L12">src/core/events.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -604,7 +617,7 @@
 					<div class="tsd-signature tsd-kind-icon">NAVIGATIONS_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"navigations_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;navigations_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L19">src/core/events.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L19">src/core/events.ts:19</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -614,7 +627,7 @@
 					<div class="tsd-signature tsd-kind-icon">OBSERVER_<wbr>NODE_<wbr>CHANGED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"observer:node_changed"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;observer:node_changed&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L75">src/core/events.ts:75</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L76">src/core/events.ts:76</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -624,7 +637,7 @@
 					<div class="tsd-signature tsd-kind-icon">ORIGINAL_<wbr>QUERY_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"original_query_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;original_query_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L1">src/core/events.ts:1</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L1">src/core/events.ts:1</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -634,7 +647,7 @@
 					<div class="tsd-signature tsd-kind-icon">PAGE_<wbr>SIZE_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"page_size_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;page_size_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L36">src/core/events.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L37">src/core/events.ts:37</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -644,7 +657,7 @@
 					<div class="tsd-signature tsd-kind-icon">PAGE_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"page_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;page_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L35">src/core/events.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L36">src/core/events.ts:36</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -654,7 +667,7 @@
 					<div class="tsd-signature tsd-kind-icon">PRODUCTS_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"products_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;products_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L11">src/core/events.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L11">src/core/events.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -664,7 +677,7 @@
 					<div class="tsd-signature tsd-kind-icon">QUERY_<wbr>REWRITES_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"query_rewrites_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;query_rewrites_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L5">src/core/events.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L5">src/core/events.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -674,7 +687,7 @@
 					<div class="tsd-signature tsd-kind-icon">RECALL_<wbr>CHANGED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"recall_changed"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;recall_changed&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L43">src/core/events.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L44">src/core/events.ts:44</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -684,7 +697,7 @@
 					<div class="tsd-signature tsd-kind-icon">RECALL_<wbr>CHANGE_<wbr>ACTIONS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[Actions.UPDATE_SEARCH,Actions.SELECT_REFINEMENT,Actions.DESELECT_REFINEMENT,]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/store/middleware.ts#L8">src/core/store/middleware.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/store/middleware.ts#L8">src/core/store/middleware.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -694,7 +707,7 @@
 					<div class="tsd-signature tsd-kind-icon">RECOMMENDATIONS_<wbr>PRODUCTS_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"recommendations_products_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;recommendations_products_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L50">src/core/events.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L51">src/core/events.ts:51</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -704,7 +717,7 @@
 					<div class="tsd-signature tsd-kind-icon">RECORD_<wbr>COUNT_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"record_count_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;record_count_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L40">src/core/events.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L41">src/core/events.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -714,7 +727,7 @@
 					<div class="tsd-signature tsd-kind-icon">REDIRECT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"redirect"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;redirect&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L47">src/core/events.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L48">src/core/events.ts:48</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -724,7 +737,7 @@
 					<div class="tsd-signature tsd-kind-icon">RELATED_<wbr>QUERIES_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"related_queries_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;related_queries_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L3">src/core/events.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L3">src/core/events.ts:3</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -734,7 +747,7 @@
 					<div class="tsd-signature tsd-kind-icon">SAGA_<wbr>CREATORS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">(Anonymous function)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[autocomplete,collection,productDetails,products,recommendations,refinements]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/sagas/index.ts#L12">src/core/sagas/index.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/sagas/index.ts#L12">src/core/sagas/index.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -744,7 +757,7 @@
 					<div class="tsd-signature tsd-kind-icon">SEARCH_<wbr>CHANGED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"search_changed"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;search_changed&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L44">src/core/events.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L45">src/core/events.ts:45</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -754,7 +767,7 @@
 					<div class="tsd-signature tsd-kind-icon">SEARCH_<wbr>CHANGE_<wbr>ACTIONS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[...RECALL_CHANGE_ACTIONS,Actions.SELECT_COLLECTION,Actions.SELECT_SORT,Actions.UPDATE_PAGE_SIZE,Actions.UPDATE_CURRENT_PAGE,]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/store/middleware.ts#L14">src/core/store/middleware.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/store/middleware.ts#L14">src/core/store/middleware.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -764,7 +777,7 @@
 					<div class="tsd-signature tsd-kind-icon">SELECTED_<wbr>COLLECTION_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"selected_collection_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;selected_collection_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L16">src/core/events.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L16">src/core/events.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -774,7 +787,7 @@
 					<div class="tsd-signature tsd-kind-icon">SELECTED_<wbr>REFINEMENTS_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"selected_refinements_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;selected_refinements_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L20">src/core/events.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L20">src/core/events.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -784,7 +797,7 @@
 					<div class="tsd-signature tsd-kind-icon">SORTS_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"sorts_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;sorts_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L8">src/core/events.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L8">src/core/events.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -794,7 +807,7 @@
 					<div class="tsd-signature tsd-kind-icon">TAG_<wbr>ALIASING<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"tag:aliasing"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;tag:aliasing&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L79">src/core/events.ts:79</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L80">src/core/events.ts:80</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -804,7 +817,7 @@
 					<div class="tsd-signature tsd-kind-icon">TAG_<wbr>LIFECYCLE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"tag:lifecycle"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;tag:lifecycle&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L78">src/core/events.ts:78</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L79">src/core/events.ts:79</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -814,7 +827,7 @@
 					<div class="tsd-signature tsd-kind-icon">TEMPLATE_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"template_updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;template_updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L28">src/core/events.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L29">src/core/events.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -824,7 +837,7 @@
 					<div class="tsd-signature tsd-kind-icon">UI_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"ui:updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;ui:updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L57">src/core/events.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L58">src/core/events.ts:58</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -834,7 +847,7 @@
 					<div class="tsd-signature tsd-kind-icon">URL_<wbr>UPDATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"url:updated"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;url:updated&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/events.ts#L85">src/core/events.ts:85</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/events.ts#L86">src/core/events.ts:86</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -844,7 +857,7 @@
 					<div class="tsd-signature tsd-kind-icon">fetch<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/utils.ts#L4">src/core/utils.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/utils.ts#L4">src/core/utils.ts:4</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -854,7 +867,7 @@
 					<div class="tsd-signature tsd-kind-icon">root<wbr>Reducer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;redux.combineReducers&lt;Store.State&gt;({isRunning,session,data: undoable(data, {limit: 5,filter: ({ type }) &#x3D;&gt; !type.startsWith(&#x27;FETCH_&#x27;)}),ui,})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/index.ts#L12">src/core/reducers/index.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/index.ts#L12">src/core/reducers/index.ts:12</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -901,7 +914,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/utils.ts#L16">src/core/utils.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/utils.ts#L16">src/core/utils.ts:16</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -942,7 +955,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L124">src/core/reducers/data/navigations.ts:124</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L124">src/core/reducers/data/navigations.ts:124</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -995,7 +1008,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L109">src/core/reducers/data/navigations.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L109">src/core/reducers/data/navigations.ts:109</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1044,7 +1057,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/ui.ts#L37">src/core/reducers/ui.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/ui.ts#L37">src/core/reducers/ui.ts:37</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1070,7 +1083,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/action-creator.ts#L9">src/core/action-creator.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/action-creator.ts#L9">src/core/action-creator.ts:9</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1093,7 +1106,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/ui.ts#L18">src/core/reducers/ui.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/ui.ts#L18">src/core/reducers/ui.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1140,7 +1153,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/sagas/index.ts#L21">src/core/sagas/index.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/sagas/index.ts#L21">src/core/sagas/index.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1166,7 +1179,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L91">src/core/reducers/data/navigations.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L91">src/core/reducers/data/navigations.ts:91</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1200,7 +1213,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/store/middleware.ts#L35">src/core/store/middleware.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/store/middleware.ts#L35">src/core/store/middleware.ts:35</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1214,6 +1227,44 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="handleerror" class="tsd-anchor"></a>
+					<h3>handle<wbr>Error</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">handle<wbr>Error<span class="tsd-signature-symbol">(</span>action<span class="tsd-signature-symbol">: </span><a href="interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, createAction<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/utils.ts#L43">src/core/utils.ts:43</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>action: <a href="interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+								<li>
+									<h5>createAction: <span class="tsd-signature-type">function</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-siganture">
+											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
 					<a name="idgenerator" class="tsd-anchor"></a>
 					<h3>id<wbr>Generator</h3>
 					<ul class="tsd-signatures tsd-kind-function">
@@ -1223,7 +1274,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/store/middleware.ts#L28">src/core/store/middleware.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/store/middleware.ts#L28">src/core/store/middleware.ts:28</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1249,7 +1300,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/utils.ts#L13">src/core/utils.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/utils.ts#L13">src/core/utils.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1278,7 +1329,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/collections.ts#L24">src/core/reducers/data/collections.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/collections.ts#L24">src/core/reducers/data/collections.ts:24</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1327,7 +1378,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L173">src/core/reducers/data/navigations.ts:173</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L173">src/core/reducers/data/navigations.ts:173</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1364,7 +1415,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L61">src/core/reducers/data/navigations.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L61">src/core/reducers/data/navigations.ts:61</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1400,7 +1451,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L54">src/core/reducers/data/page.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L54">src/core/reducers/data/page.ts:54</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1460,7 +1511,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/details.ts#L20">src/core/reducers/data/details.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/details.ts#L20">src/core/reducers/data/details.ts:20</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1482,16 +1533,16 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function">
-					<a name="receiveproducts" class="tsd-anchor"></a>
-					<h3>receive<wbr>Products</h3>
+					<a name="receiveproductrecords" class="tsd-anchor"></a>
+					<h3>receive<wbr>Product<wbr>Records</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">receive<wbr>Products<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><a href="globals.html#state" class="tsd-signature-type">State</a>, products<span class="tsd-signature-symbol">: </span><a href="interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+						<li class="tsd-signature tsd-kind-icon">receive<wbr>Product<wbr>Records<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><a href="globals.html#state" class="tsd-signature-type">State</a>, products<span class="tsd-signature-symbol">: </span><a href="interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L40">src/core/reducers/data/autocomplete.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L42">src/core/reducers/data/autocomplete.ts:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1522,7 +1573,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/query.ts#L24">src/core/reducers/data/query.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/query.ts#L24">src/core/reducers/data/query.ts:24</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1576,7 +1627,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L29">src/core/reducers/data/autocomplete.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L31">src/core/reducers/data/autocomplete.ts:31</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1620,6 +1671,37 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="receivetemplate" class="tsd-anchor"></a>
+					<h3>receive<wbr>Template</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">receive<wbr>Template<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><a href="globals.html#state" class="tsd-signature-type">State</a>, template<span class="tsd-signature-symbol">: </span><a href="interfaces/store.template.html" class="tsd-signature-type">Template</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L45">src/core/reducers/data/autocomplete.ts:45</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>state: <a href="globals.html#state" class="tsd-signature-type">State</a></h5>
+								</li>
+								<li>
+									<h5>template: <a href="interfaces/store.template.html" class="tsd-signature-type">Template</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>template<span class="tsd-signature-symbol">: </span><a href="interfaces/store.template.html" class="tsd-signature-type">Template</a></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
 					<a name="refinementpayload" class="tsd-anchor"></a>
 					<h3>refinement<wbr>Payload</h3>
 					<ul class="tsd-signatures tsd-kind-function">
@@ -1629,7 +1711,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/utils.ts#L28">src/core/utils.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/utils.ts#L28">src/core/utils.ts:28</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1661,7 +1743,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/ui.ts#L27">src/core/reducers/ui.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/ui.ts#L27">src/core/reducers/ui.ts:27</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1700,7 +1782,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L41">src/core/reducers/data/page.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L41">src/core/reducers/data/page.ts:41</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1723,7 +1805,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L73">src/core/reducers/data/navigations.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L73">src/core/reducers/data/navigations.ts:73</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1757,7 +1839,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/details.ts#L17">src/core/reducers/data/details.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/details.ts#L17">src/core/reducers/data/details.ts:17</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1799,7 +1881,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/area.ts#L5">src/core/reducers/data/area.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/area.ts#L5">src/core/reducers/data/area.ts:5</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1822,7 +1904,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L16">src/core/reducers/data/autocomplete.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L17">src/core/reducers/data/autocomplete.ts:17</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1848,7 +1930,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/collections.ts#L13">src/core/reducers/data/collections.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/collections.ts#L13">src/core/reducers/data/collections.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1874,7 +1956,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L45">src/core/reducers/data/page.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L45">src/core/reducers/data/page.ts:45</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1905,7 +1987,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/details.ts#L9">src/core/reducers/data/details.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/details.ts#L9">src/core/reducers/data/details.ts:9</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1931,7 +2013,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/errors.ts#L3">src/core/reducers/data/errors.ts:3</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/errors.ts#L3">src/core/reducers/data/errors.ts:3</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1957,7 +2039,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/is-running.ts#L7">src/core/reducers/is-running.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/is-running.ts#L7">src/core/reducers/is-running.ts:7</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1983,7 +2065,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/session.ts#L27">src/core/reducers/session.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/session.ts#L27">src/core/reducers/session.ts:27</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2014,7 +2096,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L17">src/core/reducers/data/navigations.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L17">src/core/reducers/data/navigations.ts:17</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2050,7 +2132,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/session.ts#L36">src/core/reducers/session.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/session.ts#L36">src/core/reducers/session.ts:36</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2086,7 +2168,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/query.ts#L21">src/core/reducers/data/query.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/query.ts#L21">src/core/reducers/data/query.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2112,7 +2194,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L25">src/core/reducers/data/page.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L25">src/core/reducers/data/page.ts:25</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2139,7 +2221,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/products.ts#L7">src/core/reducers/data/products.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/products.ts#L7">src/core/reducers/data/products.ts:7</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2156,7 +2238,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/recommendations.ts#L18">src/core/reducers/data/recommendations.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/recommendations.ts#L18">src/core/reducers/data/recommendations.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2192,7 +2274,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L25">src/core/reducers/data/autocomplete.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L27">src/core/reducers/data/autocomplete.ts:27</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2223,7 +2305,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/session.ts#L30">src/core/reducers/session.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/session.ts#L30">src/core/reducers/session.ts:30</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2259,7 +2341,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/recommendations.ts#L11">src/core/reducers/data/recommendations.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/recommendations.ts#L11">src/core/reducers/data/recommendations.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2285,7 +2367,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/record-count.ts#L6">src/core/reducers/data/record-count.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/record-count.ts#L6">src/core/reducers/data/record-count.ts:6</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2311,7 +2393,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/redirect.ts#L6">src/core/reducers/data/redirect.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/redirect.ts#L6">src/core/reducers/data/redirect.ts:6</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2337,7 +2419,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L28">src/core/reducers/data/navigations.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L28">src/core/reducers/data/navigations.ts:28</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2373,7 +2455,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/session.ts#L33">src/core/reducers/session.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/session.ts#L33">src/core/reducers/session.ts:33</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2410,7 +2492,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/collections.ts#L21">src/core/reducers/data/collections.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/collections.ts#L21">src/core/reducers/data/collections.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2432,7 +2514,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/sorts.ts#L18">src/core/reducers/data/sorts.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/sorts.ts#L18">src/core/reducers/data/sorts.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2463,7 +2545,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/session.ts#L8">src/core/reducers/session.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/session.ts#L8">src/core/reducers/session.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2500,7 +2582,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L49">src/core/reducers/data/page.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L49">src/core/reducers/data/page.ts:49</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2526,7 +2608,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/sorts.ts#L11">src/core/reducers/data/sorts.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/sorts.ts#L11">src/core/reducers/data/sorts.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2552,7 +2634,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/index.ts#L29">src/core/reducers/index.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/index.ts#L29">src/core/reducers/index.ts:29</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2583,7 +2665,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/template.ts#L7">src/core/reducers/data/template.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/template.ts#L7">src/core/reducers/data/template.ts:7</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2609,7 +2691,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/ui.ts#L9">src/core/reducers/ui.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/ui.ts#L9">src/core/reducers/ui.ts:9</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2635,7 +2717,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/warnings.ts#L3">src/core/reducers/data/warnings.ts:3</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/warnings.ts#L3">src/core/reducers/data/warnings.ts:3</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2660,8 +2742,8 @@
 					<div class="tsd-signature tsd-kind-icon">ACTION<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;&quot;MY_ACTION&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/test/unit/core/action-creator.ts#L10">test/unit/core/action-creator.ts:10</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/test/unit/core/utils.ts#L4">test/unit/core/utils.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/test/unit/core/action-creator.ts#L10">test/unit/core/action-creator.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/test/unit/core/utils.ts#L4">test/unit/core/utils.ts:4</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal tsd-is-not-exported">
@@ -2670,7 +2752,7 @@
 						<div class="tsd-signature tsd-kind-icon">y<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;z&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/test/unit/core/action-creator.ts#L10">test/unit/core/action-creator.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/test/unit/core/action-creator.ts#L10">test/unit/core/action-creator.ts:10</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2681,14 +2763,14 @@
 					<div class="tsd-signature tsd-kind-icon">DEFAULTS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/collections.ts#L8">src/core/reducers/data/collections.ts:8</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L15">src/core/reducers/data/page.ts:15</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L9">src/core/reducers/data/autocomplete.ts:9</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/details.ts#L7">src/core/reducers/data/details.ts:7</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L12">src/core/reducers/data/navigations.ts:12</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/query.ts#L7">src/core/reducers/data/query.ts:7</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/recommendations.ts#L7">src/core/reducers/data/recommendations.ts:7</a></li>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/sorts.ts#L7">src/core/reducers/data/sorts.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/collections.ts#L8">src/core/reducers/data/collections.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L15">src/core/reducers/data/page.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L10">src/core/reducers/data/autocomplete.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/details.ts#L7">src/core/reducers/data/details.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L12">src/core/reducers/data/navigations.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/query.ts#L7">src/core/reducers/data/query.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/recommendations.ts#L7">src/core/reducers/data/recommendations.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/sorts.ts#L7">src/core/reducers/data/sorts.ts:7</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -2697,8 +2779,8 @@
 						<div class="tsd-signature tsd-kind-icon">all<wbr>Ids<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/collections.ts#L9">src/core/reducers/data/collections.ts:9</a></li>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L13">src/core/reducers/data/navigations.ts:13</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/collections.ts#L9">src/core/reducers/data/collections.ts:9</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L13">src/core/reducers/data/navigations.ts:13</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2708,7 +2790,7 @@
 						<div class="tsd-signature tsd-kind-icon">current<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L16">src/core/reducers/data/page.ts:16</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L16">src/core/reducers/data/page.ts:16</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2718,7 +2800,7 @@
 						<div class="tsd-signature tsd-kind-icon">did<wbr>You<wbr>Mean<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/query.ts#L8">src/core/reducers/data/query.ts:8</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/query.ts#L8">src/core/reducers/data/query.ts:8</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2728,7 +2810,7 @@
 						<div class="tsd-signature tsd-kind-icon">first<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L17">src/core/reducers/data/page.ts:17</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L17">src/core/reducers/data/page.ts:17</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2738,7 +2820,7 @@
 						<div class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L18">src/core/reducers/data/page.ts:18</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L18">src/core/reducers/data/page.ts:18</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2748,7 +2830,7 @@
 						<div class="tsd-signature tsd-kind-icon">items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/sorts.ts#L8">src/core/reducers/data/sorts.ts:8</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/sorts.ts#L8">src/core/reducers/data/sorts.ts:8</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2758,7 +2840,7 @@
 						<div class="tsd-signature tsd-kind-icon">navigations<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L12">src/core/reducers/data/autocomplete.ts:12</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L13">src/core/reducers/data/autocomplete.ts:13</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2768,8 +2850,8 @@
 						<div class="tsd-signature tsd-kind-icon">products<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L11">src/core/reducers/data/autocomplete.ts:11</a></li>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/recommendations.ts#L8">src/core/reducers/data/recommendations.ts:8</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L12">src/core/reducers/data/autocomplete.ts:12</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/recommendations.ts#L8">src/core/reducers/data/recommendations.ts:8</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2779,7 +2861,7 @@
 						<div class="tsd-signature tsd-kind-icon">related<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/query.ts#L9">src/core/reducers/data/query.ts:9</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/query.ts#L9">src/core/reducers/data/query.ts:9</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2789,7 +2871,7 @@
 						<div class="tsd-signature tsd-kind-icon">rewrites<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/query.ts#L10">src/core/reducers/data/query.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/query.ts#L10">src/core/reducers/data/query.ts:10</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2799,7 +2881,7 @@
 						<div class="tsd-signature tsd-kind-icon">suggestions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L13">src/core/reducers/data/autocomplete.ts:13</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L14">src/core/reducers/data/autocomplete.ts:14</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2809,8 +2891,8 @@
 						<div class="tsd-signature tsd-kind-icon">by<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/collections.ts#L10">src/core/reducers/data/collections.ts:10</a></li>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/navigations.ts#L14">src/core/reducers/data/navigations.ts:14</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/collections.ts#L10">src/core/reducers/data/collections.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/navigations.ts#L14">src/core/reducers/data/navigations.ts:14</a></li>
 							</ul>
 						</aside>
 						<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
@@ -2819,7 +2901,7 @@
 							<div class="tsd-signature tsd-kind-icon">__computed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/collections.ts#L10">src/core/reducers/data/collections.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/collections.ts#L10">src/core/reducers/data/collections.ts:10</a></li>
 								</ul>
 							</aside>
 							<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -2828,7 +2910,7 @@
 								<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;DEFAULT_COLLECTION</span></div>
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/collections.ts#L10">src/core/reducers/data/collections.ts:10</a></li>
+										<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/collections.ts#L10">src/core/reducers/data/collections.ts:10</a></li>
 									</ul>
 								</aside>
 							</section>
@@ -2840,7 +2922,7 @@
 						<div class="tsd-signature tsd-kind-icon">category<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L10">src/core/reducers/data/autocomplete.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L11">src/core/reducers/data/autocomplete.ts:11</a></li>
 							</ul>
 						</aside>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -2849,7 +2931,7 @@
 							<div class="tsd-signature tsd-kind-icon">values<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/autocomplete.ts#L10">src/core/reducers/data/autocomplete.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/autocomplete.ts#L11">src/core/reducers/data/autocomplete.ts:11</a></li>
 								</ul>
 							</aside>
 						</section>
@@ -2860,7 +2942,7 @@
 						<div class="tsd-signature tsd-kind-icon">sizes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L19">src/core/reducers/data/page.ts:19</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L19">src/core/reducers/data/page.ts:19</a></li>
 							</ul>
 						</aside>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -2869,7 +2951,7 @@
 							<div class="tsd-signature tsd-kind-icon">items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[DEFAULT_PAGE_SIZE]</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L20">src/core/reducers/data/page.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L20">src/core/reducers/data/page.ts:20</a></li>
 								</ul>
 							</aside>
 						</section>
@@ -2879,7 +2961,7 @@
 							<div class="tsd-signature tsd-kind-icon">selected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/reducers/data/page.ts#L21">src/core/reducers/data/page.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/reducers/data/page.ts#L21">src/core/reducers/data/page.ts:21</a></li>
 								</ul>
 							</aside>
 						</section>
@@ -2891,7 +2973,7 @@
 					<div class="tsd-signature tsd-kind-icon">Routes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/utils.ts#L7">src/core/utils.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/utils.ts#L7">src/core/utils.ts:7</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -2900,7 +2982,7 @@
 						<div class="tsd-signature tsd-kind-icon">DETAILS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;details&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/utils.ts#L9">src/core/utils.ts:9</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/utils.ts#L9">src/core/utils.ts:9</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2910,7 +2992,7 @@
 						<div class="tsd-signature tsd-kind-icon">NAVIGATION<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;navigation&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/utils.ts#L10">src/core/utils.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/utils.ts#L10">src/core/utils.ts:10</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2920,7 +3002,7 @@
 						<div class="tsd-signature tsd-kind-icon">SEARCH<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;search&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/ae2155f/src/core/utils.ts#L8">src/core/utils.ts:8</a></li>
+								<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/9c2f198/src/core/utils.ts#L8">src/core/utils.ts:8</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -2999,6 +3081,9 @@
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#autocomplete_suggestions_updated" class="tsd-kind-icon">AUTOCOMPLETE_<wbr>SUGGESTIONS_<wbr>UPDATED</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#autocomplete_template_updated" class="tsd-kind-icon">AUTOCOMPLETE_<wbr>TEMPLATE_<wbr>UPDATED</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#beacon_add_to_cart" class="tsd-kind-icon">BEACON_<wbr>ADD_<wbr>TO_<wbr>CART</a>
@@ -3172,6 +3257,9 @@
 						<a href="globals.html#errorhandler" class="tsd-kind-icon">error<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#handleerror" class="tsd-kind-icon">handle<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#idgenerator" class="tsd-kind-icon">id<wbr>Generator</a>
 					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter">
@@ -3193,13 +3281,16 @@
 						<a href="globals.html#receiveproduct" class="tsd-kind-icon">receive<wbr>Product</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#receiveproducts" class="tsd-kind-icon">receive<wbr>Products</a>
+						<a href="globals.html#receiveproductrecords" class="tsd-kind-icon">receive<wbr>Product<wbr>Records</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#receivequery" class="tsd-kind-icon">receive<wbr>Query</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#receivesuggestions" class="tsd-kind-icon">receive<wbr>Suggestions</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#receivetemplate" class="tsd-kind-icon">receive<wbr>Template</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#refinementpayload" class="tsd-kind-icon">refinement<wbr>Payload</a>
