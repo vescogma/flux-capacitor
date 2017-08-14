@@ -200,6 +200,18 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('resetRefinements()', () => {
+      it('should reset refinements', () => {
+        const action = { a: 'b' };
+        const updateSearch = stub(actions, 'updateSearch').returns(action);
+
+        const result = actions.resetRefinements();
+
+        expect(result).to.be.eq(action);
+        expect(updateSearch).to.be.calledWithExactly({ clear: true });
+      });
+    });
+
     describe('search()', () => {
       it('should call actions.updateSearch()', () => {
         const query = 'pineapple';

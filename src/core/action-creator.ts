@@ -60,6 +60,9 @@ export function createActions(flux: FluxCapacitor) {
       switchRefinement: (field: string, valueOrLow: any, high: any = null) =>
         actions.updateSearch({ ...refinementPayload(field, valueOrLow, high), clear: field }),
 
+      resetRefinements: () =>
+        actions.updateSearch({ clear: true }),
+
       search: (query: string = Selectors.query(flux.store.getState())) =>
         actions.updateSearch({ query, clear: true }),
 
