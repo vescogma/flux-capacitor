@@ -13,12 +13,7 @@ namespace Page {
     (currentPage - 1) * pageSize + 1;
 
   export const toResult = (currentPage: number, pageSize: number, totalRecords: number) => {
-    if ((currentPage * pageSize) > totalRecords) {
-      const total = (currentPage - 1) * pageSize;
-      return total + (totalRecords % total);
-    } else {
-      return currentPage * pageSize;
-    }
+    return Math.min(currentPage * pageSize, totalRecords);
   };
 }
 

@@ -33,9 +33,24 @@ suite('Page Adapter', ({ expect }) => {
     });
   });
 
-  describe('fromResult', () => {
+  describe('fromResult()', () => {
     it('should return the first record index on page', () => {
       expect(Adapter.fromResult(4, 32)).to.eq(97);
+    });
+  });
+
+  describe('toResult()', () => {
+    it('should return totalRecords when there is only one page and totalRecords is less than pageSize', () => {
+      expect(Adapter.toResult(1, 10, 6)).to.eq(6);
+    });
+
+    // tslint:disable-next-line max-line-length
+    it('should return totalRecords when it is the last page and the number of items on the page is less than pageSize', () => {
+      expect(Adapter.toResult(2, 10, 12)).to.eq(12);
+    });
+
+    it('should return the product of currentPage and pageSize when totalRecords is greater than pageSize', () => {
+      expect(Adapter.toResult(1, 10, 16)).to.eq(10);
     });
   });
 });
