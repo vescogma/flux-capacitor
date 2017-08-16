@@ -5,8 +5,8 @@ State management for StoreFront
 [![npm (scoped with tag)](https://img.shields.io/npm/v/@storefront/flux-capacitor.svg?style=flat-square)](https://www.npmjs.com/package/@storefront/flux-capacitor)
 [![CircleCI branch](https://img.shields.io/circleci/project/github/groupby/flux-capacitor/master.svg?style=flat-square)](https://circleci.com/gh/groupby/flux-capacitor/tree/master)
 [![Codecov branch](https://img.shields.io/codecov/c/github/groupby/flux-capacitor/master.svg?style=flat-square)](https://codecov.io/gh/groupby/flux-capacitor)
-[![bitHound](https://img.shields.io/bithound/code/github/groupby/flux-capacitor.svg?style=flat-square)](https://www.bithound.io/github/groupby/flux-capacitor)
-[![bitHound](https://img.shields.io/bithound/dependencies/github/groupby/flux-capacitor.svg?style=flat-square)](https://www.bithound.io/github/groupby/flux-capacitor)
+[![Dependency Status](https://dependencyci.com/github/groupby/flux-capacitor/badge?style=flat-square)](https://dependencyci.com/github/groupby/flux-capacitor)
+[![Known Vulnerabilities](https://snyk.io/test/github/groupby/flux-capacitor/badge.svg?style=flat-square)](https://snyk.io/test/github/groupby/flux-capacitor)
 
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square)](http://commitizen.github.io/cz-cli/)
