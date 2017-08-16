@@ -123,8 +123,11 @@ namespace Adapter {
     }
   };
 
-  export const extractSaytCategoryField = (config: Configuration) => {
-    return config.autocomplete.category;
+  export const extractSaytCategoryField = (config: Configuration) =>
+    config.autocomplete.category;
+
+  export const extractAutocompleteNavigationLabels = (config: Configuration) => {
+    return config.autocomplete.navigations;
   };
 }
 

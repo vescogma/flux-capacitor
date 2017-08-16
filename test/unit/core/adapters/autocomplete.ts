@@ -9,7 +9,7 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
     it('should remap search term values', () => {
       const response = { result: { searchTerms: [{ value: 'a' }, { value: 'b', test: 'ignore me' }] } };
 
-      const { suggestions } = Adapter.extractSuggestions(response, '');
+      const { suggestions } = Adapter.extractSuggestions(response, '', {});
 
       expect(suggestions).to.eql([{ value: 'a' }, { value: 'b' }]);
     });
@@ -21,17 +21,31 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
       const response = { result: { searchTerms: [searchTerm] } };
       const extractCategoryValues = stub(Adapter, 'extractCategoryValues').returns(values);
 
-      const { categoryValues } = Adapter.extractSuggestions(response, 'brand');
+      const { categoryValues } = Adapter.extractSuggestions(response, 'brand', {});
 
       expect(categoryValues).to.eq(values);
       expect(extractCategoryValues).to.be.calledWith(searchTerm);
+    });
+
+    it('should add navigation labels if provided', () => {
+      const brandNavigation = { name: 'a', values: ['b', 'c'] };
+      const categoryNavigation = { name: 'd', values: ['e', 'f'] };
+      const response = { result: { navigations: [brandNavigation, categoryNavigation] } };
+      const labels = { a: 'Brand' };
+
+      const { navigations } = Adapter.extractSuggestions(response, 'brand', labels);
+
+      expect(navigations).to.eql([
+        { field: 'a', refinements: ['b', 'c'], label: 'Brand' },
+        { field: 'd', refinements: ['e', 'f'], label: 'd' },
+      ]);
     });
 
     it('should should ignore category if not specified', () => {
       const response = { result: { searchTerms: [{}] } };
       const extractCategoryValues = stub(Adapter, 'extractCategoryValues');
 
-      Adapter.extractSuggestions(response, '');
+      Adapter.extractSuggestions(response, '', {});
 
       expect(extractCategoryValues.called).to.be.false;
     });
@@ -40,7 +54,7 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
       const response = { result: { searchTerms: [] } };
       const extractCategoryValues = stub(Adapter, 'extractCategoryValues');
 
-      Adapter.extractSuggestions(response, 'brand');
+      Adapter.extractSuggestions(response, 'brand', {});
 
       expect(extractCategoryValues.called).to.be.false;
     });

@@ -1,6 +1,7 @@
 import * as effects from 'redux-saga/effects';
 import Actions from '../../../../src/core/actions';
 import Adapter from '../../../../src/core/adapters/autocomplete';
+import ConfigAdapter from '../../../../src/core/adapters/configuration';
 import SearchAdapter from '../../../../src/core/adapters/search';
 import Requests from '../../../../src/core/requests';
 import sagaCreator, { Tasks } from '../../../../src/core/sagas/autocomplete';
@@ -30,6 +31,7 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const sayt = { autocomplete };
         const query = 'rain boots';
         const field = 'popularity';
+        const navigationLabels = { u: 'v' };
         const customerId = 'myCustomer';
         const suggestionCount = 10;
         const recommendations = { suggestionCount };
@@ -51,6 +53,8 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const autocompleteCategoryFieldSelector = stub(Selectors, 'autocompleteCategoryField').returns(field);
         const extractSuggestions = stub(Adapter, 'extractSuggestions').returns(suggestions);
         const mergeSuggestions = stub(Adapter, 'mergeSuggestions').returns(mergedSuggestions);
+        const extractAutocompleteNavigationLabels = stub(ConfigAdapter, 'extractAutocompleteNavigationLabels')
+          .returns(navigationLabels);
         // tslint:disable-next-line max-line-length
         const trendingUrl = `https://${customerId}.groupbycloud.com/wisdom/v2/public/recommendations/searches/_getPopular`;
         const postRequest = {
@@ -72,7 +76,8 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         expect(task.next(state).value).to.eql(effects.all([effects.call([sayt, autocomplete], query, request), effects.call(fetch, trendingUrl, postRequest)]));
         expect(task.next([response, trendingResponse]).value).to.eql(trendingBodyPromise);
         expect(task.next(trendingResponseValue).value).to.eql(effects.put(receiveAutocompleteSuggestionsAction));
-        expect(extractSuggestions).to.be.calledWithExactly(response, field);
+        expect(extractAutocompleteNavigationLabels).to.be.calledWithExactly(config);
+        expect(extractSuggestions).to.be.calledWithExactly(response, field, navigationLabels);
         expect(locationSelector).to.be.calledWithExactly(state);
         expect(mergeSuggestions).to.be.calledWithExactly(suggestions.suggestions, trendingResponseValue);
         // tslint:disable-next-line max-line-length

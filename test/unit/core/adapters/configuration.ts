@@ -241,4 +241,12 @@ suite('Configuration Adapter', ({ expect, stub }) => {
       expect(Adapter.isAutocompleteMatchingFuzzily(<any>{ autocomplete: { fuzzy: false } })).to.be.false;
     });
   });
+
+  describe('extractAutocompleteNavigationLabels()', () => {
+    it('should return the configured autocomplete navigation labels', () => {
+      const labels = { a: 'b' };
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.extractAutocompleteNavigationLabels(<any>{ autocomplete: { navigations: labels } })).to.eql(labels);
+    });
+  });
 });

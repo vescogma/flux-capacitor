@@ -19,13 +19,14 @@ namespace Adapter {
     Config.extractAutocompleteProductArea(config) || Adapter.extractArea(config);
 
   // tslint:disable-next-line max-line-length
-  export const extractSuggestions = ({ result }: any, category: string): Actions.Payload.Autocomplete.Suggestions => {
+  export const extractSuggestions = ({ result }: any, category: string, labels: { [key: string]: string }): Actions.Payload.Autocomplete.Suggestions => {
     const searchTerms = result.searchTerms || [];
     const navigations = result.navigations || [];
     return {
       categoryValues: category && searchTerms[0] ? Adapter.extractCategoryValues(searchTerms[0], category) : [],
       suggestions: searchTerms.map(({ value }) => ({ value })),
-      navigations: navigations.map(({ name: field, values: refinements }) => ({ field, refinements }))
+      navigations: navigations.map(({ name: field, values: refinements }) =>
+        ({ field, label: labels[field] || field, refinements }))
     };
   };
 

@@ -270,6 +270,7 @@ namespace Store {
 
     export interface Navigation {
       field: string;
+      label: string;
       refinements: string[];
     }
 

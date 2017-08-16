@@ -2,6 +2,7 @@ import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import Adapter from '../adapters/autocomplete';
+import ConfigAdapter from '../adapters/configuration';
 import RecommendationsAdapter from '../adapters/recommendations';
 import SearchAdapter from '../adapters/search';
 import Configuration from '../configuration';
@@ -65,7 +66,8 @@ export namespace Tasks {
       }
 
       const responses = yield effects.all(requests);
-      const autocompleteSuggestions = Adapter.extractSuggestions(responses[0], field);
+      const navigationLabels = ConfigAdapter.extractAutocompleteNavigationLabels(flux.config);
+      const autocompleteSuggestions = Adapter.extractSuggestions(responses[0], field, navigationLabels);
       const suggestions = config.suggestionCount > 0 ?
         {
           ...autocompleteSuggestions,
