@@ -47,10 +47,13 @@ export function createActions(flux: FluxCapacitor) {
           {
             ...metadata,
             validator: {
-              payload: {
+              payload: [{
                 func: ({ query }) => !('query' in search) || !!query || query === null,
                 msg: 'search term is empty'
-              }
+              }, {
+                func: ({ query }, state) => query !== Selectors.query(state),
+                msg: 'search term is not different'
+              }]
             }
           }),
 
