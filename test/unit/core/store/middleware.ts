@@ -1,5 +1,5 @@
 import { ActionCreators } from 'redux-undo';
-import * as uuid from 'uuid';
+import * as sinon from 'sinon';
 import Actions from '../../../../src/core/actions';
 import * as Events from '../../../../src/core/events';
 import createMiddleware, { errorHandler, idGenerator } from '../../../../src/core/store/middleware';
@@ -25,27 +25,23 @@ suite('store middleware', ({ expect, spy, stub }) => {
 
   describe('idGenerator()', () => {
     it('should add id if action type is in whitelist', () => {
-      const id = '1234';
       const idKey = 'myId';
-      const v1 = stub(uuid, 'v1').returns(id);
       const next = spy();
       const whitelist = ['a', 'b', 'c'];
 
       idGenerator(idKey, whitelist)(null)(null)(next)({ type: 'b', c: 'd' });
 
-      expect(next).to.be.calledWith({ type: 'b', c: 'd', meta: { [idKey]: id } });
+      expect(next).to.be.calledWith({ type: 'b', c: 'd', meta: { [idKey]: sinon.match.string } });
     });
 
     it('should augment existing meta', () => {
-      const id = '1234';
       const idKey = 'myId';
       const meta = { d: 'e' };
       const next = spy();
-      stub(uuid, 'v1').returns(id);
 
       idGenerator(idKey, ['a', 'b', 'c'])(null)(null)(next)({ type: 'b', c: 'd', meta });
 
-      expect(next).to.be.calledWithExactly({ type: 'b', c: 'd', meta: { d: 'e', [idKey]: id } });
+      expect(next).to.be.calledWithExactly({ type: 'b', c: 'd', meta: { d: 'e', [idKey]: sinon.match.string } });
     });
 
     it('should not modify action if type not in whitelist', () => {

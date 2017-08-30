@@ -1,6 +1,6 @@
+import * as cuid from 'cuid';
 import { Middleware } from 'redux';
 import { ActionCreators } from 'redux-undo';
-import * as uuid from 'uuid';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import * as Events from '../events';
@@ -28,7 +28,7 @@ export const MIDDLEWARE_CREATORS = [
 export function idGenerator(key: string, actions: string[]) {
   return (flux) => (store) => (next) => (action) =>
     actions.includes(action.type)
-      ? next({ ...action, meta: { ...action.meta, [key]: uuid.v1() } })
+      ? next({ ...action, meta: { ...action.meta, [key]: cuid() } })
       : next(action);
 }
 
