@@ -46,6 +46,9 @@ namespace Requests {
   export const autocompleteProducts = (state: Store.State, config: AppConfig): QueryTimeProductSearchConfig =>
     Requests.chain(config.autocomplete.defaults.products, {
       ...Requests.search(state, config),
+      refinements: [],
+      skip: 0,
+      sort: undefined,
       language: Autocomplete.extractProductLanguage(config),
       area: Autocomplete.extractProductArea(config),
       pageSize: Configuration.extractAutocompleteProductCount(config)
