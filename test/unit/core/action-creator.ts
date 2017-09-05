@@ -81,8 +81,17 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
     describe('fetchAutocompleteProducts()', () => {
       it('should return an action', () => {
         const query = 'barbie';
+        const refinements: any[] = ['a', 'b'];
 
-        expectAction(() => actions.fetchAutocompleteProducts(query), Actions.FETCH_AUTOCOMPLETE_PRODUCTS, query);
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.fetchAutocompleteProducts(query, refinements), Actions.FETCH_AUTOCOMPLETE_PRODUCTS, { query, refinements });
+      });
+
+      it('should default to an empty array of refinements', () => {
+        const query = 'barbie';
+
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.fetchAutocompleteProducts(query), Actions.FETCH_AUTOCOMPLETE_PRODUCTS, { query, refinements: [] });
       });
     });
 

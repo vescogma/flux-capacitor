@@ -237,8 +237,15 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     describe('saytProducts()', () => {
       it('should call fetchAutocompleteProducts() action', () => {
         const query = 'maple beans';
+        const refinements: any[] = ['a', 'b'];
 
-        expectDispatch(() => flux.saytProducts(query), 'fetchAutocompleteProducts', query);
+        expectDispatch(() => flux.saytProducts(query, refinements), 'fetchAutocompleteProducts', query, refinements);
+      });
+
+      it('should default to an empty array of refinements', () => {
+        const query = 'maple beans';
+
+        expectDispatch(() => flux.saytProducts(query), 'fetchAutocompleteProducts', query, []);
       });
     });
   });

@@ -24,12 +24,12 @@ export function createActions(flux: FluxCapacitor) {
       fetchMoreProducts: (amount: number): Actions.FetchMoreProducts =>
         action(Actions.FETCH_MORE_PRODUCTS, amount, metadata),
 
-      // tslint:disable-next-line max-line-length
       fetchAutocompleteSuggestions: (query: string): Actions.FetchAutocompleteSuggestions =>
         action(Actions.FETCH_AUTOCOMPLETE_SUGGESTIONS, query, metadata),
 
-      fetchAutocompleteProducts: (query: string): Actions.FetchAutocompleteProducts =>
-        action(Actions.FETCH_AUTOCOMPLETE_PRODUCTS, query, metadata),
+      // tslint:disable-next-line max-line-length
+      fetchAutocompleteProducts: (query: string, refinements: Actions.Payload.Autocomplete.Refinement[] = []): Actions.FetchAutocompleteProducts =>
+        action(Actions.FETCH_AUTOCOMPLETE_PRODUCTS, { query, refinements }, metadata),
 
       fetchCollectionCount: (collection: string): Actions.FetchCollectionCount =>
         action(Actions.FETCH_COLLECTION_COUNT, collection, metadata),

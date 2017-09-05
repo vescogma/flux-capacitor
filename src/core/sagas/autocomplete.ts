@@ -81,14 +81,16 @@ export namespace Tasks {
     }
   }
 
-  export function* fetchProducts(flux: FluxCapacitor, action: Actions.FetchAutocompleteProducts) {
+  // tslint:disable-next-line max-line-length
+  export function* fetchProducts(flux: FluxCapacitor, { payload: { query, refinements } }: Actions.FetchAutocompleteProducts) {
     try {
       const request = yield effects.select(Requests.autocompleteProducts, flux.config);
       const res = yield effects.call(
         [flux.clients.bridge, flux.clients.bridge.search],
         {
           ...request,
-          query: action.payload
+          query,
+          refinements: refinements.map(({ field, value }) => ({ type: 'Value', navigationName: field, value }))
         }
       );
 
