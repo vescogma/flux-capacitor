@@ -22,18 +22,14 @@ suite('product details saga', ({ expect, spy, stub }) => {
 
   describe('Tasks', () => {
     describe('fetchProductDetails()', () => {
-      it('should return product details', () => {
+      it('should call receiveDetailsProduct', () => {
         const id = '123';
         const config: any = { a: 'b' };
         const search = () => null;
-        const emit = spy();
-        const saveState = spy();
         const bridge = { search };
-        const receiveDetailsProductAction: any = { c: 'd' };
-        const receiveDetailsProduct = spy(() => receiveDetailsProductAction);
         const record = { allMeta: { e: 'f' } };
         const request = { g: 'h' };
-        const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveDetailsProduct }, config };
+        const flux: any = { clients: { bridge }, config };
 
         const task = Tasks.fetchProductDetails(flux, <any>{ payload: id });
 
@@ -45,11 +41,9 @@ suite('product details saga', ({ expect, spy, stub }) => {
           skip: 0,
           refinements: [{ navigationName: 'id', type: 'Value', value: id }]
         }));
-        expect(task.next({ records: [record] }).value).to.eql(effects.put(receiveDetailsProductAction));
-        expect(emit).to.be.calledWith(Events.BEACON_VIEW_PRODUCT, record);
-
-        task.next();
-        expect(saveState).to.be.called;
+        expect(task.next({ records: [record] }).value).to.eql(
+          effects.call(<any>Tasks.receiveDetailsProduct, flux, record)
+        );
       });
 
       it('should handle product not found', () => {
@@ -85,6 +79,24 @@ suite('product details saga', ({ expect, spy, stub }) => {
         expect(task.throw(error).value).to.eql(effects.put(receiveDetailsProductAction));
         expect(receiveDetailsProduct).to.be.calledWith(error);
         task.next();
+      });
+    });
+
+    describe('receiveDetailsProduct()', () => {
+      it('should return product details', () => {
+        const emit = spy();
+        const saveState = spy();
+        const receiveDetailsProductAction: any = { c: 'd' };
+        const receiveDetailsProduct = spy(() => receiveDetailsProductAction);
+        const record = { allMeta: { e: 'f' }, id: '123' };
+        const flux: any = { emit, saveState, actions: { receiveDetailsProduct } };
+
+        const task = Tasks.receiveDetailsProduct(flux, record);
+
+        expect(task.next().value).to.eql(effects.put(receiveDetailsProductAction));
+        expect(emit).to.be.calledWith(Events.BEACON_VIEW_PRODUCT, record);
+        task.next();
+        expect(saveState).to.be.called;
       });
     });
   });

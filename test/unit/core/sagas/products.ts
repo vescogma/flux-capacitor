@@ -3,6 +3,7 @@ import { ActionCreators } from 'redux-undo';
 import Actions from '../../../../src/core/actions';
 import * as Events from '../../../../src/core/events';
 import Requests from '../../../../src/core/requests';
+import { Tasks as productDetailsTasks } from '../../../../src/core/sagas/product-details';
 import sagaCreator, { Tasks } from '../../../../src/core/sagas/products';
 import Selectors from '../../../../src/core/selectors';
 import { Routes } from '../../../../src/core/utils';
@@ -27,7 +28,7 @@ suite('products saga', ({ expect, spy, stub }) => {
     describe('fetchProducts()', () => {
       it('should return products', () => {
         const id = '1459';
-        const config: any = { e: 'f' };
+        const config: any = { e: 'f', search: { redirectSingleResult: false } };
         const emit = spy();
         const saveState = spy();
         const search = () => null;
@@ -36,7 +37,7 @@ suite('products saga', ({ expect, spy, stub }) => {
         const action: any = { payload };
         const receiveProductsAction: any = { c: 'd' };
         const request = { e: 'f' };
-        const response = { id };
+        const response = { id, totalRecordCount: 3 };
         const receiveProducts = spy(() => receiveProductsAction);
         const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, config };
 
@@ -50,6 +51,31 @@ suite('products saga', ({ expect, spy, stub }) => {
 
         task.next();
         expect(saveState).to.be.calledWith(Routes.SEARCH);
+      });
+
+      it('should call receiveDetailsProduct if redirectSingleResult true and single record', () => {
+        const id = '1459';
+        const config: any = { e: 'f', search: { redirectSingleResult: true } };
+        const emit = spy();
+        const saveState = spy();
+        const search = () => null;
+        const bridge = { search };
+        const payload = { a: 'b' };
+        const action: any = { payload };
+        const receiveProductsAction: any = { c: 'd' };
+        const request = { e: 'f' };
+        const response = { id, totalRecordCount: 1, records: [{}] };
+        const receiveProducts = spy(() => receiveProductsAction);
+        const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, config };
+
+        const task = Tasks.fetchProducts(flux, action);
+
+        task.next();
+        task.next();
+
+        expect(task.next(response).value).to.eql(
+          effects.call(productDetailsTasks.receiveDetailsProduct, flux, response.records[0])
+        );
       });
 
       it('should handle redirect', () => {

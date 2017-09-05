@@ -103,6 +103,10 @@ namespace Configuration {
       descending?: boolean;
     }>;
     /**
+     * redirect to the details page of product if there is only 1 product result for a search
+     */
+    redirectSingleResult: boolean;
+    /**
      * default request values
      */
     defaults?: Partial<Request> | ((request: Partial<Request>) => Partial<Request>);

@@ -23,15 +23,19 @@ export namespace Tasks {
 
       if (records.length !== 0) {
         const [record] = records;
-        flux.emit(Events.BEACON_VIEW_PRODUCT, record);
-        yield effects.put(flux.actions.receiveDetailsProduct(record.allMeta));
-        flux.saveState(utils.Routes.DETAILS);
+        yield effects.call(receiveDetailsProduct, flux, record);
       } else {
         throw new Error(`no records found matching id: ${id}`);
       }
     } catch (e) {
       yield effects.put(flux.actions.receiveDetailsProduct(e));
     }
+  }
+
+  export function* receiveDetailsProduct(flux: FluxCapacitor, record: Store.Product) {
+    flux.emit(Events.BEACON_VIEW_PRODUCT, record);
+    yield effects.put(flux.actions.receiveDetailsProduct(record.allMeta));
+    flux.saveState(utils.Routes.DETAILS);
   }
 }
 

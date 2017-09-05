@@ -6,6 +6,7 @@ import Requests from '../requests';
 import Selectors from '../selectors';
 import Store from '../store';
 import * as utils from '../utils';
+import { Tasks as productDetailsTasks } from './product-details';
 
 export namespace Tasks {
   export function* fetchProducts(flux: FluxCapacitor, action: Actions.FetchProducts) {
@@ -17,9 +18,13 @@ export namespace Tasks {
         yield effects.put(flux.actions.receiveRedirect(res.redirect));
       }
 
-      flux.emit(Events.BEACON_SEARCH, res.id);
-      yield effects.put(<any>flux.actions.receiveProducts(res));
-      flux.saveState(utils.Routes.SEARCH);
+      if (flux.config.search.redirectSingleResult && res.totalRecordCount === 1) {
+        yield effects.call(productDetailsTasks.receiveDetailsProduct, flux, res.records[0]);
+      } else {
+        flux.emit(Events.BEACON_SEARCH, res.id);
+        yield effects.put(<any>flux.actions.receiveProducts(res));
+        flux.saveState(utils.Routes.SEARCH);
+      }
     } catch (e) {
       yield effects.put(<any>flux.actions.receiveProducts(e));
     }
