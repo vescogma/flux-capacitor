@@ -100,7 +100,7 @@ jobs:
               echo "no change in generated documentation"
             fi
       - save_cache:
-          key: docs_cache-{{ checksum "component.docs.json" }}
+          key: docs_cache-{{ checksum "component.docs.json" }}-{{ epoch }}
           paths:
             - ~/project/component.docs.json
 
