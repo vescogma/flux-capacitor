@@ -67,7 +67,7 @@ export namespace Tasks {
 
       const responses = yield effects.all(requests);
       const navigationLabels = ConfigAdapter.extractAutocompleteNavigationLabels(flux.config);
-      const autocompleteSuggestions = Adapter.extractSuggestions(responses[0], field, navigationLabels);
+      const autocompleteSuggestions = Adapter.extractSuggestions(responses[0], query, field, navigationLabels);
       const suggestions = config.suggestionCount > 0 ?
         {
           ...autocompleteSuggestions,
