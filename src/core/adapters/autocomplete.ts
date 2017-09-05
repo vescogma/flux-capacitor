@@ -19,11 +19,13 @@ namespace Adapter {
     Config.extractAutocompleteProductArea(config) || Adapter.extractArea(config);
 
   // tslint:disable-next-line max-line-length
-  export const extractSuggestions = ({ result }: any, category: string, labels: { [key: string]: string }): Actions.Payload.Autocomplete.Suggestions => {
+  export const extractSuggestions = ({ result }: any, query: string, category: string, labels: { [key: string]: string }): Actions.Payload.Autocomplete.Suggestions => {
     const searchTerms = result.searchTerms || [];
     const navigations = result.navigations || [];
+    const hasCategory = category && searchTerms[0] && Adapter.termsMatch(searchTerms[0].value, query);
     return {
-      categoryValues: category && searchTerms[0] ? Adapter.extractCategoryValues(searchTerms[0], category) : [],
+      // tslint:disable-next-line max-line-length
+      categoryValues: hasCategory ? Adapter.extractCategoryValues(searchTerms[0], category) : [],
       suggestions: searchTerms.map(({ value }) => ({ value })),
       navigations: navigations.map(({ name: field, values: refinements }) =>
         ({ field, label: labels[field] || field, refinements }))
@@ -38,6 +40,10 @@ namespace Adapter {
 
   export const mergeSuggestions = (suggestions: Array<{ value: string }>, recommendations: RecommendationsResponse) =>
     [...recommendations.result.map(({ query }) => ({ value: query, trending: true })), ...suggestions];
+
+  export const termsMatch = (lhs: string, rhs: string) => {
+    return lhs.toLowerCase().trim() === rhs.toLowerCase().trim();
+  };
 }
 
 export default Adapter;

@@ -9,19 +9,33 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
     it('should remap search term values', () => {
       const response = { result: { searchTerms: [{ value: 'a' }, { value: 'b', test: 'ignore me' }] } };
 
-      const { suggestions } = Adapter.extractSuggestions(response, '', {});
+      const { suggestions } = Adapter.extractSuggestions(response, '', '', {});
 
       expect(suggestions).to.eql([{ value: 'a' }, { value: 'b' }]);
     });
 
-    it('should extract category values', () => {
+    it('should not extract category values if query does not match', () => {
       const brand = { a: 'b' };
       const values = ['x', 'y'];
       const searchTerm = { value: 'a', additionalInfo: { brand } };
       const response = { result: { searchTerms: [searchTerm] } };
-      const extractCategoryValues = stub(Adapter, 'extractCategoryValues').returns(values);
+      stub(Adapter, 'termsMatch').returns(false);
+      stub(Adapter, 'extractCategoryValues').callsFake(() => expect.fail());
 
-      const { categoryValues } = Adapter.extractSuggestions(response, 'brand', {});
+      const { categoryValues } = Adapter.extractSuggestions(response, '', 'brand', {});
+
+      expect(categoryValues).to.eql([]);
+    });
+
+    it('should extract category values when query matches', () => {
+      const brand = { a: 'b' };
+      const values = ['x', 'y'];
+      const searchTerm = { value: 'app', additionalInfo: { brand } };
+      const response = { result: { searchTerms: [searchTerm] } };
+      const extractCategoryValues = stub(Adapter, 'extractCategoryValues').returns(values);
+      stub(Adapter, 'termsMatch').returns(true);
+
+      const { categoryValues } = Adapter.extractSuggestions(response, '', 'brand', {});
 
       expect(categoryValues).to.eq(values);
       expect(extractCategoryValues).to.be.calledWith(searchTerm);
@@ -33,7 +47,7 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
       const response = { result: { navigations: [brandNavigation, categoryNavigation] } };
       const labels = { a: 'Brand' };
 
-      const { navigations } = Adapter.extractSuggestions(response, 'brand', labels);
+      const { navigations } = Adapter.extractSuggestions(response, '', 'brand', labels);
 
       expect(navigations).to.eql([
         { field: 'a', refinements: ['b', 'c'], label: 'Brand' },
@@ -45,7 +59,7 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
       const response = { result: { searchTerms: [{}] } };
       const extractCategoryValues = stub(Adapter, 'extractCategoryValues');
 
-      Adapter.extractSuggestions(response, '', {});
+      Adapter.extractSuggestions(response, '', '', {});
 
       expect(extractCategoryValues.called).to.be.false;
     });
@@ -54,7 +68,7 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
       const response = { result: { searchTerms: [] } };
       const extractCategoryValues = stub(Adapter, 'extractCategoryValues');
 
-      Adapter.extractSuggestions(response, 'brand', {});
+      Adapter.extractSuggestions(response, '', 'brand', {});
 
       expect(extractCategoryValues.called).to.be.false;
     });
@@ -188,6 +202,16 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
       const recommendations = <any>{ result: [{ query: 'test' }, { query: 'idk' }] };
       const result = [{ value: 'test', trending: true }, { value: 'idk', trending: true }, ...suggestions];
       expect(Adapter.mergeSuggestions(suggestions, recommendations)).to.eql(result);
+    });
+  });
+
+  describe('termsMatch()', () => {
+    it('should return true if both terms are roughly equivalent', () => {
+      expect(Adapter.termsMatch('   ApPLe  ', ' aPPlE   ')).to.be.true;
+    });
+
+    it('should return false if terms are not equivalent', () => {
+      expect(Adapter.termsMatch('   AppPlE  ', ' aPPlee   ')).to.be.false;
     });
   });
 });
