@@ -107,8 +107,8 @@ class FluxCapacitor extends EventEmitter {
     this.store.dispatch(this.actions.fetchAutocompleteSuggestions(query));
   }
 
-  saytProducts(query: string) {
-    this.store.dispatch(this.actions.fetchAutocompleteProducts(query));
+  saytProducts(query: string, refinements: Actions.Payload.Autocomplete.Refinement[] = []) {
+    this.store.dispatch(this.actions.fetchAutocompleteProducts(query, refinements));
   }
 
   /**

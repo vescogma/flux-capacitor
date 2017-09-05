@@ -234,7 +234,8 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const search = () => null;
         const bridge = { search };
         const query = 'umbrellas';
-        const action: any = { payload: query };
+        const refinements = [{ field: 'brand', value: 'Nike' }];
+        const action: any = { payload: { query, refinements } };
         const receiveAutocompleteProductsAction: any = { c: 'd' };
         const receiveAutocompleteProducts = spy(() => receiveAutocompleteProductsAction);
         const products = ['e', 'f'];
@@ -246,7 +247,11 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const task = Tasks.fetchProducts(flux, action);
 
         expect(task.next().value).to.eql(effects.select(Requests.autocompleteProducts, config));
-        expect(task.next(request).value).to.eql(effects.call([bridge, search], { ...request, query }));
+        expect(task.next(request).value).to.eql(effects.call([bridge, search], {
+          ...request,
+          query,
+          refinements: [{ navigationName: 'brand', type: 'Value', value: 'Nike' }]
+        }));
         expect(task.next(response).value).to.eql(effects.put(receiveAutocompleteProductsAction));
         expect(receiveAutocompleteProducts).to.be.calledWith(response);
         task.next();
@@ -262,7 +267,7 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         };
         stub(Requests, 'autocompleteProducts');
 
-        const task = Tasks.fetchProducts(flux, <any>{});
+        const task = Tasks.fetchProducts(flux, <any>{ payload: {} });
 
         task.next();
         expect(task.throw(error).value).to.eql(effects.put(receiveAutocompleteProductsAction));

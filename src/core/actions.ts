@@ -56,7 +56,8 @@ namespace Actions {
   export const FETCH_AUTOCOMPLETE_SUGGESTIONS = 'FETCH_AUTOCOMPLETE_SUGGESTIONS';
   export type FetchAutocompleteSuggestions = Action<typeof FETCH_AUTOCOMPLETE_SUGGESTIONS, string>;
   export const FETCH_AUTOCOMPLETE_PRODUCTS = 'FETCH_AUTOCOMPLETE_PRODUCTS';
-  export type FetchAutocompleteProducts = Action<typeof FETCH_AUTOCOMPLETE_PRODUCTS, string>;
+  // tslint:disable-next-line max-line-length
+  export type FetchAutocompleteProducts = Action<typeof FETCH_AUTOCOMPLETE_PRODUCTS, { query: string, refinements: Actions.Payload.Autocomplete.Refinement[] }>;
   export const FETCH_COLLECTION_COUNT = 'FETCH_COLLECTION_COUNT';
   export type FetchCollectionCount = Action<typeof FETCH_COLLECTION_COUNT, string>;
   export const FETCH_PRODUCT_DETAILS = 'FETCH_PRODUCT_DETAILS';
@@ -161,6 +162,11 @@ namespace Actions {
         suggestions: Store.Autocomplete.Suggestion[];
         categoryValues: string[];
         navigations: Store.Autocomplete.Navigation[];
+      }
+
+      export interface Refinement {
+        field: string;
+        value: string;
       }
     }
 
