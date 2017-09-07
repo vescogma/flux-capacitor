@@ -161,6 +161,16 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
           (meta) => expect(meta.validator.payload[1].func({ query: 'boot' }, state)).to.be.true);
       });
 
+      it('should return an action with validation if search term is null', () => {
+        const query = null;
+        const search: any = { a: 'b' };
+        const state = { a: 'b' };
+        stub(Selectors, 'query').withArgs(state).returns(query);
+
+        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
+          (meta) => expect(meta.validator.payload[1].func({ query }, state)).to.be.true);
+      });
+
       it('should trim query', () => {
         const search: any = { query: '  untrimmed \n \r  ' };
 
