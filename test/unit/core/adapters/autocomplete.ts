@@ -29,15 +29,14 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
 
     it('should extract category values when query matches', () => {
       const brand = { a: 'b' };
-      const values = ['x', 'y'];
       const searchTerm = { value: 'app', additionalInfo: { brand } };
       const response = { result: { searchTerms: [searchTerm] } };
-      const extractCategoryValues = stub(Adapter, 'extractCategoryValues').returns(values);
+      const extractCategoryValues = stub(Adapter, 'extractCategoryValues').returns(['x', 'y']);
       stub(Adapter, 'termsMatch').returns(true);
 
       const { categoryValues } = Adapter.extractSuggestions(response, '', 'brand', {});
 
-      expect(categoryValues).to.eq(values);
+      expect(categoryValues).to.eql([{matchAll: true}, 'x', 'y']);
       expect(extractCategoryValues).to.be.calledWith(searchTerm);
     });
 
@@ -72,15 +71,25 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
 
       expect(extractCategoryValues.called).to.be.false;
     });
+
+    it ('should shift searchTerms by one element',() => {
+      const searchTerms = ['g', 'r', 'o', 'u', 'p', 'b', 'y'];
+
+      stub(Adapter, 'termsMatch').returns(true);
+      stub(Adapter, 'extractCategoryValues');
+
+      Adapter.extractSuggestions({ result: { searchTerms } }, '', 'brand', {});
+
+      expect(searchTerms).to.eql(['r', 'o', 'u', 'p', 'b', 'y']);
+    });
   });
 
   describe('extractCategoryValues()', () => {
     it('should return an array of category values', () => {
-      const brand = ['a', 'b'];
 
-      const values = Adapter.extractCategoryValues({ additionalInfo: { brand } }, 'brand');
+      const values = Adapter.extractCategoryValues({ additionalInfo: { brand: ['a', 'b'] } }, 'brand');
 
-      expect(values).to.eq(brand);
+      expect(values).to.eql([{ value: 'a' }, { value: 'b' }]);
     });
 
     it('should default to empty array', () => {
