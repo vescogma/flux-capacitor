@@ -23,9 +23,13 @@ namespace Adapter {
     const searchTerms = result.searchTerms || [];
     const navigations = result.navigations || [];
     const hasCategory = category && searchTerms[0] && Adapter.termsMatch(searchTerms[0].value, query);
+    // tslint:disable-next-line max-line-length
+    const categoryValues = hasCategory ? [{ matchAll: true }, ...Adapter.extractCategoryValues(searchTerms[0], category)] : [];
+    if (hasCategory) {
+      searchTerms.shift();
+    }
     return {
-      // tslint:disable-next-line max-line-length
-      categoryValues: hasCategory ? Adapter.extractCategoryValues(searchTerms[0], category) : [],
+      categoryValues,
       suggestions: searchTerms.map(({ value }) => ({ value })),
       navigations: navigations.map(({ name: field, values: refinements }) =>
         ({ field, label: labels[field] || field, refinements }))
@@ -34,7 +38,7 @@ namespace Adapter {
 
   // tslint:disable-next-line max-line-length
   export const extractCategoryValues = ({ additionalInfo }: { additionalInfo: object }, category: string) =>
-    (additionalInfo || {})[category] || [];
+    ((additionalInfo || {})[category] || []).map((value) => ({ value }));
 
   export const extractProducts = ({ result: { products } }: any) => products.map(Search.extractProduct);
 
