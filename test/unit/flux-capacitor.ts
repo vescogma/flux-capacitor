@@ -145,12 +145,6 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       });
     });
 
-    describe('resetQuery()', () => {
-      it('should call updateSearch() action', () => {
-        expectDispatch(() => flux.resetQuery(), 'resetQuery');
-      });
-    });
-
     describe('resize()', () => {
       it('should call updatePageSize() action', () => {
         const pageSize = 24;

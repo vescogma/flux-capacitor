@@ -63,10 +63,6 @@ class FluxCapacitor extends EventEmitter {
     this.store.dispatch(this.actions.resetRecall(query, refinement));
   }
 
-  resetQuery() {
-    this.store.dispatch(this.actions.resetQuery());
-  }
-
   resize(pageSize: number) {
     this.store.dispatch(this.actions.updatePageSize(pageSize));
   }

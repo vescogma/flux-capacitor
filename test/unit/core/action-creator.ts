@@ -302,16 +302,6 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       });
     });
 
-    describe('resetQuery()', () => {
-      it('should call actions.updateSearch()', () => {
-        const updateSearch = actions.updateSearch = spy();
-
-        actions.resetQuery();
-
-        expect(updateSearch).to.be.calledWithExactly({ query: null });
-      });
-    });
-
     describe('selectRefinement()', () => {
       it('should return an action', () => {
         const isRefinementDeselected = stub(Selectors, 'isRefinementDeselected').returns(true);

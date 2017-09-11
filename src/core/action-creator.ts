@@ -72,8 +72,6 @@ export function createActions(flux: FluxCapacitor) {
       resetRecall: (query: string = null, { field: navigationId, index }: { field: string, index: number } = <any>{}) =>
         actions.updateSearch({ query, navigationId, index, clear: true }),
 
-      resetQuery: () => actions.updateSearch({ query: null }),
-
       selectRefinement: (navigationId: string, index: number): Actions.SelectRefinement =>
         action(Actions.SELECT_REFINEMENT, { navigationId, index }, {
           ...metadata,
