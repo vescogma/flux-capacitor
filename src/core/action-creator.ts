@@ -51,7 +51,8 @@ export function createActions(flux: FluxCapacitor) {
                 func: ({ query }) => !('query' in search) || !!query || query === null,
                 msg: 'search term is empty'
               }, {
-                func: ({ query, value, navigationId }, state) => query !== Selectors.query(state)  ||
+                func: ({ query, value, navigationId }, state) =>
+                  query !== Selectors.query(state)  || Boolean(value && navigationId) &&
                   // try to find any refinement not matching the refinement in the query
                   Selectors.selectedRefinements(state).find(
                     (refinement) => (refinement.value !== value ||
