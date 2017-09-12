@@ -147,6 +147,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const search: any = { a: 'b' };
         const state = { a: 'b' };
         stub(Selectors, 'query').withArgs(state).returns(query);
+        stub(Selectors, 'selectedRefinements').withArgs(state).returns([]);
 
         expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
           (meta) => expect(meta.validator.payload[1].func({ query }, state)).to.be.false);
@@ -156,20 +157,35 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const search: any = { a: 'b' };
         const state = { a: 'b' };
         stub(Selectors, 'query').withArgs(state).returns('book');
+        stub(Selectors, 'selectedRefinements').withArgs(state).returns([]);
 
         expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
           (meta) => expect(meta.validator.payload[1].func({ query: 'boot' }, state)).to.be.true);
       });
 
       it('should return an action with validation that evaluates to ' +
-         'false if search term is null and refinements are same', () => {
+        'false if search term is null and refinements are same', () => {
         const query = null;
         const search: any = { a: 'b' };
         const state = { a: 'b' };
         stub(Selectors, 'query').withArgs(state).returns(query);
+        stub(Selectors, 'selectedRefinements').withArgs(state).returns([]);
 
         expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
           (meta) => expect(meta.validator.payload[1].func({ query }, state)).to.be.false);
+      });
+
+      it('should return an action with validation that evaluates to ' +
+        'true if search term is null and refinements are different', () => {
+        const query = null;
+        const search: any = { a: 'b' };
+        const refinement = { navigationId : 'a', value: 'b' };
+        const state = { a: 'b' };
+        stub(Selectors, 'query').withArgs(state).returns(query);
+        stub(Selectors, 'selectedRefinements').withArgs(state).returns([]);
+
+        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
+          (meta) => expect(meta.validator.payload[1].func({ ...refinement, query }, state)).to.be.true);
       });
 
       it('should trim query', () => {
