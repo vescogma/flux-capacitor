@@ -202,7 +202,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       });
 
       it('should return an action with validation that evaluates to ' +
-      'false if search term is same and there is more than 1 refinement', () => {
+      'true if search term is same and there is more than 1 refinement and 1 of them matches', () => {
         const query = 'a';
         const search: any = { query: 'a' };
         const refinement = { navigationId : 'a', value: 'b' };
@@ -211,6 +211,34 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         stub(Selectors, 'selectedRefinements').withArgs(state).returns(
           [{ navigationName: 'aa', value: 'bb'},
           { navigationName: 'a', value: 'b'}]);
+
+        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
+          (meta) => expect(meta.validator.payload[1].func({ ...refinement, query }, state)).to.be.true);
+      });
+
+      it('should return an action with validation that evaluates to ' +
+      'true if there is one refinement and refinement navigationName matches but different value', () => {
+        const query = 'a';
+        const search: any = { query: 'a' };
+        const refinement = { navigationId : 'a', value: 'b' };
+        const state = { a: 'b' };
+        stub(Selectors, 'query').withArgs(state).returns(query);
+        stub(Selectors, 'selectedRefinements').withArgs(state).returns(
+          [{ navigationName: 'a', value: 'bb'}]);
+
+        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
+          (meta) => expect(meta.validator.payload[1].func({ ...refinement, query }, state)).to.be.true);
+      });
+
+      it('should return an action with validation that evaluates to ' +
+      'true if there is one refinement and refinement value matches but navigationName is different', () => {
+        const query = 'a';
+        const search: any = { query: 'a' };
+        const refinement = { navigationId : 'a', value: 'b' };
+        const state = { a: 'b' };
+        stub(Selectors, 'query').withArgs(state).returns(query);
+        stub(Selectors, 'selectedRefinements').withArgs(state).returns(
+          [{ navigationName: 'aa', value: 'b'}]);
 
         expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
           (meta) => expect(meta.validator.payload[1].func({ ...refinement, query }, state)).to.be.true);
