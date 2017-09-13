@@ -51,11 +51,16 @@ export function createActions(flux: FluxCapacitor) {
                 func: ({ query }) => !('query' in search) || !!query || query === null,
                 msg: 'search term is empty'
               }, {
+                  // currently assume that search will only ever have up to one refinement
                   func: ({ query, value, navigationId }, state) => {
-                  let refinements = Selectors.selectedRefinements(state);
-                  const hasRefinements = Boolean(value && navigationId);
-                  const noRefinements = Boolean(Number(refinements.length > 0) ^ Number(hasRefinements));
-                  return query !== Selectors.query(state)  || noRefinements || hasRefinements &&
+                  let currentRefinements = Selectors.selectedRefinements(state);
+                  const searchHasRefinement = Boolean(value && navigationId);
+                  // query is not the same
+                  return query !== Selectors.query(state) ||
+                  // xor for either there exists refinements or the current search has refinement
+                  currentRefinements.length > 0 !== searchHasRefinement ||
+                  // current search has refinement and does not match any of the previous refinements
+                  searchHasRefinement &&
                     // try to find any refinement not matching the refinement in the query
                     Selectors.selectedRefinements(state).find(
                       (refinement) => (refinement.value !== value ||
