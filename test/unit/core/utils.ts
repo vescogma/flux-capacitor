@@ -1,9 +1,12 @@
 import * as utils from '../../../src/core/utils';
 import suite from '../_suite';
+import SearchAdapter from '../../../src/core/adapters/search';
+import Selectors from '../../../src/core/selectors';
+
 
 const ACTION = 'MY_ACTION';
 
-suite('utils', ({ expect, spy }) => {
+suite('utils', ({ expect, spy, stub }) => {
 
   describe('rayify()', () => {
     it('should return an array if the argument is a value', () => {
@@ -62,4 +65,42 @@ suite('utils', ({ expect, spy }) => {
       expect(utils.refinementPayload(navigationId, low, high)).to.eql({ navigationId, low, high, range: true });
     });
   });
+
+      describe('shouldResetRefinements()', () => {
+      it('should be true if refinementsMatch is false', () => {
+        stub(Selectors, 'selectedRefinements').returns(['hello']);
+        stub(SearchAdapter, 'refinementsMatch').returns(false);
+
+        expect(utils.shouldResetRefinements({ navigationId: 'truthy' }, null)).to.be.true;
+      });
+
+      it('should be true if currentRefinements length is not 1', () => {
+        stub(Selectors, 'selectedRefinements').returns(['hello', 'hello']);
+        stub(SearchAdapter, 'refinementsMatch').returns(true);
+
+        expect(utils.shouldResetRefinements({ navigationId: 'truthy' }, null)).to.be.true;
+      });
+
+      it('should be true if navigationId is falsy', () => {
+        stub(Selectors, 'selectedRefinements').returns(['hello']);
+        stub(SearchAdapter, 'refinementsMatch').returns(true);
+
+        // undefined is falsy
+        expect(utils.shouldResetRefinements({ navigationId: undefined }, null)).to.be.true;
+      });
+
+      it('should be false above conditions are false', () => {
+        stub(Selectors, 'selectedRefinements').returns(['hello']);
+        stub(SearchAdapter, 'refinementsMatch').returns(true);
+
+        expect(utils.shouldResetRefinements({ navigationId: 'truthy' }, null)).to.be.false;
+      });
+
+      it('should be false above conditions are false (range is truthy case)', () => {
+        stub(Selectors, 'selectedRefinements').returns(['hello']);
+        stub(SearchAdapter, 'refinementsMatch').returns(true);
+
+        expect(utils.shouldResetRefinements({ navigationId: 'truthy', range: true }, null)).to.be.false;
+      });
+    });
 });

@@ -2,7 +2,8 @@ import Actions from '../../actions';
 import Adapter from '../../adapters/search';
 import Store from '../../store';
 
-export type Action = Actions.UpdateSearch
+export type Action = Actions.ResetRefinements
+  | Actions.AddRefinement
   | Actions.ReceiveNavigations
   | Actions.SelectRefinement
   | Actions.DeselectRefinement
@@ -16,8 +17,9 @@ export const DEFAULTS: State = {
 
 export default function updateNavigations(state: State = DEFAULTS, action: Action) {
   switch (action.type) {
-    case Actions.UPDATE_SEARCH: return updateSearch(state, action.payload);
+    case Actions.RESET_REFINEMENTS: return resetRefinements(state, action.payload);
     case Actions.RECEIVE_NAVIGATIONS: return receiveNavigations(state, action.payload);
+    case Actions.ADD_REFINEMENT: return addRefinement(state, action.payload);
     case Actions.SELECT_REFINEMENT: return selectRefinement(state, action.payload);
     case Actions.DESELECT_REFINEMENT: return deselectRefinement(state, action.payload);
     case Actions.RECEIVE_MORE_REFINEMENTS: return receiveMoreRefinements(state, action.payload);
@@ -25,11 +27,15 @@ export default function updateNavigations(state: State = DEFAULTS, action: Actio
   }
 }
 
-export const updateSearch = (state: State, payload: Actions.Payload.Search) => {
-  if (payload.clear in state.byId) {
-    const navigationId = <string>payload.clear;
-
-    state = {
+export const resetRefinements = (state: State, navigationId: boolean | string) => {
+  if (typeof navigationId === 'boolean') {
+    return {
+      ...state,
+      byId: state.allIds.reduce((navs, nav) =>
+        Object.assign(navs, { [nav]: { ...state.byId[nav], selected: [] } }), {})
+    };
+  } else {
+    return {
       ...state,
       byId: {
         ...state.byId,
@@ -39,22 +45,6 @@ export const updateSearch = (state: State, payload: Actions.Payload.Search) => {
         }
       }
     };
-  } else if (payload.clear) {
-    state = {
-      ...state,
-      byId: state.allIds.reduce((navs, nav) =>
-        Object.assign(navs, { [nav]: { ...state.byId[nav], selected: [] } }), {})
-    };
-  }
-
-  if ('navigationId' in payload) {
-    if ('index' in payload) {
-      return addRefinementByIndex(state, payload);
-    } else {
-      return addRefinement(state, <Actions.Payload.Navigation.AddRefinement>payload);
-    }
-  } else {
-    return state;
   }
 };
 
@@ -105,20 +95,23 @@ export const deselectRefinement = (state: State, { navigationId, index: refineme
   }
 };
 
-// tslint:disable-next-line max-line-length
-export const addRefinementByIndex = (state: State, { navigationId, index: refinementIndex }: Actions.Payload.Search) => {
-
-  return {
-    ...state,
-    byId: {
-      ...state.byId,
-      [navigationId]: {
-        ...state.byId[navigationId],
-        selected: [refinementIndex],
-      },
-    },
-  };
-};
+const generateNavigation = (state: State, navigationId: string, refinement: any, index: number) => ({
+  ...state.byId[navigationId],
+  ...(index === -1
+      ? {
+        refinements: [
+          ...state.byId[navigationId].refinements,
+          refinement
+        ],
+        selected: [
+          ...state.byId[navigationId].selected,
+          state.byId[navigationId].refinements.length
+        ]
+      }
+      : {
+        selected: [...state.byId[navigationId].selected, index]
+      })
+});
 
 // tslint:disable-next-line max-line-length
 export const addRefinement = (state: State, { navigationId, value, low, high, range }: Actions.Payload.Navigation.AddRefinement) => {
@@ -132,23 +125,7 @@ export const addRefinement = (state: State, { navigationId, value, low, high, ra
       ...state,
       byId: {
         ...state.byId,
-        [navigationId]: {
-          ...state.byId[navigationId],
-          ...(index === -1
-            ? {
-              refinements: [
-                ...state.byId[navigationId].refinements,
-                refinement
-              ],
-              selected: [
-                ...state.byId[navigationId].selected,
-                state.byId[navigationId].refinements.length
-              ]
-            }
-            : {
-              selected: [...state.byId[navigationId].selected, index]
-            })
-        }
+        [navigationId]: generateNavigation(state, navigationId, refinement, index)
       }
     };
   } else {

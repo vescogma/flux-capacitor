@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 import { BrowserBridge, Results } from 'groupby-api';
-import { Store as ReduxStore } from 'redux';
+import { Action as ReduxAction, Store as ReduxStore } from 'redux';
 import { Sayt } from 'sayt';
 import createActions from './core/action-creator';
 import Actions from './core/actions';
@@ -10,6 +10,13 @@ import * as Events from './core/events';
 import Observer from './core/observer';
 import Selectors from './core/selectors';
 import Store from './core/store';
+
+declare module 'redux' {
+  export interface Dispatch<S> {
+    <A extends ReduxAction>(action: A): A;
+    <A extends ReduxAction>(action: A[]): A[];
+  }
+}
 
 class FluxCapacitor extends EventEmitter {
 

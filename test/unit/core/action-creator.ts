@@ -4,6 +4,7 @@ import Actions from '../../../src/core/actions';
 import SearchAdapter from '../../../src/core/adapters/search';
 import Selectors from '../../../src/core/selectors';
 import * as utils from '../../../src/core/utils';
+import * as validators from '../../../src/core/validators';
 import FluxCapacitor from '../../../src/flux-capacitor';
 import suite from '../_suite';
 
@@ -120,90 +121,291 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
   describe('request action creators', () => {
     describe('updateSearch()', () => {
-      it('should return an action with validation if search contains query', () => {
-        const search: any = { a: 'b', query: 'q' };
+      const resetPageAction = { m: 'n' };
 
-        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
+      beforeEach(() => actions.resetPage = spy(() => resetPageAction));
+
+      it('should return a bulk action', () => {
+        const batchAction = actions.updateSearch({});
+
+        expect(batchAction).to.eql([resetPageAction]);
+      });
+
+      it('should return a bulk action with UPDATE_QUERY', () => {
+        const query = 'q';
+        const updateQuery = stub(actions, 'updateQuery').returns([ACTION]);
+
+        const batchAction = actions.updateSearch({ query });
+
+        expect(batchAction).to.eql([resetPageAction, ACTION]);
+        expect(updateQuery).to.be.calledWithExactly(query);
+      });
+
+      it('should return a bulk action with RESET_REFINEMENTS', () => {
+        flux.store = { getState: () => null };
+        const clear = 'q';
+        const shouldResetRefinements = stub(utils, 'shouldResetRefinements').returns(true);
+        const resetRefinements = stub(actions, 'resetRefinements').returns([ACTION]);
+
+        const batchAction = actions.updateSearch({ clear });
+
+        expect(batchAction).to.eql([resetPageAction, ACTION]);
+        expect(shouldResetRefinements).to.be.calledWithExactly({ clear }, null);
+      });
+
+      it('should return a bulk action with SELECT_REFINEMENT', () => {
+        const navigationId = 'color';
+        const index = 4;
+        const selectRefinement = stub(actions, 'selectRefinement').returns([ACTION]);
+
+        const batchAction = actions.updateSearch({ navigationId, index });
+
+        expect(batchAction).to.eql([resetPageAction, ACTION]);
+        expect(selectRefinement).to.be.calledWithExactly(navigationId, index);
+      });
+
+      it('should return a bulk action with value ADD_REFINEMENT', () => {
+        const navigationId = 'color';
+        const value = 'blue';
+        const addRefinement = stub(actions, 'addRefinement').returns([ACTION]);
+
+        const batchAction = actions.updateSearch({ navigationId, value });
+
+        expect(batchAction).to.eql([resetPageAction, ACTION]);
+        expect(addRefinement).to.be.calledWithExactly(navigationId, value);
+      });
+
+      it('should return a bulk action with range ADD_REFINEMENT', () => {
+        const navigationId = 'color';
+        const range = true;
+        const low = 1;
+        const high = 2;
+        const addRefinement = stub(actions, 'addRefinement').returns([ACTION]);
+
+        const batchAction = actions.updateSearch({ navigationId, range, low, high });
+
+        expect(batchAction).to.eql([resetPageAction, ACTION]);
+        expect(addRefinement).to.be.calledWithExactly(navigationId, low, high);
+      });
+
+      it('should return a bulk action without ADD_REFINEMENT', () => {
+        const batchAction = actions.updateSearch({ navigationId: 'truthy' });
+
+        expect(batchAction).to.eql([resetPageAction]);
+      });
+    });
+
+    describe('updateQuery()', () => {
+      it('should return a batch action with RESET_PAGE', () => {
+        const query = 'rambo';
+        stub(Selectors, 'query');
+        stub(utils, 'action');
+        actions.resetPage = (): any => ACTION;
+
+        const batchAction = actions.updateQuery(query);
+
+        expect(batchAction[0]).to.eql(ACTION);
+      });
+
+      it('should return an action', () => {
+        const query = 'rambo';
+        stub(Selectors, 'query');
+
+        expectAction(() => actions.updateQuery(query)[1], Actions.UPDATE_QUERY, query,
           (meta) => {
-            expect(meta.validator.payload[0].func({})).to.be.false;
-            expect(meta.validator.payload[0].func({ query: '' })).to.be.false;
-            expect(meta.validator.payload[0].func({ query: undefined })).to.be.false;
-            return expect(meta.validator.payload[0].func({ query: null })).to.be.true;
+            expect(meta.validator.payload[0].func(query)).to.be.true;
+            return expect(meta.validator.payload[1].func(query)).to.be.true;
           });
       });
 
-      it('should return an action with validation if search does not contain query', () => {
-        const search: any = { a: 'b' };
+      it('should not return an action when query is invalid', () => {
+        const query = '';
 
-        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
-          (meta) => {
-            expect(meta.validator.payload[0].func({})).to.be.true;
-            return expect(meta.validator.payload[0].func({ query: 'q' })).to.be.true;
-          });
+        expectAction(() => actions.updateQuery(query)[1], Actions.UPDATE_QUERY, query,
+          (meta) => expect(meta.validator.payload[0].func(query)).to.be.false);
       });
 
-      it('should return an action with validation if search term is not different', () => {
-        const query = 'book';
-        const search: any = { a: 'b' };
-        const state = { a: 'b' };
-        stub(Selectors, 'query').withArgs(state).returns(query);
+      it('should not return an action when query will not change', () => {
+        const query = 'umbrella';
+        stub(Selectors, 'query').returns(query);
 
-        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
-          (meta) => expect(meta.validator.payload[1].func({ query }, state)).to.be.false);
+        expectAction(() => actions.updateQuery(query)[1], Actions.UPDATE_QUERY, query,
+          (meta) => expect(meta.validator.payload[1].func(query)).to.be.false);
+      });
+    });
+
+    describe('resetRefinements()', () => {
+      it('should return a batch action with RESET_PAGE', () => {
+        const field = 'brand';
+        actions.resetPage = (): any => ACTION;
+        stub(utils, 'action');
+
+        const batchAction = actions.resetRefinements(field);
+
+        expect(batchAction[0]).to.eq(ACTION);
       });
 
-      it('should return an action with validation if search term is different', () => {
-        const search: any = { a: 'b' };
-        const state = { a: 'b' };
-        stub(Selectors, 'query').withArgs(state).returns('book');
+      it('should return an action', () => {
+        const field = 'brand';
 
-        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
-          (meta) => expect(meta.validator.payload[1].func({ query: 'boot' }, state)).to.be.true);
+        expectAction(() => actions.resetRefinements(field)[1], Actions.RESET_REFINEMENTS, field,
+          (meta) => expect(meta.validator.payload[0].func()).to.be.true);
       });
 
-      it('should return an action with validation if search term is null', () => {
-        const query = null;
-        const search: any = { a: 'b' };
-        const state = { a: 'b' };
-        stub(Selectors, 'query').withArgs(state).returns(query);
+      it('should not return an action when field is invalid', () => {
+        const field = false;
 
-        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, search,
-          (meta) => expect(meta.validator.payload[1].func({ query }, state)).to.be.true);
+        expectAction(() => actions.resetRefinements(field)[1], Actions.RESET_REFINEMENTS, field,
+          (meta) => expect(meta.validator.payload[0].func()).to.be.false);
       });
 
-      it('should trim query', () => {
-        const search: any = { query: '  untrimmed \n \r  ' };
+      it('should not return an action when no refinements selected', () => {
+        stub(Selectors, 'selectedRefinements').returns([]);
 
-        expectAction(() => actions.updateSearch(search), Actions.UPDATE_SEARCH, { query: 'untrimmed' });
+        expectAction(() => actions.resetRefinements()[1], Actions.RESET_REFINEMENTS, undefined,
+          (meta) => expect(meta.validator.payload[1].func()).to.be.false);
+      });
+
+      it('should not return an action when no refinements selected for field', () => {
+        const field = 'brand';
+        stub(Selectors, 'selectedRefinements').returns([{}]);
+        stub(Selectors, 'navigation').returns({ selected: [] });
+
+        expectAction(() => actions.resetRefinements(field)[1], Actions.RESET_REFINEMENTS, field,
+          (meta) => expect(meta.validator.payload[2].func()).to.be.false);
+      });
+    });
+
+    describe('resetPage()', () => {
+      it('should return an action', () => {
+        stub(Selectors, 'page').returns(8);
+
+        expectAction(() => actions.resetPage(), Actions.RESET_PAGE, undefined,
+          (meta) => expect(meta.validator.payload.func()).to.be.true);
+      });
+
+      it('should not return an action', () => {
+        stub(Selectors, 'page').returns(1);
+
+        expectAction(() => actions.resetPage(), Actions.RESET_PAGE, undefined,
+          (meta) => expect(meta.validator.payload.func()).to.be.false);
       });
     });
 
     describe('addRefinement()', () => {
       const navigationId = 'book';
+      const refinement = { c: 'd' };
+      const rangeRefinement = { range: true };
 
-      it('should add a value refinement', () => {
-        const action = { a: 'b' };
-        const refinement = { c: 'd' };
+      it('should return a batch action with RESET_PAGE', () => {
         const value = 'a';
-        const updateSearch = stub(actions, 'updateSearch').returns(action);
+        const resetPageAction = { a: 'b' };
+        stub(utils, 'refinementPayload').returns(refinement);
+        stub(utils, 'action');
+        stub(actions, 'resetPage').returns(resetPageAction);
+
+        const batchAction = actions.addRefinement(navigationId, value);
+
+        expect(batchAction[0]).to.eql(resetPageAction);
+      });
+
+      it('should return an action with value refinement', () => {
+        const value = 'a';
         const refinementPayload = stub(utils, 'refinementPayload').returns(refinement);
+        actions.resetPage = spy();
 
-        const result = actions.addRefinement(navigationId, value);
-
-        expect(result).to.be.eq(action);
-        expect(updateSearch).to.be.calledWithExactly(refinement);
+        expectAction(() => actions.addRefinement(navigationId, value)[1], Actions.ADD_REFINEMENT, refinement);
         expect(refinementPayload).to.be.calledWithExactly(navigationId, value, null);
       });
 
-      it('should add a range refinement', () => {
-        const low = 20;
-        const high = 57;
-        const refinementPayload = stub(utils, 'refinementPayload');
-        stub(actions, 'updateSearch');
+      it('should return an action with range refinement', () => {
+        const low = 2;
+        const high = 4;
+        const refinementPayload = stub(utils, 'refinementPayload').returns(refinement);
+        actions.resetPage = spy();
 
-        actions.addRefinement(navigationId, low, high);
-
+        expectAction(() => actions.addRefinement(navigationId, low, high)[1], Actions.ADD_REFINEMENT, refinement);
         expect(refinementPayload).to.be.calledWithExactly(navigationId, low, high);
+      });
+
+      it('should validate navigationId', () => {
+        stub(utils, 'refinementPayload').returns(refinement);
+        actions.resetPage = spy();
+
+        expectAction(() => actions.addRefinement(null, null)[1], Actions.ADD_REFINEMENT, refinement,
+          (meta) => expect(meta.validator.navigationId).to.eq(validators.isString));
+      });
+
+      it('should invalidate non-numeric low value', () => {
+        stub(utils, 'refinementPayload').returns(rangeRefinement);
+        actions.resetPage = spy();
+
+        expectAction(() => actions.addRefinement(null, 'g')[1], Actions.ADD_REFINEMENT, rangeRefinement,
+          (meta) => expect(meta.validator.payload[0].func(rangeRefinement)).to.be.false);
+      });
+
+      it('should invalidate non-numeric high value', () => {
+        stub(utils, 'refinementPayload').returns(rangeRefinement);
+        actions.resetPage = spy();
+
+        expectAction(() => actions.addRefinement(null, 2, 'j')[1], Actions.ADD_REFINEMENT, rangeRefinement,
+          (meta) => expect(meta.validator.payload[0].func(rangeRefinement)).to.be.false);
+      });
+
+      it('should invalidate low greater than high', () => {
+        stub(utils, 'refinementPayload').returns(rangeRefinement);
+        actions.resetPage = spy();
+
+        expectAction(() => actions.addRefinement(null, 2, 1)[1], Actions.ADD_REFINEMENT, rangeRefinement,
+          (meta) => expect(meta.validator.payload[1].func(rangeRefinement)).to.be.false);
+      });
+
+      it('should invalidate nonstring value', () => {
+        const value = 7;
+        const isStringValidator = stub(validators.isString, 'func').returns(false);
+        stub(utils, 'refinementPayload').returns(refinement);
+        actions.resetPage = spy();
+
+        expectAction(() => actions.addRefinement(null, value)[1], Actions.ADD_REFINEMENT, refinement,
+          (meta) => expect(meta.validator.payload[2].func(refinement)).to.be.false);
+        expect(isStringValidator).to.be.calledWith(value);
+      });
+
+      it('should validate refinement for untracked field', () => {
+        const state = { a: 'b' };
+        const selectNavigation = stub(Selectors, 'navigation');
+        stub(utils, 'refinementPayload').returns(refinement);
+        actions.resetPage = spy();
+
+        expectAction(() => actions.addRefinement(navigationId, null)[1], Actions.ADD_REFINEMENT, refinement,
+          (meta) => expect(meta.validator.payload[3].func(null, state)).to.be.true);
+        expect(selectNavigation).to.be.calledWithExactly(state, navigationId);
+      });
+
+      it('should invalidate currently selected value refinement', () => {
+        const value = 7;
+        const selected = { a: 'b' };
+        const refinementsMatch = stub(SearchAdapter, 'refinementsMatch').returns(true);
+        stub(utils, 'refinementPayload').returns(refinement);
+        stub(Selectors, 'navigation').returns({ selected: [1], refinements: [{}, selected, {}] });
+        actions.resetPage = spy();
+
+        expectAction(() => actions.addRefinement(null, value)[1], Actions.ADD_REFINEMENT, refinement,
+          (meta) => expect(meta.validator.payload[3].func(refinement)).to.be.false);
+        expect(refinementsMatch).to.be.calledWithExactly(refinement, selected, 'Value');
+      });
+
+      it('should invalidate currently selected value refinement', () => {
+        const value = 7;
+        const selected = { a: 'b' };
+        const refinementsMatch = stub(SearchAdapter, 'refinementsMatch').returns(true);
+        stub(utils, 'refinementPayload').returns(refinement);
+        stub(Selectors, 'navigation').returns({ range: true, selected: [1], refinements: [{}, selected, {}] });
+        actions.resetPage = spy();
+
+        expectAction(() => actions.addRefinement(null, value)[1], Actions.ADD_REFINEMENT, refinement,
+          (meta) => expect(meta.validator.payload[3].func(refinement)).to.be.false);
+        expect(refinementsMatch).to.be.calledWithExactly(refinement, selected, 'Range');
       });
     });
 
@@ -212,15 +414,23 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
       it('should clear the refinements and add a value refinement', () => {
         const value = 'a';
-        const action = { a: 'b' };
-        const updateSearch = stub(actions, 'updateSearch').returns(action);
-        const refinementPayload = stub(utils, 'refinementPayload').returns({ c: 'd' });
+        const resetRefinementsReturn = 'reset';
+        const addRefinementReturn = 'add';
+        const resetPageReturn = 'page';
+
+        const resetRefinements = stub(actions, 'resetRefinements').returns(resetRefinementsReturn);
+        const addRefinement = stub(actions, 'addRefinement').returns(addRefinementReturn);
+        stub(actions, 'resetPage').returns(resetPageReturn);
 
         const result = actions.switchRefinement(navigationId, value);
 
-        expect(result).to.be.eq(action);
-        expect(updateSearch).to.be.calledWithExactly({ c: 'd', clear: navigationId });
-        expect(refinementPayload).to.be.calledWithExactly(navigationId, value, null);
+        expect(result).to.be.eql([
+          resetPageReturn,
+          resetRefinementsReturn,
+          addRefinementReturn
+        ]);
+        expect(resetRefinements).to.be.calledWithExactly(navigationId);
+        expect(addRefinement).to.be.calledWithExactly(navigationId, value, null);
       });
 
       it('should clear the refinements and add a range refinement', () => {
@@ -235,82 +445,111 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       });
     });
 
-    describe('resetRefinements()', () => {
-      it('should reset refinements', () => {
-        const action = { a: 'b' };
-        const updateSearch = stub(actions, 'updateSearch').returns(action);
-
-        const result = actions.resetRefinements();
-
-        expect(result).to.be.eq(action);
-        expect(updateSearch).to.be.calledWithExactly({ clear: true });
-      });
-    });
-
     describe('search()', () => {
       it('should call actions.updateSearch()', () => {
         const query = 'pineapple';
-        const updateSearch = actions.updateSearch = spy();
 
-        actions.search(query);
+        const resetRefinementsReturn = 'reset';
+        const updateReturn = 'update';
+        const resetPageReturn = 'page';
 
-        expect(updateSearch).to.be.calledWithExactly({ query, clear: true });
+        const resetRefinements = stub(actions, 'resetRefinements').returns(resetRefinementsReturn);
+        const updateQuery = stub(actions, 'updateQuery').returns(updateReturn);
+        stub(actions, 'resetPage').returns(resetPageReturn);
+
+        const result = actions.search(query);
+
+        expect(result).to.be.eql([
+          resetPageReturn,
+          resetRefinementsReturn,
+          updateReturn,
+        ]);
+        expect(resetRefinements).to.be.calledWithExactly(true);
+        expect(updateQuery).to.be.calledWithExactly(query);
       });
 
       it('should fall back to current query', () => {
         const query = 'pineapple';
-        const state = { a: 'b' };
-        const updateSearch = actions.updateSearch = spy();
-        const selectQuery = stub(Selectors, 'query').returns(query);
-        flux.store = { getState: () => state };
 
-        actions.search();
+        const resetRefinementsReturn = 'reset';
+        const updateReturn = 'update';
+        const resetPageReturn = 'page';
 
-        expect(updateSearch).to.be.calledWithExactly({ query, clear: true });
-        expect(selectQuery).to.be.calledWithExactly(state);
+        const resetRefinements = stub(actions, 'resetRefinements').returns(resetRefinementsReturn);
+        const updateQuery = stub(actions, 'updateQuery').returns(updateReturn);
+        const queryStub = stub(Selectors, 'query').returns(query);
+        stub(actions, 'resetPage').returns(resetPageReturn);
+        flux.store = { getState: () => null };
+
+        const result = actions.search();
+
+        expect(result).to.be.eql([
+          resetPageReturn,
+          resetRefinementsReturn,
+          updateReturn,
+        ]);
+        expect(resetRefinements).to.be.calledWithExactly(true);
+        expect(updateQuery).to.be.calledWithExactly(query);
       });
     });
 
     describe('resetRecall()', () => {
-      it('should call actions.updateSearch() with falsey params to clear request state', () => {
-        const updateSearch = actions.updateSearch = spy();
+      const resetPageAction = { a: 'b' };
+      const resetRefinementsAction = { c: 'd' };
+      const updateQueryAction = { e: 'f' };
 
-        actions.resetRecall();
+      it('should call search() if field not provided and return result of search()', () => {
+        const ret = ['1'];
+        const search = stub(actions, 'search').returns(ret);
 
-        // tslint:disable-next-line max-line-length
-        expect(updateSearch).to.be.calledWithExactly({ query: null, navigationId: undefined, index: undefined, clear: true });
+        const batchAction = actions.resetRecall();
+
+        expect(batchAction).to.eql(ret);
+        expect(search).to.be.calledOnce;
       });
 
-      it('should call actions.updateSearch() with a query', () => {
-        const query = 'pineapple';
-        const updateSearch = actions.updateSearch = spy();
+      it('should return bulk action with SELECT_REFINEMENT if field and index provided', () => {
+        const field = 'color';
+        const index = 8;
+        const selectRefinementAction = { g: 'h' };
+        const selectRefinement = stub(actions, 'selectRefinement').returns([selectRefinementAction]);
+        const search = stub(actions, 'search').returns([
+          resetPageAction,
+          resetRefinementsAction,
+          updateQueryAction,
+        ]);
 
-        actions.resetRecall(query);
+        const batchAction = actions.resetRecall('', { field, index });
 
-        expect(updateSearch).to.be.calledWithExactly({ query, navigationId: undefined, index: undefined, clear: true });
-      });
-
-      it('should call actions.updateSearch() with a query and refinement', () => {
-        const query = 'pineapple';
-        const navigationId = 'brand';
-        const index = 9;
-        const updateSearch = actions.updateSearch = spy();
-
-        actions.resetRecall(query, { field: navigationId, index });
-
-        expect(updateSearch).to.be.calledWithExactly({ query, navigationId, index, clear: true });
+        expect(batchAction).to.eql([
+          resetPageAction,
+          resetRefinementsAction,
+          updateQueryAction,
+          selectRefinementAction
+        ]);
+        expect(selectRefinement).to.be.calledWithExactly(field, index);
       });
     });
 
     describe('selectRefinement()', () => {
-      it('should return an action', () => {
+      it('should return a batch action with RESET_PAGE', () => {
+        const isRefinementDeselected = stub(Selectors, 'isRefinementDeselected').returns(true);
+        stub(utils, 'action');
+        actions.resetPage = (): any => ACTION;
+
+        const batchAction = actions.selectRefinement('', 0);
+
+        expect(batchAction[0]).to.eq(ACTION);
+      });
+
+      it('should return a batch action', () => {
         const isRefinementDeselected = stub(Selectors, 'isRefinementDeselected').returns(true);
         const navigationId = 'colour';
         const index = 30;
         const state = { a: 'b' };
 
         // tslint:disable-next-line max-line-length
-        expectAction(() => actions.selectRefinement(navigationId, index), Actions.SELECT_REFINEMENT, { navigationId, index },
+        expectAction(() => actions.selectRefinement(navigationId, index)[1], Actions.SELECT_REFINEMENT, { navigationId, index },
           (meta) => {
             expect(meta.validator.payload.func(null, state)).to.be.true;
             return expect(isRefinementDeselected).to.be.calledWithExactly(state, navigationId, index);
@@ -321,19 +560,29 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         stub(Selectors, 'isRefinementDeselected').returns(false);
 
         // tslint:disable-next-line max-line-length
-        expectAction(() => actions.selectRefinement('colour', 30), Actions.SELECT_REFINEMENT, { navigationId: 'colour', index: 30 },
+        expectAction(() => actions.selectRefinement('colour', 30)[1], Actions.SELECT_REFINEMENT, { navigationId: 'colour', index: 30 },
           (meta) => expect(meta.validator.payload.func(null, {})).to.be.false);
       });
 
       describe('deselectRefinement()', () => {
-        it('should return an action', () => {
+        it('should return a batch action with RESET_PAGE', () => {
+          const isRefinementDeselected = stub(Selectors, 'isRefinementDeselected').returns(true);
+          stub(utils, 'action');
+          actions.resetPage = (): any => ACTION;
+
+          const batchAction = actions.deselectRefinement('', 0);
+
+          expect(batchAction[0]).to.eq(ACTION);
+        });
+
+        it('should return a batch action', () => {
           const isRefinementSelected = stub(Selectors, 'isRefinementSelected').returns(true);
           const navigationId = 'colour';
           const index = 30;
           const state = { a: 'b' };
 
           // tslint:disable-next-line max-line-length
-          expectAction(() => actions.deselectRefinement(navigationId, index), Actions.DESELECT_REFINEMENT, { navigationId, index },
+          expectAction(() => actions.deselectRefinement(navigationId, index)[1], Actions.DESELECT_REFINEMENT, { navigationId, index },
             (meta) => {
               expect(meta.validator.payload.func(null, state)).to.be.true;
               return expect(isRefinementSelected).to.be.calledWithExactly(state, navigationId, index);
@@ -344,7 +593,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
           stub(Selectors, 'isRefinementSelected').returns(false);
 
           // tslint:disable-next-line max-line-length
-          expectAction(() => actions.deselectRefinement('colour', 30), Actions.DESELECT_REFINEMENT, { navigationId: 'colour', index: 30 },
+          expectAction(() => actions.deselectRefinement('colour', 30)[1], Actions.DESELECT_REFINEMENT, { navigationId: 'colour', index: 30 },
             (meta) => expect(meta.validator.payload.func(null, {})).to.be.false);
         });
       });
@@ -506,12 +755,12 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(recordCount);
         const extractProducts = stub(SearchAdapter, 'extractProducts').returns(products);
         const selectCollection = stub(Selectors, 'collection').returns(collection);
-        const receiveQuery = actions.receiveQuery = spy(() => receiveQueryAction);
-        const receiveProductRecords = actions.receiveProductRecords = spy(() => receiveProductRecordsAction);
+        const receiveQuery = stub(actions, 'receiveQuery').returns(receiveQueryAction);
+        const receiveProductRecords = stub(actions, 'receiveProductRecords').returns(receiveProductRecordsAction);
         const receiveNavigations = actions.receiveNavigations = spy(() => receiveNavigationsAction);
-        const receiveRecordCount = actions.receiveRecordCount = spy(() => receiveRecordCountAction);
+        const receiveRecordCount = stub(actions, 'receiveRecordCount').returns(receiveRecordCountAction);
         const receiveCollectionCount = actions.receiveCollectionCount = spy(() => receiveCollectionCountAction);
-        const receivePage = actions.receivePage = spy(() => receivePageAction);
+        const receivePage = stub(actions, 'receivePage').returns(receivePageAction);
         const receiveTemplate = actions.receiveTemplate = spy(() => receiveTemplateAction);
         flux.store = { getState: () => state };
 
@@ -668,8 +917,8 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const extractProducts = stub(SearchAdapter, 'extractProducts').returns(products);
         const extractTemplate = stub(SearchAdapter, 'extractTemplate').returns(template);
         // tslint:disable-next-line max-line-length
-        const receiveAutocompleteProductRecords = actions.receiveAutocompleteProductRecords = spy(() => receiveAutocompleteProductRecordsAction);
-        const receiveAutocompleteTemplate = actions.receiveAutocompleteTemplate = spy(() => receiveAutocompleteTemplateAction);
+        const receiveAutocompleteProductRecords = stub(actions, 'receiveAutocompleteProductRecords').returns(receiveAutocompleteProductRecordsAction);
+        const receiveAutocompleteTemplate = stub(actions, 'receiveAutocompleteTemplate').returns(receiveAutocompleteTemplateAction);
 
         const batchAction = actions.receiveAutocompleteProducts(response);
 
@@ -740,6 +989,14 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
         // tslint:disable-next-line max-line-length
         expectAction(() => actions.createComponentState(tagName, id, state), Actions.CREATE_COMPONENT_STATE, { tagName, id, state });
+      });
+
+      it('should return an action if no state is passed as an argument', () => {
+        const tagName = 'my-tag';
+        const id = '123';
+
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.createComponentState(tagName, id), Actions.CREATE_COMPONENT_STATE, { tagName, id, state: {} });
       });
     });
 

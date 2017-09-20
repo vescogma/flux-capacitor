@@ -23,8 +23,8 @@ suite('page', ({ expect }) => {
         current: 1,
       };
 
-      it('UPDATE_SEARCH', () => {
-        const reducer = page(state, { type: Actions.UPDATE_SEARCH });
+      it('RESET_PAGE', () => {
+        const reducer = page(state, { type: Actions.RESET_PAGE });
 
         expect(reducer).to.eql(newState);
       });
@@ -41,21 +41,9 @@ suite('page', ({ expect }) => {
         expect(reducer).to.eql(newState);
       });
 
-      it('SELECT_REFINEMENT', () => {
-        const reducer = page(state, { type: Actions.SELECT_REFINEMENT });
-
-        expect(reducer).to.eql(newState);
-      });
-
-      it('DESELECT_REFINEMENT', () => {
-        const reducer = page(state, { type: Actions.DESELECT_REFINEMENT });
-
-        expect(reducer).to.eql(newState);
-      });
-
       it('should return state if current is already 1', () => {
         state.current = 1;
-        const reducer = page(state, { type: Actions.UPDATE_SEARCH });
+        const reducer = page(state, { type: Actions.RESET_PAGE });
 
         expect(reducer).to.eql(state);
       });

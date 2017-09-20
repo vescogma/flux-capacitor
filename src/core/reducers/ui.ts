@@ -3,15 +3,18 @@ import Store from '../store';
 
 export type Action = Actions.CreateComponentState
   | Actions.RemoveComponentState
-  | Actions.UpdateSearch;
+  | Actions.Action<any>;
 export type State = Store.UI;
 
-export default function updateUi(state: State = {}, action: Action): State {
-  switch (action.type) {
-    case Actions.CREATE_COMPONENT_STATE: return createComponentState(state, action.payload);
-    case Actions.REMOVE_COMPONENT_STATE: return removeComponentState(state, action.payload);
-    case Actions.UPDATE_SEARCH: return clearComponentState(state, action.payload);
-    default: return state;
+export default function updateUi(state: State = {}, { type, payload, meta = <Actions.Metadata>{} }: Action): State {
+  switch (type) {
+    case Actions.CREATE_COMPONENT_STATE: return createComponentState(state, payload);
+    case Actions.REMOVE_COMPONENT_STATE: return removeComponentState(state, payload);
+    default:
+      if ('recallId' in meta) {
+        return clearComponentState(state);
+      }
+      return state;
   }
 }
 
@@ -34,5 +37,4 @@ export const removeComponentState = (state: State, { tagName, id }: Actions.Payl
     }
   });
 
-export const clearComponentState = (state: State, payload: Actions.Payload.Search) =>
-  'query' in payload ? ({}) : state;
+export const clearComponentState = (state: State): State => ({});

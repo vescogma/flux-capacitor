@@ -1,5 +1,7 @@
 import * as fetchPonyfill from 'fetch-ponyfill';
 import Actions from './actions';
+import SearchAdapter from './adapters/search';
+import Selectors from './selectors';
 
 export const { fetch } = fetchPonyfill();
 
@@ -40,5 +42,14 @@ export const refinementPayload = (field: string, valueOrLow: any, high: any = nu
 
 // a passthrough to allow error to propagate to middleware
 // tslint:disable-next-line max-line-length
-export const handleError = (action: Actions.Action<any>,  createAction: () => any) =>
-  action.error ? action :  createAction();
+export const handleError = (errorAction: Actions.Action<any>,  createAction: () => any) =>
+  errorAction.error ? errorAction :  createAction();
+
+export const shouldResetRefinements =  ({ low, high, value, navigationId, range }: Actions.Payload.Search,
+                                        state: any): boolean => {
+  const currentRefinements = Selectors.selectedRefinements(state);
+  const refinement = { low, high, value };
+  // assumes only one refinement can be added at once
+  return !navigationId || currentRefinements.length !== 1 ||
+    !SearchAdapter.refinementsMatch(<any>refinement, currentRefinements[0], range ? 'Range' : 'Value');
+};

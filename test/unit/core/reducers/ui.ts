@@ -37,17 +37,10 @@ suite('ui', ({ expect }) => {
       expect(reducer).to.eql(newState);
     });
 
-    it('should clear state on UPDATE_SEARCH when query in payload', () => {
-      const reducer = ui(<any>{ a: 'b' }, { type: Actions.UPDATE_SEARCH, payload: { query: 'eyy' } });
+    it('should clear state when recallId in meta', () => {
+      const reducer = ui(<any>{ a: 'b' }, { type: null, payload: { query: 'eyy' }, meta: { recallId: 'a' } });
 
       expect(reducer).to.eql({});
-    });
-
-    it('should return state on UPDATE_SEARCH when no query in payload', () => {
-      const newState = <any>{ a: 'b' };
-      const reducer = ui(newState, { type: Actions.UPDATE_SEARCH, payload: {} });
-
-      expect(reducer).to.eq(newState);
     });
 
     it('should return state on default', () => {

@@ -4,7 +4,8 @@ import Actions from './actions';
 import SearchAdapter from './adapters/search';
 import Selectors from './selectors';
 import Store from './store';
-import { action, handleError, refinementPayload } from './utils';
+import { action, handleError, refinementPayload, shouldResetRefinements } from './utils';
+import * as validators from './validators';
 
 export function createActions(flux: FluxCapacitor) {
 
@@ -41,38 +42,127 @@ export function createActions(flux: FluxCapacitor) {
         action(Actions.FETCH_RECOMMENDATIONS_PRODUCTS, null, metadata),
 
       // request action creators
-      updateSearch: (search: Actions.Payload.Search): Actions.UpdateSearch =>
-        action(Actions.UPDATE_SEARCH,
-          'query' in search ? { ...search, query: search.query && search.query.trim() } : search,
-          {
-            ...metadata,
-            validator: {
-              payload: [{
-                func: ({ query }) => !('query' in search) || !!query || query === null,
-                msg: 'search term is empty'
-              }, {
-                func: ({ query }, state) => query !== Selectors.query(state) || query === null,
-                msg: 'search term is not different'
-              }]
+      updateSearch: (search: Actions.Payload.Search): Actions.UpdateSearch => {
+        const searchActions: Actions.UpdateSearch = [actions.resetPage()];
+
+        if ('query' in search) {
+          searchActions.push(...actions.updateQuery(search.query));
+        }
+        if ('clear' in search && shouldResetRefinements(search, flux.store.getState())) {
+          searchActions.push(...actions.resetRefinements(search.clear));
+        }
+        if ('navigationId' in search) {
+          if ('index' in search) {
+            searchActions.push(...actions.selectRefinement(search.navigationId, search.index));
+          } else if (search.range) {
+            searchActions.push(...actions.addRefinement(search.navigationId, search.low, search.high));
+          } else if ('value' in search) {
+            searchActions.push(...actions.addRefinement(search.navigationId, search.value));
+          }
+        }
+
+        return searchActions;
+      },
+
+      updateQuery: (query: string): Actions.ResetPageAndUpdateQuery => [
+        actions.resetPage(),
+        action(Actions.UPDATE_QUERY, query && query.trim(), {
+          ...metadata,
+          validator: {
+            payload: [{
+              func: (_query) => !!_query || _query === null,
+              msg: 'search term is empty'
+            }, {
+              func: (_query, state) => _query !== Selectors.query(state),
+              msg: 'search term is not different'
+            }]
+          }
+        })
+      ],
+
+      addRefinement: (field: string, valueOrLow: any, high: any = null): Actions.ResetPageAndAddRefinement => [
+        actions.resetPage(),
+        action(Actions.ADD_REFINEMENT, refinementPayload(field, valueOrLow, high), {
+          ...metadata,
+          validator: {
+            navigationId: validators.isString,
+            payload: [{
+              func: ({ range }) => !range || (typeof valueOrLow === 'number' && typeof high === 'number'),
+              msg: 'low and high values must be numeric'
+            }, {
+              func: ({ range }) => !range || valueOrLow < high,
+              msg: 'low value must be lower than high'
+            }, {
+              func: ({ range }) => !!range || validators.isString.func(valueOrLow),
+              msg: `value ${validators.isString.msg}`
+            }, {
+              func: (payload, state) => {
+                const navigation = Selectors.navigation(state, field);
+                // tslint:disable-next-line max-line-length
+                return !navigation || navigation.selected
+                  .findIndex((index) => SearchAdapter.refinementsMatch(payload, <any>navigation.refinements[index], navigation.range ? 'Range' : 'Value')) === -1;
+              },
+              msg: 'refinement is already selected'
+            }]
+          }
+        })
+      ],
+
+      switchRefinement: (field: string, valueOrLow: any, high: any = null): Actions.SwitchRefinement => <any>[
+        actions.resetPage(),
+        ...actions.resetRefinements(field),
+        ...actions.addRefinement(field, valueOrLow, high)
+      ],
+
+      resetRefinements: (field?: boolean | string): Actions.ResetPageAndResetRefinements => [
+        actions.resetPage(),
+        action(Actions.RESET_REFINEMENTS, field, {
+          ...metadata,
+          validator: {
+            payload: [{
+              func: () => field === true || typeof field === 'string',
+              msg: 'clear must be a string or true'
+            }, {
+              func: (_, state) => Selectors.selectedRefinements(state).length !== 0,
+              msg: 'no refinements to clear'
+            }, {
+              // tslint:disable-next-line max-line-length
+              func: (_, state) => typeof field === 'boolean' || Selectors.navigation(state, field).selected.length !== 0,
+              msg: `no refinements to clear for field "${field}"`
+            }]
+          }
+        })
+      ],
+
+      resetPage: (): Actions.ResetPage =>
+        action(Actions.RESET_PAGE, undefined, {
+          ...metadata,
+          validator: {
+            payload: {
+              func: (_, state) => Selectors.page(state) !== 1,
+              msg: 'page must not be on first page'
             }
-          }),
+          }
+        }),
 
-      addRefinement: (field: string, valueOrLow: any, high: any = null) =>
-        actions.updateSearch(refinementPayload(field, valueOrLow, high)),
+      search: (query: string = Selectors.query(flux.store.getState())): Actions.Search => <any>[
+        actions.resetPage(),
+        ...actions.resetRefinements(true),
+        ...actions.updateQuery(query)
+      ],
 
-      switchRefinement: (field: string, valueOrLow: any, high: any = null) =>
-        actions.updateSearch({ ...refinementPayload(field, valueOrLow, high), clear: field }),
+      // tslint:disable-next-line max-line-length
+      resetRecall: (query: string = null, { field, index }: { field: string, index: number } = <any>{}): Actions.ResetRecall => {
+        const resetActions: any[] = actions.search();
+        if (field) {
+          resetActions.push(...actions.selectRefinement(field, index));
+        }
 
-      resetRefinements: () =>
-        actions.updateSearch({ clear: true }),
+        return <Actions.ResetRecall>resetActions;
+      },
 
-      search: (query: string = Selectors.query(flux.store.getState())) =>
-        actions.updateSearch({ query, clear: true }),
-
-      resetRecall: (query: string = null, { field: navigationId, index }: { field: string, index: number } = <any>{}) =>
-        actions.updateSearch({ query, navigationId, index, clear: true }),
-
-      selectRefinement: (navigationId: string, index: number): Actions.SelectRefinement =>
+      selectRefinement: (navigationId: string, index: number): Actions.ResetPageAndSelectRefinement => [
+        actions.resetPage(),
         action(Actions.SELECT_REFINEMENT, { navigationId, index }, {
           ...metadata,
           validator: {
@@ -81,9 +171,10 @@ export function createActions(flux: FluxCapacitor) {
               msg: 'navigation does not exist or refinement is already selected'
             }
           }
-        }),
+        })],
 
-      deselectRefinement: (navigationId: string, index: number): Actions.DeselectRefinement =>
+      deselectRefinement: (navigationId: string, index: number): Actions.ResetPageAndDeselectRefinement => [
+        actions.resetPage(),
         action(Actions.DESELECT_REFINEMENT, { navigationId, index }, {
           ...metadata,
           validator: {
@@ -92,7 +183,7 @@ export function createActions(flux: FluxCapacitor) {
               msg: 'navigation does not exist or refinement is not selected'
             }
           }
-        }),
+        })],
 
       selectCollection: (id: string): Actions.SelectCollection =>
         action(Actions.SELECT_COLLECTION, id, {

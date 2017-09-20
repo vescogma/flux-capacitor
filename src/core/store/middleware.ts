@@ -6,7 +6,9 @@ import Actions from '../actions';
 import * as Events from '../events';
 
 export const RECALL_CHANGE_ACTIONS = [
-  Actions.UPDATE_SEARCH,
+  Actions.RESET_REFINEMENTS,
+  Actions.UPDATE_QUERY,
+  Actions.ADD_REFINEMENT,
   Actions.SELECT_REFINEMENT,
   Actions.DESELECT_REFINEMENT,
 ];

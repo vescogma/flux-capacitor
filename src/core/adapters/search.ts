@@ -2,6 +2,7 @@ import {
   Navigation,
   PageInfo,
   RangeRefinement,
+  Refinement,
   Results,
   SortType,
   Template,
@@ -45,8 +46,7 @@ namespace Adapter {
     sort: navigation.sort && Adapter.extractNavigationSort(navigation.sort),
   });
 
-  // tslint:disable-next-line max-line-length
-  export const refinementsMatch = (lhs: Store.RangeRefinement | Store.ValueRefinement, rhs: RangeRefinement | ValueRefinement, type: string = rhs.type) => {
+  export const refinementsMatch = (lhs: Store.Refinement, rhs: Refinement, type: string = rhs.type) => {
     if (type === 'Value') {
       return (<any>lhs).value === (<any>rhs).value;
     } else {

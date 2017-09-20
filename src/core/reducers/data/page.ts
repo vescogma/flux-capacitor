@@ -1,11 +1,9 @@
 import Actions from '../../actions';
 import Store from '../../store';
 
-export type Action = Actions.UpdateSearch
+export type Action = Actions.ResetPage
   | Actions.SelectSort
   | Actions.SelectCollection
-  | Actions.SelectRefinement
-  | Actions.DeselectRefinement
   | Actions.UpdateCurrentPage
   | Actions.UpdatePageSize
   | Actions.ReceivePage;
@@ -24,11 +22,9 @@ export const DEFAULTS: State = {
 
 export default function updatePage(state: State = DEFAULTS, action: Action): State {
   switch (action.type) {
-    case Actions.UPDATE_SEARCH:
+    case Actions.RESET_PAGE:
     case Actions.SELECT_SORT:
     case Actions.SELECT_COLLECTION:
-    case Actions.SELECT_REFINEMENT:
-    case Actions.DESELECT_REFINEMENT:
       return resetPage(state);
     case Actions.UPDATE_CURRENT_PAGE: return updateCurrent(state, action.payload);
     case Actions.UPDATE_PAGE_SIZE: return updateSize(state, action.payload);
