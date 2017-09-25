@@ -4,42 +4,44 @@ import Actions from './actions';
 import SearchAdapter from './adapters/search';
 import Selectors from './selectors';
 import Store from './store';
-import { action, handleError, refinementPayload, shouldResetRefinements } from './utils';
+import { action as createAction, handleError, refinementPayload, shouldResetRefinements } from './utils';
 import * as validators from './validators';
 
 export function createActions(flux: FluxCapacitor) {
 
   return (meta: () => any) => {
     const metadata = meta();
+    const action = <T extends string>(type: T, payload: any, validator: any = {}) =>
+      createAction(type, payload, { ...metadata, validator });
     const actions = ({
       refreshState: (state: any): Actions.RefreshState =>
-        action(Actions.REFRESH_STATE, state, metadata),
+        action(Actions.REFRESH_STATE, state),
 
       // fetch action creators
       fetchMoreRefinements: (navigationId: string): Actions.FetchMoreRefinements =>
-        action(Actions.FETCH_MORE_REFINEMENTS, navigationId, metadata),
+        action(Actions.FETCH_MORE_REFINEMENTS, navigationId),
 
       fetchProducts: (): Actions.FetchProducts =>
-        action(Actions.FETCH_PRODUCTS, null, metadata),
+        action(Actions.FETCH_PRODUCTS, null),
 
       fetchMoreProducts: (amount: number): Actions.FetchMoreProducts =>
-        action(Actions.FETCH_MORE_PRODUCTS, amount, metadata),
+        action(Actions.FETCH_MORE_PRODUCTS, amount),
 
       fetchAutocompleteSuggestions: (query: string): Actions.FetchAutocompleteSuggestions =>
-        action(Actions.FETCH_AUTOCOMPLETE_SUGGESTIONS, query, metadata),
+        action(Actions.FETCH_AUTOCOMPLETE_SUGGESTIONS, query),
 
       // tslint:disable-next-line max-line-length
       fetchAutocompleteProducts: (query: string, refinements: Actions.Payload.Autocomplete.Refinement[] = []): Actions.FetchAutocompleteProducts =>
-        action(Actions.FETCH_AUTOCOMPLETE_PRODUCTS, { query, refinements }, metadata),
+        action(Actions.FETCH_AUTOCOMPLETE_PRODUCTS, { query, refinements }),
 
       fetchCollectionCount: (collection: string): Actions.FetchCollectionCount =>
-        action(Actions.FETCH_COLLECTION_COUNT, collection, metadata),
+        action(Actions.FETCH_COLLECTION_COUNT, collection),
 
       fetchProductDetails: (id: string): Actions.FetchProductDetails =>
-        action(Actions.FETCH_PRODUCT_DETAILS, id, metadata),
+        action(Actions.FETCH_PRODUCT_DETAILS, id),
 
       fetchRecommendationsProducts: () =>
-        action(Actions.FETCH_RECOMMENDATIONS_PRODUCTS, null, metadata),
+        action(Actions.FETCH_RECOMMENDATIONS_PRODUCTS, null),
 
       // request action creators
       updateSearch: (search: Actions.Payload.Search): Actions.UpdateSearch => {
@@ -67,16 +69,13 @@ export function createActions(flux: FluxCapacitor) {
       updateQuery: (query: string): Actions.ResetPageAndUpdateQuery => [
         actions.resetPage(),
         action(Actions.UPDATE_QUERY, query && query.trim(), {
-          ...metadata,
-          validator: {
-            payload: [{
-              func: (_query) => !!_query || _query === null,
-              msg: 'search term is empty'
-            }, {
-              func: (_query, state) => _query !== Selectors.query(state),
-              msg: 'search term is not different'
-            }]
-          }
+          payload: [{
+            func: (_query) => !!_query || _query === null,
+            msg: 'search term is empty'
+          }, {
+            func: (_query, state) => _query !== Selectors.query(state),
+            msg: 'search term is not different'
+          }]
         })
       ],
 
@@ -85,28 +84,25 @@ export function createActions(flux: FluxCapacitor) {
       addRefinement: (field: string, valueOrLow: any, high: any = null): Actions.ResetPageAndAddRefinement => [
         actions.resetPage(),
         action(Actions.ADD_REFINEMENT, refinementPayload(field, valueOrLow, high), {
-          ...metadata,
-          validator: {
-            navigationId: validators.isString,
-            payload: [{
-              func: ({ range }) => !range || (typeof valueOrLow === 'number' && typeof high === 'number'),
-              msg: 'low and high values must be numeric'
-            }, {
-              func: ({ range }) => !range || valueOrLow < high,
-              msg: 'low value must be lower than high'
-            }, {
-              func: ({ range }) => !!range || validators.isString.func(valueOrLow),
-              msg: `value ${validators.isString.msg}`
-            }, {
-              func: (payload, state) => {
-                const navigation = Selectors.navigation(state, field);
-                // tslint:disable-next-line max-line-length
-                return !navigation || navigation.selected
-                  .findIndex((index) => SearchAdapter.refinementsMatch(payload, <any>navigation.refinements[index], navigation.range ? 'Range' : 'Value')) === -1;
-              },
-              msg: 'refinement is already selected'
-            }]
-          }
+          navigationId: validators.isString,
+          payload: [{
+            func: ({ range }) => !range || (typeof valueOrLow === 'number' && typeof high === 'number'),
+            msg: 'low and high values must be numeric'
+          }, {
+            func: ({ range }) => !range || valueOrLow < high,
+            msg: 'low value must be lower than high'
+          }, {
+            func: ({ range }) => !!range || validators.isString.func(valueOrLow),
+            msg: `value ${validators.isString.msg}`
+          }, {
+            func: (payload, state) => {
+              const navigation = Selectors.navigation(state, field);
+              // tslint:disable-next-line max-line-length
+              return !navigation || navigation.selected
+                .findIndex((index) => SearchAdapter.refinementsMatch(payload, <any>navigation.refinements[index], navigation.range ? 'Range' : 'Value')) === -1;
+            },
+            msg: 'refinement is already selected'
+          }]
         })
       ],
 
@@ -119,31 +115,25 @@ export function createActions(flux: FluxCapacitor) {
       resetRefinements: (field?: boolean | string): Actions.ResetPageAndResetRefinements => [
         actions.resetPage(),
         action(Actions.RESET_REFINEMENTS, field, {
-          ...metadata,
-          validator: {
-            payload: [{
-              func: () => field === true || typeof field === 'string',
-              msg: 'clear must be a string or true'
-            }, {
-              func: (_, state) => Selectors.selectedRefinements(state).length !== 0,
-              msg: 'no refinements to clear'
-            }, {
-              // tslint:disable-next-line max-line-length
-              func: (_, state) => typeof field === 'boolean' || Selectors.navigation(state, field).selected.length !== 0,
-              msg: `no refinements to clear for field "${field}"`
-            }]
-          }
+          payload: [{
+            func: () => field === true || typeof field === 'string',
+            msg: 'clear must be a string or true'
+          }, {
+            func: (_, state) => Selectors.selectedRefinements(state).length !== 0,
+            msg: 'no refinements to clear'
+          }, {
+            // tslint:disable-next-line max-line-length
+            func: (_, state) => typeof field === 'boolean' || Selectors.navigation(state, field).selected.length !== 0,
+            msg: `no refinements to clear for field "${field}"`
+          }]
         })
       ],
 
       resetPage: (): Actions.ResetPage =>
         action(Actions.RESET_PAGE, undefined, {
-          ...metadata,
-          validator: {
-            payload: {
-              func: (_, state) => Selectors.page(state) !== 1,
-              msg: 'page must not be on first page'
-            }
+          payload: {
+            func: (_, state) => Selectors.page(state) !== 1,
+            msg: 'page must not be on first page'
           }
         }),
 
@@ -166,68 +156,50 @@ export function createActions(flux: FluxCapacitor) {
       selectRefinement: (navigationId: string, index: number): Actions.ResetPageAndSelectRefinement => [
         actions.resetPage(),
         action(Actions.SELECT_REFINEMENT, { navigationId, index }, {
-          ...metadata,
-          validator: {
-            payload: {
-              func: (_, state) => Selectors.isRefinementDeselected(state, navigationId, index),
-              msg: 'navigation does not exist or refinement is already selected'
-            }
+          payload: {
+            func: (_, state) => Selectors.isRefinementDeselected(state, navigationId, index),
+            msg: 'navigation does not exist or refinement is already selected'
           }
         })],
 
       deselectRefinement: (navigationId: string, index: number): Actions.ResetPageAndDeselectRefinement => [
         actions.resetPage(),
         action(Actions.DESELECT_REFINEMENT, { navigationId, index }, {
-          ...metadata,
-          validator: {
-            payload: {
-              func: (_, state) => Selectors.isRefinementSelected(state, navigationId, index),
-              msg: 'navigation does not exist or refinement is not selected'
-            }
+          payload: {
+            func: (_, state) => Selectors.isRefinementSelected(state, navigationId, index),
+            msg: 'navigation does not exist or refinement is not selected'
           }
         })],
 
       selectCollection: (id: string): Actions.SelectCollection =>
         action(Actions.SELECT_COLLECTION, id, {
-          ...metadata,
-          validator: {
-            payload: {
-              func: (_, state) => Selectors.collection(state) !== id,
-              msg: 'collection is already selected'
-            }
+          payload: {
+            func: (_, state) => Selectors.collection(state) !== id,
+            msg: 'collection is already selected'
           }
         }),
 
       selectSort: (index: number): Actions.SelectSort =>
         action(Actions.SELECT_SORT, index, {
-          ...metadata,
-          validator: {
-            payload: {
-              func: (_, state) => Selectors.sortIndex(state) !== index,
-              msg: 'sort is already selected'
-            }
+          payload: {
+            func: (_, state) => Selectors.sortIndex(state) !== index,
+            msg: 'sort is already selected'
           }
         }),
 
       updatePageSize: (size: number): Actions.UpdatePageSize =>
         action(Actions.UPDATE_PAGE_SIZE, size, {
-          ...metadata,
-          validator: {
-            payload: {
-              func: (_, state) => Selectors.pageSize(state) !== size,
-              msg: 'page size is already selected'
-            }
+          payload: {
+            func: (_, state) => Selectors.pageSize(state) !== size,
+            msg: 'page size is already selected'
           }
         }),
 
       updateCurrentPage: (page: number): Actions.UpdateCurrentPage =>
         action(Actions.UPDATE_CURRENT_PAGE, page, {
-          ...metadata,
-          validator: {
-            payload: {
-              func: (_, state) => page !== null && Selectors.page(state) !== page,
-              msg: 'page size is already selected'
-            }
+          payload: {
+            func: (_, state) => page !== null && Selectors.page(state) !== page,
+            msg: 'page size is already selected'
           }
         }),
 
@@ -236,12 +208,9 @@ export function createActions(flux: FluxCapacitor) {
 
       updateAutocompleteQuery: (query: string): Actions.UpdateAutocompleteQuery =>
         action(Actions.UPDATE_AUTOCOMPLETE_QUERY, query, {
-          ...metadata,
-          validator: {
-            payload: {
-              func: (_, state) => Selectors.autocompleteQuery(state) !== query,
-              msg: 'suggestions for query have already been requested'
-            }
+          payload: {
+            func: (_, state) => Selectors.autocompleteQuery(state) !== query,
+            msg: 'suggestions for query have already been requested'
           }
         }),
 
@@ -339,7 +308,7 @@ export function createActions(flux: FluxCapacitor) {
 
       // app action creators
       startApp: (): Actions.StartApp =>
-        action<any, typeof Actions.START_APP, any>(Actions.START_APP, undefined, metadata)
+        action<typeof Actions.START_APP>(Actions.START_APP, undefined)
     });
 
     return actions;
