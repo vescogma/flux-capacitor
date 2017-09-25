@@ -234,6 +234,15 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('resetQuery()', () => {
+      it('should call updateQuery()', () => {
+        const updateQuery = actions.updateQuery = spy(() => ACTION);
+
+        expect(actions.resetQuery()).to.eq(ACTION);
+        expect(updateQuery).to.be.calledWithExactly(null);
+      });
+    });
+
     describe('resetRefinements()', () => {
       it('should return a batch action with RESET_PAGE', () => {
         const field = 'brand';

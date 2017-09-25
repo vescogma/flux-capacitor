@@ -80,6 +80,8 @@ export function createActions(flux: FluxCapacitor) {
         })
       ],
 
+      resetQuery: () => actions.updateQuery(null),
+
       addRefinement: (field: string, valueOrLow: any, high: any = null): Actions.ResetPageAndAddRefinement => [
         actions.resetPage(),
         action(Actions.ADD_REFINEMENT, refinementPayload(field, valueOrLow, high), {
