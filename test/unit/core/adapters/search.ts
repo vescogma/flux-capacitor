@@ -70,6 +70,10 @@ suite('Search Adapter', ({ expect, stub }) => {
         or: true,
         refinements: ['a', 'b'],
         sort: { c: 'd' },
+        metadata: [
+          { key: 'e', value: 'f' },
+          { key: 'g', value: 'h' },
+        ]
       };
       const sort = { e: 'f' };
       const extractRefinement = stub(Adapter, 'extractRefinement').returns('x');
@@ -86,6 +90,7 @@ suite('Search Adapter', ({ expect, stub }) => {
         refinements: ['x', 'x'],
         selected: [],
         sort,
+        metadata: { e: 'f', g: 'h' }
       });
       expect(extractRefinement).to.be.calledWith('a')
         .and.calledWith('b');
@@ -93,7 +98,7 @@ suite('Search Adapter', ({ expect, stub }) => {
     });
 
     it('should ignore sort if not truthy', () => {
-      const navigation: any = { refinements: [] };
+      const navigation: any = { refinements: [], metadata: [] };
       const extractNavigationSort = stub(Adapter, 'extractNavigationSort');
 
       const extracted = Adapter.extractNavigation(navigation);

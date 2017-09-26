@@ -139,7 +139,8 @@ export const addRefinement = (state: State, { navigationId, value, low, high, ra
           label: navigationId,
           range,
           refinements: [refinement],
-          selected: [0]
+          selected: [0],
+          metadata: {}
         }
       }
     };

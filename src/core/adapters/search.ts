@@ -44,6 +44,8 @@ namespace Adapter {
     refinements: navigation.refinements.map(Adapter.extractRefinement),
     selected: [],
     sort: navigation.sort && Adapter.extractNavigationSort(navigation.sort),
+    metadata: navigation.metadata
+      .reduce((metadata, keyValue) => Object.assign(metadata, { [keyValue.key]: keyValue.value }), {}),
   });
 
   export const refinementsMatch = (lhs: Store.Refinement, rhs: Refinement, type: string = rhs.type) => {

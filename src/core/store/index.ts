@@ -236,6 +236,7 @@ namespace Store {
     selected: number[]; // pre
     refinements: Refinement[]; // post
     sort?: Sort; // post
+    metadata: { [key: string]: string };
   }
 
   export interface BaseRefinement {

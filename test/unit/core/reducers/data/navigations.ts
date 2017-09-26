@@ -15,6 +15,7 @@ suite('navigations', ({ expect }) => {
       { value: 'Paper', total: 129 },
       { value: 'Audio Book', total: 293 },
     ],
+    metadata: {}
   };
   const Section = { // tslint:disable-line variable-name
     field: 'section',
@@ -29,6 +30,7 @@ suite('navigations', ({ expect }) => {
       { value: 'Teens', total: 193 },
       { high: 10, low: 5, total: 200 },
     ],
+    metadata: {}
   };
   const state: Store.Indexed<Store.Navigation> = {
     allIds,
@@ -72,6 +74,7 @@ suite('navigations', ({ expect }) => {
             { value: 'green', total: 199 },
             { value: 'blue', total: 213 },
           ],
+          metadata: {}
         }, {
           field: 'size',
           label: 'Size',
@@ -83,6 +86,7 @@ suite('navigations', ({ expect }) => {
             { value: 'medium', total: 309 },
             { value: 'large', total: 13 },
           ],
+          metadata: {}
         },
       ];
       const newState = {
@@ -169,7 +173,8 @@ suite('navigations', ({ expect }) => {
             label: 'Brand',
             range: false,
             refinements: [{ value: 'Oakley' }],
-            selected: [0]
+            selected: [0],
+            metadata: {}
           }
         }
       };
@@ -198,7 +203,8 @@ suite('navigations', ({ expect }) => {
             label: 'Brand',
             range: true,
             refinements: [{ low: 23, high: 34 }],
-            selected: [0]
+            selected: [0],
+            metadata: {}
           }
         }
       };
