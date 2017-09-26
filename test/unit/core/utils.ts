@@ -67,40 +67,49 @@ suite('utils', ({ expect, spy, stub }) => {
   });
 
       describe('shouldResetRefinements()', () => {
-      it('should be true if refinementsMatch is false', () => {
-        stub(Selectors, 'selectedRefinements').returns(['hello']);
-        stub(SearchAdapter, 'refinementsMatch').returns(false);
+        it('should be true if refinementsMatch is false', () => {
+          stub(Selectors, 'selectedRefinements').returns(['hello']);
+          stub(SearchAdapter, 'refinementsMatch').returns(false);
 
-        expect(utils.shouldResetRefinements({ navigationId: 'truthy' }, null)).to.be.true;
+          expect(utils.shouldResetRefinements({ navigationId: 'truthy' }, null)).to.be.true;
+        });
+
+        it('should be true if currentRefinements length is not 1', () => {
+          stub(Selectors, 'selectedRefinements').returns(['hello', 'hello']);
+          stub(SearchAdapter, 'refinementsMatch').returns(true);
+
+          expect(utils.shouldResetRefinements({ navigationId: 'truthy' }, null)).to.be.true;
+        });
+
+        it('should be true if navigationId is falsy', () => {
+          stub(Selectors, 'selectedRefinements').returns(['hello']);
+          stub(SearchAdapter, 'refinementsMatch').returns(true);
+
+          // undefined is falsy
+          expect(utils.shouldResetRefinements({ navigationId: undefined }, null)).to.be.true;
+        });
+
+        it('should be false above conditions are false', () => {
+          stub(Selectors, 'selectedRefinements').returns(['hello']);
+          stub(SearchAdapter, 'refinementsMatch').returns(true);
+
+          expect(utils.shouldResetRefinements({ navigationId: 'truthy' }, null)).to.be.false;
+        });
+
+        it('should be false above conditions are false (range is truthy case)', () => {
+          stub(Selectors, 'selectedRefinements').returns(['hello']);
+          stub(SearchAdapter, 'refinementsMatch').returns(true);
+
+          expect(utils.shouldResetRefinements({ navigationId: 'truthy', range: true }, null)).to.be.false;
+        });
+
+        it('should look up refinement from index if index passed', () => {
+          const crumb = stub(Selectors, 'isRefinementSelected').returns(false);
+          stub(Selectors, 'selectedRefinements').returns([{ value: 'hello' }]);
+
+          expect(utils.shouldResetRefinements(
+            { navigationId: 'truthy', value: 'notHello', index: 4 }, null)).to.be.true;
+          expect(crumb).to.be.calledWith(null, 'truthy', 4);
+        });
       });
-
-      it('should be true if currentRefinements length is not 1', () => {
-        stub(Selectors, 'selectedRefinements').returns(['hello', 'hello']);
-        stub(SearchAdapter, 'refinementsMatch').returns(true);
-
-        expect(utils.shouldResetRefinements({ navigationId: 'truthy' }, null)).to.be.true;
-      });
-
-      it('should be true if navigationId is falsy', () => {
-        stub(Selectors, 'selectedRefinements').returns(['hello']);
-        stub(SearchAdapter, 'refinementsMatch').returns(true);
-
-        // undefined is falsy
-        expect(utils.shouldResetRefinements({ navigationId: undefined }, null)).to.be.true;
-      });
-
-      it('should be false above conditions are false', () => {
-        stub(Selectors, 'selectedRefinements').returns(['hello']);
-        stub(SearchAdapter, 'refinementsMatch').returns(true);
-
-        expect(utils.shouldResetRefinements({ navigationId: 'truthy' }, null)).to.be.false;
-      });
-
-      it('should be false above conditions are false (range is truthy case)', () => {
-        stub(Selectors, 'selectedRefinements').returns(['hello']);
-        stub(SearchAdapter, 'refinementsMatch').returns(true);
-
-        expect(utils.shouldResetRefinements({ navigationId: 'truthy', range: true }, null)).to.be.false;
-      });
-    });
 });
