@@ -204,7 +204,7 @@ export function createActions(flux: FluxCapacitor) {
         }),
 
       updateDetails: (product: Store.Product): Actions.UpdateDetails =>
-        action(Actions.UPDATE_DETAILS, product, metadata),
+        action(Actions.UPDATE_DETAILS, product),
 
       updateAutocompleteQuery: (query: string): Actions.UpdateAutocompleteQuery =>
         action(Actions.UPDATE_AUTOCOMPLETE_QUERY, query, {
@@ -216,10 +216,10 @@ export function createActions(flux: FluxCapacitor) {
 
       // response action creators
       receiveQuery: (query: Actions.Payload.Query): Actions.ReceiveQuery =>
-        action(Actions.RECEIVE_QUERY, query, metadata),
+        action(Actions.RECEIVE_QUERY, query),
 
       receiveProducts: (res: Results): Actions.Action<string, any>[] | Actions.ReceiveProducts => {
-        const receiveProducts = action(Actions.RECEIVE_PRODUCTS, res, metadata);
+        const receiveProducts = action(Actions.RECEIVE_PRODUCTS, res);
 
         return handleError(receiveProducts, () => {
           const state = flux.store.getState();
@@ -242,39 +242,39 @@ export function createActions(flux: FluxCapacitor) {
       },
 
       receiveProductRecords: (products: Store.Product[]): Actions.ReceiveProductRecords =>
-        action(Actions.RECEIVE_PRODUCT_RECORDS, products, metadata),
+        action(Actions.RECEIVE_PRODUCT_RECORDS, products),
 
       receiveCollectionCount: (count: Actions.Payload.Collection.Count): Actions.ReceiveCollectionCount =>
-        action(Actions.RECEIVE_COLLECTION_COUNT, count, metadata),
+        action(Actions.RECEIVE_COLLECTION_COUNT, count),
 
       receiveNavigations: (navigations: Store.Navigation[]): Actions.ReceiveNavigations =>
-        action(Actions.RECEIVE_NAVIGATIONS, navigations, metadata),
+        action(Actions.RECEIVE_NAVIGATIONS, navigations),
 
       receivePage: (page: Actions.Payload.Page): Actions.ReceivePage =>
-        action(Actions.RECEIVE_PAGE, page, metadata),
+        action(Actions.RECEIVE_PAGE, page),
 
       receiveTemplate: (template: Store.Template): Actions.ReceiveTemplate =>
-        action(Actions.RECEIVE_TEMPLATE, template, metadata),
+        action(Actions.RECEIVE_TEMPLATE, template),
 
       receiveRecordCount: (recordCount: number): Actions.ReceiveRecordCount =>
-        action(Actions.RECEIVE_RECORD_COUNT, recordCount, metadata),
+        action(Actions.RECEIVE_RECORD_COUNT, recordCount),
 
       receiveRedirect: (redirect: string): Actions.ReceiveRedirect =>
-        action(Actions.RECEIVE_REDIRECT, redirect, metadata),
+        action(Actions.RECEIVE_REDIRECT, redirect),
 
       // tslint:disable-next-line max-line-length
       receiveMoreRefinements: (navigationId: string, refinements: Store.Refinement[], selected: number[]): Actions.ReceiveMoreRefinements =>
-        action(Actions.RECEIVE_MORE_REFINEMENTS, { navigationId, refinements, selected }, metadata),
+        action(Actions.RECEIVE_MORE_REFINEMENTS, { navigationId, refinements, selected }),
 
       // tslint:disable-next-line max-line-length
       receiveAutocompleteSuggestions: (suggestions: Actions.Payload.Autocomplete.Suggestions): Actions.ReceiveAutocompleteSuggestions =>
-        action(Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS, suggestions, metadata),
+        action(Actions.RECEIVE_AUTOCOMPLETE_SUGGESTIONS, suggestions),
 
       receiveMoreProducts: (products: Store.Product[]): Actions.ReceiveMoreProducts =>
-        action(Actions.RECEIVE_MORE_PRODUCTS, products, metadata),
+        action(Actions.RECEIVE_MORE_PRODUCTS, products),
 
       receiveAutocompleteProducts: (res: Results): Actions.ReceiveAutocompleteProducts => {
-        const receiveProducts = action(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, res, metadata);
+        const receiveProducts = action(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, res);
 
         return handleError(receiveProducts, () => [
           receiveProducts,
@@ -284,27 +284,27 @@ export function createActions(flux: FluxCapacitor) {
       },
 
       receiveAutocompleteProductRecords: (products: Store.Product[]): Actions.ReceiveAutocompleteProductRecords =>
-        action(Actions.RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS, products, metadata),
+        action(Actions.RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS, products),
 
       receiveAutocompleteTemplate: (template: Store.Template): Actions.ReceiveAutocompleteTemplate =>
-        action(Actions.RECEIVE_AUTOCOMPLETE_TEMPLATE, template, metadata),
+        action(Actions.RECEIVE_AUTOCOMPLETE_TEMPLATE, template),
 
       receiveDetailsProduct: (product: Store.Product): Actions.ReceiveDetailsProduct =>
-        action(Actions.RECEIVE_DETAILS_PRODUCT, product, metadata),
+        action(Actions.RECEIVE_DETAILS_PRODUCT, product),
 
       receiveRecommendationsProducts: (products: Store.Product[]) =>
-        action(Actions.RECEIVE_RECOMMENDATIONS_PRODUCTS, products, metadata),
+        action(Actions.RECEIVE_RECOMMENDATIONS_PRODUCTS, products),
 
       // ui action creators
       createComponentState: (tagName: string, id: string, state: any = {}): Actions.CreateComponentState =>
-        action(Actions.CREATE_COMPONENT_STATE, { tagName, id, state }, metadata),
+        action(Actions.CREATE_COMPONENT_STATE, { tagName, id, state }),
 
       removeComponentState: (tagName: string, id: string): Actions.RemoveComponentState =>
-        action(Actions.REMOVE_COMPONENT_STATE, { tagName, id }, metadata),
+        action(Actions.REMOVE_COMPONENT_STATE, { tagName, id }),
 
       // session action creators
       updateLocation: (location: Store.Geolocation): Actions.UpdateLocation =>
-        action(Actions.UPDATE_LOCATION, location, metadata),
+        action(Actions.UPDATE_LOCATION, location),
 
       // app action creators
       startApp: (): Actions.StartApp =>
