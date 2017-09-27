@@ -10,7 +10,7 @@ suite('reducers', ({ expect, stub }) => {
       session: undefined,
       data: {
         past: [{ autocomplete: { c: 'd' }, details: {} }],
-        present: { autocomplete: {}, details: { id: undefined } },
+        present: { autocomplete: {}, details: { data: undefined } },
         future: []
       }
     };

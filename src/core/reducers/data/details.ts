@@ -14,8 +14,8 @@ export default function updateDetails(state: State = DEFAULTS, action: Action): 
   }
 }
 
-export const update = (state: State, { id, title }: Actions.Payload.Details) =>
-  ({ ...state, id, title });
+export const update = (state: State, data: Store.Product) =>
+  ({ ...state, data });
 
 export const receiveProduct = (state: State, product: Store.Product) =>
   ({ ...state, product });

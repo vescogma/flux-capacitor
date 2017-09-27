@@ -183,7 +183,7 @@ suite('Observer', ({ expect, spy, stub }) => {
       expect(present.collections.byId).to.be.a('function');
       expect(present.collections.selected).to.be.a('function');
       expect(present.details).to.be.an('object');
-      expect(present.details.id).to.be.a('function');
+      expect(present.details.data).to.be.a('function');
       expect(present.details.product).to.be.a('function');
       expect(present.navigations).to.be.a('function');
       expect(present.page).to.be.a('function');
@@ -288,8 +288,8 @@ suite('Observer', ({ expect, spy, stub }) => {
       });
 
       describe('details', () => {
-        it('should emit DETAILS_ID_UPDATED event', () => {
-          observers.data.present.details.id(undefined, OBJ);
+        it('should emit DETAILS_UPDATED event', () => {
+          observers.data.present.details.data(undefined, OBJ);
 
           expect(emit).to.be.calledWith(Events.DETAILS_UPDATED, OBJ);
         });

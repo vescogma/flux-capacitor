@@ -210,8 +210,7 @@ namespace Store {
   }
 
   export interface Details {
-    id?: string; // pre
-    title?: string; // mixed
+    data?: Product; // pre
     product?: Product; // post
   }
 

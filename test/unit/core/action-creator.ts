@@ -702,10 +702,9 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
       describe('updateDetails()', () => {
         it('should return an action', () => {
-          const id = '4123';
-          const title = 'my-product';
+          const product: any = { a: 'b' };
 
-          expectAction(() => actions.updateDetails(id, title), Actions.UPDATE_DETAILS, { id, title });
+          expectAction(() => actions.updateDetails(product), Actions.UPDATE_DETAILS, product);
         });
       });
 

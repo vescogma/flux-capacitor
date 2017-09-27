@@ -31,7 +31,7 @@ namespace Actions {
   export const UPDATE_AUTOCOMPLETE_QUERY = 'UPDATE_AUTOCOMPLETE_QUERY';
   export type UpdateAutocompleteQuery = Action<typeof UPDATE_AUTOCOMPLETE_QUERY, string>;
   export const UPDATE_DETAILS = 'UPDATE_DETAILS';
-  export type UpdateDetails = Action<typeof UPDATE_DETAILS, Payload.Details>;
+  export type UpdateDetails = Action<typeof UPDATE_DETAILS, Store.Product>;
   export const SELECT_REFINEMENT = 'SELECT_REFINEMENT';
   export type SelectRefinement = Action<typeof SELECT_REFINEMENT, Payload.Navigation.Refinement>;
   export const DESELECT_REFINEMENT = 'DESELECT_REFINEMENT';
@@ -191,11 +191,6 @@ namespace Actions {
         field: string;
         value: string;
       }
-    }
-
-    export interface Details {
-      id: string;
-      title: string;
     }
 
     export namespace Navigation {

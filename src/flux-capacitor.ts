@@ -86,8 +86,8 @@ class FluxCapacitor extends EventEmitter {
     this.store.dispatch(this.actions.deselectRefinement(navigationName, index));
   }
 
-  details(id: string, title: string) {
-    this.store.dispatch(this.actions.updateDetails(id, title));
+  details(product: Store.Product) {
+    this.store.dispatch(this.actions.updateDetails(product));
   }
 
   switchCollection(collection: string) {

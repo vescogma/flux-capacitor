@@ -203,8 +203,8 @@ export function createActions(flux: FluxCapacitor) {
           }
         }),
 
-      updateDetails: (id: string, title: string): Actions.UpdateDetails =>
-        action(Actions.UPDATE_DETAILS, { id, title }, metadata),
+      updateDetails: (product: Store.Product): Actions.UpdateDetails =>
+        action(Actions.UPDATE_DETAILS, product, metadata),
 
       updateAutocompleteQuery: (query: string): Actions.UpdateAutocompleteQuery =>
         action(Actions.UPDATE_AUTOCOMPLETE_QUERY, query, {

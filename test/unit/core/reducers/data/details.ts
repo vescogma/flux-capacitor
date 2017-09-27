@@ -15,24 +15,20 @@ suite('details', ({ expect }) => {
     name: 'pajamas',
   };
   const state: Store.Details = {
-    id,
+    data: product,
     product,
   };
 
   describe('updateDetails()', () => {
     it('should update state on UPDATE_DETAILS_ID', () => {
       const newState = {
-        id: product.id,
-        title: product.name,
+        data: product2,
         product,
       };
 
       const reducer = details(state, {
         type: Actions.UPDATE_DETAILS,
-        payload: {
-          id: product.id,
-          title: product.name
-        }
+        payload: product2
       });
 
       expect(reducer).to.eql(newState);
@@ -40,7 +36,7 @@ suite('details', ({ expect }) => {
 
     it('should update state on RECEIVE_DETAILS_PRODUCT', () => {
       const newState = {
-        id,
+        data: product,
         product: product2,
       };
 
