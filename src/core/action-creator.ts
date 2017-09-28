@@ -69,13 +69,10 @@ export function createActions(flux: FluxCapacitor) {
       updateQuery: (query: string): Actions.ResetPageAndUpdateQuery => [
         actions.resetPage(),
         action(Actions.UPDATE_QUERY, query && query.trim(), {
-          payload: [{
-            func: (_query) => !!_query || _query === null,
-            msg: 'search term is empty'
-          }, {
-            func: (_query, state) => _query !== Selectors.query(state),
-            msg: 'search term is not different'
-          }]
+          payload: [
+            validators.isValidQuery,
+            validators.isDifferentQuery
+          ]
         })
       ],
 
@@ -85,24 +82,12 @@ export function createActions(flux: FluxCapacitor) {
         actions.resetPage(),
         action(Actions.ADD_REFINEMENT, refinementPayload(field, valueOrLow, high), {
           navigationId: validators.isString,
-          payload: [{
-            func: ({ range }) => !range || (typeof valueOrLow === 'number' && typeof high === 'number'),
-            msg: 'low and high values must be numeric'
-          }, {
-            func: ({ range }) => !range || valueOrLow < high,
-            msg: 'low value must be lower than high'
-          }, {
-            func: ({ range }) => !!range || validators.isString.func(valueOrLow),
-            msg: `value ${validators.isString.msg}`
-          }, {
-            func: (payload, state) => {
-              const navigation = Selectors.navigation(state, field);
-              // tslint:disable-next-line max-line-length
-              return !navigation || navigation.selected
-                .findIndex((index) => SearchAdapter.refinementsMatch(payload, <any>navigation.refinements[index], navigation.range ? 'Range' : 'Value')) === -1;
-            },
-            msg: 'refinement is already selected'
-          }]
+          payload: [
+            validators.isRangeRefinement,
+            validators.isValidRange,
+            validators.isValueRefinement,
+            validators.isRefinementDeselectedByValue
+          ]
         })
       ],
 
@@ -115,26 +100,17 @@ export function createActions(flux: FluxCapacitor) {
       resetRefinements: (field?: boolean | string): Actions.ResetPageAndResetRefinements => [
         actions.resetPage(),
         action(Actions.RESET_REFINEMENTS, field, {
-          payload: [{
-            func: () => field === true || typeof field === 'string',
-            msg: 'clear must be a string or true'
-          }, {
-            func: (_, state) => Selectors.selectedRefinements(state).length !== 0,
-            msg: 'no refinements to clear'
-          }, {
-            // tslint:disable-next-line max-line-length
-            func: (_, state) => typeof field === 'boolean' || Selectors.navigation(state, field).selected.length !== 0,
-            msg: `no refinements to clear for field "${field}"`
-          }]
+          payload: [
+            validators.isValidClearField,
+            validators.hasSelectedRefinements,
+            validators.hasSelectedRefinementsByField
+          ]
         })
       ],
 
       resetPage: (): Actions.ResetPage =>
         action(Actions.RESET_PAGE, undefined, {
-          payload: {
-            func: (_, state) => Selectors.page(state) !== 1,
-            msg: 'page must not be on first page'
-          }
+          payload: validators.notOnFirstPage
         }),
 
       search: (query: string = Selectors.query(flux.store.getState())): Actions.Search => <any>[
@@ -156,51 +132,33 @@ export function createActions(flux: FluxCapacitor) {
       selectRefinement: (navigationId: string, index: number): Actions.ResetPageAndSelectRefinement => [
         actions.resetPage(),
         action(Actions.SELECT_REFINEMENT, { navigationId, index }, {
-          payload: {
-            func: (_, state) => Selectors.isRefinementDeselected(state, navigationId, index),
-            msg: 'navigation does not exist or refinement is already selected'
-          }
+          payload: validators.isRefinementDeselectedByIndex
         })],
 
       deselectRefinement: (navigationId: string, index: number): Actions.ResetPageAndDeselectRefinement => [
         actions.resetPage(),
         action(Actions.DESELECT_REFINEMENT, { navigationId, index }, {
-          payload: {
-            func: (_, state) => Selectors.isRefinementSelected(state, navigationId, index),
-            msg: 'navigation does not exist or refinement is not selected'
-          }
+          payload: validators.isRefinementSelectedByIndex
         })],
 
       selectCollection: (id: string): Actions.SelectCollection =>
         action(Actions.SELECT_COLLECTION, id, {
-          payload: {
-            func: (_, state) => Selectors.collection(state) !== id,
-            msg: 'collection is already selected'
-          }
+          payload: validators.isCollectionDeselected
         }),
 
       selectSort: (index: number): Actions.SelectSort =>
         action(Actions.SELECT_SORT, index, {
-          payload: {
-            func: (_, state) => Selectors.sortIndex(state) !== index,
-            msg: 'sort is already selected'
-          }
+          payload: validators.isSortDeselected
         }),
 
       updatePageSize: (size: number): Actions.UpdatePageSize =>
         action(Actions.UPDATE_PAGE_SIZE, size, {
-          payload: {
-            func: (_, state) => Selectors.pageSize(state) !== size,
-            msg: 'page size is already selected'
-          }
+          payload: validators.isDifferentPageSize
         }),
 
       updateCurrentPage: (page: number): Actions.UpdateCurrentPage =>
         action(Actions.UPDATE_CURRENT_PAGE, page, {
-          payload: {
-            func: (_, state) => page !== null && Selectors.page(state) !== page,
-            msg: 'page size is already selected'
-          }
+          payload: validators.isOnDifferentPage
         }),
 
       updateDetails: (product: Store.Product): Actions.UpdateDetails =>
@@ -208,10 +166,7 @@ export function createActions(flux: FluxCapacitor) {
 
       updateAutocompleteQuery: (query: string): Actions.UpdateAutocompleteQuery =>
         action(Actions.UPDATE_AUTOCOMPLETE_QUERY, query, {
-          payload: {
-            func: (_, state) => Selectors.autocompleteQuery(state) !== query,
-            msg: 'suggestions for query have already been requested'
-          }
+          payload: validators.isDifferentAutocompleteQuery
         }),
 
       // response action creators

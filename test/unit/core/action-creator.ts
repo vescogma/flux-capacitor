@@ -17,18 +17,37 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
   beforeEach(() => actions = createActions(flux = <any>{})(() => null));
 
   // tslint:disable-next-line max-line-length
-  function expectAction<T>(fn: () => Actions.Action<T, any>, type: T, payload?: any, metadataTest?: (meta: any) => any) {
+  function expectAction<T>(fn: () => Actions.Action<T, any> | Actions.Action<T, any>[], type: T, payload?: any) {
     const createAction = stub(utils, 'action').returns(ACTION);
 
     const action = fn();
 
-    expect(action).to.eq(ACTION);
-    const args: any[] = [type, payload];
-    if (metadataTest) {
-      args.push(sinon.match(metadataTest));
+    if (Array.isArray(action)) {
+      action.forEach((subAction) => expect(subAction).to.eq(ACTION));
     } else {
-      args.push(sinon.match.any);
+      expect(action).to.eq(ACTION);
     }
+    expect(createAction).to.be.calledWithExactly(type, payload, sinon.match.any);
+  }
+
+  // tslint:disable-next-line max-line-length
+  function expectValidators<T>(fn: () => Actions.Action<T, any> | Actions.Action<T, any>[], type: T, validator: object) {
+    const createAction = stub(utils, 'action').returns(ACTION);
+
+    fn();
+
+    const args: any[] = [type, sinon.match.any];
+    args.push(sinon.match((meta) => Object.keys(validator)
+      .reduce((allValid, key) => {
+        if (Array.isArray(validator[key]) !== Array.isArray(meta.validator[key])) {
+          return false;
+        } else if (Array.isArray(validator[key])) {
+          return allValid && meta.validator[key]
+            .reduce((valid, subValidator, index) => valid && subValidator === validator[key][index], true);
+        } else {
+          return allValid && validator[key] === meta.validator[key];
+        }
+      }, true)));
     expect(createAction).to.be.calledWithExactly(...args);
   }
 
@@ -196,41 +215,23 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
     });
 
     describe('updateQuery()', () => {
+      const query = 'rambo';
+
       it('should return a batch action with RESET_PAGE', () => {
-        const query = 'rambo';
-        stub(Selectors, 'query');
-        stub(utils, 'action');
-        actions.resetPage = (): any => ACTION;
-
-        const batchAction = actions.updateQuery(query);
-
-        expect(batchAction[0]).to.eql(ACTION);
+        expectAction(() => actions.updateQuery(query), Actions.RESET_PAGE);
       });
 
-      it('should return an action', () => {
-        const query = 'rambo';
-        stub(Selectors, 'query');
-
-        expectAction(() => actions.updateQuery(query)[1], Actions.UPDATE_QUERY, query,
-          (meta) => {
-            expect(meta.validator.payload[0].func(query)).to.be.true;
-            return expect(meta.validator.payload[1].func(query)).to.be.true;
-          });
+      it('should return a batch action with UPDATE_QUERY', () => {
+        expectAction(() => actions.updateQuery(query), Actions.UPDATE_QUERY, query);
       });
 
-      it('should not return an action when query is invalid', () => {
-        const query = '';
-
-        expectAction(() => actions.updateQuery(query)[1], Actions.UPDATE_QUERY, query,
-          (meta) => expect(meta.validator.payload[0].func(query)).to.be.false);
-      });
-
-      it('should not return an action when query will not change', () => {
-        const query = 'umbrella';
-        stub(Selectors, 'query').returns(query);
-
-        expectAction(() => actions.updateQuery(query)[1], Actions.UPDATE_QUERY, query,
-          (meta) => expect(meta.validator.payload[1].func(query)).to.be.false);
+      it('should apply validators to UPDATE_QUERY', () => {
+        expectValidators(() => actions.updateQuery(query), Actions.UPDATE_QUERY, {
+          payload: [
+            validators.isValidQuery,
+            validators.isDifferentQuery
+          ]
+        });
       });
     });
 
@@ -244,60 +245,36 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
     });
 
     describe('resetRefinements()', () => {
+      const field = 'brand';
+
       it('should return a batch action with RESET_PAGE', () => {
-        const field = 'brand';
-        actions.resetPage = (): any => ACTION;
-        stub(utils, 'action');
-
-        const batchAction = actions.resetRefinements(field);
-
-        expect(batchAction[0]).to.eq(ACTION);
+        expectAction(() => actions.resetRefinements(field), Actions.RESET_PAGE);
       });
 
-      it('should return an action', () => {
-        const field = 'brand';
-
-        expectAction(() => actions.resetRefinements(field)[1], Actions.RESET_REFINEMENTS, field,
-          (meta) => expect(meta.validator.payload[0].func()).to.be.true);
+      it('should return a batch action with RESET_REFINEMENTS', () => {
+        expectAction(() => actions.resetRefinements(field), Actions.RESET_REFINEMENTS, field);
       });
 
-      it('should not return an action when field is invalid', () => {
-        const field = false;
-
-        expectAction(() => actions.resetRefinements(field)[1], Actions.RESET_REFINEMENTS, field,
-          (meta) => expect(meta.validator.payload[0].func()).to.be.false);
-      });
-
-      it('should not return an action when no refinements selected', () => {
-        stub(Selectors, 'selectedRefinements').returns([]);
-
-        expectAction(() => actions.resetRefinements()[1], Actions.RESET_REFINEMENTS, undefined,
-          (meta) => expect(meta.validator.payload[1].func()).to.be.false);
-      });
-
-      it('should not return an action when no refinements selected for field', () => {
-        const field = 'brand';
-        stub(Selectors, 'selectedRefinements').returns([{}]);
-        stub(Selectors, 'navigation').returns({ selected: [] });
-
-        expectAction(() => actions.resetRefinements(field)[1], Actions.RESET_REFINEMENTS, field,
-          (meta) => expect(meta.validator.payload[2].func()).to.be.false);
+      it('should apply validators to RESET_REFINEMENTS', () => {
+        expectValidators(() => actions.resetRefinements(field), Actions.RESET_REFINEMENTS, {
+          payload: [
+            validators.isValidClearField,
+            validators.hasSelectedRefinements,
+            validators.hasSelectedRefinementsByField
+          ]
+        });
       });
     });
 
     describe('resetPage()', () => {
       it('should return an action', () => {
-        stub(Selectors, 'page').returns(8);
-
-        expectAction(() => actions.resetPage(), Actions.RESET_PAGE, undefined,
-          (meta) => expect(meta.validator.payload.func()).to.be.true);
+        expectAction(() => actions.resetPage(), Actions.RESET_PAGE, undefined);
       });
 
-      it('should not return an action', () => {
-        stub(Selectors, 'page').returns(1);
-
-        expectAction(() => actions.resetPage(), Actions.RESET_PAGE, undefined,
-          (meta) => expect(meta.validator.payload.func()).to.be.false);
+      it('should apply validators to action', () => {
+        expectValidators(() => actions.resetPage(), Actions.RESET_PAGE, {
+          payload: validators.notOnFirstPage
+        });
       });
     });
 
@@ -307,23 +284,14 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
       const rangeRefinement = { range: true };
 
       it('should return a batch action with RESET_PAGE', () => {
-        const value = 'a';
-        const resetPageAction = { a: 'b' };
-        stub(utils, 'refinementPayload').returns(refinement);
-        stub(utils, 'action');
-        stub(actions, 'resetPage').returns(resetPageAction);
-
-        const batchAction = actions.addRefinement(navigationId, value);
-
-        expect(batchAction[0]).to.eql(resetPageAction);
+        expectAction(() => actions.addRefinement(navigationId, null), Actions.RESET_PAGE);
       });
 
       it('should return an action with value refinement', () => {
         const value = 'a';
         const refinementPayload = stub(utils, 'refinementPayload').returns(refinement);
-        actions.resetPage = spy();
 
-        expectAction(() => actions.addRefinement(navigationId, value)[1], Actions.ADD_REFINEMENT, refinement);
+        expectAction(() => actions.addRefinement(navigationId, value), Actions.ADD_REFINEMENT, refinement);
         expect(refinementPayload).to.be.calledWithExactly(navigationId, value, null);
       });
 
@@ -331,90 +299,21 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         const low = 2;
         const high = 4;
         const refinementPayload = stub(utils, 'refinementPayload').returns(refinement);
-        actions.resetPage = spy();
 
-        expectAction(() => actions.addRefinement(navigationId, low, high)[1], Actions.ADD_REFINEMENT, refinement);
+        expectAction(() => actions.addRefinement(navigationId, low, high), Actions.ADD_REFINEMENT, refinement);
         expect(refinementPayload).to.be.calledWithExactly(navigationId, low, high);
       });
 
-      it('should validate navigationId', () => {
-        stub(utils, 'refinementPayload').returns(refinement);
-        actions.resetPage = spy();
-
-        expectAction(() => actions.addRefinement(null, null)[1], Actions.ADD_REFINEMENT, refinement,
-          (meta) => expect(meta.validator.navigationId).to.eq(validators.isString));
-      });
-
-      it('should invalidate non-numeric low value', () => {
-        stub(utils, 'refinementPayload').returns(rangeRefinement);
-        actions.resetPage = spy();
-
-        expectAction(() => actions.addRefinement(null, 'g')[1], Actions.ADD_REFINEMENT, rangeRefinement,
-          (meta) => expect(meta.validator.payload[0].func(rangeRefinement)).to.be.false);
-      });
-
-      it('should invalidate non-numeric high value', () => {
-        stub(utils, 'refinementPayload').returns(rangeRefinement);
-        actions.resetPage = spy();
-
-        expectAction(() => actions.addRefinement(null, 2, 'j')[1], Actions.ADD_REFINEMENT, rangeRefinement,
-          (meta) => expect(meta.validator.payload[0].func(rangeRefinement)).to.be.false);
-      });
-
-      it('should invalidate low greater than high', () => {
-        stub(utils, 'refinementPayload').returns(rangeRefinement);
-        actions.resetPage = spy();
-
-        expectAction(() => actions.addRefinement(null, 2, 1)[1], Actions.ADD_REFINEMENT, rangeRefinement,
-          (meta) => expect(meta.validator.payload[1].func(rangeRefinement)).to.be.false);
-      });
-
-      it('should invalidate nonstring value', () => {
-        const value = 7;
-        const isStringValidator = stub(validators.isString, 'func').returns(false);
-        stub(utils, 'refinementPayload').returns(refinement);
-        actions.resetPage = spy();
-
-        expectAction(() => actions.addRefinement(null, value)[1], Actions.ADD_REFINEMENT, refinement,
-          (meta) => expect(meta.validator.payload[2].func(refinement)).to.be.false);
-        expect(isStringValidator).to.be.calledWith(value);
-      });
-
-      it('should validate refinement for untracked field', () => {
-        const state = { a: 'b' };
-        const selectNavigation = stub(Selectors, 'navigation');
-        stub(utils, 'refinementPayload').returns(refinement);
-        actions.resetPage = spy();
-
-        expectAction(() => actions.addRefinement(navigationId, null)[1], Actions.ADD_REFINEMENT, refinement,
-          (meta) => expect(meta.validator.payload[3].func(null, state)).to.be.true);
-        expect(selectNavigation).to.be.calledWithExactly(state, navigationId);
-      });
-
-      it('should invalidate currently selected value refinement', () => {
-        const value = 7;
-        const selected = { a: 'b' };
-        const refinementsMatch = stub(SearchAdapter, 'refinementsMatch').returns(true);
-        stub(utils, 'refinementPayload').returns(refinement);
-        stub(Selectors, 'navigation').returns({ selected: [1], refinements: [{}, selected, {}] });
-        actions.resetPage = spy();
-
-        expectAction(() => actions.addRefinement(null, value)[1], Actions.ADD_REFINEMENT, refinement,
-          (meta) => expect(meta.validator.payload[3].func(refinement)).to.be.false);
-        expect(refinementsMatch).to.be.calledWithExactly(refinement, selected, 'Value');
-      });
-
-      it('should invalidate currently selected value refinement', () => {
-        const value = 7;
-        const selected = { a: 'b' };
-        const refinementsMatch = stub(SearchAdapter, 'refinementsMatch').returns(true);
-        stub(utils, 'refinementPayload').returns(refinement);
-        stub(Selectors, 'navigation').returns({ range: true, selected: [1], refinements: [{}, selected, {}] });
-        actions.resetPage = spy();
-
-        expectAction(() => actions.addRefinement(null, value)[1], Actions.ADD_REFINEMENT, refinement,
-          (meta) => expect(meta.validator.payload[3].func(refinement)).to.be.false);
-        expect(refinementsMatch).to.be.calledWithExactly(refinement, selected, 'Range');
+      it('should apply validators to ADD_REFINEMENT', () => {
+        expectValidators(() => actions.addRefinement(null, null), Actions.ADD_REFINEMENT, {
+          navigationId: validators.isString,
+          payload: [
+            validators.isRangeRefinement,
+            validators.isValidRange,
+            validators.isValueRefinement,
+            validators.isRefinementDeselectedByValue
+          ]
+        });
       });
     });
 
@@ -541,195 +440,123 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
     });
 
     describe('selectRefinement()', () => {
+      const navigationId = 'colour';
+
       it('should return a batch action with RESET_PAGE', () => {
-        const isRefinementDeselected = stub(Selectors, 'isRefinementDeselected').returns(true);
-        stub(utils, 'action');
-        actions.resetPage = (): any => ACTION;
-
-        const batchAction = actions.selectRefinement('', 0);
-
-        expect(batchAction[0]).to.eq(ACTION);
+        expectAction(() => actions.selectRefinement(navigationId, null), Actions.RESET_PAGE);
       });
 
-      it('should return a batch action', () => {
-        const isRefinementDeselected = stub(Selectors, 'isRefinementDeselected').returns(true);
-        const navigationId = 'colour';
+      it('should return a batch action with SELECT_REFINEMENT', () => {
         const index = 30;
-        const state = { a: 'b' };
 
         // tslint:disable-next-line max-line-length
-        expectAction(() => actions.selectRefinement(navigationId, index)[1], Actions.SELECT_REFINEMENT, { navigationId, index },
-          (meta) => {
-            expect(meta.validator.payload.func(null, state)).to.be.true;
-            return expect(isRefinementDeselected).to.be.calledWithExactly(state, navigationId, index);
-          });
+        expectAction(() => actions.selectRefinement(navigationId, index), Actions.SELECT_REFINEMENT, { navigationId, index });
       });
 
-      it('should invalidate action when refinement not selectable', () => {
-        stub(Selectors, 'isRefinementDeselected').returns(false);
+      it('should apply validators to SELECT_REFINEMENT', () => {
+        expectValidators(() => actions.selectRefinement(navigationId, 30), Actions.SELECT_REFINEMENT, {
+          payload: validators.isRefinementDeselectedByIndex
+        });
+      });
+    });
+
+    describe('deselectRefinement()', () => {
+      const navigationId = 'colour';
+
+      it('should return a batch action with RESET_PAGE', () => {
+        expectAction(() => actions.deselectRefinement(navigationId, null), Actions.RESET_PAGE);
+      });
+
+      it('should return a batch action with DESELECT_REFINEMENT', () => {
+        const index = 30;
 
         // tslint:disable-next-line max-line-length
-        expectAction(() => actions.selectRefinement('colour', 30)[1], Actions.SELECT_REFINEMENT, { navigationId: 'colour', index: 30 },
-          (meta) => expect(meta.validator.payload.func(null, {})).to.be.false);
+        expectAction(() => actions.deselectRefinement(navigationId, index), Actions.DESELECT_REFINEMENT, { navigationId, index });
       });
 
-      describe('deselectRefinement()', () => {
-        it('should return a batch action with RESET_PAGE', () => {
-          const isRefinementDeselected = stub(Selectors, 'isRefinementDeselected').returns(true);
-          stub(utils, 'action');
-          actions.resetPage = (): any => ACTION;
+      it('should apply validators to DESELECT_REFINEMENT', () => {
+        const index = 30;
 
-          const batchAction = actions.deselectRefinement('', 0);
-
-          expect(batchAction[0]).to.eq(ACTION);
-        });
-
-        it('should return a batch action', () => {
-          const isRefinementSelected = stub(Selectors, 'isRefinementSelected').returns(true);
-          const navigationId = 'colour';
-          const index = 30;
-          const state = { a: 'b' };
-
-          // tslint:disable-next-line max-line-length
-          expectAction(() => actions.deselectRefinement(navigationId, index)[1], Actions.DESELECT_REFINEMENT, { navigationId, index },
-            (meta) => {
-              expect(meta.validator.payload.func(null, state)).to.be.true;
-              return expect(isRefinementSelected).to.be.calledWithExactly(state, navigationId, index);
-            });
-        });
-
-        it('should invalidate action when refinement not deselectable', () => {
-          stub(Selectors, 'isRefinementSelected').returns(false);
-
-          // tslint:disable-next-line max-line-length
-          expectAction(() => actions.deselectRefinement('colour', 30)[1], Actions.DESELECT_REFINEMENT, { navigationId: 'colour', index: 30 },
-            (meta) => expect(meta.validator.payload.func(null, {})).to.be.false);
+        expectValidators(() => actions.deselectRefinement(navigationId, index), Actions.DESELECT_REFINEMENT, {
+          payload: validators.isRefinementSelectedByIndex
         });
       });
+    });
 
-      describe('selectCollection()', () => {
-        it('should return an action', () => {
-          const collection = 'otherCollection';
-          const state = { a: 'b' };
-          const selectCollection = stub(Selectors, 'collection').returns('someCollection');
+    describe('selectCollection()', () => {
+      const collection = 'products';
 
-          expectAction(() => actions.selectCollection(collection), Actions.SELECT_COLLECTION, collection,
-            (meta) => {
-              expect(meta.validator.payload.func(null, state)).to.be.true;
-              return expect(selectCollection).to.be.calledWith(state);
-            });
-        });
-
-        it('should invalidate action if collection is already selected', () => {
-          const collection = 'otherCollection';
-          stub(Selectors, 'collection').returns(collection);
-
-          expectAction(() => actions.selectCollection(collection), Actions.SELECT_COLLECTION, collection,
-            (meta) => expect(meta.validator.payload.func(null, { a: 'b' })).to.be.false);
-        });
+      it('should return a SELECT_COLLECTION action', () => {
+        expectAction(() => actions.selectCollection(collection), Actions.SELECT_COLLECTION, collection);
       });
 
-      describe('selectSort()', () => {
-        it('should return an action', () => {
-          const index = 9;
-          const state = { a: 'b' };
-          const sortIndex = stub(Selectors, 'sortIndex').returns(2);
-
-          expectAction(() => actions.selectSort(index), Actions.SELECT_SORT, index,
-            (meta) => {
-              expect(meta.validator.payload.func(null, state)).to.be.true;
-              return expect(sortIndex).to.be.calledWith(state);
-            });
-        });
-
-        it('should invalidate action if sort is already selected', () => {
-          const index = 9;
-          stub(Selectors, 'sortIndex').returns(index);
-
-          expectAction(() => actions.selectSort(index), Actions.SELECT_SORT, index,
-            (meta) => expect(meta.validator.payload.func(null, { a: 'b' })).to.be.false);
+      it('should apply validators to SELECT_COLLECTION', () => {
+        expectValidators(() => actions.selectCollection(collection), Actions.SELECT_COLLECTION, {
+          payload: validators.isCollectionDeselected
         });
       });
+    });
 
-      describe('updatePageSize()', () => {
-        it('should return an action', () => {
-          const pageSize = stub(Selectors, 'pageSize').returns(14);
-          const size = 12;
-          const state = { a: 'b' };
+    describe('selectSort()', () => {
+      const index = 9;
 
-          expectAction(() => actions.updatePageSize(size), Actions.UPDATE_PAGE_SIZE, size,
-            (meta) => {
-              expect(meta.validator.payload.func(null, state)).to.be.true;
-              return expect(pageSize).to.be.calledWithExactly(state);
-            });
-        });
-
-        it('should invalidate action if selected page size is the same', () => {
-          const size = 12;
-          stub(Selectors, 'pageSize').returns(size);
-
-          expectAction(() => actions.updatePageSize(size), Actions.UPDATE_PAGE_SIZE, size,
-            (meta) => expect(meta.validator.payload.func(null, {})).to.be.false);
-        });
+      it('should return a SELECT_SORT action', () => {
+        expectAction(() => actions.selectSort(index), Actions.SELECT_SORT, index);
       });
 
-      describe('updateCurrentPage()', () => {
-        it('should return an action', () => {
-          const page = 5;
-          const state = { a: 'b' };
-          const pageSelector = stub(Selectors, 'page').returns(8);
-
-          expectAction(() => actions.updateCurrentPage(page), Actions.UPDATE_CURRENT_PAGE, page,
-            (meta) => {
-              expect(meta.validator.payload.func(null, state)).to.be.true;
-              return expect(pageSelector).to.be.calledWith(state);
-            });
-        });
-
-        it('should invalidate action if page is the same as current page', () => {
-          const page = 5;
-          stub(Selectors, 'page').returns(page);
-
-          expectAction(() => actions.updateCurrentPage(page), Actions.UPDATE_CURRENT_PAGE, page,
-            (meta) => expect(meta.validator.payload.func(null, { a: 'b' })).to.be.false);
-        });
-
-        it('should invalidate action if page is null', () => {
-          expectAction(() => actions.updateCurrentPage(null), Actions.UPDATE_CURRENT_PAGE, null,
-            (meta) => expect(meta.validator.payload.func(null, {})).to.be.false);
+      it('should apply validators to SELECT_SORT', () => {
+        expectValidators(() => actions.selectSort(index), Actions.SELECT_SORT, {
+          payload: validators.isSortDeselected
         });
       });
+    });
 
-      describe('updateDetails()', () => {
-        it('should return an action', () => {
-          const product: any = { a: 'b' };
+    describe('updatePageSize()', () => {
+      const pageSize = 20;
 
-          expectAction(() => actions.updateDetails(product), Actions.UPDATE_DETAILS, product);
-        });
+      it('should return an UPDATE_PAGE_SIZE action', () => {
+        expectAction(() => actions.updatePageSize(pageSize), Actions.UPDATE_PAGE_SIZE, pageSize);
       });
 
-      describe('updateAutocompleteQuery()', () => {
-        it('should return an action', () => {
-          const query = 'pink elephant';
-          const state = { a: 'b' };
-          const autocompleteQuery = stub(Selectors, 'autocompleteQuery').returns('red elephant');
-
-          // tslint:disable-next-line max-line-length
-          expectAction(() => actions.updateAutocompleteQuery(query), Actions.UPDATE_AUTOCOMPLETE_QUERY, query,
-            (meta) => {
-              expect(meta.validator.payload.func(null, state)).to.be.true;
-              return expect(autocompleteQuery).to.be.calledWith(state);
-            });
+      it('should apply validators to UPDATE_PAGE_SIZE', () => {
+        expectValidators(() => actions.updatePageSize(pageSize), Actions.UPDATE_PAGE_SIZE, {
+          payload: validators.isDifferentPageSize
         });
+      });
+    });
 
-        it('should invalidate action if queries are the same', () => {
-          const query = 'pink elephant';
-          const state = { a: 'b' };
-          stub(Selectors, 'autocompleteQuery').returns(query);
+    describe('updateCurrentPage()', () => {
+      const page = 3;
 
-          // tslint:disable-next-line max-line-length
-          expectAction(() => actions.updateAutocompleteQuery(query), Actions.UPDATE_AUTOCOMPLETE_QUERY, query,
-            (meta) => expect(meta.validator.payload.func(null, state)).to.be.false);
+      it('should return an UPDATE_CURRENT_PAGE action', () => {
+        expectAction(() => actions.updateCurrentPage(page), Actions.UPDATE_CURRENT_PAGE, page);
+      });
+
+      it('should apply validators to UPDATE_CURRENT_PAGE', () => {
+        expectValidators(() => actions.updateCurrentPage(page), Actions.UPDATE_CURRENT_PAGE, {
+          payload: validators.isOnDifferentPage
+        });
+      });
+    });
+
+    describe('updateDetails()', () => {
+      it('should return an action', () => {
+        const product: any = { a: 'b' };
+
+        expectAction(() => actions.updateDetails(product), Actions.UPDATE_DETAILS, product);
+      });
+    });
+
+    describe('updateAutocompleteQuery()', () => {
+      const query = 'pink elephant';
+
+      it('should return an UPDATE_AUTOCOMPLETE_QUERY action', () => {
+        expectAction(() => actions.updateAutocompleteQuery(query), Actions.UPDATE_AUTOCOMPLETE_QUERY, query);
+      });
+
+      it('should apply validators to UPDATE_AUTOCOMPLETE_QUERY', () => {
+        expectValidators(() => actions.updateAutocompleteQuery(query), Actions.UPDATE_AUTOCOMPLETE_QUERY, {
+          payload: validators.isDifferentAutocompleteQuery
         });
       });
     });
