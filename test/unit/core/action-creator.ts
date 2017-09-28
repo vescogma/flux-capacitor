@@ -311,6 +311,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
             validators.isRangeRefinement,
             validators.isValidRange,
             validators.isValueRefinement,
+            validators.isNotFullRange,
             validators.isRefinementDeselectedByValue
           ]
         });

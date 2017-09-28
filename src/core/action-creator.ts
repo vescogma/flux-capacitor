@@ -86,6 +86,7 @@ export function createActions(flux: FluxCapacitor) {
             validators.isRangeRefinement,
             validators.isValidRange,
             validators.isValueRefinement,
+            validators.isNotFullRange,
             validators.isRefinementDeselectedByValue
           ]
         })

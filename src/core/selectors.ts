@@ -78,6 +78,12 @@ namespace Selectors {
               ? { navigationName: nav.field, type: 'Range', high, low }
               : { navigationName: nav.field, type: 'Value', value }), [])), []);
 
+  export const rangeNavigationMax = (state: Store.State, navigationId) =>
+    navigation(state, navigationId).max;
+
+  export const rangeNavigationMin = (state: Store.State, navigationId) =>
+    navigation(state, navigationId).min;
+
   export const navigation = (state: Store.State, navigationId: string) =>
     state.data.present.navigations.byId[navigationId];
 

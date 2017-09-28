@@ -41,6 +41,8 @@ namespace Adapter {
     more: navigation.moreRefinements,
     or: navigation.or,
     range: !!navigation.range,
+    max: navigation.max,
+    min: navigation.min,
     refinements: navigation.refinements.map(Adapter.extractRefinement),
     selected: [],
     sort: navigation.sort && Adapter.extractNavigationSort(navigation.sort),
@@ -92,7 +94,6 @@ namespace Adapter {
         navigations[selectedNav.name] = navigation;
       }
     });
-
     return Object.keys(navigations).reduce((navs, key) => navs.concat(navigations[key]), []);
   };
 

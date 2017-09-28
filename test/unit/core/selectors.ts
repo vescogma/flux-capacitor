@@ -33,6 +33,25 @@ suite('selectors', ({ expect, stub }) => {
       expect(Selectors.isRefinementDeselected(<any>{}, 'my navigation', 4)).to.be.true;
     });
   });
+  describe('rangeNavigationMin()', () => {
+    it('should return the min', () => {
+      const min = 4;
+      const id = 'hello';
+      const state: any = { data: { present: { navigations: { byId: { [id]: { min }}}}}};
+
+      expect(Selectors.rangeNavigationMin(state, id)).to.be.eq(min);
+    });
+  });
+
+  describe('rangeNavigationMax()', () => {
+    it('should return the max', () => {
+      const max = 4;
+      const id = 'hello';
+      const state: any = { data: { present: { navigations: { byId: { [id]: { max }}}}}};
+
+      expect(Selectors.rangeNavigationMax(state, id)).to.be.eq(max);
+    });
+  });
 
   describe('isRefinementSelected()', () => {
     it('should return false if navigation does not exist', () => {
@@ -425,7 +444,7 @@ suite('selectors', ({ expect, stub }) => {
       const tagName = 'gb-navigation-display';
       const id = 'Main';
       const tagIdState = { c: 'd' };
-      const state: any = { ui: { } };
+      const state: any = { ui: {} };
 
       expect(() => Selectors.uiTagState(state, tagName, id)).to.not.throw();
     });

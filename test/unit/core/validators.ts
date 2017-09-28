@@ -327,4 +327,32 @@ suite('validators', ({ expect, spy, stub }) => {
       expect(validators.isDifferentAutocompleteQuery.func(query)).to.be.false;
     });
   });
+
+  describe('isNotFullRange', () => {
+    const low = 4;
+    const high = 8;
+    const range = true;
+    const navigationId = 'a';
+    const payload = {
+      navigationId,
+      range,
+      low,
+      high
+    };
+    const state: any = { a: 'b' };
+
+    it('should be valid if it is not full range', () => {
+      stub(Selectors, 'rangeNavigationMax').returns(high);
+      stub(Selectors, 'rangeNavigationMin').returns(low + 1);
+
+      expect(validators.isNotFullRange.func(payload, state)).to.be.true;
+    });
+
+    it('should be invalid if it is full range', () => {
+      stub(Selectors, 'rangeNavigationMax').returns(high);
+      stub(Selectors, 'rangeNavigationMin').returns(low);
+
+      expect(validators.isNotFullRange.func(payload, state)).to.be.false;
+    });
+  });
 });

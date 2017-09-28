@@ -43,6 +43,12 @@ export const isRefinementDeselectedByValue: Validator<Actions.Payload.Navigation
   msg: 'refinement is already selected'
 };
 
+export const isNotFullRange: Validator<Actions.Payload.Navigation.AddRefinement> = {
+  // tslint:disable-next-line max-line-length
+  func: ({ navigationId, range, low, high }, state) => !range || !(Selectors.rangeNavigationMax(state, navigationId) === high && Selectors.rangeNavigationMin(state, navigationId) === low),
+  msg: 'range must be smaller than full range'
+};
+
 export const isValidRange: Validator<Actions.Payload.Navigation.AddRefinement> = {
   func: ({ range, low, high }) => !range || low < high,
   msg: 'low value must be lower than high'
