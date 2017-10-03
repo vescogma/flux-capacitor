@@ -371,4 +371,18 @@ suite('Search Adapter', ({ expect, stub }) => {
       expect(Adapter.extractRecordCount(<any>{ totalRecordCount: MAX_RECORDS + 1 })).to.eq(MAX_RECORDS);
     });
   });
+
+  describe('requestSort()', () => {
+    it('should return a descending sort', () => {
+      const field = 'height';
+
+      expect(Adapter.requestSort({ field, descending: true })).to.eql({ field, order: 'Descending' });
+    });
+
+    it('should return an ascending sort', () => {
+      const field = 'height';
+
+      expect(Adapter.requestSort({ field })).to.eql({ field, order: undefined });
+    });
+  });
 });

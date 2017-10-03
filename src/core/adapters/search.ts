@@ -148,6 +148,9 @@ namespace Adapter {
     results.records.map(Adapter.extractProduct);
 
   export const extractProduct = ({ allMeta }) => allMeta;
+
+  export const requestSort = ({ field, descending }: Store.Sort) =>
+    ({ field, order: descending && 'Descending' });
 }
 
 export default Adapter;

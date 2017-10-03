@@ -2,7 +2,7 @@ import { Request } from 'groupby-api';
 import { QueryTimeAutocompleteConfig, QueryTimeProductSearchConfig } from 'sayt';
 import Autocomplete from './adapters/autocomplete';
 import Configuration from './adapters/configuration';
-import { MAX_RECORDS } from './adapters/search';
+import SearchAdapter, { MAX_RECORDS } from './adapters/search';
 import AppConfig from './configuration';
 import Selectors from './selectors';
 import Store from './store';
@@ -28,7 +28,7 @@ namespace Requests {
       request.language = language;
     }
     if (sort) {
-      request.sort = <any>Selectors.requestSort(sort);
+      request.sort = <any>SearchAdapter.requestSort(sort);
     }
 
     return <Request>Requests.chain(config.search.defaults, request, config.search.overrides);

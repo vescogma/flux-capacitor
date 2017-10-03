@@ -1,6 +1,6 @@
 import * as sinon from 'sinon';
 import ConfigAdapter from '../../../src/core/adapters/configuration';
-import { MAX_RECORDS } from '../../../src/core/adapters/search';
+import SearchAdapter, { MAX_RECORDS } from '../../../src/core/adapters/search';
 import Requests from '../../../src/core/requests';
 import Selectors from '../../../src/core/selectors';
 import suite from '../_suite';
@@ -16,7 +16,7 @@ suite('requests', ({ expect, stub }) => {
 
     beforeEach(() => {
       sortSelector = stub(Selectors, 'sort');
-      requestSortSelector = stub(Selectors, 'requestSort');
+      requestSortSelector = stub(SearchAdapter, 'requestSort');
       stub(Selectors, 'area');
       stub(Selectors, 'fields');
       stub(Selectors, 'query');
