@@ -4,7 +4,6 @@ import area from './area';
 import autocomplete from './autocomplete';
 import collections from './collections';
 import details from './details';
-import errors from './errors';
 import navigations from './navigations';
 import page from './page';
 import products from './products';
@@ -14,14 +13,12 @@ import recordCount from './record-count';
 import redirect from './redirect';
 import sorts from './sorts';
 import template from './template';
-import warnings from './warnings';
 
 export default redux.combineReducers({
   area,
   autocomplete,
   collections,
   details,
-  errors,
   fields: (state = []) => state,
   navigations,
   page,
@@ -32,5 +29,4 @@ export default redux.combineReducers({
   redirect,
   sorts,
   template,
-  warnings,
 });

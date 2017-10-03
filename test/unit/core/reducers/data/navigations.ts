@@ -4,6 +4,11 @@ import suite from '../../../_suite';
 
 suite('navigations', ({ expect }) => {
   const allIds = ['Format', 'Section'];
+  const valueRef = [
+    { value: 'Hardcover', count: 200 },
+    { value: 'Paper', count: 129 },
+    { value: 'Audio Book', count: 293 },
+  ];
   const Format = { // tslint:disable-line variable-name
     field: 'format',
     label: 'Format',
@@ -32,18 +37,27 @@ suite('navigations', ({ expect }) => {
     ],
     metadata: {}
   };
-  const state: Store.Indexed<Store.Navigation> = {
+  const sort = [{
+    name: 'Format',
+    values: valueRef
+  }, {
+    name: 'Section',
+    values: [valueRef[0]]
+  }];
+
+  const state: Store.AvailableNavigations = {
     allIds,
     byId: {
       Format,
       Section,
     },
+    sort
   };
 
   describe('updateNavigations()', () => {
     it('should clear selected refinements state on RESET_REFINEMENTS', () => {
       const newState = {
-        allIds,
+        ...state,
         byId: {
           Format: {
             ...Format,
@@ -90,6 +104,7 @@ suite('navigations', ({ expect }) => {
         },
       ];
       const newState = {
+        ...state,
         allIds: ['colour', 'size'],
         byId: {
           colour: newNavs[0],
@@ -105,9 +120,43 @@ suite('navigations', ({ expect }) => {
       expect(reducer).to.eql(newState);
     });
 
+    it('should sort navigation state on RECEIVE_NAVIGATION_SORT', () => {
+      const nav = [{
+        name: 'Section',
+        values: [{
+          value: 'test',
+          count: 100
+        }]
+      }, {
+        name: 'Format',
+        values: [{
+          value: 'another',
+          count: 34
+        }]
+      }, {
+        name: 'Extra',
+        values: [{
+          value: 'another',
+          count: 34
+        }]
+      }];
+
+      const newState = {
+        ...state,
+        sort: nav,
+      };
+
+      const reducer = navigations({ ...state }, {
+        type: Actions.RECEIVE_NAVIGATION_SORT,
+        payload: nav,
+      });
+
+      expect(reducer).to.eql(newState);
+    });
+
     it('should add selected refinement state on SELECT_REFINEMENT', () => {
       const newState = {
-        allIds,
+        ...state,
         byId: {
           Format,
           Section: {
@@ -164,6 +213,7 @@ suite('navigations', ({ expect }) => {
 
     it('should add value refinement on ADD_REFINEMENT', () => {
       const newState = {
+        ...state,
         allIds: ['Format', 'Section', 'Brand'],
         byId: {
           Format,
@@ -194,6 +244,7 @@ suite('navigations', ({ expect }) => {
 
     it('should add range navigation and refinement on ADD_REFINEMENT', () => {
       const newState = {
+        ...state,
         allIds: ['Format', 'Section', 'Brand'],
         byId: {
           Format,
@@ -224,7 +275,7 @@ suite('navigations', ({ expect }) => {
 
     it('should add refinement to existing navigation on ADD_REFINEMENT', () => {
       const newState = {
-        allIds,
+        ...state,
         byId: {
           Section,
           Format: {
@@ -251,7 +302,7 @@ suite('navigations', ({ expect }) => {
 
     it('should only clear specified navigation on RESET_REFINEMENTS', () => {
       const newState = {
-        allIds,
+        ...state,
         byId: {
           Section,
           Format: {
@@ -271,7 +322,7 @@ suite('navigations', ({ expect }) => {
 
     it('should select existing refinement on ADD_REFINEMENT', () => {
       const newState = {
-        allIds,
+        ...state,
         byId: {
           Section,
           Format: {
@@ -295,7 +346,7 @@ suite('navigations', ({ expect }) => {
 
     it('should return state on RESET_REFINEMENTS if no navigationId and payload clear is truth', () => {
       const newState = {
-        allIds,
+        ...state,
         byId: {
           Section: {
             ...Section,
@@ -318,7 +369,7 @@ suite('navigations', ({ expect }) => {
 
     it('should remove selected refinement state on DESELECT_REFINEMENT', () => {
       const newState = {
-        allIds,
+        ...state,
         byId: {
           Format: {
             ...Format,
@@ -355,7 +406,7 @@ suite('navigations', ({ expect }) => {
         { value: 'ebook', total: 2000 },
       ];
       const newState = {
-        allIds,
+        ...state,
         byId: {
           Format: {
             ...Format,

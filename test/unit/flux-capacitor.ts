@@ -257,6 +257,34 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
         expect(clients.bridge).to.eq(bridge);
       });
 
+      it('should return error callback that emits an ERROR_BRIDGE and calls error handler', () => {
+        const errorHandler = spy(() => null);
+        const emit = spy(() => null);
+        const config = { network: { errorHandler } };
+        const bridge = { c: 'd' };
+        const err = 'err';
+        stub(FluxCapacitor, 'createBridge').returns(bridge).callsArgWith(1, err);
+        stub(FluxCapacitor, 'createSayt');
+
+        const clients = FluxCapacitor.createClients(<any>{ config, emit });
+
+        expect(emit).to.be.calledWith(Events.ERROR_BRIDGE, err);
+        expect(errorHandler).to.be.calledWith(err);
+      });
+
+      it('should return error callback that does not call error handler if not present', () => {
+        const emit = spy(() => null);
+        const config = { network: { } };
+        const bridge = { c: 'd' };
+        const err = 'err';
+        stub(FluxCapacitor, 'createBridge').returns(bridge).callsArgWith(1, err);
+        stub(FluxCapacitor, 'createSayt');
+
+        const clients = FluxCapacitor.createClients(<any>{ config, emit });
+
+        expect(emit).to.be.calledWith(Events.ERROR_BRIDGE, err);
+      });
+
       it('should call createSayt()', () => {
         const config = { a: 'b' };
         const sayt = { c: 'd' };

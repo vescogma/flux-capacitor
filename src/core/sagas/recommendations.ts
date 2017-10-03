@@ -13,20 +13,17 @@ export namespace Tasks {
   export function* fetchProducts(flux: FluxCapacitor, action: Actions.FetchRecommendationsProducts) {
     try {
       const state = yield effects.select();
-      const config = flux.config.recommendations;
+      const config = flux.config.recommendations.productSuggestions;
       // fall back to default mode "popular" if not provided
       // "popular" default will likely provide the most consistently strong data
       const mode = Configuration.RECOMMENDATION_MODES[config.mode || 'popular'];
       // tslint:disable-next-line max-line-length
-      const recommendationsUrl = `${Adapter.buildUrl(flux.config.customerId)}/products/_get${mode}`;
-      const recommendationsResponse = yield effects.call(fetch, recommendationsUrl, {
-        method: 'POST',
-        body: JSON.stringify({
-          size: config.productCount,
-          type: 'viewProduct',
-          target: config.idField
-        })
-      });
+      const recommendationsUrl = Adapter.buildUrl(flux.config.customerId, 'products', mode);
+      const recommendationsResponse = yield effects.call(fetch, recommendationsUrl, Adapter.buildBody({
+        size: config.productCount,
+        type: 'viewProduct',
+        target: config.idField
+      }));
       const recommendations = yield recommendationsResponse.json();
       // tslint:disable-next-line max-line-length
       const refinements = recommendations.result

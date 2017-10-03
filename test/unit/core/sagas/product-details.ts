@@ -44,6 +44,7 @@ suite('product details saga', ({ expect, spy, stub }) => {
         expect(task.next({ records: [record] }).value).to.eql(
           effects.call(<any>Tasks.receiveDetailsProduct, flux, record)
         );
+        task.next();
       });
 
       it('should handle product not found', () => {

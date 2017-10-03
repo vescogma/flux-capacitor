@@ -63,7 +63,7 @@ namespace Store {
     sorts: SelectableList<Sort>;
     products: Product[]; // post
     collections: Indexed.Selectable<Collection>; // mixed
-    navigations: Indexed<Navigation>; // mixed
+    navigations: AvailableNavigations; // mixed
 
     autocomplete: Autocomplete; // mixed
 
@@ -216,6 +216,24 @@ namespace Store {
 
   export interface Recommendations {
     products: Product[];
+  }
+
+  export type AvailableNavigations = Indexed<Navigation> & {
+    sort: Recommendations.Navigation[];
+  };
+
+  export namespace Recommendations {
+    export interface Navigation {
+      name: string;
+      values: RecommendationRefinement[];
+      lows?: any[];
+      highs?: any[];
+    }
+
+    export interface RecommendationRefinement {
+      value: string;
+      count: number;
+    }
   }
 
   export interface Product {

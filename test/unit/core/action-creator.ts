@@ -333,7 +333,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
         const result = actions.switchRefinement(navigationId, value);
 
-        expect(result).to.be.eql([
+        expect(result).to.eql([
           resetPageReturn,
           resetRefinementsReturn,
           addRefinementReturn
@@ -368,7 +368,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
         const result = actions.search(query);
 
-        expect(result).to.be.eql([
+        expect(result).to.eql([
           resetPageReturn,
           resetRefinementsReturn,
           updateReturn,
@@ -392,7 +392,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
         const result = actions.search();
 
-        expect(result).to.be.eql([
+        expect(result).to.eql([
           resetPageReturn,
           resetRefinementsReturn,
           updateReturn,
@@ -625,7 +625,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
           receiveRecordCountAction,
           receiveCollectionCountAction,
           receivePageAction,
-          receiveTemplateAction
+          receiveTemplateAction,
         ]);
       });
 
@@ -812,6 +812,15 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
         // tslint:disable-next-line max-line-length
         expectAction(() => actions.receiveRecommendationsProducts(products), Actions.RECEIVE_RECOMMENDATIONS_PRODUCTS, products);
+      });
+    });
+
+    describe('receiveNavigationSort()', () => {
+      it('should return an action', () => {
+        const navigations: any[] = ['a', 'b', 'c'];
+
+        // tslint:disable-next-line max-line-length
+        expectAction(() => actions.receiveNavigationSort(navigations), Actions.RECEIVE_NAVIGATION_SORT, navigations);
       });
     });
   });

@@ -150,6 +150,98 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     });
   });
 
+  describe('extractPageSizes()', () => {
+    const defaultValue = 0;
+
+    it('should do nothing if state is not an object', () => {
+      const pageSizes = Adapter.extractPageSizes(<any>{
+        search: {
+          pageSize: false,
+        }
+      }, defaultValue);
+
+      expect(pageSizes).to.eql({ selected: 0, items: [defaultValue] });
+    });
+
+    it('should default items to defaultValue', () => {
+      const pageSizes = Adapter.extractPageSizes(<any>{
+        search: {
+          pageSize: {},
+        }
+      }, defaultValue);
+
+      expect(pageSizes).to.eql({ selected: 0, items: [defaultValue] });
+    });
+  });
+
+  describe('extractSorts()', () => {
+    it('should do nothing if state does not contain default or options', () => {
+      const sort = {};
+
+      const sorts = Adapter.extractSorts(<any>{ search: { sort } });
+
+      expect(sorts).to.eql({ selected: 0, items: [sort] });
+    });
+
+    it('should default selected to empty object', () => {
+      const sorts = Adapter.extractSorts(<any>{
+        search: {
+          sort: {
+            options: false,
+          },
+        }
+      });
+
+      expect(sorts).to.eql({ selected: 0, items: [] });
+    });
+
+    it('should return selected sorts', () => {
+      const sort = {
+        default: false,
+        options: [
+          { field: true,
+            descending: true
+          },
+          {}
+        ]
+      };
+
+      expect(Adapter.extractSorts(<any>{
+        search: {
+          sort
+        }
+      })).to.eql({ selected: 1, items: sort.options });
+    });
+  });
+
+  describe('extractNavigationsPinned()', () => {
+    it('should return pinned navigations', () => {
+      const pinned = 'nav';
+
+      expect(Adapter.extractNavigationsPinned(<any>{ recommendations: {
+        iNav: {
+          navigations: {
+            pinned
+          }
+        }
+      }})).to.eq(pinned);
+    });
+  });
+
+  describe('extractRefinementsPinned()', () => {
+    it('should return pinned refinements', () => {
+      const pinned = 'nav';
+
+      expect(Adapter.extractRefinementsPinned(<any>{ recommendations: {
+        iNav: {
+          refinements: {
+            pinned
+          }
+        }
+      }})).to.eq(pinned);
+    });
+  });
+
   describe('extractIndexedState()', () => {
     it('should return indexed state', () => {
       const collectionDefault = 'Im a collection';

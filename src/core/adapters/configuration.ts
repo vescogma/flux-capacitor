@@ -103,7 +103,7 @@ namespace Adapter {
       const items = state.options || [defaultValue];
       const selectedIndex = items.findIndex((pageSize) => pageSize === selected);
 
-      return { items, selected: selectedIndex === -1 ? 0 : selectedIndex };
+      return { items, selected: (selectedIndex === -1 ? 0 : selectedIndex) };
     } else {
       return { selected: 0, items: [state] };
     }
@@ -113,11 +113,11 @@ namespace Adapter {
     const state = config.search.sort;
     if (typeof state === 'object' && ('options' in state || 'default' in state)) {
       const selected: Store.Sort = (<{ default: Store.Sort }>state).default || <any>{};
-      const items = ((<{ options: Store.Sort[] }>state).options || []);
+      const items = (<{ options: Store.Sort[] }>state).options || [];
       const selectedIndex = items
         .findIndex((sort) => sort.field === selected.field && !sort.descending === !selected.descending);
 
-      return { items, selected: selectedIndex === -1 ? 0 : selectedIndex };
+      return { items, selected: (selectedIndex === -1 ? 0 : selectedIndex) };
     } else {
       return { selected: 0, items: [<Store.Sort>state] };
     }
@@ -129,6 +129,18 @@ namespace Adapter {
   export const extractAutocompleteNavigationLabels = (config: Configuration) => {
     return config.autocomplete.navigations;
   };
+
+  export const extractINav = (config: Configuration) =>
+    config.recommendations.iNav;
+
+  export const extractNavigationsPinned = (config: Configuration) =>
+    extractINav(config).navigations.pinned;
+
+  export const extractRefinementsPinned = (config: Configuration) =>
+    extractINav(config).refinements.pinned;
+
+  export const extractRefinementsSort = (config: Configuration) =>
+    extractINav(config).refinements.sort;
 }
 
 export default Adapter;

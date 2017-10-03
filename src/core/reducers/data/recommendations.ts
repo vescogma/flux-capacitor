@@ -5,7 +5,7 @@ export type Action = Actions.ReceiveRecommendationsProducts;
 export type State = Store.Recommendations;
 
 export const DEFAULTS: State = {
-  products: []
+  products: [],
 };
 
 export default function updateRecommendations(state: State = DEFAULTS, action: Action): State {

@@ -204,7 +204,7 @@ suite('Observer', ({ expect, spy, stub }) => {
     });
 
     describe('data', () => {
-      const OBJ = { a: 'b' };
+      const testObject = { a: 'b' };
       const path = '.search.whatever.stuff';
       let emit;
       let observers;
@@ -215,6 +215,14 @@ suite('Observer', ({ expect, spy, stub }) => {
       });
 
       describe('autocomplete()', () => {
+        it('should not emit update if state identical to old state', () => {
+          const state = 'state';
+
+          observers.data.present.autocomplete(<any>state, <any>state, path);
+
+          expect(emit).to.not.be.called;
+        });
+
         it('should emit AUTOCOMPLETE_SUGGESTIONS_UPDATED event when suggestions differ', () => {
           const oldState = { suggestions: 'idk' };
           const newState = { suggestions: 'im different o wow' };
@@ -281,23 +289,23 @@ suite('Observer', ({ expect, spy, stub }) => {
         });
 
         it('should emit SELECTED_COLLECTION_UPDATED event', () => {
-          observers.data.present.collections.selected(undefined, OBJ);
+          observers.data.present.collections.selected(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.SELECTED_COLLECTION_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.SELECTED_COLLECTION_UPDATED, testObject);
         });
       });
 
       describe('details', () => {
         it('should emit DETAILS_UPDATED event', () => {
-          observers.data.present.details.data(undefined, OBJ);
+          observers.data.present.details.data(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.DETAILS_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.DETAILS_UPDATED, testObject);
         });
 
         it('should emit DETAILS_PRODUCT_UPDATED event', () => {
-          observers.data.present.details.product(undefined, OBJ);
+          observers.data.present.details.product(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.DETAILS_PRODUCT_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.DETAILS_PRODUCT_UPDATED, testObject);
         });
       });
 
@@ -342,21 +350,21 @@ suite('Observer', ({ expect, spy, stub }) => {
 
       describe('page', () => {
         it('should emit PAGE_UPDATED event', () => {
-          observers.data.present.page(undefined, OBJ);
+          observers.data.present.page(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.PAGE_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.PAGE_UPDATED, testObject);
         });
 
         it('should emit CURRENT_PAGE_UPDATED event', () => {
-          observers.data.present.page.current(undefined, OBJ);
+          observers.data.present.page.current(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.CURRENT_PAGE_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.CURRENT_PAGE_UPDATED, testObject);
         });
 
         it('should emit PAGE_SIZE_UPDATED event', () => {
-          observers.data.present.page.sizes(undefined, OBJ);
+          observers.data.present.page.sizes(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.PAGE_SIZE_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.PAGE_SIZE_UPDATED, testObject);
         });
       });
 
@@ -378,65 +386,65 @@ suite('Observer', ({ expect, spy, stub }) => {
 
       describe('query', () => {
         it('should emit CORRECTED_QUERY_UPDATED event', () => {
-          observers.data.present.query.corrected(undefined, OBJ);
+          observers.data.present.query.corrected(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.CORRECTED_QUERY_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.CORRECTED_QUERY_UPDATED, testObject);
         });
 
         it('should emit DID_YOU_MEANS_UPDATED event', () => {
-          observers.data.present.query.didYouMean(undefined, OBJ);
+          observers.data.present.query.didYouMean(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.DID_YOU_MEANS_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.DID_YOU_MEANS_UPDATED, testObject);
         });
 
         it('should emit ORIGINAL_QUERY_UPDATED event', () => {
-          observers.data.present.query.original(undefined, OBJ);
+          observers.data.present.query.original(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.ORIGINAL_QUERY_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.ORIGINAL_QUERY_UPDATED, testObject);
         });
 
         it('should emit RELATED_QUERIES_UPDATED event', () => {
-          observers.data.present.query.related(undefined, OBJ);
+          observers.data.present.query.related(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.RELATED_QUERIES_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.RELATED_QUERIES_UPDATED, testObject);
         });
 
         it('should emit QUERY_REWRITES_UPDATED event', () => {
-          observers.data.present.query.rewrites(undefined, OBJ);
+          observers.data.present.query.rewrites(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.QUERY_REWRITES_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.QUERY_REWRITES_UPDATED, testObject);
         });
       });
 
       describe('recommendations', () => {
         it('should emit RECOMMENDATIONS_PRODUCTS_UPDATED event', () => {
-          observers.data.present.recommendations.products(undefined, OBJ);
+          observers.data.present.recommendations.products(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.RECOMMENDATIONS_PRODUCTS_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.RECOMMENDATIONS_PRODUCTS_UPDATED, testObject);
         });
       });
 
       describe('redirect', () => {
         it('should emit REDIRECT event', () => {
-          observers.data.present.redirect(undefined, OBJ);
+          observers.data.present.redirect(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.REDIRECT, OBJ);
+          expect(emit).to.be.calledWith(Events.REDIRECT, testObject);
         });
       });
 
       describe('sorts', () => {
         it('should emit SORTS_UPDATED event', () => {
-          observers.data.present.sorts(undefined, OBJ);
+          observers.data.present.sorts(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.SORTS_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.SORTS_UPDATED, testObject);
         });
       });
 
       describe('template', () => {
         it('should emit TEMPLATE_UPDATED event', () => {
-          observers.data.present.template(undefined, OBJ);
+          observers.data.present.template(undefined, testObject);
 
-          expect(emit).to.be.calledWith(Events.TEMPLATE_UPDATED, OBJ);
+          expect(emit).to.be.calledWith(Events.TEMPLATE_UPDATED, testObject);
         });
       });
     });
@@ -461,11 +469,16 @@ suite('Observer', ({ expect, spy, stub }) => {
 
         expect(emit).to.be.calledWith(Events.APP_KILLED, false);
       });
+      it('should emit nothing if neither value passed is true', () => {
+        observers.isRunning(false, false);
+
+        expect(emit).to.not.be.called;
+      });
     });
   });
 
   describe('session', () => {
-    const OBJ = { a: 'b' };
+    const testObject = { a: 'b' };
     let emit;
     let observers;
 
@@ -476,25 +489,25 @@ suite('Observer', ({ expect, spy, stub }) => {
 
     describe('recallId', () => {
       it('should emit RECALL_CHANGED event', () => {
-        observers.session.recallId(undefined, OBJ);
+        observers.session.recallId(undefined, testObject);
 
-        expect(emit).to.be.calledWith(Events.RECALL_CHANGED, OBJ);
+        expect(emit).to.be.calledWith(Events.RECALL_CHANGED, testObject);
       });
     });
 
     describe('searchId', () => {
       it('should emit SORTS_UPDATED event', () => {
-        observers.session.searchId(undefined, OBJ);
+        observers.session.searchId(undefined, testObject);
 
-        expect(emit).to.be.calledWith(Events.SEARCH_CHANGED, OBJ);
+        expect(emit).to.be.calledWith(Events.SEARCH_CHANGED, testObject);
       });
     });
 
     describe('location', () => {
       it('should emit LOCATION_UPDATED event', () => {
-        observers.session.location(undefined, OBJ);
+        observers.session.location(undefined, testObject);
 
-        expect(emit).to.be.calledWith(Events.LOCATION_UPDATED, OBJ);
+        expect(emit).to.be.calledWith(Events.LOCATION_UPDATED, testObject);
       });
     });
   });
@@ -511,16 +524,26 @@ suite('Observer', ({ expect, spy, stub }) => {
     it('should emit UI_UPDATED event', () => {
       const tagName = 'Main';
       const id = 'brand';
-      const OBJ = {
-        [tagName]: {
-          [id]: {
-            isActive: false
-          }
-        }
-      };
-      observers.ui({}, OBJ);
+      const testObject = { [tagName]: { [id]: { isActive: false } } };
+      observers.ui({}, testObject);
 
-      expect(emit).to.be.calledWith(`${Events.UI_UPDATED}:${tagName}:${id}`, OBJ[tagName][id]);
+      expect(emit).to.be.calledWith(`${Events.UI_UPDATED}:${tagName}:${id}`, testObject[tagName][id]);
+    });
+
+    it('should emit nothing if states same', () => {
+      observers.ui(false, false);
+
+      expect(emit).to.not.be.called;
+    });
+
+    it('should not emit UI_UPDATED event if oldTagState and newTagState same', () => {
+      const tagName = 'Main';
+      const id = 'brand';
+      const testObject = { [tagName]: { [id]: true } };
+
+      observers.ui({ [tagName]: { [id]: true } }, testObject);
+
+      expect(emit).to.not.be.calledWith(`${Events.UI_UPDATED}:${tagName}:${id}`, testObject[tagName][id]);
     });
   });
 });

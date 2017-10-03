@@ -12,6 +12,15 @@ suite('selectors', ({ expect, stub }) => {
     });
   });
 
+  describe('navigationSort()', () => {
+    it('should select navigationSort from the state', () => {
+      const sort = { d: 'r' };
+      const state: any = { data: { present: { navigations: { sort } } } };
+
+      expect(Selectors.navigationSort(state)).to.eq(sort);
+    });
+  });
+
   describe('isRefinementDeselected()', () => {
     it('should return false if navigation does not exist', () => {
       const navigation = stub(Selectors, 'navigation');

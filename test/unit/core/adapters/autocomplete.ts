@@ -97,6 +97,12 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
 
       expect(values).to.eql([]);
     });
+
+    it('should have additionalInfo default to empty object', () => {
+      const values = Adapter.extractCategoryValues(<any>{ }, 'brand');
+
+      expect(values).to.eql([]);
+    });
   });
 
   describe('extractProducts()', () => {
