@@ -76,8 +76,10 @@
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="tasks.html#fetchcount" class="tsd-kind-icon">fetch<wbr>Count</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="tasks.html#fetchmoreproducts" class="tsd-kind-icon">fetch<wbr>More<wbr>Products</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="tasks.html#fetchmorerefinements" class="tsd-kind-icon">fetch<wbr>More<wbr>Refinements</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="tasks.html#fetchnavigations" class="tsd-kind-icon">fetch<wbr>Navigations</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="tasks.html#fetchproductdetails" class="tsd-kind-icon">fetch<wbr>Product<wbr>Details</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="tasks.html#fetchproducts" class="tsd-kind-icon">fetch<wbr>Products</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="tasks.html#fetchproductsrequest" class="tsd-kind-icon">fetch<wbr>Products<wbr>Request</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="tasks.html#fetchsuggestions" class="tsd-kind-icon">fetch<wbr>Suggestions</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="tasks.html#receivedetailsproduct" class="tsd-kind-icon">receive<wbr>Details<wbr>Product</a></li>
 							</ul>
@@ -97,7 +99,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/cdebb0e/src/core/sagas/collection.ts#L8">src/core/sagas/collection.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/c50b2f5/src/core/sagas/collection.ts#L8">src/core/sagas/collection.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -128,7 +130,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/cdebb0e/src/core/sagas/products.ts#L33">src/core/sagas/products.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/c50b2f5/src/core/sagas/products.ts#L81">src/core/sagas/products.ts:81</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -154,7 +156,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/cdebb0e/src/core/sagas/refinements.ts#L10">src/core/sagas/refinements.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/c50b2f5/src/core/sagas/refinements.ts#L12">src/core/sagas/refinements.ts:12</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -171,6 +173,32 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="fetchnavigations" class="tsd-anchor"></a>
+					<h3>fetch<wbr>Navigations</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">fetch<wbr>Navigations<span class="tsd-signature-symbol">(</span>flux<span class="tsd-signature-symbol">: </span><a href="../classes/fluxcapacitor.html" class="tsd-signature-type">FluxCapacitor</a>, action<span class="tsd-signature-symbol">: </span><a href="actions.html#fetchproducts" class="tsd-signature-type">FetchProducts</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/c50b2f5/src/core/sagas/products.ts#L51">src/core/sagas/products.ts:51</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>flux: <a href="../classes/fluxcapacitor.html" class="tsd-signature-type">FluxCapacitor</a></h5>
+								</li>
+								<li>
+									<h5>action: <a href="actions.html#fetchproducts" class="tsd-signature-type">FetchProducts</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="fetchproductdetails" class="tsd-anchor"></a>
 					<h3>fetch<wbr>Product<wbr>Details</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
@@ -180,7 +208,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/cdebb0e/src/core/sagas/product-details.ts#L10">src/core/sagas/product-details.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/c50b2f5/src/core/sagas/product-details.ts#L10">src/core/sagas/product-details.ts:10</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -211,7 +239,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/cdebb0e/src/core/sagas/autocomplete.ts#L85">src/core/sagas/autocomplete.ts:85</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/c50b2f5/src/core/sagas/autocomplete.ts#L85">src/core/sagas/autocomplete.ts:85</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -241,6 +269,32 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="fetchproductsrequest" class="tsd-anchor"></a>
+					<h3>fetch<wbr>Products<wbr>Request</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">fetch<wbr>Products<wbr>Request<span class="tsd-signature-symbol">(</span>flux<span class="tsd-signature-symbol">: </span><a href="../classes/fluxcapacitor.html" class="tsd-signature-type">FluxCapacitor</a>, action<span class="tsd-signature-symbol">: </span><a href="actions.html#fetchproducts" class="tsd-signature-type">FetchProducts</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/c50b2f5/src/core/sagas/products.ts#L46">src/core/sagas/products.ts:46</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>flux: <a href="../classes/fluxcapacitor.html" class="tsd-signature-type">FluxCapacitor</a></h5>
+								</li>
+								<li>
+									<h5>action: <a href="actions.html#fetchproducts" class="tsd-signature-type">FetchProducts</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="fetchsuggestions" class="tsd-anchor"></a>
 					<h3>fetch<wbr>Suggestions</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
@@ -250,7 +304,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/cdebb0e/src/core/sagas/autocomplete.ts#L16">src/core/sagas/autocomplete.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/c50b2f5/src/core/sagas/autocomplete.ts#L16">src/core/sagas/autocomplete.ts:16</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -281,7 +335,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/cdebb0e/src/core/sagas/product-details.ts#L35">src/core/sagas/product-details.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/c50b2f5/src/core/sagas/product-details.ts#L35">src/core/sagas/product-details.ts:35</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -352,10 +406,16 @@
 						<a href="tasks.html#fetchmorerefinements" class="tsd-kind-icon">fetch<wbr>More<wbr>Refinements</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="tasks.html#fetchnavigations" class="tsd-kind-icon">fetch<wbr>Navigations</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="tasks.html#fetchproductdetails" class="tsd-kind-icon">fetch<wbr>Product<wbr>Details</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="tasks.html#fetchproducts" class="tsd-kind-icon">fetch<wbr>Products</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="tasks.html#fetchproductsrequest" class="tsd-kind-icon">fetch<wbr>Products<wbr>Request</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="tasks.html#fetchsuggestions" class="tsd-kind-icon">fetch<wbr>Suggestions</a>
