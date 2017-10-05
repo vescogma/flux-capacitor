@@ -87,6 +87,8 @@ namespace Actions {
   export type FetchProductDetails = Action<typeof FETCH_PRODUCT_DETAILS, string>;
   export const FETCH_RECOMMENDATIONS_PRODUCTS = 'FETCH_RECOMMENDATIONS_PRODUCTS';
   export type FetchRecommendationsProducts = Action<typeof FETCH_RECOMMENDATIONS_PRODUCTS, string>;
+  export const FETCH_PAST_PURCHASES = 'FETCH_PAST_PURCHASES';
+  export type FetchPastPurchases = Action<typeof FETCH_PAST_PURCHASES, string>;
 
   // response actions
   export const RECEIVE_MORE_REFINEMENTS = 'RECEIVE_MORE_REFINEMENTS';
@@ -124,6 +126,8 @@ namespace Actions {
   export type ReceiveRedirect = Action<typeof RECEIVE_REDIRECT, string>;
   export const RECEIVE_RECOMMENDATIONS_PRODUCTS = 'RECEIVE_RECOMMENDATIONS_PRODUCTS';
   export type ReceiveRecommendationsProducts = Action<typeof RECEIVE_RECOMMENDATIONS_PRODUCTS, Store.Product[]>;
+  export const RECEIVE_PAST_PURCHASES = 'RECEIVE_PAST_PURCHASES';
+  export type ReceivePastPurchases = Action<typeof RECEIVE_PAST_PURCHASES, Store.Recommendations.PastPurchase[]>;
   export const RECEIVE_NAVIGATION_SORT = 'RECEIVE_NAVIGATION_SORT';
   // tslint:disable-next-line max-line-length
   export type ReceiveNavigationSort = Action<typeof RECEIVE_NAVIGATION_SORT, Store.Recommendations.Navigation[]>;

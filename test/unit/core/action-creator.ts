@@ -136,6 +136,12 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
         expectAction(() => actions.fetchRecommendationsProducts(), Actions.FETCH_RECOMMENDATIONS_PRODUCTS, null);
       });
     });
+
+    describe('fetchPastPurchases()', () => {
+      it('should return an action', () => {
+        expectAction(() => actions.fetchPastPurchases(), Actions.FETCH_PAST_PURCHASES, null);
+      });
+    });
   });
 
   describe('request action creators', () => {
@@ -812,6 +818,14 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
         // tslint:disable-next-line max-line-length
         expectAction(() => actions.receiveRecommendationsProducts(products), Actions.RECEIVE_RECOMMENDATIONS_PRODUCTS, products);
+      });
+    });
+
+    describe('receivePastPurchases()', () => {
+      it('should return an action', () => {
+        const products = [{ sku: '59384', quantity: 3 }, { sku: '239', quantity: 1 }];
+
+        expectAction(() => actions.receivePastPurchases(products), Actions.RECEIVE_PAST_PURCHASES, products);
       });
     });
 

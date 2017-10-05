@@ -411,7 +411,7 @@ suite('selectors', ({ expect, stub }) => {
       const products = ['a', 'b', 'c'];
 
       expect(Selectors.recommendationsProducts(<any>{
-        data: { present: { recommendations: { products } } }
+        data: { present: { recommendations: { suggested: { products } } } }
       })).to.eq(products);
     });
   });

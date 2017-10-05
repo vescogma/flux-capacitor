@@ -43,6 +43,9 @@ export function createActions(flux: FluxCapacitor) {
       fetchRecommendationsProducts: () =>
         action(Actions.FETCH_RECOMMENDATIONS_PRODUCTS, null),
 
+      fetchPastPurchases: () =>
+        action(Actions.FETCH_PAST_PURCHASES, null),
+
       // request action creators
       updateSearch: (search: Actions.Payload.Search): Actions.UpdateSearch => {
         const searchActions: Actions.UpdateSearch = [actions.resetPage()];
@@ -250,6 +253,9 @@ export function createActions(flux: FluxCapacitor) {
 
       receiveRecommendationsProducts: (products: Store.Product[]) =>
         action(Actions.RECEIVE_RECOMMENDATIONS_PRODUCTS, products),
+
+      receivePastPurchases: (products: Store.Recommendations.PastPurchase[]) =>
+        action(Actions.RECEIVE_PAST_PURCHASES, products),
 
       // tslint:disable-next-line max-line-length
       receiveNavigationSort: (navigations: Store.Recommendations.Navigation[]): Actions.ReceiveNavigationSort =>

@@ -217,42 +217,77 @@ namespace Configuration {
   }
 
   export interface Recommendations {
-    productSuggestions: Configuration.ProductSuggestions;
+    productSuggestions: Configuration.Recommendations.ProductSuggestions;
     iNav: Configuration.Recommendations.INav;
-  }
-
-  export interface ProductSuggestions {
-    /**
-     * number of products to request
-     */
-    productCount: number;
-    /**
-     * product ID field as used in recommendations
-     */
-    idField: string;
-    /**
-     * type of product recommendations to request
-     */
-    mode: Configuration.RecommendationMode;
+    pastPurchases: Configuration.Recommendations.PastPurchases;
   }
 
   export namespace Recommendations {
+    export interface ProductSuggestions {
+      /**
+       * Number of products to request.
+       */
+      productCount: number;
+      /**
+       * Product ID field as used in recommendations.
+       */
+      idField: string;
+      /**
+       * Type of product recommendations to request.
+       */
+      mode: Configuration.RecommendationMode;
+    }
+
+    export interface PastPurchases {
+      /**
+       * Number of products to request.
+       */
+      productCount: number;
+    }
+
     // tslint:disable-next-line interface-name
     export interface INav {
+      /**
+       * Navigation settings.
+       */
       navigations: Navigations;
+      /**
+       * Refinement settings.
+       */
       refinements: Refinements;
+      /**
+       * Minimum number of navigations required in response.
+       */
       minSize?: number;
+      /**
+       * Maximum number of navigations to return.
+       */
       size: number;
+      /**
+       * Time period of recorded recommendations.
+       */
       window: 'day' | 'week' | 'month';
     }
 
     export interface Navigations {
+      /**
+       * Whether to sort navigations.
+       */
       sort: boolean;
+      /**
+       * Navigations to pin to the top regardless of recommendations.
+       */
       pinned?: string[];
     }
 
     export interface Refinements {
+      /**
+       * Whether to sort refinements, or array of what refinements to sort.
+       */
       sort: boolean | string[];
+      /**
+       * Refinements to pin to the top regardless of recommendations.
+       */
       pinned?: Configuration.Recommendations.Pinned;
     }
 

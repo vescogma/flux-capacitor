@@ -104,6 +104,19 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         expect(task.next().value).to.eql(effects.call(fetch, url, request));
       });
 
+      it('should not return past purchases for 0 productCount', () => {
+        const customerId = 'myCustomer';
+        const productCount = 0;
+        const productSuggestions = { productCount };
+        const config = { customerId, recommendations: { productSuggestions } };
+        const flux: any = { config };
+
+        const task = Tasks.fetchProducts(flux, <any>{ payload: {} });
+
+        task.next();
+        expect(task.next().value).to.eql([]);
+      });
+
       it('should handle request failure', () => {
         const error = new Error();
         const receiveRecommendationsProductsAction: any = { a: 'b' };
@@ -115,6 +128,70 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         task.next();
         expect(task.throw(error).value).to.eql(effects.put(receiveRecommendationsProductsAction));
         expect(receiveRecommendationsProducts).to.be.calledWithExactly(error);
+        task.next();
+      });
+    });
+
+    describe('fetchPastPurchases()', () => {
+      it('should return past purchases', () => {
+        const customerId = 'myCustomer';
+        const productCount = 8;
+        const idField = 'myId';
+        const pastPurchases = { productCount };
+        const config = { customerId, recommendations: { pastPurchases } };
+        const receivePastPurchasesAction: any = { a: 'b' };
+        const receivePastPurchases = spy(() => receivePastPurchasesAction);
+        const flux: any = { config, actions: { receivePastPurchases } };
+        const url = `http://${customerId}.groupbycloud.com/orders/public/skus/popular`;
+
+        const fetch = stub(utils, 'fetch');
+        const request = {
+          method: 'POST',
+          body: JSON.stringify({
+            size: productCount
+          })
+        };
+        const promise = Promise.resolve();
+        const response = {
+          result: [{ sku: '12314', quantity: 1 }, { sku: '0932', quantity: 2 }, { sku: '19235', quantity: 1 }]
+        };
+
+        const task = Tasks.fetchPastPurchases(flux, <any>{ payload: {} });
+
+        expect(task.next().value).to.eql(effects.call(fetch, url, request));
+        expect(task.next({ json: () => promise }).value).to.eql(promise);
+        expect(task.next(response).value).to.eql(effects.put(receivePastPurchasesAction));
+        expect(receivePastPurchases).to.be.calledWithExactly(response.result);
+        task.next();
+      });
+
+      it('should not return past purchases for 0 productCount', () => {
+        const customerId = 'myCustomer';
+        const productCount = 0;
+        const pastPurchases = { productCount };
+        const config = { customerId, recommendations: { pastPurchases } };
+        const flux: any = { config };
+
+        const task = Tasks.fetchPastPurchases(flux, <any>{ payload: {} });
+
+        expect(task.next().value).to.eql([]);
+      });
+
+      it('should handle request failure', () => {
+        const customerId = 'myCustomer';
+        const productCount = 8;
+        const pastPurchases = { productCount };
+        const config = { customerId, recommendations: { pastPurchases } };
+        const error = new Error();
+        const receivePastPurchasesAction: any = { a: 'b' };
+        const receivePastPurchases = spy(() => receivePastPurchasesAction);
+        const flux: any = { config, actions: { receivePastPurchases } };
+
+        const task = Tasks.fetchPastPurchases(flux, <any>{ payload: {} });
+
+        task.next();
+        expect(task.throw(error).value).to.eql(effects.put(receivePastPurchasesAction));
+        expect(receivePastPurchases).to.be.calledWithExactly(error);
         task.next();
       });
     });

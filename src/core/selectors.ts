@@ -253,7 +253,7 @@ namespace Selectors {
    * Returns the current recommendations product suggestions.
    */
   export const recommendationsProducts = (state: Store.State) =>
-    state.data.present.recommendations.products;
+    state.data.present.recommendations.suggested.products;
 
   /**
    * Returns the ui state for the all of the tags with the given tagName.

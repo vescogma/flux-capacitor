@@ -215,7 +215,12 @@ namespace Store {
   }
 
   export interface Recommendations {
-    products: Product[];
+    suggested: {
+      products: Product[];
+    };
+    pastPurchases: {
+      products: Recommendations.PastPurchase[];
+    };
   }
 
   export type AvailableNavigations = Indexed<Navigation> & {
@@ -233,6 +238,11 @@ namespace Store {
     export interface RecommendationRefinement {
       value: string;
       count: number;
+    }
+
+    export interface PastPurchase {
+      sku: string;
+      quantity: number;
     }
   }
 
