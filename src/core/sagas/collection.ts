@@ -24,5 +24,5 @@ export namespace Tasks {
 }
 
 export default (flux: FluxCapacitor) => function* saga() {
-  yield effects.takeLatest(Actions.FETCH_COLLECTION_COUNT, Tasks.fetchCount, flux);
+  yield effects.takeEvery(Actions.FETCH_COLLECTION_COUNT, Tasks.fetchCount, flux);
 };

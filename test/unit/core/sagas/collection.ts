@@ -14,7 +14,7 @@ suite('collection saga', ({ expect, spy, stub }) => {
       const saga = sagaCreator(flux)();
 
       // tslint:disable-next-line max-line-length
-      expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_COLLECTION_COUNT, Tasks.fetchCount, flux));
+      expect(saga.next().value).to.eql(effects.takeEvery(Actions.FETCH_COLLECTION_COUNT, Tasks.fetchCount, flux));
       saga.next();
     });
   });
