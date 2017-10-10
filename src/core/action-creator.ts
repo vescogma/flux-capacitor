@@ -16,12 +16,9 @@ export function createActions(flux: FluxCapacitor) {
     const actions = ({
       /**
        * Updates state with given state.
-<<<<<<< Updated upstream
-=======
        * @param {any} state - The state to use.
        * @return
        * {@link Actions.RefreshState} - Action with state.
->>>>>>> Stashed changes
        */
       refreshState: (state: any): Actions.RefreshState =>
         action(Actions.REFRESH_STATE, state),
@@ -29,30 +26,18 @@ export function createActions(flux: FluxCapacitor) {
       // fetch action creators
       /**
        * Makes a request for more refinements for given navigation.
-<<<<<<< Updated upstream
-       * @param  {string} navigationId                   The navigationId for
-       * the navigation fetching more refinements against.
-       * @return {Actions.FETCH_MORE_REFINEMENTS}
-       * Action with navigationId.
-=======
        * @param  {string} navigationId - The navigationId for
        * the navigation fetching more refinements against.
        * @return
        * {@link Actions.FetchMoreRefinements} - Action with navigationId.
->>>>>>> Stashed changes
        */
       fetchMoreRefinements: (navigationId: string): Actions.FetchMoreRefinements =>
         action(Actions.FETCH_MORE_REFINEMENTS, navigationId),
 
       /**
        * Makes a request for products.
-<<<<<<< Updated upstream
-       * @return {Actions.FETCH_PRODUCTS}
-       * Action with null.
-=======
        * @return
        * {@link Actions.FetchProducts} - Action with null.
->>>>>>> Stashed changes
        */
       fetchProducts: (): Actions.FetchProducts =>
         action(Actions.FETCH_PRODUCTS, null),
@@ -210,7 +195,7 @@ export function createActions(flux: FluxCapacitor) {
 
       /**
        * Make a request with refinements removed.
-       * @param {(boolean|string)} field - 
+       * @param {(boolean|string)} field -
        * @return {[type]} [description]
        */
       resetRefinements: (field?: boolean | string): Actions.ResetPageAndResetRefinements => [
