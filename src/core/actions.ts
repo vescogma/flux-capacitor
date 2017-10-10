@@ -149,6 +149,8 @@ namespace Actions {
   export type ShutdownApp = Action<typeof SHUTDOWN_APP>;
   export const REFRESH_STATE = 'REFRESH_STATE';
   export type RefreshState = Action<typeof REFRESH_STATE, any>;
+  // added automatically by middleware to interact with redux-undo
+  export const SAVE_STATE = 'SAVE_STATE';
 
   export namespace Payload {
     export namespace Component {

@@ -7,7 +7,7 @@ import Actions from '../actions';
 import Adapter from '../adapters/configuration';
 import reducer from '../reducers';
 import createSagas, { SAGA_CREATORS } from '../sagas';
-import createMiddleware, { MIDDLEWARE_CREATORS } from './middleware';
+import createMiddleware, { BATCH_MIDDLEWARE_CREATORS, MIDDLEWARE_CREATORS } from './middleware';
 
 export { ReduxStore };
 
@@ -21,6 +21,7 @@ namespace Store {
       validatorMiddleware(),
       ...createMiddleware(MIDDLEWARE_CREATORS, flux),
       sagaMiddleware,
+      ...createMiddleware(BATCH_MIDDLEWARE_CREATORS, flux),
     ];
 
     if (process.env.NODE_ENV === 'development' && ((((<any>config).services || {}).logging || {}).debug || {}).flux) {

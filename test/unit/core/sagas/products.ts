@@ -91,7 +91,7 @@ suite('products saga', ({ expect, spy, stub }) => {
           effects.call(Tasks.fetchProductsRequest, flux, action),
           effects.call(Tasks.fetchNavigations, flux, action)
         ])));
-        expect(task.next([response, undefined]).value).to.eql(effects.put(receiveProductsAction));
+        expect(task.next([response, undefined]).value).to.eql(effects.put(<any>[receiveProductsAction]));
         // expect(task.next().value).to.eql(effects.put(receiveNavigationsAction));
         expect(emit).to.be.calledWithExactly(Events.BEACON_SEARCH, id);
         expect(receiveProducts).to.be.calledWithExactly(response);
@@ -218,8 +218,7 @@ suite('products saga', ({ expect, spy, stub }) => {
         const task = Tasks.fetchProducts(<any>flux, <any>{});
         task.next();
         expect(task.next([{ availableNavigation }, sortArray]).value)
-          .to.eql(effects.put(receiveRecommendationsNavigationsAction));
-        expect(task.next().value).to.eql(effects.put(receiveProductsAction));
+          .to.eql(effects.put(<any>[receiveRecommendationsNavigationsAction, receiveProductsAction]));
         expect(receiveProducts.getCall(0).args[0]).to.eql({ availableNavigation: sortedNavigations });
       });
 
@@ -285,8 +284,7 @@ suite('products saga', ({ expect, spy, stub }) => {
         const task = Tasks.fetchProducts(<any>flux, <any>{});
         task.next();
         expect(task.next([{ availableNavigation: avail }, sortArray]).value)
-          .to.eql(effects.put(receiveRecommendationsNavigationsAction));
-        expect(task.next().value).to.eql(effects.put(receiveProductsAction));
+          .to.eql(effects.put(<any>[receiveRecommendationsNavigationsAction, receiveProductsAction]));
         expect(receiveProducts.getCall(0).args[0]).to.eql({ availableNavigation: sortedNavigations });
       });
 
@@ -352,8 +350,7 @@ suite('products saga', ({ expect, spy, stub }) => {
         const task = Tasks.fetchProducts(<any>flux, <any>{});
         task.next();
         expect(task.next([{ availableNavigation: avail }, sortArray]).value).
-          to.eql(effects.put(receiveRecommendationsNavigationsAction));
-        expect(task.next().value).to.eql(effects.put(receiveProductsAction));
+          to.eql(effects.put(<any>[receiveRecommendationsNavigationsAction, receiveProductsAction]));
         expect(receiveProducts.getCall(0).args[0]).to.eql({ availableNavigation: sortedNavigations });
       });
 
@@ -400,8 +397,7 @@ suite('products saga', ({ expect, spy, stub }) => {
         const task = Tasks.fetchProducts(<any>flux, <any>{});
         task.next();
         expect(task.next([{ availableNavigation }, sortArray]).value)
-          .to.eql(effects.put(receiveRecommendationsNavigationsAction));
-        expect(task.next().value).to.eql(effects.put(receiveProductsAction));
+          .to.eql(effects.put(<any>[receiveRecommendationsNavigationsAction, receiveProductsAction]));
         expect(receiveProducts.getCall(0).args[0]).to.eql({ availableNavigation });
         expect(sortAndPinNavigations).to.be.calledWith(availableNavigation, sortArray, flux.config);
       });

@@ -2,7 +2,7 @@ import { ActionCreators } from 'redux-undo';
 import * as sinon from 'sinon';
 import Actions from '../../../../src/core/actions';
 import Events from '../../../../src/core/events';
-import createMiddleware, { errorHandler, idGenerator } from '../../../../src/core/store/middleware';
+import createMiddleware, { errorHandler, idGenerator, saveStateAnalyzer } from '../../../../src/core/store/middleware';
 import suite from '../../_suite';
 
 suite('store middleware', ({ expect, spy, stub }) => {
@@ -29,7 +29,7 @@ suite('store middleware', ({ expect, spy, stub }) => {
       const next = spy();
       const whitelist = ['a', 'b', 'c'];
 
-      idGenerator(idKey, whitelist)(null)(null)(next)({ type: 'b', c: 'd' });
+      idGenerator(idKey, whitelist)(null)()(next)({ type: 'b', c: 'd' });
 
       expect(next).to.be.calledWith({ type: 'b', c: 'd', meta: { [idKey]: sinon.match.string } });
     });
@@ -39,7 +39,7 @@ suite('store middleware', ({ expect, spy, stub }) => {
       const meta = { d: 'e' };
       const next = spy();
 
-      idGenerator(idKey, ['a', 'b', 'c'])(null)(null)(next)({ type: 'b', c: 'd', meta });
+      idGenerator(idKey, ['a', 'b', 'c'])(null)()(next)({ type: 'b', c: 'd', meta });
 
       expect(next).to.be.calledWithExactly({ type: 'b', c: 'd', meta: { d: 'e', [idKey]: sinon.match.string } });
     });
@@ -49,7 +49,7 @@ suite('store middleware', ({ expect, spy, stub }) => {
       const originalAction = { a: 'b', type: 'c' };
       const next = spy();
 
-      idGenerator(idKey, ['e', 'f', 'g'])(null)(null)(next)(originalAction);
+      idGenerator(idKey, ['e', 'f', 'g'])(null)()(next)(originalAction);
 
       expect(next).to.be.calledWith(originalAction);
     });
@@ -60,7 +60,7 @@ suite('store middleware', ({ expect, spy, stub }) => {
       const payload = { a: 'b' };
       const emit = spy();
 
-      const error = errorHandler(<any>{ emit })(null)(() => null)({ error: true, payload });
+      const error = errorHandler(<any>{ emit })()(() => null)({ error: true, payload });
 
       expect(emit).to.be.calledWith(Events.ERROR_FETCH_ACTION, payload);
       expect(error).to.eq(payload);
@@ -70,7 +70,7 @@ suite('store middleware', ({ expect, spy, stub }) => {
       const action = { a: 'b' };
       const next = spy();
 
-      errorHandler(<any>{})(null)(next)(action);
+      errorHandler(<any>{})()(next)(action);
 
       expect(next).to.be.calledWith(action);
     });
@@ -81,9 +81,29 @@ suite('store middleware', ({ expect, spy, stub }) => {
       const next = spy();
       stub(ActionCreators, 'undo').returns(undoAction);
 
-      errorHandler(<any>{})(null)(next)(action);
+      errorHandler(<any>{})()(next)(action);
 
       expect(next).to.be.calledWith(undoAction);
+    });
+  });
+
+  describe('saveStateAnalyzer()', () => {
+    it('should add SAVE_STATE action if match found', () => {
+      const batchAction = [{ type: 'a' }, { type: Actions.RECEIVE_PRODUCTS }];
+      const next = spy();
+
+      saveStateAnalyzer()()(next)(batchAction);
+
+      expect(next).to.be.calledWithExactly([...batchAction, { type: Actions.SAVE_STATE }]);
+    });
+
+    it('should not add SAVE_STATE action if no match found', () => {
+      const batchAction = [{ type: 'a' }, { type: 'b' }];
+      const next = spy();
+
+      saveStateAnalyzer()()(next)(batchAction);
+
+      expect(next).to.be.calledWithExactly(batchAction);
     });
   });
 });

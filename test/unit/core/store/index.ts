@@ -28,16 +28,19 @@ suite('Store', ({ expect, spy, stub }) => {
       const createStore = stub(redux, 'createStore').returns(storeInstance);
       const compose = stub(redux, 'compose').returns(composed);
       const createSagaMiddleware = stub(reduxSaga, 'default').returns(sagaMiddleware);
-      const createMiddleware = stub(customMiddleware, 'default').returns(['p', 'q', 'r']);
+      const createMiddleware = stub(customMiddleware, 'default');
       const createSagas = stub(sagas, 'default').returns(['m', 'n', 'o']);
+      createMiddleware.withArgs(customMiddleware.MIDDLEWARE_CREATORS).returns(['p', 'q']);
+      createMiddleware.withArgs(customMiddleware.BATCH_MIDDLEWARE_CREATORS).returns(['r', 's']);
 
       const store = Store.create(flux);
 
       expect(store).to.eq(storeInstance);
       expect(createMiddleware).to.be.calledWith(customMiddleware.MIDDLEWARE_CREATORS, flux);
+      expect(createMiddleware).to.be.calledWith(customMiddleware.BATCH_MIDDLEWARE_CREATORS, flux);
       expect(initialState).to.be.calledWith(config);
       // tslint:disable-next-line max-line-length
-      expect(applyMiddleware).to.be.calledWithExactly(sinon.match.func, 'p', 'q', 'r', sagaMiddleware);
+      expect(applyMiddleware).to.be.calledWithExactly(sinon.match.func, 'p', 'q', sagaMiddleware, 'r', 's');
       expect(compose).to.be.calledWithExactly(reduxBatch, middleware, reduxBatch);
       expect(createStore).to.be.calledWithExactly(rootReducer, state, composed);
       expect(createSagas).to.be.calledWith(sagas.SAGA_CREATORS, flux);

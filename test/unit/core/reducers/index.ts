@@ -1,5 +1,6 @@
 import Actions from '../../../../src/core/actions';
 import reducer, * as reducers from '../../../../src/core/reducers';
+import * as dataReducers from '../../../../src/core/reducers/data';
 import suite from '../../_suite';
 
 suite('reducers', ({ expect, stub }) => {
@@ -22,6 +23,20 @@ suite('reducers', ({ expect, stub }) => {
         future: []
       }
     }, { type: Actions.REFRESH_STATE, payload })).to.eql(newState);
+  });
+
+  it('should advance history on SAVE_STATE', () => {
+    const updated = reducer(<any>{
+      data: {
+        past: [],
+        present: {},
+        future: []
+      }
+    }, <any>{ type: Actions.SAVE_STATE });
+
+    expect(updated.data.future).to.eql([]);
+    expect(updated.data.past).to.eql([{}]);
+    expect(updated.data.present).to.be.an('object');
   });
 
   it('should return default', () => {

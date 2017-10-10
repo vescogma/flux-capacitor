@@ -24,8 +24,9 @@ export namespace Tasks {
         yield effects.call(productDetailsTasks.receiveDetailsProduct, flux, products.records[0]);
       } else {
         flux.emit(Events.BEACON_SEARCH, products.id);
+        const actions: any[] = [flux.actions.receiveProducts(products)];
         if (navigations && !(navigations instanceof Error)) {
-          yield effects.put(<any>flux.actions.receiveNavigationSort(navigations));
+          actions.unshift(flux.actions.receiveNavigationSort(navigations));
         } else {
           // if inav navigations is invalid then make it an empty array so it does not sort
           navigations = [];
@@ -35,7 +36,7 @@ export namespace Tasks {
           navigations,
           flux.config
         );
-        yield effects.put(<any>flux.actions.receiveProducts(products));
+        yield effects.put(<any>actions);
         flux.saveState(utils.Routes.SEARCH);
       }
     } catch (e) {
