@@ -2,7 +2,7 @@ import * as effects from 'redux-saga/effects';
 import { ActionCreators } from 'redux-undo';
 import Actions from '../../../../src/core/actions';
 import RecommendationsAdapter from '../../../../src/core/adapters/recommendations';
-import * as Events from '../../../../src/core/events';
+import Events from '../../../../src/core/events';
 import Requests from '../../../../src/core/requests';
 import { Tasks as productDetailsTasks } from '../../../../src/core/sagas/product-details';
 import sagaCreator, { Tasks } from '../../../../src/core/sagas/products';

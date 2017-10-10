@@ -1,6 +1,6 @@
 import { Store as ReduxStore } from 'redux';
 import FluxCapacitor from '../flux-capacitor';
-import * as Events from './events';
+import Events from './events';
 import Store from './store';
 
 type Observer = (oldState: any, newState: any, path: string) => void;

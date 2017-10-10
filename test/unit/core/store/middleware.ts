@@ -1,7 +1,7 @@
 import { ActionCreators } from 'redux-undo';
 import * as sinon from 'sinon';
 import Actions from '../../../../src/core/actions';
-import * as Events from '../../../../src/core/events';
+import Events from '../../../../src/core/events';
 import createMiddleware, { errorHandler, idGenerator } from '../../../../src/core/store/middleware';
 import suite from '../../_suite';
 

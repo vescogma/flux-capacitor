@@ -2,7 +2,7 @@ import * as core from '../../../src/core';
 import createActions from '../../../src/core/action-creator';
 import Actions from '../../../src/core/actions';
 import Adapters from '../../../src/core/adapters';
-import * as Events from '../../../src/core/events';
+import Events from '../../../src/core/events';
 import Observer from '../../../src/core/observer';
 import reducer from '../../../src/core/reducers';
 import Selectors from '../../../src/core/selectors';

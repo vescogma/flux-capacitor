@@ -3,7 +3,7 @@ import { Middleware } from 'redux';
 import { ActionCreators } from 'redux-undo';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
-import * as Events from '../events';
+import Events from '../events';
 
 export const RECALL_CHANGE_ACTIONS = [
   Actions.RESET_REFINEMENTS,

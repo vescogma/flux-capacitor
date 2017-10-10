@@ -5,7 +5,7 @@ import * as sinon from 'sinon';
 import * as core from '../../src/core';
 import createActions, * as ActionCreator from '../../src/core/action-creator';
 import ConfigAdapter from '../../src/core/adapters/configuration';
-import * as Events from '../../src/core/events';
+import Events from '../../src/core/events';
 import Observer from '../../src/core/observer';
 import Store from '../../src/core/store';
 import FluxCapacitor from '../../src/flux-capacitor';

@@ -1,7 +1,7 @@
 import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
-import * as Events from '../events';
+import Events from '../events';
 import Requests from '../requests';
 import Store from '../store';
 import * as utils from '../utils';

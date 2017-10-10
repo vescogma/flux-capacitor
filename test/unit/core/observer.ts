@@ -1,5 +1,5 @@
 import * as sinon from 'sinon';
-import * as Events from '../../../src/core/events';
+import Events from '../../../src/core/events';
 import Observer from '../../../src/core/observer';
 import suite from '../_suite';
 

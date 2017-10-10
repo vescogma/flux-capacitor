@@ -3,7 +3,7 @@ import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import RecommendationsAdapter from '../adapters/recommendations';
-import * as Events from '../events';
+import Events from '../events';
 import Requests from '../requests';
 import Selectors from '../selectors';
 import Store from '../store';

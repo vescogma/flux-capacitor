@@ -6,7 +6,7 @@ import createActions from './core/action-creator';
 import Actions from './core/actions';
 import Adapter from './core/adapters/configuration';
 import Configuration from './core/configuration';
-import * as Events from './core/events';
+import Events from './core/events';
 import Observer from './core/observer';
 import Selectors from './core/selectors';
 import Store from './core/store';
