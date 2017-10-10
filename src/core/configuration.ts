@@ -190,10 +190,6 @@ namespace Configuration {
        * type of product siuggestions to request
        */
       suggestionMode: RecommendationMode;
-      /**
-       * set to true to enable location-specific autocomplete recommendations
-       */
-      location: boolean;
     }
 
     export interface Products {
@@ -217,12 +213,21 @@ namespace Configuration {
   }
 
   export interface Recommendations {
+    /**
+     * set object to enable location-specific autocomplete recommendations
+     */
+    location?: Configuration.Recommendations.Location;
     productSuggestions: Configuration.Recommendations.ProductSuggestions;
     iNav: Configuration.Recommendations.INav;
     pastPurchases: Configuration.Recommendations.PastPurchases;
   }
 
   export namespace Recommendations {
+    export interface Location {
+      minSize: number;
+      distance: string;
+    }
+
     export interface ProductSuggestions {
       /**
        * Number of products to request.

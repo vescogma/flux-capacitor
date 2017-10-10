@@ -1,5 +1,6 @@
 import * as effects from 'redux-saga/effects';
 import Actions from '../../../../src/core/actions';
+import RecommendationsAdapter from '../../../../src/core/adapters/recommendations';
 import Adapter from '../../../../src/core/adapters/search';
 import Requests from '../../../../src/core/requests';
 import sagaCreator, { Tasks } from '../../../../src/core/sagas/recommendations';
@@ -17,6 +18,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
       // tslint:disable-next-line max-line-length
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_RECOMMENDATIONS_PRODUCTS, Tasks.fetchProducts, flux));
+      expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PAST_PURCHASES, Tasks.fetchPastPurchases, flux));
       saga.next();
     });
   });
@@ -27,8 +29,9 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const customerId = 'myCustomer';
         const productCount = 8;
         const idField = 'myId';
+        const location = { minSize: 10 };
         const productSuggestions = { productCount, idField };
-        const config = { customerId, recommendations: { productSuggestions } };
+        const config = { customerId, recommendations: { productSuggestions, location } };
         const state = { c: 'd' };
         const search = () => null;
         const bridge = { search };
@@ -40,21 +43,25 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const url = `https://${customerId}.groupbycloud.com/wisdom/v2/public/recommendations/products/_getPopular`;
         const searchRequestSelector = stub(Requests, 'search').returns({ e: 'f' });
         const extractProduct = stub(Adapter, 'extractProduct').returns('x');
+        const matchExact = 'match exact';
         const fetch = stub(utils, 'fetch');
+        const originalBody = {
+          size: productCount,
+          type: 'viewProduct',
+          target: idField
+        };
         const request = {
           method: 'POST',
-          body: JSON.stringify({
-            size: productCount,
-            type: 'viewProduct',
-            target: idField
-          })
+          body: JSON.stringify(matchExact)
         };
         const records = ['a', 'b', 'c'];
 
         const task = Tasks.fetchProducts(flux, <any>{ payload: {} });
+        const addLocationToRequest = stub(RecommendationsAdapter, 'addLocationToRequest').returns(matchExact);
 
         expect(task.next().value).to.eql(effects.select());
         expect(task.next(state).value).to.eql(effects.call(fetch, url, request));
+        expect(addLocationToRequest).to.be.calledWith(originalBody);
         expect(task.next({ json: () => recommendationsPromise }).value).to.eql(recommendationsPromise);
         expect(task.next(recommendationsResponse).value).to.eql(effects.call(
           [bridge, search],
@@ -84,19 +91,18 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const productCount = 8;
         const idField = 'myId';
         const productSuggestions = { productCount, idField, mode: 'trending' };
-        const config = { customerId, recommendations: { productSuggestions } };
+        const location = { minSize: 10 };
+        const config = { customerId, recommendations: { productSuggestions, location } };
         const flux: any = { config };
         const url = `https://${customerId}.groupbycloud.com/wisdom/v2/public/recommendations/products/_getTrending`;
+        const matchExact = 'match exact';
         const request = {
           method: 'POST',
-          body: JSON.stringify({
-            size: productCount,
-            type: 'viewProduct',
-            target: idField
-          })
+          body: JSON.stringify(matchExact)
         };
         const records = ['a', 'b', 'c'];
         const fetch = stub(utils, 'fetch');
+        stub(RecommendationsAdapter, 'addLocationToRequest').returns(matchExact);
 
         const task = Tasks.fetchProducts(flux, <any>{ payload: {} });
 

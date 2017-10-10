@@ -1,6 +1,7 @@
 import { Navigation, ValueRefinement } from 'groupby-api';
 import * as effects from 'redux-saga/effects';
 import Configuration from '../configuration';
+import Selectors from '../selectors';
 import Store from '../store';
 import { fetch, sortBasedOn } from '../utils';
 import ConfigurationAdapter from './configuration';
@@ -23,16 +24,16 @@ namespace Recommendations {
     return (Array.isArray(refinementSort) ?
       navigations.filter(({ name }) => refinementSort.find((nav) => nav === name)) : navigations)
       .reduce((resultsAcc, navigation) => {
-      const index = resultsAcc.findIndex(({ name }) => navigation.name === name);
-      if (index !== -1) {
-        resultsAcc = [...resultsAcc.slice(0, index), {
-          ...resultsAcc[index], refinements:
-          sortBasedOn(resultsAcc[index].refinements, navigation.values,
-            (unsorted: ValueRefinement, sorted) => unsorted.value.toLowerCase() === sorted.value.toLowerCase())
-        }, ...resultsAcc.slice(index + 1)];
-      }
-      return resultsAcc;
-     }, results);
+        const index = resultsAcc.findIndex(({ name }) => navigation.name === name);
+        if (index !== -1) {
+          resultsAcc = [...resultsAcc.slice(0, index), {
+            ...resultsAcc[index], refinements:
+            sortBasedOn(resultsAcc[index].refinements, navigation.values,
+              (unsorted: ValueRefinement, sorted) => unsorted.value.toLowerCase() === sorted.value.toLowerCase())
+          }, ...resultsAcc.slice(index + 1)];
+        }
+        return resultsAcc;
+      }, results);
   };
 
   export const pinNavigations = ({ results, config }: Navigations): Navigation[] => {
@@ -62,6 +63,42 @@ namespace Recommendations {
     ];
     return transformations.reduce((results, transform: Function) =>
       transform({ results, navigations, config }), availableNavigations);
+  };
+
+  // tslint:disable-next-line max-line-length
+  export const addLocationToRequest = (request, state, config: Configuration): RecommendationsBody | RecommendationsRequest => {
+    const locationConfig = ConfigurationAdapter.extractLocation(config);
+    const location = Selectors.location(state);
+    if (locationConfig && location) {
+      return {
+        minSize: locationConfig.minSize,
+        sequence: [
+          {
+          ...request,
+          matchExact: {
+            ...(request.matchExact || {}),
+            and: [{
+              visit: {
+                generated: {
+                  geo: {
+                    location: {
+                      distance: locationConfig.distance,
+                      center: {
+                        lat: location.latitude,
+                        lon: location.longitude
+                      }
+                    }
+                  }
+                }
+              }
+            }]
+          }
+        },
+          request,
+        ]};
+    } else {
+      return request;
+    }
   };
 
   export interface RecommendationsRequest {

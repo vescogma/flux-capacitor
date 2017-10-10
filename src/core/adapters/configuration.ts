@@ -141,6 +141,9 @@ namespace Adapter {
 
   export const extractRefinementsSort = (config: Configuration) =>
     extractINav(config).refinements.sort;
+
+  export const extractLocation = (config: Configuration) =>
+    config.recommendations.location;
 }
 
 export default Adapter;

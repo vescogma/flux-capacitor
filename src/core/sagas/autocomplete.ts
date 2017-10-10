@@ -17,7 +17,6 @@ export namespace Tasks {
     try {
       const state = yield effects.select();
       const field = Selectors.autocompleteCategoryField(state);
-      const location = Selectors.location(state);
       const suggestionsRequest = effects.call(
         [flux.clients.sayt, flux.clients.sayt.autocomplete],
         query,
@@ -37,28 +36,10 @@ export namespace Tasks {
           }]
         }
       };
-      if (location) {
-        trendingBody.matchExact = {
-          and: [{
-            visit: {
-              generated: {
-                geo: {
-                  location: {
-                    distance: '100km',
-                    center: {
-                      lat: location.latitude,
-                      lon: location.longitude
-                    }
-                  }
-                }
-              }
-            }
-          }]
-        };
-      }
       const trendingRequest = effects.call(fetch, trendingUrl, {
         method: 'POST',
-        body: JSON.stringify(trendingBody)
+        body: JSON.stringify(
+          RecommendationsAdapter.addLocationToRequest(trendingBody, state, flux.config))
       });
       const requests = [suggestionsRequest];
       if (config.suggestionCount > 0) {
