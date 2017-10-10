@@ -14,13 +14,28 @@ export function createActions(flux: FluxCapacitor) {
     const action = <T extends string>(type: T, payload: any, validator: any = {}) =>
       createAction(type, payload, { ...metadata, validator });
     const actions = ({
+      /**
+       * Updates state with given state.
+       */
       refreshState: (state: any): Actions.RefreshState =>
         action(Actions.REFRESH_STATE, state),
 
       // fetch action creators
+      /**
+       * Makes a request for more refinements for given navigation.
+       * @param  {string} navigationId                   The navigationId for
+       * the navigation fetching more refinements against.
+       * @return {Actions.FETCH_MORE_REFINEMENTS}
+       * Action with navigationId.
+       */
       fetchMoreRefinements: (navigationId: string): Actions.FetchMoreRefinements =>
         action(Actions.FETCH_MORE_REFINEMENTS, navigationId),
 
+      /**
+       * Makes a request for products.
+       * @return {Actions.FETCH_PRODUCTS}
+       * Action with null.
+       */
       fetchProducts: (): Actions.FetchProducts =>
         action(Actions.FETCH_PRODUCTS, null),
 
