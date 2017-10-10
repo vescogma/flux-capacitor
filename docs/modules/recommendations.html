@@ -84,6 +84,7 @@
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="recommendations.html#addlocationtorequest" class="tsd-kind-icon">add<wbr>Location<wbr>ToRequest</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="recommendations.html#buildbody" class="tsd-kind-icon">build<wbr>Body</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="recommendations.html#buildurl" class="tsd-kind-icon">build<wbr>Url</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="recommendations.html#pastpurchasebiasing" class="tsd-kind-icon">past<wbr>Purchase<wbr>Biasing</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="recommendations.html#pinnavigations" class="tsd-kind-icon">pin<wbr>Navigations</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="recommendations.html#pinrefinements" class="tsd-kind-icon">pin<wbr>Refinements</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="recommendations.html#sortandpinnavigations" class="tsd-kind-icon">sort<wbr>And<wbr>Pin<wbr>Navigations</a></li>
@@ -106,7 +107,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/3b2ce3e/src/core/adapters/recommendations.ts#L69">src/core/adapters/recommendations.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b868a4b/src/core/adapters/recommendations.ts#L69">src/core/adapters/recommendations.ts:69</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -138,7 +139,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/3b2ce3e/src/core/adapters/recommendations.ts#L14">src/core/adapters/recommendations.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b868a4b/src/core/adapters/recommendations.ts#L14">src/core/adapters/recommendations.ts:14</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -169,7 +170,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/3b2ce3e/src/core/adapters/recommendations.ts#L11">src/core/adapters/recommendations.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b868a4b/src/core/adapters/recommendations.ts#L11">src/core/adapters/recommendations.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -189,6 +190,59 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="pastpurchasebiasing" class="tsd-anchor"></a>
+					<h3>past<wbr>Purchase<wbr>Biasing</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">past<wbr>Purchase<wbr>Biasing<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.state.html" class="tsd-signature-type">State</a>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b868a4b/src/core/adapters/recommendations.ts#L105">src/core/adapters/recommendations.ts:105</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>state: <a href="../interfaces/store.state.html" class="tsd-signature-type">State</a></h5>
+								</li>
+								<li>
+									<h5>__namedParameters: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>recommendations<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></h5>
+											<ul class="tsd-parameters">
+												<li class="tsd-parameter">
+													<h5>id<wbr>Field<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+												</li>
+												<li class="tsd-parameter">
+													<h5>past<wbr>Purchases<span class="tsd-signature-symbol">: </span><a href="../interfaces/configuration.recommendations.pastpurchases.html" class="tsd-signature-type">PastPurchases</a></h5>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>augment<wbr>Biases<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>biases<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>bring<wbr>ToTop<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>influence<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="pinnavigations" class="tsd-anchor"></a>
 					<h3>pin<wbr>Navigations</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
@@ -198,7 +252,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/3b2ce3e/src/core/adapters/recommendations.ts#L39">src/core/adapters/recommendations.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b868a4b/src/core/adapters/recommendations.ts#L39">src/core/adapters/recommendations.ts:39</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -229,7 +283,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/3b2ce3e/src/core/adapters/recommendations.ts#L44">src/core/adapters/recommendations.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b868a4b/src/core/adapters/recommendations.ts#L44">src/core/adapters/recommendations.ts:44</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -260,7 +314,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/3b2ce3e/src/core/adapters/recommendations.ts#L55">src/core/adapters/recommendations.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b868a4b/src/core/adapters/recommendations.ts#L55">src/core/adapters/recommendations.ts:55</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -289,7 +343,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/3b2ce3e/src/core/adapters/recommendations.ts#L19">src/core/adapters/recommendations.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b868a4b/src/core/adapters/recommendations.ts#L19">src/core/adapters/recommendations.ts:19</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -320,7 +374,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/3b2ce3e/src/core/adapters/recommendations.ts#L22">src/core/adapters/recommendations.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b868a4b/src/core/adapters/recommendations.ts#L22">src/core/adapters/recommendations.ts:22</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -409,6 +463,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="recommendations.html#buildurl" class="tsd-kind-icon">build<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="recommendations.html#pastpurchasebiasing" class="tsd-kind-icon">past<wbr>Purchase<wbr>Biasing</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="recommendations.html#pinnavigations" class="tsd-kind-icon">pin<wbr>Navigations</a>
