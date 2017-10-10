@@ -101,6 +101,18 @@ namespace Recommendations {
     }
   };
 
+  // tslint:disable-next-line max-line-length
+  export const pastPurchaseBiasing = (state: Store.State, { recommendations: { idField, pastPurchases } }: Configuration) => {
+    return {
+      bringToTop: [],
+      augmentBiases: true,
+      influence: pastPurchases.biasInfluence,
+      biases: state.data.present.recommendations.pastPurchases.products
+        .slice(0, pastPurchases.biasCount)
+        .map((pastPurchase) => ({ name: idField, content: pastPurchase.sku, strength: pastPurchases.biasStrength }))
+    };
+  };
+
   export interface RecommendationsRequest {
     size?: number;
     window?: string;

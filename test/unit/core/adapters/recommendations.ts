@@ -124,8 +124,62 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
         }, {
           name: 'b',
           refinements: [{ value: '1' }, { value: '2' }, { value: '3' }]
-        }]
-        );
+        }]);
+    });
+  });
+
+  describe('pastPurchaseBiasing()', () => {
+    const idField = 'productId';
+    const biasInfluence = 8;
+    const biasStrength = 2;
+    const state: any = {
+      data: {
+        present: {
+          recommendations: {
+            pastPurchases: {
+              products: [{ sku: 'a' }, { sku: 'b' }, { sku: 'c' }]
+            }
+          }
+        }
+      }
+    };
+
+    it('should generate biases from past purchase product SKUs', () => {
+      const config: any = {
+        recommendations: {
+          idField,
+          pastPurchases: { biasStrength, biasInfluence, biasCount: 10 }
+        }
+      };
+
+      const biasing = RecommendationsAdapter.pastPurchaseBiasing(state, config);
+
+      expect(biasing).to.eql({
+        bringToTop: [],
+        augmentBiases: true,
+        influence: biasInfluence,
+        biases: [
+          { name: idField, content: 'a', strength: biasStrength },
+          { name: idField, content: 'b', strength: biasStrength },
+          { name: idField, content: 'c', strength: biasStrength },
+        ]
+      });
+    });
+
+    it('should limit generated biases by biasCount', () => {
+      const config: any = {
+        recommendations: {
+          idField,
+          pastPurchases: { biasStrength, biasInfluence, biasCount: 2 }
+        }
+      };
+
+      const biasing = RecommendationsAdapter.pastPurchaseBiasing(state, config);
+
+      expect(biasing.biases).to.eql([
+        { name: idField, content: 'a', strength: biasStrength },
+        { name: idField, content: 'b', strength: biasStrength }
+      ]);
     });
   });
 

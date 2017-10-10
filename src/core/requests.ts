@@ -2,6 +2,7 @@ import { Request } from 'groupby-api';
 import { QueryTimeAutocompleteConfig, QueryTimeProductSearchConfig } from 'sayt';
 import Autocomplete from './adapters/autocomplete';
 import Configuration from './adapters/configuration';
+import RecommendationsAdapter from './adapters/recommendations';
 import SearchAdapter, { MAX_RECORDS } from './adapters/search';
 import AppConfig from './configuration';
 import Selectors from './selectors';
@@ -29,6 +30,9 @@ namespace Requests {
     }
     if (sort) {
       request.sort = <any>SearchAdapter.requestSort(sort);
+    }
+    if (Configuration.shouldAddPastPurchaseBias(config)) {
+      request.biasing = RecommendationsAdapter.pastPurchaseBiasing(state, config);
     }
 
     return <Request>Requests.chain(config.search.defaults, request, config.search.overrides);

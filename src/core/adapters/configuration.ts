@@ -144,6 +144,9 @@ namespace Adapter {
 
   export const extractLocation = (config: Configuration) =>
     config.recommendations.location;
+
+  export const shouldAddPastPurchaseBias = (config: Configuration) =>
+    config.recommendations.pastPurchases.biasCount > 0;
 }
 
 export default Adapter;

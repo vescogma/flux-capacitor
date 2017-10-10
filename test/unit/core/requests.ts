@@ -1,5 +1,6 @@
 import * as sinon from 'sinon';
 import ConfigAdapter from '../../../src/core/adapters/configuration';
+import RecommendationsAdapter from '../../../src/core/adapters/recommendations';
 import SearchAdapter, { MAX_RECORDS } from '../../../src/core/adapters/search';
 import Requests from '../../../src/core/requests';
 import Selectors from '../../../src/core/selectors';
@@ -12,11 +13,13 @@ suite('requests', ({ expect, stub }) => {
     const originalPageSize = MAX_RECORDS - 1;
     const originalSkip = MAX_RECORDS - remainingRecords;
     let sortSelector: sinon.SinonStub;
-    let requestSortSelector: sinon.SinonStub;
+    let requestSortAdapter: sinon.SinonStub;
+    let pastPurchaseBiasingAdapter: sinon.SinonStub;
 
     beforeEach(() => {
       sortSelector = stub(Selectors, 'sort');
-      requestSortSelector = stub(SearchAdapter, 'requestSort');
+      requestSortAdapter = stub(SearchAdapter, 'requestSort');
+      pastPurchaseBiasingAdapter = stub(ConfigAdapter, 'shouldAddPastPurchaseBias');
       stub(Selectors, 'area');
       stub(Selectors, 'fields');
       stub(Selectors, 'query');
@@ -45,11 +48,24 @@ suite('requests', ({ expect, stub }) => {
     it('should include sort when truthy', () => {
       const sort = { a: 'b' };
       sortSelector.returns(true);
-      requestSortSelector.returns(sort);
+      requestSortAdapter.returns(sort);
 
       const request = Requests.search(<any>{}, <any>{ search: {} });
 
       expect(request.sort).to.eq(sort);
+    });
+
+    it('should add past purchase biasing', () => {
+      const biasing = { c: 'd' };
+      const state: any = { e: 'f' };
+      const config: any = { search: {} };
+      const pastPurchaseBiasing = stub(RecommendationsAdapter, 'pastPurchaseBiasing').returns(biasing);
+      pastPurchaseBiasingAdapter.returns(true);
+
+      const request = Requests.search(state, config);
+
+      expect(request.biasing).to.eq(biasing);
+      expect(pastPurchaseBiasing).to.be.calledWithExactly(state, config);
     });
 
     it('should apply defaults', () => {

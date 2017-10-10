@@ -13,7 +13,7 @@ export namespace Tasks {
   export function* fetchProducts(flux: FluxCapacitor, action: Actions.FetchRecommendationsProducts) {
     try {
       const state = yield effects.select();
-      const config = flux.config.recommendations.productSuggestions;
+      const { idField, productSuggestions: config } = flux.config.recommendations;
       const productCount = config.productCount;
       if (productCount > 0) {
         // fall back to default mode "popular" if not provided
@@ -23,7 +23,7 @@ export namespace Tasks {
         const recommendationsRequestBody = {
           size: config.productCount,
           type: 'viewProduct',
-          target: config.idField
+          target: idField
         };
 
         const recommendationsResponse = yield effects.call(fetch, recommendationsUrl, {
@@ -32,8 +32,8 @@ export namespace Tasks {
         });
         const recommendations = yield recommendationsResponse.json();
         const refinements = recommendations.result
-        .filter(({ productId }) => productId)
-        .map(({ productId }) => ({ navigationName: config.idField, type: 'Value', value: productId }));
+          .filter(({ productId }) => productId)
+          .map(({ productId }) => ({ navigationName: idField, type: 'Value', value: productId }));
         const { records } = yield effects.call(
           [flux.clients.bridge, flux.clients.bridge.search],
           {

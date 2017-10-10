@@ -199,7 +199,8 @@ suite('Configuration Adapter', ({ expect, stub }) => {
       const sort = {
         default: false,
         options: [
-          { field: true,
+          {
+            field: true,
             descending: true
           },
           {}
@@ -218,13 +219,15 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     it('should return pinned navigations', () => {
       const pinned = 'nav';
 
-      expect(Adapter.extractNavigationsPinned(<any>{ recommendations: {
-        iNav: {
-          navigations: {
-            pinned
+      expect(Adapter.extractNavigationsPinned(<any>{
+        recommendations: {
+          iNav: {
+            navigations: {
+              pinned
+            }
           }
         }
-      }})).to.eq(pinned);
+      })).to.eq(pinned);
     });
   });
 
@@ -232,13 +235,15 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     it('should return pinned refinements', () => {
       const pinned = 'nav';
 
-      expect(Adapter.extractRefinementsPinned(<any>{ recommendations: {
-        iNav: {
-          refinements: {
-            pinned
+      expect(Adapter.extractRefinementsPinned(<any>{
+        recommendations: {
+          iNav: {
+            refinements: {
+              pinned
+            }
           }
         }
-      }})).to.eq(pinned);
+      })).to.eq(pinned);
     });
   });
 
@@ -339,6 +344,18 @@ suite('Configuration Adapter', ({ expect, stub }) => {
       const labels = { a: 'b' };
       // tslint:disable-next-line max-line-length
       expect(Adapter.extractAutocompleteNavigationLabels(<any>{ autocomplete: { navigations: labels } })).to.eql(labels);
+    });
+  });
+
+  describe('shouldAddPastPurchaseBias()', () => {
+    it('should return true if requesting positive number of biases', () => {
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.shouldAddPastPurchaseBias(<any>{ recommendations: { pastPurchases: { biasCount: 3 } } })).to.be.true;
+    });
+
+    it('should return false if requesting zero biases', () => {
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.shouldAddPastPurchaseBias(<any>{ recommendations: { pastPurchases: { biasCount: 0 } } })).to.be.false;
     });
   });
 });

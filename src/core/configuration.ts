@@ -1,4 +1,4 @@
-import { BrowserBridge, Request } from 'groupby-api';
+import { BiasStrength, BrowserBridge, Request } from 'groupby-api';
 import { QueryTimeAutocompleteConfig, QueryTimeProductSearchConfig, Sayt } from 'sayt';
 
 interface Configuration {
@@ -217,6 +217,11 @@ namespace Configuration {
      * set object to enable location-specific autocomplete recommendations
      */
     location?: Configuration.Recommendations.Location;
+
+    /**
+     * Product ID field as used in recommendations.
+     */
+    idField: string;
     productSuggestions: Configuration.Recommendations.ProductSuggestions;
     iNav: Configuration.Recommendations.INav;
     pastPurchases: Configuration.Recommendations.PastPurchases;
@@ -234,10 +239,6 @@ namespace Configuration {
        */
       productCount: number;
       /**
-       * Product ID field as used in recommendations.
-       */
-      idField: string;
-      /**
        * Type of product recommendations to request.
        */
       mode: Configuration.RecommendationMode;
@@ -248,6 +249,21 @@ namespace Configuration {
        * Number of products to request.
        */
       productCount: number;
+
+      /**
+       * Number of past purchase products to bias by.
+       */
+      biasCount: number;
+
+      /**
+       * Overall strength of applied biases.
+       */
+      biasInfluence: number;
+
+      /**
+       * Strength of applied biases.
+       */
+      biasStrength: BiasStrength;
     }
 
     // tslint:disable-next-line interface-name
