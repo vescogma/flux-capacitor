@@ -46,7 +46,7 @@ suite('selectors', ({ expect, stub }) => {
     it('should return the min', () => {
       const min = 4;
       const id = 'hello';
-      const state: any = { data: { present: { navigations: { byId: { [id]: { min }}}}}};
+      const state: any = { data: { present: { navigations: { byId: { [id]: { min } } } } } };
 
       expect(Selectors.rangeNavigationMin(state, id)).to.be.eq(min);
     });
@@ -56,7 +56,7 @@ suite('selectors', ({ expect, stub }) => {
     it('should return the max', () => {
       const max = 4;
       const id = 'hello';
-      const state: any = { data: { present: { navigations: { byId: { [id]: { max }}}}}};
+      const state: any = { data: { present: { navigations: { byId: { [id]: { max } } } } } };
 
       expect(Selectors.rangeNavigationMax(state, id)).to.be.eq(max);
     });
@@ -268,6 +268,34 @@ suite('selectors', ({ expect, stub }) => {
     });
   });
 
+  describe('productsWithMetadata()', () => {
+    it('should return products with pastPurchase metadata', () => {
+      const state: any = { a: 'b' };
+      const pastPurchaseProductsBySku = stub(Selectors, 'pastPurchaseProductsBySku').returns({ a: {}, c: {} });
+      const products = stub(Selectors, 'products').returns([{ id: 'a' }, { id: 'b' }, { id: 'c' }]);
+
+      expect(Selectors.productsWithMetadata(state, 'id')).to.eql([
+        { data: { id: 'a' }, meta: { pastPurchase: true } },
+        { data: { id: 'b' }, meta: {} },
+        { data: { id: 'c' }, meta: { pastPurchase: true } },
+      ]);
+      expect(pastPurchaseProductsBySku).to.be.calledWithExactly(state);
+      expect(products).to.be.calledWithExactly(state);
+    });
+
+    it('should use provided id field', () => {
+      const state: any = { a: 'b' };
+      stub(Selectors, 'pastPurchaseProductsBySku').returns({ a: {}, c: {} });
+      stub(Selectors, 'products').returns([{ sku: 'a' }, { sku: 'b' }, { sku: 'c' }]);
+
+      expect(Selectors.productsWithMetadata(state, 'sku')).to.eql([
+        { data: { sku: 'a' }, meta: { pastPurchase: true } },
+        { data: { sku: 'b' }, meta: {} },
+        { data: { sku: 'c' }, meta: { pastPurchase: true } },
+      ]);
+    });
+  });
+
   describe('details()', () => {
     it('should return all details data', () => {
       const details = { a: 'b' };
@@ -413,6 +441,28 @@ suite('selectors', ({ expect, stub }) => {
       expect(Selectors.recommendationsProducts(<any>{
         data: { present: { recommendations: { suggested: { products } } } }
       })).to.eq(products);
+    });
+  });
+
+  describe('pastPurchaseProductsBySku()', () => {
+    it('should return a map of past purchase products by sku', () => {
+      const state: any = {
+        data: {
+          present: {
+            recommendations: {
+              pastPurchases: {
+                products: [
+                  { sku: 'a', quantity: 4 },
+                  { sku: 'b', quantity: 5 },
+                  { sku: 'c', quantity: 8 }
+                ]
+              }
+            }
+          }
+        }
+      };
+
+      expect(Selectors.pastPurchaseProductsBySku(state)).to.eql({ a: 4, b: 5, c: 8, });
     });
   });
 

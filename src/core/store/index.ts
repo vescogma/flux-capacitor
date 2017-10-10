@@ -252,6 +252,13 @@ namespace Store {
     [key: string]: any; // post
   }
 
+  export interface ProductWithMetadata {
+    data: Product;
+    meta: {
+      pastPurchase?: boolean;
+    };
+  }
+
   export interface Navigation {
     /**
      * byId key
