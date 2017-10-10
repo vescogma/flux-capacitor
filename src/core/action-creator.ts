@@ -16,6 +16,12 @@ export function createActions(flux: FluxCapacitor) {
     const actions = ({
       /**
        * Updates state with given state.
+<<<<<<< Updated upstream
+=======
+       * @param {any} state - The state to use.
+       * @return
+       * {@link Actions.RefreshState} - Action with state.
+>>>>>>> Stashed changes
        */
       refreshState: (state: any): Actions.RefreshState =>
         action(Actions.REFRESH_STATE, state),
@@ -23,45 +29,106 @@ export function createActions(flux: FluxCapacitor) {
       // fetch action creators
       /**
        * Makes a request for more refinements for given navigation.
+<<<<<<< Updated upstream
        * @param  {string} navigationId                   The navigationId for
        * the navigation fetching more refinements against.
        * @return {Actions.FETCH_MORE_REFINEMENTS}
        * Action with navigationId.
+=======
+       * @param  {string} navigationId - The navigationId for
+       * the navigation fetching more refinements against.
+       * @return
+       * {@link Actions.FetchMoreRefinements} - Action with navigationId.
+>>>>>>> Stashed changes
        */
       fetchMoreRefinements: (navigationId: string): Actions.FetchMoreRefinements =>
         action(Actions.FETCH_MORE_REFINEMENTS, navigationId),
 
       /**
        * Makes a request for products.
+<<<<<<< Updated upstream
        * @return {Actions.FETCH_PRODUCTS}
        * Action with null.
+=======
+       * @return
+       * {@link Actions.FetchProducts} - Action with null.
+>>>>>>> Stashed changes
        */
       fetchProducts: (): Actions.FetchProducts =>
         action(Actions.FETCH_PRODUCTS, null),
 
+      /**
+       * Makes a request for additional products beyond currently requested products.
+       * @param  {string} amount - Amount of more products to fetch.
+       * @return
+       * {@link Actions.FetchMoreProducts} - Action with amount.
+       */
       fetchMoreProducts: (amount: number): Actions.FetchMoreProducts =>
         action(Actions.FETCH_MORE_PRODUCTS, amount),
 
+      /**
+       * Makes a request for autocomplete suggestions.
+       * @param  {string} query - Search term to fetch autocomplete suggestions against.
+       * @return
+       * {@link Actions.FetchAutocompleteSuggestions} - Action with query.
+       */
       fetchAutocompleteSuggestions: (query: string): Actions.FetchAutocompleteSuggestions =>
         action(Actions.FETCH_AUTOCOMPLETE_SUGGESTIONS, query),
 
+      /**
+       * Makes a request for autocomplete products.
+       * @param  {string} query - Search term to fetch autocomplete products against.
+       * @param
+       * {@link Actions.Payload.Autocomplete.Refinement} refinements - The applied refinements.
+       * @return
+       * {@link Actions.FetchAutocompleteProducts} - Action with query and refinements.
+       */
       // tslint:disable-next-line max-line-length
       fetchAutocompleteProducts: (query: string, refinements: Actions.Payload.Autocomplete.Refinement[] = []): Actions.FetchAutocompleteProducts =>
         action(Actions.FETCH_AUTOCOMPLETE_PRODUCTS, { query, refinements }),
 
+      /**
+       * Makes a request for the collection count for a given collection.
+       * @param  {string} collection - Collection name.
+       * @return
+       * {@link Actions.FetchCollectionCount} - Action with collection.
+       */
       fetchCollectionCount: (collection: string): Actions.FetchCollectionCount =>
         action(Actions.FETCH_COLLECTION_COUNT, collection),
 
+      /**
+       * Makes a request for the details for a given product.
+       * @param  {string} id - The id for a specific product.
+       * @return
+       * {@link Actions.FetchProductDetails} - Action with product id.
+       */
       fetchProductDetails: (id: string): Actions.FetchProductDetails =>
         action(Actions.FETCH_PRODUCT_DETAILS, id),
 
-      fetchRecommendationsProducts: () =>
+      /**
+       * Makes a request for recommendations products.
+       * @return
+       * {@link Actions.FetchRecommendationsProducts} - Action with null.
+       */
+      fetchRecommendationsProducts: (): Actions.FetchRecommendationsProducts =>
         action(Actions.FETCH_RECOMMENDATIONS_PRODUCTS, null),
 
-      fetchPastPurchases: () =>
+      /**
+       * Makes a request for past purchases.
+       * @return
+       * {@link Actions.FetchPastPurchases} - Action with null.
+       */
+      fetchPastPurchases: (): Actions.FetchPastPurchases =>
         action(Actions.FETCH_PAST_PURCHASES, null),
 
       // request action creators
+      /**
+       * Makes a new search request.
+       * @param
+       * {@link Actions.Payload.Search} - Search object.
+       * @return
+       * {@link Actions.UpdateSearch} - Actions with relevant data.
+       */
       updateSearch: (search: Actions.Payload.Search): Actions.UpdateSearch => {
         const searchActions: Actions.UpdateSearch = [actions.resetPage()];
 
@@ -84,6 +151,12 @@ export function createActions(flux: FluxCapacitor) {
         return searchActions;
       },
 
+      /**
+       * Make a request for a given search term.
+       * @param {string} query - Search term to use.
+       * @return
+       * {@link Actions.ResetPageAndUpdateQuery} - Actions with relevant data.
+       */
       updateQuery: (query: string): Actions.ResetPageAndUpdateQuery => [
         actions.resetPage(),
         action(Actions.UPDATE_QUERY, query && query.trim(), {
@@ -94,8 +167,19 @@ export function createActions(flux: FluxCapacitor) {
         })
       ],
 
+      /**
+       * Make a request for a null query.
+       */
       resetQuery: () => actions.updateQuery(null),
 
+      /**
+       * Make a request with a refinement.
+       * @param {string} field - The field name for the refinement.
+       * @param valueOrLow - Either the value for a value refinement, or the low for a range refinement.
+       * @param high - Either the high for a range refinement, or left out for a value refinement.
+       * @return
+       * {@link Actions.ResetPageAndAddRefinement} - Actions with relevant data.
+       */
       addRefinement: (field: string, valueOrLow: any, high: any = null): Actions.ResetPageAndAddRefinement => [
         actions.resetPage(),
         action(Actions.ADD_REFINEMENT, refinementPayload(field, valueOrLow, high), {
@@ -110,12 +194,25 @@ export function createActions(flux: FluxCapacitor) {
         })
       ],
 
+      /**
+       * Make a request removing all refinements and adding given refinement.
+       * @param {string} field - The field name for the refinement.
+       * @param valueOrLow - Either the value for a value refinement, or the low for a range refinement.
+       * @param high - Either the high for a range refinement, or left out for a value refinement.
+       * @return
+       * {@link Actions.SwitchRefinement} - Actions with relevant data.
+       */
       switchRefinement: (field: string, valueOrLow: any, high: any = null): Actions.SwitchRefinement => <any>[
         actions.resetPage(),
         ...actions.resetRefinements(field),
         ...actions.addRefinement(field, valueOrLow, high)
       ],
 
+      /**
+       * Make a request with refinements removed.
+       * @param {(boolean|string)} field - 
+       * @return {[type]} [description]
+       */
       resetRefinements: (field?: boolean | string): Actions.ResetPageAndResetRefinements => [
         actions.resetPage(),
         action(Actions.RESET_REFINEMENTS, field, {
