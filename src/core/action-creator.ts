@@ -108,7 +108,7 @@ export function createActions(flux: FluxCapacitor) {
 
       // request action creators
       /**
-       * Makes a new search request.
+       * Updates the search with given parameters.
        * @param
        * {@link Actions.Payload.Search} - Search object.
        * @return
@@ -137,7 +137,7 @@ export function createActions(flux: FluxCapacitor) {
       },
 
       /**
-       * Make a request for a given search term.
+       * Updates the search query.
        * @param {string} query - Search term to use.
        * @return
        * {@link Actions.ResetPageAndUpdateQuery} - Actions with relevant data.
@@ -153,12 +153,12 @@ export function createActions(flux: FluxCapacitor) {
       ],
 
       /**
-       * Make a request for a null query.
+       * Clears the search query.
        */
       resetQuery: () => actions.updateQuery(null),
 
       /**
-       * Make a request with a refinement.
+       * Adds a given refinement to the search.
        * @param {string} field - The field name for the refinement.
        * @param valueOrLow - Either the value for a value refinement, or the low for a range refinement.
        * @param high - Either the high for a range refinement, or left out for a value refinement.
@@ -180,7 +180,7 @@ export function createActions(flux: FluxCapacitor) {
       ],
 
       /**
-       * Make a request removing all refinements and adding given refinement.
+       * Removes all refinements for a given navigation field and adds the given refinement to the search.
        * @param {string} field - The field name for the refinement.
        * @param valueOrLow - Either the value for a value refinement, or the low for a range refinement.
        * @param high - Either the high for a range refinement, or left out for a value refinement.
@@ -194,9 +194,11 @@ export function createActions(flux: FluxCapacitor) {
       ],
 
       /**
-       * Make a request with refinements removed.
-       * @param {(boolean|string)} field -
-       * @return {[type]} [description]
+       * Removes the selected refinements from the search.
+       * @param {(boolean|string)} field - true to reset all refinements, or
+       * navigationId to reset all refinements on a specific navigation.
+       * @return
+       * {@link Actions.ResetPageAndResetRefinements} - Actions with relevant data.
        */
       resetRefinements: (field?: boolean | string): Actions.ResetPageAndResetRefinements => [
         actions.resetPage(),
@@ -209,6 +211,13 @@ export function createActions(flux: FluxCapacitor) {
         })
       ],
 
+      /**
+       * Sets the current page in the store to page 1, but does not update the search.
+       * @param  {[type]}                       Actions.RESET_PAGE [description]
+       * @param  {[type]}                       undefined          [description]
+       * @param  {validators.notOnFirstPage                                       }} {payload [description]
+       * @return {[type]}                                          [description]
+       */
       resetPage: (): Actions.ResetPage =>
         action(Actions.RESET_PAGE, undefined, {
           payload: validators.notOnFirstPage
