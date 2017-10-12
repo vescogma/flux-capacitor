@@ -92,6 +92,7 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#___rawactions" class="tsd-kind-icon">___raw<wbr>Actions</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#actions" class="tsd-kind-icon">actions</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#clients" class="tsd-kind-icon">clients</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#config" class="tsd-kind-icon">config</a></li>
@@ -124,7 +125,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#savestate" class="tsd-kind-icon">save<wbr>State</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#saytproducts" class="tsd-kind-icon">sayt<wbr>Products</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#saytsuggestions" class="tsd-kind-icon">sayt<wbr>Suggestions</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#search" class="tsd-kind-icon">search</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#search-1" class="tsd-kind-icon">search</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#sort" class="tsd-kind-icon">sort</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#switchcollection" class="tsd-kind-icon">switch<wbr>Collection</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="fluxcapacitor.html#switchpage" class="tsd-kind-icon">switch<wbr>Page</a></li>
@@ -149,7 +150,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L42">flux-capacitor.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L41">flux-capacitor.ts:41</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -166,18 +167,1097 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
-					<a name="actions" class="tsd-anchor"></a>
-					<h3>actions</h3>
-					<div class="tsd-signature tsd-kind-icon">actions<span class="tsd-signature-symbol">:</span> <a href="../modules/actioncreators.html" class="tsd-signature-type">ActionCreators</a><span class="tsd-signature-symbol"> =&nbsp;ActionCreators</span></div>
+					<a name="___rawactions" class="tsd-anchor"></a>
+					<h3>___raw<wbr>Actions</h3>
+					<div class="tsd-signature tsd-kind-icon">___raw<wbr>Actions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">(Anonymous function)</span><span class="tsd-signature-symbol"> =&nbsp;createActions(this)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L30">flux-capacitor.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L24">flux-capacitor.ts:24</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+					<a name="actions" class="tsd-anchor"></a>
+					<h3>actions</h3>
+					<div class="tsd-signature tsd-kind-icon">actions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;this.__rawActions(() &#x3D;&gt; ({}))</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L29">flux-capacitor.ts:29</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>actions for modifying contents of the store</p>
 						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>add<wbr>Refinement<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">add<wbr>Refinement<span class="tsd-signature-symbol">(</span>field<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, valueOrLow<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, high<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#resetpageandaddrefinement" class="tsd-signature-type">ResetPageAndAddRefinement</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L84">core/action-creator.ts:84</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>field: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5>valueOrLow: <span class="tsd-signature-type">any</span></h5>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagDefault value">Default value</span> high: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#resetpageandaddrefinement" class="tsd-signature-type">ResetPageAndAddRefinement</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>create<wbr>Component<wbr>State<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">create<wbr>Component<wbr>State<span class="tsd-signature-symbol">(</span>tagName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, state<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#createcomponentstate" class="tsd-signature-type">CreateComponentState</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L265">core/action-creator.ts:265</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>tagName: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5>id: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagDefault value">Default value</span> state: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#createcomponentstate" class="tsd-signature-type">CreateComponentState</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>deselect<wbr>Refinement<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">deselect<wbr>Refinement<span class="tsd-signature-symbol">(</span>navigationId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#resetpageanddeselectrefinement" class="tsd-signature-type">ResetPageAndDeselectRefinement</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L142">core/action-creator.ts:142</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>navigationId: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5>index: <span class="tsd-signature-type">number</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#resetpageanddeselectrefinement" class="tsd-signature-type">ResetPageAndDeselectRefinement</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>fetch<wbr>Autocomplete<wbr>Products<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">fetch<wbr>Autocomplete<wbr>Products<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, refinements<span class="tsd-signature-symbol">?: </span><a href="../interfaces/actions.payload.autocomplete.refinement.html" class="tsd-signature-type">Refinement</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#fetchautocompleteproducts" class="tsd-signature-type">FetchAutocompleteProducts</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L34">core/action-creator.ts:34</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>query: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagDefault value">Default value</span> refinements: <a href="../interfaces/actions.payload.autocomplete.refinement.html" class="tsd-signature-type">Refinement</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#fetchautocompleteproducts" class="tsd-signature-type">FetchAutocompleteProducts</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>fetch<wbr>Autocomplete<wbr>Suggestions<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">fetch<wbr>Autocomplete<wbr>Suggestions<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#fetchautocompletesuggestions" class="tsd-signature-type">FetchAutocompleteSuggestions</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L30">core/action-creator.ts:30</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>query: <span class="tsd-signature-type">string</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#fetchautocompletesuggestions" class="tsd-signature-type">FetchAutocompleteSuggestions</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>fetch<wbr>Collection<wbr>Count<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">fetch<wbr>Collection<wbr>Count<span class="tsd-signature-symbol">(</span>collection<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#fetchcollectioncount" class="tsd-signature-type">FetchCollectionCount</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L37">core/action-creator.ts:37</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>collection: <span class="tsd-signature-type">string</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#fetchcollectioncount" class="tsd-signature-type">FetchCollectionCount</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>fetch<wbr>More<wbr>Products<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">fetch<wbr>More<wbr>Products<span class="tsd-signature-symbol">(</span>amount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#fetchmoreproducts" class="tsd-signature-type">FetchMoreProducts</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L27">core/action-creator.ts:27</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>amount: <span class="tsd-signature-type">number</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#fetchmoreproducts" class="tsd-signature-type">FetchMoreProducts</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>fetch<wbr>More<wbr>Refinements<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">fetch<wbr>More<wbr>Refinements<span class="tsd-signature-symbol">(</span>navigationId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#fetchmorerefinements" class="tsd-signature-type">FetchMoreRefinements</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L21">core/action-creator.ts:21</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>navigationId: <span class="tsd-signature-type">string</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#fetchmorerefinements" class="tsd-signature-type">FetchMoreRefinements</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>fetch<wbr>Past<wbr>Purchases<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">fetch<wbr>Past<wbr>Purchases<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">"FETCH_PAST_PURCHASES"</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L46">core/action-creator.ts:46</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-returns-title">Returns <a href="../interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">"FETCH_PAST_PURCHASES"</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>fetch<wbr>Product<wbr>Details<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">fetch<wbr>Product<wbr>Details<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#fetchproductdetails" class="tsd-signature-type">FetchProductDetails</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L40">core/action-creator.ts:40</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>id: <span class="tsd-signature-type">string</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#fetchproductdetails" class="tsd-signature-type">FetchProductDetails</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>fetch<wbr>Products<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">fetch<wbr>Products<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#fetchproducts" class="tsd-signature-type">FetchProducts</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L24">core/action-creator.ts:24</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#fetchproducts" class="tsd-signature-type">FetchProducts</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>fetch<wbr>Recommendations<wbr>Products<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">fetch<wbr>Recommendations<wbr>Products<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">"FETCH_RECOMMENDATIONS_PRODUCTS"</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L43">core/action-creator.ts:43</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-returns-title">Returns <a href="../interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">"FETCH_RECOMMENDATIONS_PRODUCTS"</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Autocomplete<wbr>Product<wbr>Records<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Autocomplete<wbr>Product<wbr>Records<span class="tsd-signature-symbol">(</span>products<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receiveautocompleteproductrecords" class="tsd-signature-type">ReceiveAutocompleteProductRecords</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L245">core/action-creator.ts:245</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>products: <a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">[]</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receiveautocompleteproductrecords" class="tsd-signature-type">ReceiveAutocompleteProductRecords</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Autocomplete<wbr>Products<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Autocomplete<wbr>Products<span class="tsd-signature-symbol">(</span>res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Results</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receiveautocompleteproducts" class="tsd-signature-type">ReceiveAutocompleteProducts</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L235">core/action-creator.ts:235</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>res: <span class="tsd-signature-type">Results</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receiveautocompleteproducts" class="tsd-signature-type">ReceiveAutocompleteProducts</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Autocomplete<wbr>Suggestions<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Autocomplete<wbr>Suggestions<span class="tsd-signature-symbol">(</span>suggestions<span class="tsd-signature-symbol">: </span><a href="../interfaces/actions.payload.autocomplete.suggestions.html" class="tsd-signature-type">Suggestions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receiveautocompletesuggestions" class="tsd-signature-type">ReceiveAutocompleteSuggestions</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L229">core/action-creator.ts:229</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>suggestions: <a href="../interfaces/actions.payload.autocomplete.suggestions.html" class="tsd-signature-type">Suggestions</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receiveautocompletesuggestions" class="tsd-signature-type">ReceiveAutocompleteSuggestions</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Autocomplete<wbr>Template<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Autocomplete<wbr>Template<span class="tsd-signature-symbol">(</span>template<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.template.html" class="tsd-signature-type">Template</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receiveautocompletetemplate" class="tsd-signature-type">ReceiveAutocompleteTemplate</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L248">core/action-creator.ts:248</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>template: <a href="../interfaces/store.template.html" class="tsd-signature-type">Template</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receiveautocompletetemplate" class="tsd-signature-type">ReceiveAutocompleteTemplate</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Collection<wbr>Count<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Collection<wbr>Count<span class="tsd-signature-symbol">(</span>count<span class="tsd-signature-symbol">: </span><a href="../interfaces/actions.payload.collection.count.html" class="tsd-signature-type">Count</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receivecollectioncount" class="tsd-signature-type">ReceiveCollectionCount</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L206">core/action-creator.ts:206</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>count: <a href="../interfaces/actions.payload.collection.count.html" class="tsd-signature-type">Count</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receivecollectioncount" class="tsd-signature-type">ReceiveCollectionCount</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Details<wbr>Product<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Details<wbr>Product<span class="tsd-signature-symbol">(</span>product<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receivedetailsproduct" class="tsd-signature-type">ReceiveDetailsProduct</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L251">core/action-creator.ts:251</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>product: <a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receivedetailsproduct" class="tsd-signature-type">ReceiveDetailsProduct</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>More<wbr>Products<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>More<wbr>Products<span class="tsd-signature-symbol">(</span>products<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receivemoreproducts" class="tsd-signature-type">ReceiveMoreProducts</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L232">core/action-creator.ts:232</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>products: <a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">[]</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receivemoreproducts" class="tsd-signature-type">ReceiveMoreProducts</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>More<wbr>Refinements<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>More<wbr>Refinements<span class="tsd-signature-symbol">(</span>navigationId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, refinements<span class="tsd-signature-symbol">: </span><a href="../modules/store.html#refinement" class="tsd-signature-type">Refinement</a><span class="tsd-signature-symbol">[]</span>, selected<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receivemorerefinements" class="tsd-signature-type">ReceiveMoreRefinements</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L225">core/action-creator.ts:225</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>navigationId: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5>refinements: <a href="../modules/store.html#refinement" class="tsd-signature-type">Refinement</a><span class="tsd-signature-symbol">[]</span></h5>
+											</li>
+											<li>
+												<h5>selected: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receivemorerefinements" class="tsd-signature-type">ReceiveMoreRefinements</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Navigation<wbr>Sort<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Navigation<wbr>Sort<span class="tsd-signature-symbol">(</span>navigations<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.recommendations.navigation.html" class="tsd-signature-type">Navigation</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receivenavigationsort" class="tsd-signature-type">ReceiveNavigationSort</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L261">core/action-creator.ts:261</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>navigations: <a href="../interfaces/store.recommendations.navigation.html" class="tsd-signature-type">Navigation</a><span class="tsd-signature-symbol">[]</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receivenavigationsort" class="tsd-signature-type">ReceiveNavigationSort</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Navigations<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Navigations<span class="tsd-signature-symbol">(</span>navigations<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.navigation.html" class="tsd-signature-type">Navigation</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receivenavigations" class="tsd-signature-type">ReceiveNavigations</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L209">core/action-creator.ts:209</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>navigations: <a href="../interfaces/store.navigation.html" class="tsd-signature-type">Navigation</a><span class="tsd-signature-symbol">[]</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receivenavigations" class="tsd-signature-type">ReceiveNavigations</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Page<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Page<span class="tsd-signature-symbol">(</span>page<span class="tsd-signature-symbol">: </span><a href="../interfaces/actions.payload.page.html" class="tsd-signature-type">Page</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receivepage" class="tsd-signature-type">ReceivePage</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L212">core/action-creator.ts:212</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>page: <a href="../interfaces/actions.payload.page.html" class="tsd-signature-type">Page</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receivepage" class="tsd-signature-type">ReceivePage</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Past<wbr>Purchases<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Past<wbr>Purchases<span class="tsd-signature-symbol">(</span>products<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.recommendations.pastpurchase.html" class="tsd-signature-type">PastPurchase</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">"RECEIVE_PAST_PURCHASES"</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L257">core/action-creator.ts:257</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>products: <a href="../interfaces/store.recommendations.pastpurchase.html" class="tsd-signature-type">PastPurchase</a><span class="tsd-signature-symbol">[]</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">"RECEIVE_PAST_PURCHASES"</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Product<wbr>Records<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Product<wbr>Records<span class="tsd-signature-symbol">(</span>products<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receiveproductrecords" class="tsd-signature-type">ReceiveProductRecords</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L203">core/action-creator.ts:203</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>products: <a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">[]</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receiveproductrecords" class="tsd-signature-type">ReceiveProductRecords</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Products<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Products<span class="tsd-signature-symbol">(</span>res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Results</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="../modules/actions.html#receiveproducts" class="tsd-signature-type">ReceiveProducts</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L180">core/action-creator.ts:180</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>res: <span class="tsd-signature-type">Results</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span>
+											<span class="tsd-signature-symbol"> | </span>
+											<a href="../modules/actions.html#receiveproducts" class="tsd-signature-type">ReceiveProducts</a>
+										</h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Query<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Query<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><a href="../interfaces/actions.payload.query.html" class="tsd-signature-type">Query</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receivequery" class="tsd-signature-type">ReceiveQuery</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L177">core/action-creator.ts:177</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>query: <a href="../interfaces/actions.payload.query.html" class="tsd-signature-type">Query</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receivequery" class="tsd-signature-type">ReceiveQuery</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Recommendations<wbr>Products<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Recommendations<wbr>Products<span class="tsd-signature-symbol">(</span>products<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">"RECEIVE_RECOMMENDATIONS_PRODUCTS"</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L254">core/action-creator.ts:254</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>products: <a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">[]</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../interfaces/actions.action.html" class="tsd-signature-type">Action</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">"RECEIVE_RECOMMENDATIONS_PRODUCTS"</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Record<wbr>Count<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Record<wbr>Count<span class="tsd-signature-symbol">(</span>recordCount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receiverecordcount" class="tsd-signature-type">ReceiveRecordCount</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L218">core/action-creator.ts:218</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>recordCount: <span class="tsd-signature-type">number</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receiverecordcount" class="tsd-signature-type">ReceiveRecordCount</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Redirect<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Redirect<span class="tsd-signature-symbol">(</span>redirect<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receiveredirect" class="tsd-signature-type">ReceiveRedirect</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L221">core/action-creator.ts:221</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>redirect: <span class="tsd-signature-type">string</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receiveredirect" class="tsd-signature-type">ReceiveRedirect</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>receive<wbr>Template<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">receive<wbr>Template<span class="tsd-signature-symbol">(</span>template<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.template.html" class="tsd-signature-type">Template</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#receivetemplate" class="tsd-signature-type">ReceiveTemplate</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L215">core/action-creator.ts:215</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>template: <a href="../interfaces/store.template.html" class="tsd-signature-type">Template</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#receivetemplate" class="tsd-signature-type">ReceiveTemplate</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>refresh<wbr>State<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">refresh<wbr>State<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#refreshstate" class="tsd-signature-type">RefreshState</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L17">core/action-creator.ts:17</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>state: <span class="tsd-signature-type">any</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#refreshstate" class="tsd-signature-type">RefreshState</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>remove<wbr>Component<wbr>State<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">remove<wbr>Component<wbr>State<span class="tsd-signature-symbol">(</span>tagName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#removecomponentstate" class="tsd-signature-type">RemoveComponentState</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L268">core/action-creator.ts:268</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>tagName: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5>id: <span class="tsd-signature-type">string</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#removecomponentstate" class="tsd-signature-type">RemoveComponentState</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>reset<wbr>Page<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">reset<wbr>Page<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#resetpage" class="tsd-signature-type">ResetPage</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L115">core/action-creator.ts:115</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#resetpage" class="tsd-signature-type">ResetPage</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>reset<wbr>Query<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">reset<wbr>Query<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L82">core/action-creator.ts:82</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Object</span></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>reset<wbr>Recall<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">reset<wbr>Recall<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#resetrecall" class="tsd-signature-type">ResetRecall</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L127">core/action-creator.ts:127</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5><span class="tsd-flag ts-flagDefault value">Default value</span> query: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagDefault value">Default value</span> __namedParameters: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;&lt;any&gt;{}</span></h5>
+												<ul class="tsd-parameters">
+													<li class="tsd-parameter">
+														<h5>field<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+													</li>
+													<li class="tsd-parameter">
+														<h5>index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+													</li>
+												</ul>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#resetrecall" class="tsd-signature-type">ResetRecall</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>reset<wbr>Refinements<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">reset<wbr>Refinements<span class="tsd-signature-symbol">(</span>field<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#resetpageandresetrefinements" class="tsd-signature-type">ResetPageAndResetRefinements</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L104">core/action-creator.ts:104</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> field: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#resetpageandresetrefinements" class="tsd-signature-type">ResetPageAndResetRefinements</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>search<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#search" class="tsd-signature-type">Search</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L120">core/action-creator.ts:120</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5><span class="tsd-flag ts-flagDefault value">Default value</span> query: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;Selectors.query(flux.store.getState())</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#search" class="tsd-signature-type">Search</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>select<wbr>Collection<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">select<wbr>Collection<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#selectcollection" class="tsd-signature-type">SelectCollection</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L148">core/action-creator.ts:148</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>id: <span class="tsd-signature-type">string</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#selectcollection" class="tsd-signature-type">SelectCollection</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>select<wbr>Refinement<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">select<wbr>Refinement<span class="tsd-signature-symbol">(</span>navigationId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#resetpageandselectrefinement" class="tsd-signature-type">ResetPageAndSelectRefinement</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L136">core/action-creator.ts:136</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>navigationId: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5>index: <span class="tsd-signature-type">number</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#resetpageandselectrefinement" class="tsd-signature-type">ResetPageAndSelectRefinement</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>select<wbr>Sort<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">select<wbr>Sort<span class="tsd-signature-symbol">(</span>index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#selectsort" class="tsd-signature-type">SelectSort</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L153">core/action-creator.ts:153</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>index: <span class="tsd-signature-type">number</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#selectsort" class="tsd-signature-type">SelectSort</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>start<wbr>App<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">start<wbr>App<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#startapp" class="tsd-signature-type">StartApp</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L276">core/action-creator.ts:276</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#startapp" class="tsd-signature-type">StartApp</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>switch<wbr>Refinement<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">switch<wbr>Refinement<span class="tsd-signature-symbol">(</span>field<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, valueOrLow<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, high<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#switchrefinement" class="tsd-signature-type">SwitchRefinement</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L98">core/action-creator.ts:98</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>field: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5>valueOrLow: <span class="tsd-signature-type">any</span></h5>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagDefault value">Default value</span> high: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#switchrefinement" class="tsd-signature-type">SwitchRefinement</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>update<wbr>Autocomplete<wbr>Query<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">update<wbr>Autocomplete<wbr>Query<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#updateautocompletequery" class="tsd-signature-type">UpdateAutocompleteQuery</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L171">core/action-creator.ts:171</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>query: <span class="tsd-signature-type">string</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#updateautocompletequery" class="tsd-signature-type">UpdateAutocompleteQuery</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>update<wbr>Current<wbr>Page<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">update<wbr>Current<wbr>Page<span class="tsd-signature-symbol">(</span>page<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#updatecurrentpage" class="tsd-signature-type">UpdateCurrentPage</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L163">core/action-creator.ts:163</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>page: <span class="tsd-signature-type">number</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#updatecurrentpage" class="tsd-signature-type">UpdateCurrentPage</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>update<wbr>Details<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">update<wbr>Details<span class="tsd-signature-symbol">(</span>product<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#updatedetails" class="tsd-signature-type">UpdateDetails</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L168">core/action-creator.ts:168</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>product: <a href="../interfaces/store.product.html" class="tsd-signature-type">Product</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#updatedetails" class="tsd-signature-type">UpdateDetails</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>update<wbr>Location<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">update<wbr>Location<span class="tsd-signature-symbol">(</span>location<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.geolocation.html" class="tsd-signature-type">Geolocation</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#updatelocation" class="tsd-signature-type">UpdateLocation</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L272">core/action-creator.ts:272</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>location: <a href="../interfaces/store.geolocation.html" class="tsd-signature-type">Geolocation</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#updatelocation" class="tsd-signature-type">UpdateLocation</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>update<wbr>Page<wbr>Size<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">update<wbr>Page<wbr>Size<span class="tsd-signature-symbol">(</span>size<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#updatepagesize" class="tsd-signature-type">UpdatePageSize</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L158">core/action-creator.ts:158</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>size: <span class="tsd-signature-type">number</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#updatepagesize" class="tsd-signature-type">UpdatePageSize</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>update<wbr>Query<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">update<wbr>Query<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#resetpageandupdatequery" class="tsd-signature-type">ResetPageAndUpdateQuery</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L72">core/action-creator.ts:72</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>query: <span class="tsd-signature-type">string</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#resetpageandupdatequery" class="tsd-signature-type">ResetPageAndUpdateQuery</a></h4>
+									</li>
+							</ul>        </li>
+							<li class="tsd-parameter">
+								<h5>update<wbr>Search<span class="tsd-signature-symbol">: </span>function</h5>
+								<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external">
+									<li class="tsd-signature tsd-kind-icon">update<wbr>Search<span class="tsd-signature-symbol">(</span>search<span class="tsd-signature-symbol">: </span><a href="../interfaces/actions.payload.search.html" class="tsd-signature-type">Search</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/actions.html#updatesearch" class="tsd-signature-type">UpdateSearch</a></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<aside class="tsd-sources">
+											<ul>
+												<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/core/action-creator.ts#L50">core/action-creator.ts:50</a></li>
+											</ul>
+										</aside>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>search: <a href="../interfaces/actions.payload.search.html" class="tsd-signature-type">Search</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/actions.html#updatesearch" class="tsd-signature-type">UpdateSearch</a></h4>
+									</li>
+							</ul>        </li>
+						</ul>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
@@ -186,7 +1266,7 @@
 					<div class="tsd-signature tsd-kind-icon">clients<span class="tsd-signature-symbol">:</span> <a href="../interfaces/configuration.clients.html" class="tsd-signature-type">Clients</a><span class="tsd-signature-symbol"> =&nbsp;FluxCapacitor.createClients(this)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L38">flux-capacitor.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L37">flux-capacitor.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -201,7 +1281,7 @@
 					<div class="tsd-signature tsd-kind-icon">config<span class="tsd-signature-symbol">:</span> <a href="../modules/configuration.html" class="tsd-signature-type">Configuration</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L44">flux-capacitor.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L43">flux-capacitor.ts:43</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -211,7 +1291,7 @@
 					<div class="tsd-signature tsd-kind-icon">selectors<span class="tsd-signature-symbol">:</span> <a href="../modules/selectors.html" class="tsd-signature-type">Selectors</a><span class="tsd-signature-symbol"> =&nbsp;Selectors</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L34">flux-capacitor.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L33">flux-capacitor.ts:33</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -226,7 +1306,7 @@
 					<div class="tsd-signature tsd-kind-icon">store<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReduxStore</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/store.state.html" class="tsd-signature-type">State</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;Store.create(this, Observer.listener(this))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L42">flux-capacitor.ts:42</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L41">flux-capacitor.ts:41</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -289,7 +1369,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L106">flux-capacitor.ts:106</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L105">flux-capacitor.ts:105</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -312,7 +1392,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L102">flux-capacitor.ts:102</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L101">flux-capacitor.ts:101</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -335,7 +1415,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L90">flux-capacitor.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L89">flux-capacitor.ts:89</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -465,7 +1545,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L66">flux-capacitor.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L65">flux-capacitor.ts:65</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -488,7 +1568,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L62">flux-capacitor.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L61">flux-capacitor.ts:61</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -614,7 +1694,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L58">flux-capacitor.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L57">flux-capacitor.ts:57</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -631,7 +1711,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L82">flux-capacitor.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L81">flux-capacitor.ts:81</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -724,7 +1804,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L70">flux-capacitor.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L69">flux-capacitor.ts:69</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -758,7 +1838,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L74">flux-capacitor.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L73">flux-capacitor.ts:73</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -781,7 +1861,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L48">flux-capacitor.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L47">flux-capacitor.ts:47</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -804,7 +1884,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L114">flux-capacitor.ts:114</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L113">flux-capacitor.ts:113</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -830,7 +1910,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L110">flux-capacitor.ts:110</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L109">flux-capacitor.ts:109</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -844,7 +1924,7 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
-					<a name="search" class="tsd-anchor"></a>
+					<a name="search-1" class="tsd-anchor"></a>
 					<h3>search</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
@@ -853,7 +1933,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L54">flux-capacitor.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L53">flux-capacitor.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -876,7 +1956,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L78">flux-capacitor.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L77">flux-capacitor.ts:77</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -899,7 +1979,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L94">flux-capacitor.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L93">flux-capacitor.ts:93</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -922,7 +2002,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L98">flux-capacitor.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L97">flux-capacitor.ts:97</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -945,7 +2025,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L86">flux-capacitor.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L85">flux-capacitor.ts:85</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -971,7 +2051,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L137">flux-capacitor.ts:137</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L136">flux-capacitor.ts:136</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1020,7 +2100,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L121">flux-capacitor.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L120">flux-capacitor.ts:120</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1056,7 +2136,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/a9a9431/src/flux-capacitor.ts#L151">flux-capacitor.ts:151</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/49c5012/src/flux-capacitor.ts#L150">flux-capacitor.ts:150</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1093,6 +2173,9 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-external">
 								<a href="fluxcapacitor.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
+								<a href="fluxcapacitor.html#___rawactions" class="tsd-kind-icon">___raw<wbr>Actions</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 								<a href="fluxcapacitor.html#actions" class="tsd-kind-icon">actions</a>
@@ -1176,7 +2259,7 @@
 								<a href="fluxcapacitor.html#saytsuggestions" class="tsd-kind-icon">sayt<wbr>Suggestions</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
-								<a href="fluxcapacitor.html#search" class="tsd-kind-icon">search</a>
+								<a href="fluxcapacitor.html#search-1" class="tsd-kind-icon">search</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="fluxcapacitor.html#sort" class="tsd-kind-icon">sort</a>

@@ -88,6 +88,9 @@
 						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="modules/actions.html">Actions</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="modules/configuration.html">Configuration</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -109,16 +112,7 @@
 						<a href="modules/_redux_.html">"redux"</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
-						<a href="modules/actioncreators.html">Action<wbr>Creators</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="modules/actions.html">Actions</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/adapter.html">Adapter</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="modules/middleware.html">Middleware</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/page.html">Page</a>
@@ -142,7 +136,7 @@
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/recommendationsresponse.html" class="tsd-kind-icon">Recommendations<wbr>Response</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/validator.html" class="tsd-kind-icon">Validator</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
@@ -153,6 +147,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#state" class="tsd-kind-icon">State</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#batch_middleware_creators" class="tsd-kind-icon">BATCH_<wbr>MIDDLEWARE_<wbr>CREATORS</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#default_area" class="tsd-kind-icon">DEFAULT_<wbr>AREA</a>
@@ -170,6 +167,9 @@
 						<a href="globals.html#max_records" class="tsd-kind-icon">MAX_<wbr>RECORDS</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#middleware_creators" class="tsd-kind-icon">MIDDLEWARE_<wbr>CREATORS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#recall_change_actions" class="tsd-kind-icon">RECALL_<wbr>CHANGE_<wbr>ACTIONS</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
@@ -184,14 +184,17 @@
 					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#rootreducer" class="tsd-kind-icon">root<wbr>Reducer</a>
 					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter">
+						<a href="globals.html#action" class="tsd-kind-icon">action</a>
+					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#addrefinement" class="tsd-kind-icon">add<wbr>Refinement</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#clearcomponentstate" class="tsd-kind-icon">clear<wbr>Component<wbr>State</a>
 					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#createaction" class="tsd-kind-icon">create<wbr>Action</a>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#createactions" class="tsd-kind-icon">create<wbr>Actions</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#createcomponentstate" class="tsd-kind-icon">create<wbr>Component<wbr>State</a>
@@ -202,11 +205,17 @@
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#deselectrefinement" class="tsd-kind-icon">deselect<wbr>Refinement</a>
 					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#errorhandler" class="tsd-kind-icon">error<wbr>Handler</a>
+					</li>
 					<li class=" tsd-kind-function tsd-is-external tsd-is-not-exported">
 						<a href="globals.html#generatenavigation" class="tsd-kind-icon">generate<wbr>Navigation</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-external">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#handleerror" class="tsd-kind-icon">handle<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#idgenerator" class="tsd-kind-icon">id<wbr>Generator</a>
 					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter">
 						<a href="globals.html#rayify" class="tsd-kind-icon">rayify</a>
@@ -241,7 +250,7 @@
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#receivetemplate" class="tsd-kind-icon">receive<wbr>Template</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-external">
+					<li class=" tsd-kind-function">
 						<a href="globals.html#refinementpayload" class="tsd-kind-icon">refinement<wbr>Payload</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
@@ -254,9 +263,12 @@
 						<a href="globals.html#resetrefinements" class="tsd-kind-icon">reset<wbr>Refinements</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#selectrefinement" class="tsd-kind-icon">select<wbr>Refinement</a>
+						<a href="globals.html#savestateanalyzer" class="tsd-kind-icon">save<wbr>State<wbr>Analyzer</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#selectrefinement" class="tsd-kind-icon">select<wbr>Refinement</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#shouldresetrefinements" class="tsd-kind-icon">should<wbr>Reset<wbr>Refinements</a>
 					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter">
@@ -349,61 +361,61 @@
 					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#routes" class="tsd-kind-icon">Routes</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#hasselectedrefinements" class="tsd-kind-icon">has<wbr>Selected<wbr>Refinements</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#hasselectedrefinementsbyfield" class="tsd-kind-icon">has<wbr>Selected<wbr>Refinements<wbr>ByField</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#iscollectiondeselected" class="tsd-kind-icon">is<wbr>Collection<wbr>Deselected</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isdifferentautocompletequery" class="tsd-kind-icon">is<wbr>Different<wbr>Autocomplete<wbr>Query</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isdifferentpagesize" class="tsd-kind-icon">is<wbr>Different<wbr>Page<wbr>Size</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isdifferentquery" class="tsd-kind-icon">is<wbr>Different<wbr>Query</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isnotfullrange" class="tsd-kind-icon">is<wbr>Not<wbr>Full<wbr>Range</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isondifferentpage" class="tsd-kind-icon">is<wbr>OnDifferent<wbr>Page</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#israngerefinement" class="tsd-kind-icon">is<wbr>Range<wbr>Refinement</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isrefinementdeselectedbyindex" class="tsd-kind-icon">is<wbr>Refinement<wbr>Deselected<wbr>ByIndex</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isrefinementdeselectedbyvalue" class="tsd-kind-icon">is<wbr>Refinement<wbr>Deselected<wbr>ByValue</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isrefinementselectedbyindex" class="tsd-kind-icon">is<wbr>Refinement<wbr>Selected<wbr>ByIndex</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#issortdeselected" class="tsd-kind-icon">is<wbr>Sort<wbr>Deselected</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isstring" class="tsd-kind-icon">is<wbr>String</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isvalidclearfield" class="tsd-kind-icon">is<wbr>Valid<wbr>Clear<wbr>Field</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isvalidquery" class="tsd-kind-icon">is<wbr>Valid<wbr>Query</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isvalidrange" class="tsd-kind-icon">is<wbr>Valid<wbr>Range</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#isvaluerefinement" class="tsd-kind-icon">is<wbr>Value<wbr>Refinement</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
+					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#notonfirstpage" class="tsd-kind-icon">not<wbr>OnFirst<wbr>Page</a>
 					</li>
 				</ul>
