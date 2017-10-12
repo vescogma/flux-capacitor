@@ -1,6 +1,6 @@
 import * as core from '../../../src/core';
+import createActions from '../../../src/core/action-creator';
 import Actions from '../../../src/core/actions';
-import ActionCreators from '../../../src/core/actions/creators';
 import Adapters from '../../../src/core/adapters';
 import Events from '../../../src/core/events';
 import Observer from '../../../src/core/observer';
@@ -11,9 +11,9 @@ import { Routes } from '../../../src/core/utils';
 import suite from '../_suite';
 
 suite('core', ({ expect }) => {
-  describe('ActionCreators', () => {
-    it('should expose ActionCreators', () => {
-      expect(core.ActionCreators).to.eq(ActionCreators);
+  describe('createActions()', () => {
+    it('should expose createActions', () => {
+      expect(core.createActions).to.eq(createActions);
     });
   });
 
