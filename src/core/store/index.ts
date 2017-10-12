@@ -7,7 +7,7 @@ import Actions from '../actions';
 import Adapter from '../adapters/configuration';
 import reducer from '../reducers';
 import createSagas, { SAGA_CREATORS } from '../sagas';
-import createMiddleware, { BATCH_MIDDLEWARE_CREATORS, MIDDLEWARE_CREATORS } from './middleware';
+import Middleware from './middleware';
 
 export { ReduxStore };
 
@@ -15,25 +15,13 @@ namespace Store {
 
   // tslint:disable-next-line max-line-length
   export function create(flux: FluxCapacitor, listener?: (store: ReduxStore<State>) => () => void): ReduxStore<State> {
-    const { config } = flux;
     const sagaMiddleware = createSagaMiddleware();
-    const middleware = [
-      validatorMiddleware(),
-      ...createMiddleware(MIDDLEWARE_CREATORS, flux),
-      sagaMiddleware,
-      ...createMiddleware(BATCH_MIDDLEWARE_CREATORS, flux),
-    ];
-
-    if (process.env.NODE_ENV === 'development' && ((((<any>config).services || {}).logging || {}).debug || {}).flux) {
-      const logger = require('redux-logger').default;
-
-      middleware.push(logger);
-    }
+    const middleware = Middleware.create(sagaMiddleware, flux);
 
     const store = createStore<State>(
       reducer,
-      <any>Adapter.initialState(config),
-      compose(reduxBatch, applyMiddleware(...middleware), reduxBatch),
+      <State>Adapter.initialState(flux.config),
+      middleware,
     );
 
     createSagas(SAGA_CREATORS, flux).forEach(sagaMiddleware.run);

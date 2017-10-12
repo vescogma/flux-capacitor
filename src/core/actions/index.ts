@@ -1,19 +1,19 @@
 import { Results } from 'groupby-api';
-import { Dispatch } from 'redux';
-import Store from './store';
+import Store from '../store';
 
 namespace Actions {
-  export interface Action<S, T = any, M extends Metadata | {} = any> {
+  export interface Action<S = string, T = any> {
     type: S;
     payload?: T;
-    meta?: M;
+    meta?: Metadata;
     error?: boolean;
   }
 
   export interface Metadata {
-    recallId: string;
-    searchId: string;
+    recallId?: string;
+    searchId?: string;
     tag?: Metadata.Tag;
+    validator?: object;
   }
   export namespace Metadata {
     export interface Tag {
@@ -24,7 +24,11 @@ namespace Actions {
   }
 
   export interface Thunk<T> {
-    (dispatch: Dispatch<T>, getState?: () => Store.State);
+    (getState?: () => Store.State): Action<T>;
+  }
+
+  export interface ActionCreator {
+    (...args: any[]): Action | Action[] | Thunk<any>;
   }
 
   // update actions
@@ -60,7 +64,7 @@ namespace Actions {
   // tslint:disable-next-line max-line-length
   export type ResetRecall = [Actions.ResetPage, Actions.ResetPage, Actions.ResetRefinements, Actions.ResetPage, Actions.UpdateQuery] |
     [Actions.ResetPage, Actions.ResetPage, Actions.ResetRefinements, Actions.ResetPage, Actions.UpdateQuery, Actions.ResetPage, Actions.SelectRefinement];
-    // tslint:disable-next-line max-line-length
+  // tslint:disable-next-line max-line-length
   export type UpdateSearch = Array<Actions.ResetPage | Actions.UpdateQuery | Actions.ResetRefinements | Actions.SelectRefinement | Actions.AddRefinement>;
   export type ResetPageAndResetRefinements = [Actions.ResetPage, Actions.ResetRefinements];
   export type ResetPageAndSelectRefinement = [Actions.ResetPage, Actions.SelectRefinement];

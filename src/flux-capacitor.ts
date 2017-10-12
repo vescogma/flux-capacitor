@@ -2,8 +2,9 @@ import { EventEmitter } from 'eventemitter3';
 import { BrowserBridge, Results } from 'groupby-api';
 import { Action as ReduxAction, Store as ReduxStore } from 'redux';
 import { Sayt } from 'sayt';
-import createActions from './core/action-creator';
+import wrapActionCreators from './core/actions';
 import Actions from './core/actions';
+import ActionCreators from './core/actions/creators';
 import Adapter from './core/adapters/configuration';
 import Configuration from './core/configuration';
 import Events from './core/events';
@@ -15,18 +16,18 @@ declare module 'redux' {
   export interface Dispatch<S> {
     <A extends ReduxAction>(action: A): A;
     <A extends ReduxAction>(action: A[]): A[];
+    <A extends ReduxAction>(action: (getState: () => Store.State) => A): A;
+    <A extends ReduxAction>(action: (getState: () => Store.State) => A[]): A[];
   }
 }
 
 class FluxCapacitor extends EventEmitter {
 
-  // tslint:disable-next-line typedef variable-name
-  __rawActions = createActions(this);
   /**
    * actions for modifying contents of the store
    */
   // tslint:disable-next-line typedef
-  actions = this.__rawActions(() => ({}));
+  actions: typeof ActionCreators = ActionCreators;
   /**
    * selector functions for extracting data from the store
    */

@@ -1,7 +1,7 @@
-import Actions from './actions';
-import SearchAdapter from './adapters/search';
-import Selectors from './selectors';
-import Store from './store';
+import Actions from '.';
+import SearchAdapter from '../adapters/search';
+import Selectors from '../selectors';
+import Store from '../store';
 
 export interface Validator<T = any> {
   func: (payload?: T, state?: Store.State) => boolean;

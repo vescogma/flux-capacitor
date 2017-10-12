@@ -1,6 +1,8 @@
+import { reduxBatch } from '@manaflair/redux-batch';
 import * as cuid from 'cuid';
-import { Middleware } from 'redux';
+import { applyMiddleware, compose, createStore, Middleware as ReduxMiddleware } from 'redux';
 import { ActionCreators } from 'redux-undo';
+import * as validatorMiddleware from 'redux-validator';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import Events from '../events';
@@ -31,48 +33,59 @@ export const SEARCH_CHANGE_ACTIONS = [
   Actions.UPDATE_CURRENT_PAGE,
 ];
 
-export const BATCH_MIDDLEWARE_CREATORS = [
-  saveStateAnalyzer
-];
+export namespace Middleware {
+  export const validator = validatorMiddleware;
 
-export const MIDDLEWARE_CREATORS = [
-  idGenerator('recallId', RECALL_CHANGE_ACTIONS),
-  idGenerator('searchId', SEARCH_CHANGE_ACTIONS),
-  errorHandler
-];
+  export function idGenerator(key: string, actions: string[]): ReduxMiddleware {
+    return () => (next) => (action) =>
+      actions.includes(action.type)
+        ? next({ ...action, meta: { ...action.meta, [key]: cuid() } })
+        : next(action);
+  }
 
-export function idGenerator(key: string, actions: string[]) {
-  return (flux) => () => (next) => (action) =>
-    actions.includes(action.type)
-      ? next({ ...action, meta: { ...action.meta, [key]: cuid() } })
-      : next(action);
-}
-
-export function errorHandler(flux: FluxCapacitor) {
-  return () => (next) => (action) => {
-    if (action.error) {
-      switch (action.type) {
-        case Actions.RECEIVE_PRODUCTS: return next(ActionCreators.undo());
-        default:
-          flux.emit(Events.ERROR_FETCH_ACTION, action.payload);
-          return action.payload;
+  export function errorHandler(flux: FluxCapacitor): ReduxMiddleware {
+    return () => (next) => (action) => {
+      if (action.error) {
+        switch (action.type) {
+          case Actions.RECEIVE_PRODUCTS: return next(ActionCreators.undo());
+          default:
+            flux.emit(Events.ERROR_FETCH_ACTION, action.payload);
+            return action.payload;
+        }
+      } else {
+        return next(action);
       }
-    } else {
-      return next(action);
+    };
+  }
+
+  export function saveStateAnalyzer() {
+    return (next) => (batchAction) => {
+      const actions = utils.rayify(batchAction);
+      if (actions.some((action) => HISTORY_UPDATE_ACTIONS.includes(action.type))) {
+        return next([...actions, { type: Actions.SAVE_STATE }]);
+      } else {
+        return next(actions);
+      }
+    };
+  }
+
+  export function create(sagaMiddleware: any, flux: FluxCapacitor): any {
+    const middleware = [
+      Middleware.validator(),
+      Middleware.idGenerator('recallId', RECALL_CHANGE_ACTIONS),
+      Middleware.idGenerator('searchId', SEARCH_CHANGE_ACTIONS),
+      Middleware.errorHandler(flux),
+      sagaMiddleware,
+      Middleware.saveStateAnalyzer,
+    ];
+
+    // tslint:disable-next-line max-line-length
+    if (process.env.NODE_ENV === 'development' && ((((<any>flux.config).services || {}).logging || {}).debug || {}).flux) {
+      middleware.push(require('redux-logger').default);
     }
-  };
+
+    return compose(reduxBatch, applyMiddleware(...middleware), reduxBatch);
+  }
 }
 
-export function saveStateAnalyzer() {
-  return () => (next) => (batchAction) => {
-    const actions = utils.rayify(batchAction);
-    if (actions.some((action) => HISTORY_UPDATE_ACTIONS.includes(action.type))) {
-      return next([...actions, { type: Actions.SAVE_STATE }]);
-    } else {
-      return next(actions);
-    }
-  };
-}
-
-export default (middleware: Array<(flux: FluxCapacitor) => Middleware>, flux: FluxCapacitor) =>
-  middleware.map((handler) => handler(flux));
+export default Middleware;

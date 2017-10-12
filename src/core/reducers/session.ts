@@ -1,7 +1,7 @@
 import Actions from '../actions';
 import Store from '../store';
 
-export type Action = Actions.Action<string, any, Actions.Metadata>;
+export type Action = Actions.Action<string, any>;
 export type State = Store.Session;
 
 // tslint:disable-next-line max-line-length
