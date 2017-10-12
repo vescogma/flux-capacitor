@@ -3,7 +3,7 @@ import * as groupbyApi from 'groupby-api';
 import * as saytApi from 'sayt';
 import * as sinon from 'sinon';
 import * as core from '../../src/core';
-import ActionCreators from '../../src/core/actions/creators';
+import createActions, * as ActionCreator from '../../src/core/action-creator';
 import ConfigAdapter from '../../src/core/adapters/configuration';
 import Events from '../../src/core/events';
 import Observer from '../../src/core/observer';
@@ -16,18 +16,23 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
   describe('constructor()', () => {
     it('should initialize action creator', () => {
       const primedInstance = { a: 'b' };
+      const instance = spy(() => primedInstance);
+      const creator = stub(ActionCreator, 'default').returns(instance);
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
       stub(Store, 'create');
 
       const flux = new FluxCapacitor(<any>{});
 
-      expect(flux.actions).to.eq(ActionCreators);
+      expect(creator).to.be.calledWith(flux);
+      expect(instance).to.be.calledWith(sinon.match.func);
+      expect(flux.actions).to.eq(primedInstance);
     });
 
     it('should create API clients', () => {
       const clients = { a: 'b' };
       const createClients = stub(FluxCapacitor, 'createClients').returns(clients);
+      stub(core, 'createActions');
       stub(Observer, 'listen');
       stub(Store, 'create');
 
@@ -44,6 +49,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       const create = stub(Store, 'create').returns(instance);
       const listener = stub(Observer, 'listener').returns(observer);
       stub(FluxCapacitor, 'createClients');
+      stub(core, 'createActions');
 
       const flux = new FluxCapacitor(config);
 
@@ -53,6 +59,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     });
 
     it('should extend EventEmitter', () => {
+      stub(core, 'createActions');
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
       stub(Store, 'create');
@@ -69,7 +76,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     function expectDispatch(action: () => void, creatorName: string, ...params: any[]) {
       const fakeAction = { type: 'FAKE_ACTION' };
       const dispatch = store.dispatch = spy();
-      const actionCreator = stub(ActionCreators, creatorName).returns(action);
+      const actionCreator = actions[creatorName] = stub().returns(action);
 
       action();
 
@@ -78,6 +85,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
 
     beforeEach(() => {
       actions = <any>{};
+      stub(ActionCreator, 'default').returns(() => actions);
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
       stub(Store, 'create').returns(store = {});

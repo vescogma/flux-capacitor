@@ -1,95 +1,25 @@
-import { reduxBatch } from '@manaflair/redux-batch';
-import * as redux from 'redux';
-import reduxLogger from 'redux-logger';
 import { ActionCreators } from 'redux-undo';
 import * as sinon from 'sinon';
 import Actions from '../../../../src/core/actions';
 import Events from '../../../../src/core/events';
-import Middleware, {
-  RECALL_CHANGE_ACTIONS,
-  SEARCH_CHANGE_ACTIONS
-} from '../../../../src/core/store/middleware';
+import createMiddleware, { errorHandler, idGenerator, saveStateAnalyzer } from '../../../../src/core/store/middleware';
 import suite from '../../_suite';
 
-suite('Middleware', ({ expect, spy, stub }) => {
+suite('store middleware', ({ expect, spy, stub }) => {
 
-  describe('create()', () => {
-    const sagaMiddleware = { a: 'b' };
-    const idGeneratorMiddleware = { g: 'h' };
-    const errorHandlerMiddleware = { i: 'j' };
-    const validatorMiddleware = { m: 'n' };
+  describe('createMiddleware()', () => {
+    it('should return middleware', () => {
+      const middleware1 = { c: 'd' };
+      const middleware2 = { e: 'f' };
+      const creator1 = spy(() => middleware1);
+      const creator2 = spy(() => middleware2);
+      const flux: any = { a: 'b' };
 
-    afterEach(() => delete process.env.NODE_ENV);
+      const middleware = createMiddleware([creator1, creator2], flux);
 
-    it('should return composed middleware', () => {
-      const flux: any = { config: {} };
-      const composed = ['e', 'f'];
-      const applied = ['k', 'l'];
-      const idGenerator = stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
-      const errorHandler = stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
-      const compose = stub(redux, 'compose').returns(composed);
-      const applyMiddleware = stub(redux, 'applyMiddleware').returns(applied);
-      stub(Middleware, 'validator').returns(validatorMiddleware);
-
-      const middleware = Middleware.create(sagaMiddleware, flux);
-
-      expect(idGenerator).to.have.callCount(2)
-        .and.calledWithExactly('recallId', RECALL_CHANGE_ACTIONS)
-        .and.calledWithExactly('searchId', SEARCH_CHANGE_ACTIONS);
-      expect(errorHandler).to.be.calledWithExactly(flux);
-      expect(applyMiddleware).to.be.calledWithExactly(
-        validatorMiddleware,
-        idGeneratorMiddleware,
-        idGeneratorMiddleware,
-        errorHandlerMiddleware,
-        sagaMiddleware,
-        Middleware.saveStateAnalyzer
-      );
-      expect(compose).to.be.calledWithExactly(reduxBatch, applied, reduxBatch);
-      expect(middleware).to.eql(composed);
-    });
-
-    it('should include redux-logger when running in development and debug set', () => {
-      const flux: any = { config: { services: { logging: { debug: { flux: true } } } } };
-      const applyMiddleware = stub(redux, 'applyMiddleware');
-      stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
-      stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
-      stub(Middleware, 'validator').returns(validatorMiddleware);
-      stub(redux, 'compose');
-      process.env.NODE_ENV = 'development';
-
-      Middleware.create(sagaMiddleware, flux);
-
-      expect(applyMiddleware).to.be.calledWithExactly(
-        validatorMiddleware,
-        idGeneratorMiddleware,
-        idGeneratorMiddleware,
-        errorHandlerMiddleware,
-        sagaMiddleware,
-        Middleware.saveStateAnalyzer,
-        reduxLogger
-      );
-    });
-
-    it('should not include redux-logger when running in development and debug not set', () => {
-      const flux: any = { config: {} };
-      const applyMiddleware = stub(redux, 'applyMiddleware');
-      stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
-      stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
-      stub(Middleware, 'validator').returns(validatorMiddleware);
-      stub(redux, 'compose');
-      process.env.NODE_ENV = 'development';
-
-      Middleware.create(sagaMiddleware, flux);
-
-      expect(applyMiddleware).to.be.calledWithExactly(
-        validatorMiddleware,
-        idGeneratorMiddleware,
-        idGeneratorMiddleware,
-        errorHandlerMiddleware,
-        sagaMiddleware,
-        Middleware.saveStateAnalyzer
-      );
+      expect(creator1).to.be.calledWith(flux);
+      expect(creator2).to.be.calledWith(flux);
+      expect(middleware).to.eql([middleware1, middleware2]);
     });
   });
 
@@ -99,7 +29,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const next = spy();
       const whitelist = ['a', 'b', 'c'];
 
-      Middleware.idGenerator(idKey, whitelist)(null)(next)({ type: 'b', c: 'd' });
+      idGenerator(idKey, whitelist)(null)()(next)({ type: 'b', c: 'd' });
 
       expect(next).to.be.calledWith({ type: 'b', c: 'd', meta: { [idKey]: sinon.match.string } });
     });
@@ -109,7 +39,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const meta = { d: 'e' };
       const next = spy();
 
-      Middleware.idGenerator(idKey, ['a', 'b', 'c'])(null)(next)({ type: 'b', c: 'd', meta });
+      idGenerator(idKey, ['a', 'b', 'c'])(null)()(next)({ type: 'b', c: 'd', meta });
 
       expect(next).to.be.calledWithExactly({ type: 'b', c: 'd', meta: { d: 'e', [idKey]: sinon.match.string } });
     });
@@ -119,7 +49,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const originalAction = { a: 'b', type: 'c' };
       const next = spy();
 
-      Middleware.idGenerator(idKey, ['e', 'f', 'g'])(null)(next)(originalAction);
+      idGenerator(idKey, ['e', 'f', 'g'])(null)()(next)(originalAction);
 
       expect(next).to.be.calledWith(originalAction);
     });
@@ -130,17 +60,17 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const payload = { a: 'b' };
       const emit = spy();
 
-      const error = Middleware.errorHandler(<any>{ emit })(null)(() => null)(<any>{ error: true, payload });
+      const error = errorHandler(<any>{ emit })()(() => null)({ error: true, payload });
 
       expect(emit).to.be.calledWith(Events.ERROR_FETCH_ACTION, payload);
       expect(error).to.eq(payload);
     });
 
     it('should allow valid actions through', () => {
-      const action: any = { a: 'b' };
+      const action = { a: 'b' };
       const next = spy();
 
-      Middleware.errorHandler(<any>{})(null)(next)(action);
+      errorHandler(<any>{})()(next)(action);
 
       expect(next).to.be.calledWith(action);
     });
@@ -151,7 +81,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const next = spy();
       stub(ActionCreators, 'undo').returns(undoAction);
 
-      Middleware.errorHandler(<any>{})(null)(next)(action);
+      errorHandler(<any>{})()(next)(action);
 
       expect(next).to.be.calledWith(undoAction);
     });
@@ -162,7 +92,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const batchAction = [{ type: 'a' }, { type: Actions.RECEIVE_PRODUCTS }];
       const next = spy();
 
-      Middleware.saveStateAnalyzer()(next)(batchAction);
+      saveStateAnalyzer()()(next)(batchAction);
 
       expect(next).to.be.calledWithExactly([...batchAction, { type: Actions.SAVE_STATE }]);
     });
@@ -171,7 +101,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const batchAction = [{ type: 'a' }, { type: 'b' }];
       const next = spy();
 
-      Middleware.saveStateAnalyzer()(next)(batchAction);
+      saveStateAnalyzer()()(next)(batchAction);
 
       expect(next).to.be.calledWithExactly(batchAction);
     });
