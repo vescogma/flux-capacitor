@@ -155,6 +155,10 @@ namespace Configuration {
      */
     fuzzy?: boolean;
     /**
+     * Whether to use first result from suggestions
+     */
+    useFirstResult?: boolean;
+    /**
      * autocomplete products settings
      */
     products?: Configuration.Autocomplete.Products;
