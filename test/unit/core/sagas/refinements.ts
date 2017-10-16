@@ -2,6 +2,7 @@ import * as effects from 'redux-saga/effects';
 import Actions from '../../../../src/core/actions';
 import RecommendationsAdapter from '../../../../src/core/adapters/recommendations';
 import Adapter from '../../../../src/core/adapters/refinements';
+import Events from '../../../../src/core/events';
 import Requests from '../../../../src/core/requests';
 import sagaCreator, { Tasks } from '../../../../src/core/sagas/refinements';
 import Selectors from '../../../../src/core/selectors';
@@ -46,7 +47,8 @@ suite('refinements saga', ({ expect, spy, stub }) => {
         const state = { i: 'j'};
         const store = { getState: () => 1 };
         const results = { navigation: { sort: false, pinned: false }};
-        const flux: any = { clients: { bridge }, actions: { receiveMoreRefinements }, config, store };
+        const emit = spy();
+        const flux: any = { clients: { bridge }, actions: { receiveMoreRefinements }, config, store, emit };
         const searchRequest = stub(Requests, 'search').returns(request);
         const mergeRefinements = stub(Adapter, 'mergeRefinements').returns({
           navigationId,
@@ -64,6 +66,7 @@ suite('refinements saga', ({ expect, spy, stub }) => {
         expect(searchRequest).to.be.calledWithExactly(state, config);
         expect(mergeRefinements).to.be.calledWithExactly(results, state);
         expect(receiveMoreRefinements).to.be.calledWithExactly(navigationId, mergedRefinements, selected);
+        expect(flux.emit).to.be.calledWithExactly(Events.BEACON_MORE_REFINEMENTS, navigationId);
         task.next();
       });
 
@@ -95,7 +98,7 @@ suite('refinements saga', ({ expect, spy, stub }) => {
         };
         const navigation = 'navigation';
         const results = { navigation };
-        const flux: any = { clients: { bridge }, actions: { receiveMoreRefinements }, config, store };
+        const flux: any = { clients: { bridge }, actions: { receiveMoreRefinements }, config, store, emit: () => 1 };
         const searchRequest = stub(Requests, 'search').returns(request);
         const mergeRefinements = stub(Adapter, 'mergeRefinements').returns({
           navigationId,

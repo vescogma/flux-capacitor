@@ -3,6 +3,7 @@ import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import RecommendationsAdapter from '../adapters/recommendations';
 import Adapter from '../adapters/refinements';
+import Events from '../events';
 import Requests from '../requests';
 import Selectors from '../selectors';
 import Store from '../store';
@@ -17,6 +18,7 @@ export namespace Tasks {
         Requests.search(state, flux.config),
         action.payload
       );
+      flux.emit(Events.BEACON_MORE_REFINEMENTS, action.payload);
       res.navigation = RecommendationsAdapter.sortAndPinNavigations(
         [res.navigation],
         Selectors.navigationSort(flux.store.getState()),

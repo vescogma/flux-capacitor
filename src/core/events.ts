@@ -228,6 +228,10 @@ namespace Events {
    * Triggered when an order beacon is sent.
    */
   export const BEACON_ORDER = 'beacon:order';
+  /**
+   * Triggered when more refinements beacon is sent
+   */
+  export const BEACON_MORE_REFINEMENTS = 'beacon:more_refinements';
 
   // observer events
   /**
