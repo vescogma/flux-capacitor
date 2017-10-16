@@ -150,7 +150,7 @@ namespace Adapter {
   export const extractProduct = ({ allMeta }) => allMeta;
 
   export const requestSort = ({ field, descending }: Store.Sort) =>
-    ({ field, order: descending && 'Descending' });
+    ({ field, order: descending ? 'Descending' : undefined });
 }
 
 export default Adapter;

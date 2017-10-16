@@ -379,6 +379,12 @@ suite('Search Adapter', ({ expect, stub }) => {
       expect(Adapter.requestSort({ field, descending: true })).to.eql({ field, order: 'Descending' });
     });
 
+    it('should return an ascending sort when descending is false', () => {
+      const field = 'height';
+
+      expect(Adapter.requestSort({ field, descending: false })).to.eql({ field, order: undefined });
+    });
+
     it('should return an ascending sort', () => {
       const field = 'height';
 
