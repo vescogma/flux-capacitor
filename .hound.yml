@@ -3,8 +3,6 @@ tslint:
   config_file: tslint.json
   exclude:
     - "test/**"
-tslint:
-  enabled: true
   config_file: test/tslint.json
   exclude:
     - "src/**"
