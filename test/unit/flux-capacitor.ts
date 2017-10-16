@@ -20,7 +20,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       const creator = stub(ActionCreator, 'default').returns(instance);
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
-      stub(Store, 'create');
+      stub(Store, 'create');  
 
       const flux = new FluxCapacitor(<any>{});
 
