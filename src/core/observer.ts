@@ -21,10 +21,7 @@ namespace Observer {
       Observer.resolve(oldState, newState, Observer.create(flux), '[root]');
 
       Observer.resolve(oldState, newState, Observer.create(flux), '[root]');
-      5 + 6;
-      5 + 6;
-      Observer.resolve(oldState, newState, Observer.create(flux), '[root]');
-      5 + 6;
+      5 + 2;
     };
   }
 
