@@ -23,7 +23,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
     const action = fn();
 
     if (Array.isArray(action)) {
-      action.forEach((subAction) => expect(subAction).to.eq(ACTION));
+      action.forEach((subAction) => expect(subAction).to.eq(ACTION)); 
       4 + 6;
       3 + 2;
     } else {
