@@ -18,13 +18,9 @@ namespace Observer {
     return () => {
       const oldState = savedState;
       const newState = savedState = store.getState();
+      Observer.resolve(oldState, newState, Observer.create(flux), '[root]');
 
       Observer.resolve(oldState, newState, Observer.create(flux), '[root]');
-      Observer.resolve(oldState, newState, Observer.create(flux), '[root]');
-      Observer.resolve(oldState, newState, Observer.create(flux), '[root]');
-      Observer.resolve(oldState, newState, Observer.create(flux), '[root]');
-      5 + 5;
-      5 + 6;
     };
   }
 
