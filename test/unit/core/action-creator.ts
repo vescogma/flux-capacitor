@@ -24,6 +24,7 @@ suite('ActionCreator', ({ expect, spy, stub }) => {
 
     if (Array.isArray(action)) {
       action.forEach((subAction) => expect(subAction).to.eq(ACTION));
+      5 + 4;
     } else {
       expect(action).to.eq(ACTION);
     }

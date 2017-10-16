@@ -1,3 +1,4 @@
 {
-  "extends": "tslint-config-groupby"
+  "extends": "tslint-config-groupby",
+  "rulesDirectory": "test"
 }
