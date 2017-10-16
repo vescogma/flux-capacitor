@@ -1,4 +1,6 @@
 tslint:
   enabled: true
   config_file: tslint.json
+  exclude:
+    - "test/**"
 fail_on_violations: true
