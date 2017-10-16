@@ -1,8 +1,8 @@
 defaults:
   node_cache: &node_cache
-    key: node_cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+    key: node_cache-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
   build_cache: &build_cache
-    key: build_cache-{{ .Branch }}-{{ epoch }}
+    key: build_cache-v2-{{ .Branch }}-{{ epoch }}
 
 version: 2
 
@@ -59,7 +59,7 @@ jobs:
       - restore_cache:
           <<: *node_cache
       - restore_cache:
-          key: build_cache-{{ .Branch }}
+          key: build_cache-v2-{{ .Branch }}
       - run:
           name: Release
           command: yarn start release || true
@@ -71,7 +71,7 @@ jobs:
       - restore_cache:
           <<: *node_cache
       - restore_cache:
-          key: docs_cache-v2-{{ .Branch }}
+          key: docs_cache-v3-{{ .Branch }}
       - run:
           name: Documentation
           command: |
@@ -100,7 +100,7 @@ jobs:
               echo "no change in generated documentation"
             fi
       - save_cache:
-          key: docs_cache-v2-{{ .Branch }}-{{ checksum "component.docs.json" }}
+          key: docs_cache-v3-{{ .Branch }}-{{ checksum "component.docs.json" }}
           paths:
             - ~/project/component.docs.json
 
