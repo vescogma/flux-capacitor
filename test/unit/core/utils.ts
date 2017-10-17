@@ -23,7 +23,7 @@ suite('utils', ({ expect, spy, stub }) => {
   });
 
   describe('action()', () => {
-    it('should build an FSA compliant action with empty meta', () => {
+    it('should build an FSA compliant action with empty meta and no payload when payload is undefined', () => {
       expect(utils.action(ACTION)).to.eql({ type: ACTION, meta: {} });
     });
 
@@ -38,6 +38,12 @@ suite('utils', ({ expect, spy, stub }) => {
       const meta = { e: 'f' };
 
       expect(utils.action(ACTION, payload, meta)).to.eql({ type: ACTION, payload, meta });
+    });
+
+    it('should build an FSA complaint action with payload when payload is null', () => {
+      const payload = null;
+
+      expect(utils.action(ACTION, payload)).to.eql({ type: ACTION, payload, meta: {} });
     });
 
     it('should add error flag if payload is an Error', () => {
