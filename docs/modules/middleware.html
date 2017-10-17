@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Requests | @storefront/flux-capacitor</title>
+	<title>Middleware | @storefront/flux-capacitor</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="requests.html">Requests</a>
+					<a href="middleware.html">Middleware</a>
 				</li>
 			</ul>
-			<h1>Module Requests</h1>
+			<h1>Module Middleware</h1>
 		</div>
 	</div>
 </header>
@@ -70,118 +70,152 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-external">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-external"><a href="middleware.html#validator" class="tsd-kind-icon">validator</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-external">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="requests.html#autocompleteproducts" class="tsd-kind-icon">autocomplete<wbr>Products</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="requests.html#autocompletesuggestions" class="tsd-kind-icon">autocomplete<wbr>Suggestions</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="requests.html#chain" class="tsd-kind-icon">chain</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="requests.html#search" class="tsd-kind-icon">search</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="middleware.html#create" class="tsd-kind-icon">create</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="middleware.html#errorhandler" class="tsd-kind-icon">error<wbr>Handler</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="middleware.html#idgenerator" class="tsd-kind-icon">id<wbr>Generator</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="middleware.html#savestateanalyzer" class="tsd-kind-icon">save<wbr>State<wbr>Analyzer</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="middleware.html#thunkevaluator" class="tsd-kind-icon">thunk<wbr>Evaluator</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-external">
+					<a name="validator" class="tsd-anchor"></a>
+					<h3>validator</h3>
+					<div class="tsd-signature tsd-kind-icon">validator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;validatorMiddleware</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b6c2894/src/core/store/middleware.ts#L37">core/store/middleware.ts:37</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="autocompleteproducts" class="tsd-anchor"></a>
-					<h3>autocomplete<wbr>Products</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">autocomplete<wbr>Products<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.state.html" class="tsd-signature-type">State</a>, config<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AppConfig</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">QueryTimeProductSearchConfig</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a name="create" class="tsd-anchor"></a>
+					<h3>create</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>sagaMiddleware<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, flux<span class="tsd-signature-symbol">: </span><a href="../classes/fluxcapacitor.html" class="tsd-signature-type">FluxCapacitor</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b6c2894/src/core/requests.ts#L50">core/requests.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b6c2894/src/core/store/middleware.ts#L82">core/store/middleware.ts:82</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>state: <a href="../interfaces/store.state.html" class="tsd-signature-type">State</a></h5>
+									<h5>sagaMiddleware: <span class="tsd-signature-type">any</span></h5>
 								</li>
 								<li>
-									<h5>config: <span class="tsd-signature-type">AppConfig</span></h5>
+									<h5>flux: <a href="../classes/fluxcapacitor.html" class="tsd-signature-type">FluxCapacitor</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">QueryTimeProductSearchConfig</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="autocompletesuggestions" class="tsd-anchor"></a>
-					<h3>autocomplete<wbr>Suggestions</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">autocomplete<wbr>Suggestions<span class="tsd-signature-symbol">(</span>config<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AppConfig</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">QueryTimeAutocompleteConfig</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a name="errorhandler" class="tsd-anchor"></a>
+					<h3>error<wbr>Handler</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">error<wbr>Handler<span class="tsd-signature-symbol">(</span>flux<span class="tsd-signature-symbol">: </span><a href="../classes/fluxcapacitor.html" class="tsd-signature-type">FluxCapacitor</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReduxMiddleware</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b6c2894/src/core/requests.ts#L41">core/requests.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b6c2894/src/core/store/middleware.ts#L46">core/store/middleware.ts:46</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>config: <span class="tsd-signature-type">AppConfig</span></h5>
+									<h5>flux: <a href="../classes/fluxcapacitor.html" class="tsd-signature-type">FluxCapacitor</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">QueryTimeAutocompleteConfig</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReduxMiddleware</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="chain" class="tsd-anchor"></a>
-					<h3>chain</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">chain<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>objs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a name="idgenerator" class="tsd-anchor"></a>
+					<h3>id<wbr>Generator</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">id<wbr>Generator<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, actions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReduxMiddleware</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b6c2894/src/core/requests.ts#L61">core/requests.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b6c2894/src/core/store/middleware.ts#L39">core/store/middleware.ts:39</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>objs: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>actions: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">function</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReduxMiddleware</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="search" class="tsd-anchor"></a>
-					<h3>search</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><a href="../interfaces/store.state.html" class="tsd-signature-type">State</a>, config<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AppConfig</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a name="savestateanalyzer" class="tsd-anchor"></a>
+					<h3>save<wbr>State<wbr>Analyzer</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">save<wbr>State<wbr>Analyzer<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b6c2894/src/core/requests.ts#L13">core/requests.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b6c2894/src/core/store/middleware.ts#L61">core/store/middleware.ts:61</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a name="thunkevaluator" class="tsd-anchor"></a>
+					<h3>thunk<wbr>Evaluator</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">thunk<wbr>Evaluator<span class="tsd-signature-symbol">(</span>store<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/b6c2894/src/core/store/middleware.ts#L72">core/store/middleware.ts:72</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>state: <a href="../interfaces/store.state.html" class="tsd-signature-type">State</a></h5>
-								</li>
-								<li>
-									<h5>config: <span class="tsd-signature-type">AppConfig</span></h5>
+									<h5>store: <span class="tsd-signature-type">Store</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Request</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -205,7 +239,7 @@
 					<li class=" tsd-kind-module">
 						<a href="observer.html">Observer</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="requests.html">Requests</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -226,7 +260,7 @@
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="adapter.html">Adapter</a>
 					</li>
-					<li class=" tsd-kind-module tsd-is-external">
+					<li class="current tsd-kind-module tsd-is-external">
 						<a href="middleware.html">Middleware</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
@@ -245,17 +279,23 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="requests.html#autocompleteproducts" class="tsd-kind-icon">autocomplete<wbr>Products</a>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
+						<a href="middleware.html#validator" class="tsd-kind-icon">validator</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="requests.html#autocompletesuggestions" class="tsd-kind-icon">autocomplete<wbr>Suggestions</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<a href="middleware.html#create" class="tsd-kind-icon">create</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="requests.html#chain" class="tsd-kind-icon">chain</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<a href="middleware.html#errorhandler" class="tsd-kind-icon">error<wbr>Handler</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="requests.html#search" class="tsd-kind-icon">search</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<a href="middleware.html#idgenerator" class="tsd-kind-icon">id<wbr>Generator</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<a href="middleware.html#savestateanalyzer" class="tsd-kind-icon">save<wbr>State<wbr>Analyzer</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<a href="middleware.html#thunkevaluator" class="tsd-kind-icon">thunk<wbr>Evaluator</a>
 					</li>
 				</ul>
 			</nav>
