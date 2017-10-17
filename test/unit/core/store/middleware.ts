@@ -24,12 +24,17 @@ suite('Middleware', ({ expect, spy, stub }) => {
     it('should return composed middleware', () => {
       const flux: any = { config: {} };
       const composed = ['e', 'f'];
-      const applied = ['k', 'l'];
+      const simpleMiddleware = ['k', 'l'];
+      const batchMiddleware = ['k', 'l'];
+      const thunkMiddleware = ['k', 'l'];
       const idGenerator = stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
       const errorHandler = stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
       const compose = stub(redux, 'compose').returns(composed);
-      const applyMiddleware = stub(redux, 'applyMiddleware').returns(applied);
+      const applyMiddleware = stub(redux, 'applyMiddleware');
       stub(Middleware, 'validator').returns(validatorMiddleware);
+      applyMiddleware.withArgs().returns(batchMiddleware);
+      applyMiddleware.withArgs(Middleware.thunkEvaluator).returns(thunkMiddleware);
+      applyMiddleware.withArgs(Middleware.thunkEvaluator, Middleware.saveStateAnalyzer).returns(simpleMiddleware);
 
       const middleware = Middleware.create(sagaMiddleware, flux);
 
@@ -38,6 +43,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
         .and.calledWithExactly('searchId', SEARCH_CHANGE_ACTIONS);
       expect(errorHandler).to.be.calledWithExactly(flux);
       expect(applyMiddleware).to.be.calledWithExactly(
+        Middleware.thunkEvaluator,
         validatorMiddleware,
         idGeneratorMiddleware,
         idGeneratorMiddleware,
@@ -47,11 +53,12 @@ suite('Middleware', ({ expect, spy, stub }) => {
         Middleware.saveStateAnalyzer
       );
       expect(compose).to.be.calledWithExactly(
-        Middleware.thunkEvaluator,
-        Middleware.saveStateAnalyzer,
+        simpleMiddleware,
         reduxBatch,
-        applied,
-        reduxBatch
+        batchMiddleware,
+        reduxBatch,
+        thunkMiddleware,
+        reduxBatch,
       );
       expect(middleware).to.eql(composed);
     });
@@ -68,6 +75,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       Middleware.create(sagaMiddleware, flux);
 
       expect(applyMiddleware).to.be.calledWithExactly(
+        Middleware.thunkEvaluator,
         validatorMiddleware,
         idGeneratorMiddleware,
         idGeneratorMiddleware,
@@ -91,6 +99,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       Middleware.create(sagaMiddleware, flux);
 
       expect(applyMiddleware).to.be.calledWithExactly(
+        Middleware.thunkEvaluator,
         validatorMiddleware,
         idGeneratorMiddleware,
         idGeneratorMiddleware,

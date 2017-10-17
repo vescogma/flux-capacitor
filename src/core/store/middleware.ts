@@ -81,6 +81,7 @@ export namespace Middleware {
 
   export function create(sagaMiddleware: any, flux: FluxCapacitor): any {
     const middleware = [
+      thunkEvaluator,
       Middleware.validator(),
       Middleware.idGenerator('recallId', RECALL_CHANGE_ACTIONS),
       Middleware.idGenerator('searchId', SEARCH_CHANGE_ACTIONS),
@@ -96,11 +97,12 @@ export namespace Middleware {
     }
 
     return compose(
-      thunkEvaluator,
-      saveStateAnalyzer,
+      applyMiddleware(thunkEvaluator, saveStateAnalyzer),
       reduxBatch,
       applyMiddleware(...middleware),
-      reduxBatch
+      reduxBatch,
+      applyMiddleware(thunkEvaluator),
+      reduxBatch,
     );
   }
 }
