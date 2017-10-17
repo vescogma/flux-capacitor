@@ -1,12 +1,12 @@
 import * as effects from 'redux-saga/effects';
 import Actions from '../../../../src/core/actions';
+import * as utils from '../../../../src/core/actions/utils';
 import RecommendationsAdapter from '../../../../src/core/adapters/recommendations';
 import Adapter from '../../../../src/core/adapters/refinements';
 import Events from '../../../../src/core/events';
 import Requests from '../../../../src/core/requests';
 import sagaCreator, { Tasks } from '../../../../src/core/sagas/refinements';
 import Selectors from '../../../../src/core/selectors';
-import * as utils from '../../../../src/core/utils';
 import suite from '../../_suite';
 
 suite('refinements saga', ({ expect, spy, stub }) => {
@@ -123,7 +123,7 @@ suite('refinements saga', ({ expect, spy, stub }) => {
         const flux: any = {
           clients: { bridge: { search: () => null } }
         };
-        const action = stub(utils, 'action').returns(receiveMoreRefinementsAction);
+        const action = stub(utils, 'createAction').returns(receiveMoreRefinementsAction);
 
         const task = Tasks.fetchMoreRefinements(flux, <any>{});
 

@@ -1,5 +1,5 @@
-import createActions from './action-creator';
 import Actions from './actions';
+import ActionCreators from './actions/creators';
 import Adapters from './adapters';
 import Configuration from './configuration';
 import Events from './events';
@@ -14,6 +14,7 @@ import { Routes } from './utils';
 export {
   DEFAULT_AREA,
   DEFAULT_COLLECTION,
+  ActionCreators,
   Actions,
   Adapters,
   Configuration,
@@ -23,6 +24,5 @@ export {
   Selectors,
   Store,
   Observer,
-  createActions,
   reducer
 };

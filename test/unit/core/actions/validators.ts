@@ -1,6 +1,6 @@
-import Selectors from '../../../src/core/selectors';
-import * as validators from '../../../src/core/validators';
-import suite from '../_suite';
+import * as validators from '../../../../src/core/actions/validators';
+import Selectors from '../../../../src/core/selectors';
+import suite from '../../_suite';
 
 suite('validators', ({ expect, spy, stub }) => {
 
