@@ -182,6 +182,7 @@ namespace Actions {
       rewrites: string[];
     }
 
+    // NOTE: Isn't getting the right type in generated doc for some reason
     export interface Search extends Partial<Navigation.Refinement>, Partial<Navigation.AddRefinement> {
       query?: string;
 
