@@ -547,7 +547,10 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
 
       it('should apply validators to UPDATE_CURRENT_PAGE', () => {
         expectValidators(ActionCreators.updateCurrentPage(page), Actions.UPDATE_CURRENT_PAGE, {
-          payload: validators.isOnDifferentPage
+          payload: [
+            validators.isValidPage,
+            validators.isOnDifferentPage
+          ]
         });
       });
     });

@@ -220,6 +220,14 @@ suite('selectors', ({ expect, stub }) => {
     });
   });
 
+  describe('totalPages()', () => {
+    it('should return last page', () => {
+      const last = 555;
+
+      expect(Selectors.totalPages(<any>{ data: { present: { page: { last } } } })).to.eq(last);
+    });
+  });
+
   describe('sorts()', () => {
     it('should return indexed sort data', () => {
       const sorts = { a: 'b' };

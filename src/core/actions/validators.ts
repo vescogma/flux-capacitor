@@ -101,8 +101,13 @@ export const isDifferentPageSize: Validator<number> = {
 };
 
 export const isOnDifferentPage: Validator<number> = {
-  func: (page, state) => page !== null && Selectors.page(state) !== page,
-  msg: 'page size is already selected'
+  func: (page, state) => Selectors.page(state) !== page,
+  msg: 'page is already selected'
+};
+
+export const isValidPage: Validator<number> = {
+  func: (page, state) => typeof page === 'number' && page <= Selectors.totalPages(state) && page >= 1,
+  msg: 'page is invalid'
 };
 
 export const isDifferentAutocompleteQuery: Validator<string> = {

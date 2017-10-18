@@ -343,7 +343,10 @@ namespace ActionCreators {
    */
   export function updateCurrentPage(page: number): Actions.UpdateCurrentPage {
     return createAction(Actions.UPDATE_CURRENT_PAGE, page, {
-      payload: validators.isOnDifferentPage
+      payload: [
+        validators.isValidPage,
+        validators.isOnDifferentPage
+      ]
     });
   }
 
