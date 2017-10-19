@@ -68,7 +68,7 @@ namespace ActionCreators {
    // tslint:disable-next-line max-line-length
   export function fetchAutocompleteProducts(query: string, refinements: Actions.Payload.Autocomplete.Refinement[] = []): Actions.FetchAutocompleteProducts {
     return createAction(Actions.FETCH_AUTOCOMPLETE_PRODUCTS, { query, refinements }, {
-      query: validators.isString,
+      query: validators.isValidQuery,
     });
   }
 

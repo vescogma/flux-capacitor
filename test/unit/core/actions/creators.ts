@@ -111,7 +111,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
 
       it('should apply validators to FETCH_AUTOCOMPLETE_PRODUCTS', () => {
         expectValidators(ActionCreators.fetchAutocompleteProducts(''), Actions.FETCH_AUTOCOMPLETE_PRODUCTS, {
-          query: validators.isString
+          query: validators.isValidQuery
         });
       });
     });
