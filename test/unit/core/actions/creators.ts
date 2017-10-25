@@ -437,9 +437,10 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
           resetRefinementsAction,
           updateQueryAction,
         ]);
-        stub(ActionCreators, 'search').returns(searchThunk);
+        const search = stub(ActionCreators, 'search').returns(searchThunk);
+        const query = '';
 
-        const batchAction = ActionCreators.resetRecall('', { field, index })(state);
+        const batchAction = ActionCreators.resetRecall(query, { field, index })(state);
 
         expect(batchAction).to.eql([
           resetPageAction,
@@ -449,6 +450,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         ]);
         expect(searchThunk).to.be.calledWithExactly(state);
         expect(selectRefinement).to.be.calledWithExactly(field, index);
+        expect(search).to.be.calledWithExactly(query);
       });
     });
 

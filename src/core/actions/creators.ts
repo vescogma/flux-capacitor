@@ -259,7 +259,7 @@ namespace ActionCreators {
   // tslint:disable-next-line max-line-length
   export function resetRecall(query: string = null, { field, index }: { field: string, index: number } = <any>{}) {
     return (state: Store.State): Actions.ResetRecall => {
-      const resetActions: any[] = ActionCreators.search()(state);
+      const resetActions: any[] = ActionCreators.search(query)(state);
       if (field) {
         resetActions.push(...ActionCreators.selectRefinement(field, index));
       }
