@@ -6,6 +6,7 @@ import * as validatorMiddleware from 'redux-validator';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import Events from '../events';
+import StorageManager from '../storage-manager';
 import * as utils from '../utils';
 
 export const HISTORY_UPDATE_ACTIONS = [
@@ -32,6 +33,10 @@ export const SEARCH_CHANGE_ACTIONS = [
   Actions.SELECT_SORT,
   Actions.UPDATE_PAGE_SIZE,
   Actions.UPDATE_CURRENT_PAGE,
+];
+
+export const PERSONALIZATION_CHANGE_ACTIONS = [
+  Actions.SELECT_REFINEMENT,
 ];
 
 export namespace Middleware {
@@ -80,6 +85,15 @@ export namespace Middleware {
     };
   }
 
+  export function personalizationAnalyzer() {
+    return (next) => (action) => {
+      if (PERSONALIZATION_CHANGE_ACTIONS.includes(action.type)) {
+        // todo
+      }
+      return next(action);
+    };
+  }
+
   export function create(sagaMiddleware: any, flux: FluxCapacitor): any {
     const middleware = [
       thunkEvaluator,
@@ -90,6 +104,7 @@ export namespace Middleware {
       sagaMiddleware,
       thunkEvaluator,
       saveStateAnalyzer,
+      personalizationAnalyzer,
     ];
 
     // tslint:disable-next-line max-line-length
