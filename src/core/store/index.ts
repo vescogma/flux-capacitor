@@ -338,6 +338,11 @@ namespace Store {
     latitude: number;
     longitude: number;
   }
+
+  export interface Personalization {
+
+  }
+
 }
 
 export default Store;
