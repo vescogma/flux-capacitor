@@ -92,7 +92,7 @@ export namespace Middleware {
     ];
 
     // tslint:disable-next-line max-line-length
-    if (process.env.NODE_ENV === 'development' && ((((<any>flux.config).services || {}).logging || {}).debug || {}).flux) {
+    if (process.env.NODE_ENV === 'development' && ((((<any>flux.__config).services || {}).logging || {}).debug || {}).flux) {
       middleware.push(require('redux-logger').default);
     }
 

@@ -55,6 +55,9 @@ suite('Configuration Adapter', ({ expect, stub }) => {
               }
             }
           }
+        },
+        session: {
+          config
         }
       });
     });
@@ -125,6 +128,9 @@ suite('Configuration Adapter', ({ expect, stub }) => {
               }
             }
           }
+        },
+        session: {
+          config
         }
       };
 

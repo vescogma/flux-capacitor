@@ -5,6 +5,7 @@ import * as validatorMiddleware from 'redux-validator';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import Adapter from '../adapters/configuration';
+import Configuration from '../configuration';
 import reducer from '../reducers';
 import createSagas, { SAGA_CREATORS } from '../sagas';
 import Middleware from './middleware';
@@ -20,7 +21,7 @@ namespace Store {
 
     const store = createStore<State>(
       reducer,
-      <State>Adapter.initialState(flux.config),
+      <State>Adapter.initialState(flux.__config),
       middleware,
     );
 
@@ -154,6 +155,7 @@ namespace Store {
     searchId?: string;
     location?: Geolocation;
     origin?: Actions.Metadata.Tag;
+    config?: Configuration;
   }
 
   export interface IsFetching {

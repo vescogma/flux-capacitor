@@ -25,6 +25,22 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       expect(flux.actions).to.eq(ActionCreators);
     });
 
+    it('should have a config getter', () => {
+      const state = 'state';
+      const getState = spy(() => state);
+      stub(FluxCapacitor, 'createClients');
+      stub(Observer, 'listen');
+      stub(Store, 'create');
+
+      const flux = new FluxCapacitor(<any>{});
+      const selector = stub(flux.selectors, 'config');
+      flux.store = <any>{ getState };
+      flux.config;
+
+      expect(selector).to.be.calledWithExactly(state);
+      expect(getState).to.be.calledWithExactly();
+    });
+
     it('should create API clients', () => {
       const clients = { a: 'b' };
       const createClients = stub(FluxCapacitor, 'createClients').returns(clients);
@@ -238,27 +254,29 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
   describe('static', () => {
     describe('createClients()', () => {
       it('should call createBridge()', () => {
-        const config = { a: 'b' };
+        // tslint:disable-next-line variable-name
+        const __config = { a: 'b' };
         const bridge = { c: 'd' };
         const createBridge = stub(FluxCapacitor, 'createBridge').returns(bridge);
         stub(FluxCapacitor, 'createSayt');
 
-        const clients = FluxCapacitor.createClients(<any>{ config });
+        const clients = FluxCapacitor.createClients(<any>{ __config });
 
-        expect(createBridge).to.be.calledWith(config);
+        expect(createBridge).to.be.calledWith(__config);
         expect(clients.bridge).to.eq(bridge);
       });
 
       it('should return error callback that emits an ERROR_BRIDGE and calls error handler', () => {
         const errorHandler = spy(() => null);
         const emit = spy(() => null);
-        const config = { network: { errorHandler } };
+        // tslint:disable-next-line variable-name
+        const __config = { network: { errorHandler } };
         const bridge = { c: 'd' };
         const err = 'err';
         stub(FluxCapacitor, 'createBridge').returns(bridge).callsArgWith(1, err);
         stub(FluxCapacitor, 'createSayt');
 
-        const clients = FluxCapacitor.createClients(<any>{ config, emit });
+        const clients = FluxCapacitor.createClients(<any>{ __config, emit });
 
         expect(emit).to.be.calledWith(Events.ERROR_BRIDGE, err);
         expect(errorHandler).to.be.calledWith(err);
@@ -266,26 +284,28 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
 
       it('should return error callback that does not call error handler if not present', () => {
         const emit = spy(() => null);
-        const config = { network: { } };
+        // tslint:disable-next-line variable-name
+        const __config = { network: { } };
         const bridge = { c: 'd' };
         const err = 'err';
         stub(FluxCapacitor, 'createBridge').returns(bridge).callsArgWith(1, err);
         stub(FluxCapacitor, 'createSayt');
 
-        const clients = FluxCapacitor.createClients(<any>{ config, emit });
+        const clients = FluxCapacitor.createClients(<any>{ __config, emit });
 
         expect(emit).to.be.calledWith(Events.ERROR_BRIDGE, err);
       });
 
       it('should call createSayt()', () => {
-        const config = { a: 'b' };
+        // tslint:disable-next-line variable-name
+        const __config = { a: 'b' };
         const sayt = { c: 'd' };
         const createSayt = stub(FluxCapacitor, 'createSayt').returns(sayt);
         stub(FluxCapacitor, 'createBridge');
 
-        const clients = FluxCapacitor.createClients(<any>{ config });
+        const clients = FluxCapacitor.createClients(<any>{ __config });
 
-        expect(createSayt).to.be.calledWith(config);
+        expect(createSayt).to.be.calledWith(__config);
         expect(clients.sayt).to.eq(sayt);
       });
     });

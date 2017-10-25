@@ -13,16 +13,17 @@ export namespace Tasks {
   export function* fetchMoreRefinements(flux: FluxCapacitor, action: Actions.FetchMoreRefinements) {
     try {
       const state: Store.State = yield effects.select();
+      const config = yield effects.select(Selectors.config);
       const res = yield effects.call(
         [flux.clients.bridge, flux.clients.bridge.refinements],
-        Requests.search(state, flux.config),
+        Requests.search(state),
         action.payload
       );
       flux.emit(Events.BEACON_MORE_REFINEMENTS, action.payload);
       res.navigation = RecommendationsAdapter.sortAndPinNavigations(
         [res.navigation],
         Selectors.navigationSort(flux.store.getState()),
-        flux.config
+        config
       )[0];
       const { navigationId, refinements, selected } = Adapter.mergeRefinements(res, state);
       yield effects.put(flux.actions.receiveMoreRefinements(navigationId, refinements, selected));

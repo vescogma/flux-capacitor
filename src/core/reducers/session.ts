@@ -1,4 +1,5 @@
 import Actions from '../actions';
+import Configuration from '../configuration';
 import Store from '../store';
 
 export type Action = Actions.Action<string, any>;

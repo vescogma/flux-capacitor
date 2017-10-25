@@ -151,8 +151,9 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
           pastPurchases: { biasStrength, biasInfluence, biasCount: 10 }
         }
       };
+      stub(Selectors, 'config').returns(config);
 
-      const biasing = RecommendationsAdapter.pastPurchaseBiasing(state, config);
+      const biasing = RecommendationsAdapter.pastPurchaseBiasing(state);
 
       expect(biasing).to.eql({
         bringToTop: [],
@@ -173,8 +174,9 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
           pastPurchases: { biasStrength, biasInfluence, biasCount: 2 }
         }
       };
+      stub(Selectors, 'config').returns(config);
 
-      const biasing = RecommendationsAdapter.pastPurchaseBiasing(state, config);
+      const biasing = RecommendationsAdapter.pastPurchaseBiasing(state);
 
       expect(biasing.biases).to.eql([
         { name: idField, content: 'a', strength: biasStrength },
@@ -191,7 +193,7 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
       const longitude = -132.140;
       const location = { latitude, longitude };
       const locationSelector = stub(Selectors, 'location').returns(location);
-      const request = { a: 1, b: 2, c: 3 };
+      const request: any = { a: 1, b: 2, c: 3 };
       const returned = {
         minSize: config.minSize,
         sequence: [
@@ -218,9 +220,10 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
           request,
         ]
       };
-      const state = { d: 4 };
+      const state: any = { d: 4 };
+      stub(Selectors,'config').returns(config);
 
-      const added = RecommendationsAdapter.addLocationToRequest(request, state, <any>config);
+      const added = RecommendationsAdapter.addLocationToRequest(request, state);
 
       expect(added).to.eql(returned);
       expect(configAdapter).to.be.calledWithExactly(config);
@@ -232,10 +235,11 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
       const configAdapter = stub(ConfigurationAdapter, 'extractLocation').returns(config);
       const location = { latitude: 30.401, longitude: -132.140 };
       const locationSelector = stub(Selectors, 'location').returns(undefined);
-      const request = { a: 1, b: 2, c: 3 };
-      const state = { d: 4 };
+      const request: any = { a: 1, b: 2, c: 3 };
+      const state: any = { d: 4};
+      stub(Selectors,'config').returns(config);
 
-      const added = RecommendationsAdapter.addLocationToRequest(request, state, <any>config);
+      const added = RecommendationsAdapter.addLocationToRequest(request, state);
 
       expect(added).to.eql(request);
     });

@@ -38,7 +38,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const receiveRecommendationsProducts = spy(() => receiveRecommendationsProductsAction);
         const recommendationsPromise = Promise.resolve();
         const recommendationsResponse = { result: [{ productId: '123' }, {}, { productId: '456' }] };
-        const flux: any = { clients: { bridge }, actions: { receiveRecommendationsProducts }, config };
+        const flux: any = { clients: { bridge }, actions: { receiveRecommendationsProducts }, };
         const url = `https://${customerId}.groupbycloud.com/wisdom/v2/public/recommendations/products/_getPopular`;
         const searchRequestSelector = stub(Requests, 'search').returns({ e: 'f' });
         const extractProduct = stub(Adapter, 'extractProduct').returns('x');
@@ -59,7 +59,8 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const addLocationToRequest = stub(RecommendationsAdapter, 'addLocationToRequest').returns(matchExact);
 
         expect(task.next().value).to.eql(effects.select());
-        expect(task.next(state).value).to.eql(effects.call(fetch, url, request));
+        expect(task.next(state).value).to.eql(effects.select(Selectors.config));
+        expect(task.next(config).value).to.eql(effects.call(fetch, url, request));
         expect(addLocationToRequest).to.be.calledWith(originalBody);
         expect(task.next({ json: () => recommendationsPromise }).value).to.eql(recommendationsPromise);
         expect(task.next(recommendationsResponse).value).to.eql(effects.call(
@@ -76,7 +77,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
           }
         ));
         expect(task.next({ records }).value).to.eql(effects.put(receiveRecommendationsProductsAction));
-        expect(searchRequestSelector).to.be.calledWithExactly(state, config);
+        expect(searchRequestSelector).to.be.calledWithExactly(state);
         expect(receiveRecommendationsProducts).to.be.calledWithExactly(['x', 'x', 'x']);
         expect(extractProduct).to.be.calledThrice
           .and.calledWith('a')
@@ -92,7 +93,6 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const productSuggestions = { productCount, mode: 'trending' };
         const location = { minSize: 10 };
         const config = { customerId, recommendations: { productSuggestions, location, idField } };
-        const flux: any = { config };
         const url = `https://${customerId}.groupbycloud.com/wisdom/v2/public/recommendations/products/_getTrending`;
         const matchExact = 'match exact';
         const request = {
@@ -103,10 +103,11 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const fetch = stub(utils, 'fetch');
         stub(RecommendationsAdapter, 'addLocationToRequest').returns(matchExact);
 
-        const task = Tasks.fetchProducts(flux, <any>{ payload: {} });
+        const task = Tasks.fetchProducts(<any>{}, <any>{ payload: {} });
 
         task.next();
-        expect(task.next().value).to.eql(effects.call(fetch, url, request));
+        task.next();
+        expect(task.next(config).value).to.eql(effects.call(fetch, url, request));
       });
 
       it('should not return past purchases for 0 productCount', () => {
@@ -114,12 +115,12 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const productCount = 0;
         const productSuggestions = { productCount };
         const config = { customerId, recommendations: { productSuggestions } };
-        const flux: any = { config };
 
-        const task = Tasks.fetchProducts(flux, <any>{ payload: {} });
+        const task = Tasks.fetchProducts(<any>{}, <any>{ payload: {} });
 
         task.next();
-        expect(task.next().value).to.eql([]);
+        task.next(config);
+        expect(task.next(config).value).to.eql([]);
       });
 
       it('should handle request failure', () => {
@@ -162,7 +163,8 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchPastPurchases(flux, <any>{ payload: {} });
 
-        expect(task.next().value).to.eql(effects.call(fetch, url, request));
+        task.next();
+        expect(task.next(config).value).to.eql(effects.call(fetch, url, request));
         expect(task.next({ json: () => promise }).value).to.eql(promise);
         expect(task.next(response).value).to.eql(effects.put(receivePastPurchasesAction));
         expect(receivePastPurchases).to.be.calledWithExactly(response.result);
@@ -174,11 +176,11 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const productCount = 0;
         const pastPurchases = { productCount };
         const config = { customerId, recommendations: { pastPurchases } };
-        const flux: any = { config };
 
-        const task = Tasks.fetchPastPurchases(flux, <any>{ payload: {} });
+        const task = Tasks.fetchPastPurchases(<any>{}, <any>{ payload: {} });
 
-        expect(task.next().value).to.eql([]);
+        expect(task.next().value).to.eql(effects.select(Selectors.config));
+        expect(task.next(config).value).to.eql([]);
       });
 
       it('should handle request failure', () => {

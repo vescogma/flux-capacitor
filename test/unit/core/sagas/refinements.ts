@@ -48,7 +48,7 @@ suite('refinements saga', ({ expect, spy, stub }) => {
         const store = { getState: () => 1 };
         const results = { navigation: { sort: false, pinned: false }};
         const emit = spy();
-        const flux: any = { clients: { bridge }, actions: { receiveMoreRefinements }, config, store, emit };
+        const flux: any = { clients: { bridge }, actions: { receiveMoreRefinements }, store, emit };
         const searchRequest = stub(Requests, 'search').returns(request);
         const mergeRefinements = stub(Adapter, 'mergeRefinements').returns({
           navigationId,
@@ -61,9 +61,10 @@ suite('refinements saga', ({ expect, spy, stub }) => {
         stub(RecommendationsAdapter, 'sortAndPinNavigations').returns(results);
 
         expect(task.next().value).to.eql(effects.select());
-        expect(task.next(state).value).to.eql(effects.call([bridge, refinements], request, navigationId));
+        expect(task.next(state).value).to.eql(effects.select(Selectors.config));
+        expect(task.next(config).value).to.eql(effects.call([bridge, refinements], request, navigationId));
         expect(task.next(results).value).to.eql(effects.put(receiveMoreRefinementsAction));
-        expect(searchRequest).to.be.calledWithExactly(state, config);
+        expect(searchRequest).to.be.calledWithExactly(state);
         expect(mergeRefinements).to.be.calledWithExactly(results, state);
         expect(receiveMoreRefinements).to.be.calledWithExactly(navigationId, mergedRefinements, selected);
         expect(flux.emit).to.be.calledWithExactly(Events.BEACON_MORE_REFINEMENTS, navigationId);
@@ -98,7 +99,7 @@ suite('refinements saga', ({ expect, spy, stub }) => {
         };
         const navigation = 'navigation';
         const results = { navigation };
-        const flux: any = { clients: { bridge }, actions: { receiveMoreRefinements }, config, store, emit: () => 1 };
+        const flux: any = { clients: { bridge }, actions: { receiveMoreRefinements }, store, emit: () => 1 };
         const searchRequest = stub(Requests, 'search').returns(request);
         const mergeRefinements = stub(Adapter, 'mergeRefinements').returns({
           navigationId,
@@ -112,6 +113,7 @@ suite('refinements saga', ({ expect, spy, stub }) => {
 
         task.next();
         task.next(state);
+        task.next(config);
         task.next(results);
         expect(sortAndPinNavigations).to.be.calledWith([navigation], sort, config);
         task.next();

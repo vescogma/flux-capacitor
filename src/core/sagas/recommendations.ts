@@ -5,6 +5,7 @@ import Adapter from '../adapters/recommendations';
 import SearchAdapter from '../adapters/search';
 import Configuration from '../configuration';
 import Requests from '../requests';
+import Selectors from '../selectors';
 import Store from '../store';
 import { fetch } from '../utils';
 
@@ -13,22 +14,23 @@ export namespace Tasks {
   export function* fetchProducts(flux: FluxCapacitor, action: Actions.FetchRecommendationsProducts) {
     try {
       const state = yield effects.select();
-      const { idField, productSuggestions: config } = flux.config.recommendations;
-      const productCount = config.productCount;
+      const config = yield effects.select(Selectors.config);
+      const { idField, productSuggestions: productConfig } = config.recommendations;
+      const productCount = productConfig.productCount;
       if (productCount > 0) {
         // fall back to default mode "popular" if not provided
         // "popular" default will likely provide the most consistently strong data
-        const mode = Configuration.RECOMMENDATION_MODES[config.mode || 'popular'];
-        const recommendationsUrl = Adapter.buildUrl(flux.config.customerId, 'products', mode);
+        const mode = Configuration.RECOMMENDATION_MODES[productConfig.mode || 'popular'];
+        const recommendationsUrl = Adapter.buildUrl(config.customerId, 'products', mode);
         const recommendationsRequestBody = {
-          size: config.productCount,
+          size: productConfig.productCount,
           type: 'viewProduct',
           target: idField
         };
 
         const recommendationsResponse = yield effects.call(fetch, recommendationsUrl, {
           method: 'POST',
-          body: JSON.stringify(Adapter.addLocationToRequest(recommendationsRequestBody, state, flux.config))
+          body: JSON.stringify(Adapter.addLocationToRequest(recommendationsRequestBody, state))
         });
         const recommendations = yield recommendationsResponse.json();
         const refinements = recommendations.result
@@ -37,8 +39,8 @@ export namespace Tasks {
         const { records } = yield effects.call(
           [flux.clients.bridge, flux.clients.bridge.search],
           {
-            ...Requests.search(state, flux.config),
-            pageSize: config.productCount,
+            ...Requests.search(state),
+            pageSize: productConfig.productCount,
             includedNavigations: [],
             skip: 0,
             refinements
@@ -55,10 +57,10 @@ export namespace Tasks {
 
   export function* fetchPastPurchases(flux: FluxCapacitor, action: Actions.FetchPastPurchases) {
     try {
-      const config = flux.config.recommendations.pastPurchases;
-      const productCount = config.productCount;
+      const config = yield effects.select(Selectors.config);
+      const productCount = config.recommendations.pastPurchases.productCount;
       if (productCount > 0) {
-        const url = `http://${flux.config.customerId}.groupbycloud.com/orders/public/skus/popular`;
+        const url = `http://${config.customerId}.groupbycloud.com/orders/public/skus/popular`;
         // TODO: change to be the real/right request
         const response = yield effects.call(fetch, url, Adapter.buildBody({
           size: productCount

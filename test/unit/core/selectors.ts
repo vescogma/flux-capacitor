@@ -442,6 +442,14 @@ suite('selectors', ({ expect, stub }) => {
     });
   });
 
+  describe('config()', () => {
+    it('should return the current session config', () => {
+      const config = { a: 'b' };
+
+      expect(Selectors.config(<any>{ session: { config } })).to.eq(config);
+    });
+  });
+
   describe('recommendationsProducts()', () => {
     it('should return the currently recommended products', () => {
       const products = ['a', 'b', 'c'];

@@ -30,7 +30,9 @@ suite('requests', ({ expect, stub }) => {
     });
 
     it('should decrease page size to prevent exceeding MAX_RECORDS', () => {
-      const { pageSize, skip } = Requests.search(<any>{}, <any>{ search: {} });
+      stub(Selectors,'config').returns({ search: {} });
+
+      const { pageSize, skip } = Requests.search(<any>{});
 
       expect(pageSize).to.eq(remainingRecords);
       expect(skip).to.eq(originalSkip);
@@ -39,8 +41,9 @@ suite('requests', ({ expect, stub }) => {
     it('should include language when truthy', () => {
       const language = 'en';
       const extractLanguage = stub(ConfigAdapter, 'extractLanguage').returns(language);
+      stub(Selectors,'config').returns({ search: {} });
 
-      const request = Requests.search(<any>{}, <any>{ search: {} });
+      const request = Requests.search(<any>{});
 
       expect(request.language).to.eq(language);
     });
@@ -49,8 +52,9 @@ suite('requests', ({ expect, stub }) => {
       const sort = { a: 'b' };
       sortSelector.returns(true);
       requestSortAdapter.returns(sort);
+      stub(Selectors,'config').returns({ search: {} });
 
-      const request = Requests.search(<any>{}, <any>{ search: {} });
+      const request = Requests.search(<any>{});
 
       expect(request.sort).to.eq(sort);
     });
@@ -61,17 +65,19 @@ suite('requests', ({ expect, stub }) => {
       const config: any = { search: {} };
       const pastPurchaseBiasing = stub(RecommendationsAdapter, 'pastPurchaseBiasing').returns(biasing);
       pastPurchaseBiasingAdapter.returns(true);
+      stub(Selectors,'config').returns(config);
 
-      const request = Requests.search(state, config);
+      const request = Requests.search(state);
 
       expect(request.biasing).to.eq(biasing);
-      expect(pastPurchaseBiasing).to.be.calledWithExactly(state, config);
+      expect(pastPurchaseBiasing).to.be.calledWithExactly(state);
     });
 
     it('should apply defaults', () => {
       const defaults = { a: 'b', c: 'd' };
+      stub(Selectors,'config').returns({ search: { defaults } });
 
-      const request: any = Requests.search(<any>{}, <any>{ search: { defaults } });
+      const request: any = Requests.search(<any>{});
 
       expect(request.a).to.eq('b');
       expect(request.c).to.eq('d');
@@ -81,8 +87,9 @@ suite('requests', ({ expect, stub }) => {
       const pageSize = 32;
       const skip = 22;
       const overrides = { pageSize, skip };
+      stub(Selectors,'config').returns({ search: { overrides } });
 
-      const request = Requests.search(<any>{}, <any>{ search: { overrides } });
+      const request = Requests.search(<any>{});
 
       expect(request.pageSize).to.eq(pageSize);
       expect(request.skip).to.eq(skip);
@@ -91,8 +98,9 @@ suite('requests', ({ expect, stub }) => {
     it('should override defaults', () => {
       const defaults = { a: 'b', c: 'd' };
       const overrides = { c: 'd1' };
+      stub(Selectors,'config').returns({ search: { defaults, overrides } });
 
-      const request: any = Requests.search(<any>{}, <any>{ search: { defaults, overrides } });
+      const request: any = Requests.search(<any>{});
 
       expect(request.a).to.eq('b');
       expect(request.c).to.eq('d1');
@@ -155,8 +163,9 @@ suite('requests', ({ expect, stub }) => {
       const state: any = {};
       const chain = stub(Requests, 'chain').returns(chained);
       const search = stub(Requests, 'search').returns({ i: 'j' });
+      stub(Selectors,'config').returns(config);
 
-      const request = Requests.autocompleteProducts(state, config);
+      const request = Requests.autocompleteProducts(state);
 
       expect(request).to.eql(chained);
       expect(chain).to.be.calledWith(defaults, {

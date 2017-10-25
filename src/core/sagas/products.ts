@@ -17,10 +17,12 @@ export namespace Tasks {
         effects.call(fetchProductsRequest, flux, action),
         effects.call(fetchNavigations, flux, action)
       ]);
+      const config = yield effects.select(Selectors.config);
+
       if (products.redirect) {
         yield effects.put(flux.actions.receiveRedirect(products.redirect));
       }
-      if (flux.config.search.redirectSingleResult && products.totalRecordCount === 1) {
+      if (config.search.redirectSingleResult && products.totalRecordCount === 1) {
         yield effects.call(productDetailsTasks.receiveDetailsProduct, flux, products.records[0]);
       } else {
         flux.emit(Events.BEACON_SEARCH, products.id);
@@ -34,7 +36,7 @@ export namespace Tasks {
         products.availableNavigation = RecommendationsAdapter.sortAndPinNavigations(
           products.availableNavigation,
           navigations,
-          flux.config
+          config
         );
         yield effects.put(<any>actions);
         flux.saveState(utils.Routes.SEARCH);
@@ -45,16 +47,17 @@ export namespace Tasks {
   }
 
   export function* fetchProductsRequest(flux: FluxCapacitor, action: Actions.FetchProducts) {
-    const request = yield effects.select(Requests.search, flux.config);
+    const request = yield effects.select(Requests.search);
     return yield effects.call([flux.clients.bridge, flux.clients.bridge.search], request);
   }
 
   export function* fetchNavigations(flux: FluxCapacitor, action: Actions.FetchProducts) {
     try {
-      const iNav = flux.config.recommendations.iNav;
+      const config = yield effects.select(Selectors.config);
+      const iNav = config.recommendations.iNav;
       if (iNav.navigations.sort || iNav.refinements.sort) {
-        const query = yield effects.select(Selectors.query, flux.store.getState());
-        const recommendationsUrl = RecommendationsAdapter.buildUrl(flux.config.customerId, 'refinements', 'Popular');
+        const query = yield effects.select(Selectors.query);
+        const recommendationsUrl = RecommendationsAdapter.buildUrl(config.customerId, 'refinements', 'Popular');
         const sizeAndWindow = { size: iNav.size, window: iNav.window };
         // tslint:disable-next-line max-line-length
         const recommendationsResponse = yield effects.call(utils.fetch, recommendationsUrl, RecommendationsAdapter.buildBody({
@@ -82,10 +85,12 @@ export namespace Tasks {
   export function* fetchMoreProducts(flux: FluxCapacitor, action: Actions.FetchMoreProducts) {
     try {
       const state: Store.State = yield effects.select();
+      const config = yield effects.select(Selectors.config);
+
       const { records: products, id } = yield effects.call(
         [flux.clients.bridge, flux.clients.bridge.search],
         {
-          ...Requests.search(state, flux.config),
+          ...Requests.search(state),
           pageSize: action.payload,
           skip: Selectors.products(state).length
         }

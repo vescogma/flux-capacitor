@@ -91,8 +91,8 @@ suite('products saga', ({ expect, spy, stub }) => {
           effects.call(Tasks.fetchProductsRequest, flux, action),
           effects.call(Tasks.fetchNavigations, flux, action)
         ])));
-        expect(task.next([response, undefined]).value).to.eql(effects.put(<any>[receiveProductsAction]));
-        // expect(task.next().value).to.eql(effects.put(receiveNavigationsAction));
+        expect(task.next([response, undefined]).value).to.eql(effects.select(Selectors.config));
+        expect(task.next(config).value).to.eql(effects.put(<any>[receiveProductsAction]));
         expect(emit).to.be.calledWithExactly(Events.BEACON_SEARCH, id);
         expect(receiveProducts).to.be.calledWithExactly(response);
         task.next();
@@ -119,6 +119,7 @@ suite('products saga', ({ expect, spy, stub }) => {
         task.next();
         task.next([{ redirect: true }, undefined]);
         task.next();
+        task.next();
         expect(receiveRedirect).to.be.calledOnce;
       });
 
@@ -128,20 +129,21 @@ suite('products saga', ({ expect, spy, stub }) => {
         const record: any = { g: 'h' };
         const receiveRedirect = spy(() => receiveProductsAction);
         const receiveProducts = spy(() => receiveNavigationsAction);
+        const config = {
+          search: {
+            redirectSingleResult: true
+          }
+        };
         const flux: any = {
           actions: { receiveProducts, receiveRedirect },
-          config: {
-            search: {
-              redirectSingleResult: true
-            }
-          },
           emit: () => undefined,
           saveState: () => undefined
         };
 
         const task = Tasks.fetchProducts(<any>flux, <any>{});
         task.next();
-        expect(task.next([{ redirect: false, totalRecordCount: 1, records: [record] }, undefined]).value)
+        task.next([{ redirect: false, totalRecordCount: 1, records: [record] }, undefined]);
+        expect(task.next(config).value)
           .to.eql(effects.call(productDetailsTasks.receiveDetailsProduct, flux, record));
         task.next();
       });
@@ -151,19 +153,20 @@ suite('products saga', ({ expect, spy, stub }) => {
         const record: any = { g: 'h' };
         const receiveProducts = spy(() => receiveProductsAction);
         const products = { id: 2 };
+        const config = {
+          search: {
+            redirectSingleResult: false
+          }
+        };
         const flux: any = {
           actions: { receiveProducts },
-          config: {
-            search: {
-              redirectSingleResult: false
-            }
-          },
           emit: () => undefined,
           saveState: () => undefined
         };
 
         const task = Tasks.fetchProducts(<any>flux, <any>{});
         task.next();
+        task.next(config);
         expect(task.next([products, new Error()]).value).to.eql(effects.put(receiveProductsAction));
       });
 
@@ -174,25 +177,25 @@ suite('products saga', ({ expect, spy, stub }) => {
         const products = { id: 2 };
         const receiveProductsAction: any = { c: 'd' };
         const receiveProducts = spy(() => receiveProductsAction);
+        const config = {
+          search: {
+            redirectSingleResult: false
+          },
+          recommendations: {
+            iNav: {
+              navigations: {
+                sort: true,
+                pinned: undefined,
+              },
+              refinements: {
+                sort: false,
+                pinned: undefined,
+              }
+            }
+          },
+        };
         const flux: any = {
           actions: { receiveNavigationSort, receiveProducts },
-          config: {
-            search: {
-              redirectSingleResult: false
-            },
-            recommendations: {
-              iNav: {
-                navigations: {
-                  sort: true,
-                  pinned: undefined,
-                },
-                refinements: {
-                  sort: false,
-                  pinned: undefined,
-                }
-              }
-            },
-          },
           emit: () => undefined,
           saveState: () => undefined
         };
@@ -217,7 +220,8 @@ suite('products saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchProducts(<any>flux, <any>{});
         task.next();
-        expect(task.next([{ availableNavigation }, sortArray]).value)
+        task.next([{ availableNavigation }, sortArray]);
+        expect(task.next(config).value)
           .to.eql(effects.put(<any>[receiveRecommendationsNavigationsAction, receiveProductsAction]));
         expect(receiveProducts.getCall(0).args[0]).to.eql({ availableNavigation: sortedNavigations });
       });
@@ -229,25 +233,25 @@ suite('products saga', ({ expect, spy, stub }) => {
         const products = { id: 2 };
         const receiveProductsAction: any = { c: 'd' };
         const receiveProducts = spy(() => receiveProductsAction);
+        const config = {
+          search: {
+            redirectSingleResult: false
+          },
+          recommendations: {
+            iNav: {
+              navigations: {
+                sort: false,
+                pinned: undefined,
+              },
+              refinements: {
+                sort: true,
+                pinned: undefined,
+              }
+            }
+          },
+        };
         const flux: any = {
           actions: { receiveNavigationSort, receiveProducts },
-          config: {
-            search: {
-              redirectSingleResult: false
-            },
-            recommendations: {
-              iNav: {
-                navigations: {
-                  sort: false,
-                  pinned: undefined,
-                },
-                refinements: {
-                  sort: true,
-                  pinned: undefined,
-                }
-              }
-            },
-          },
           emit: () => undefined,
           saveState: () => undefined
         };
@@ -283,7 +287,8 @@ suite('products saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchProducts(<any>flux, <any>{});
         task.next();
-        expect(task.next([{ availableNavigation: avail }, sortArray]).value)
+        task.next([{ availableNavigation: avail }, sortArray]);
+        expect(task.next(config).value)
           .to.eql(effects.put(<any>[receiveRecommendationsNavigationsAction, receiveProductsAction]));
         expect(receiveProducts.getCall(0).args[0]).to.eql({ availableNavigation: sortedNavigations });
       });
@@ -295,25 +300,25 @@ suite('products saga', ({ expect, spy, stub }) => {
         const products = { id: 2 };
         const receiveProductsAction: any = { c: 'd' };
         const receiveProducts = spy(() => receiveProductsAction);
+        const config = {
+          search: {
+            redirectSingleResult: false
+          },
+          recommendations: {
+            iNav: {
+              navigations: {
+                sort: true,
+                pinned: undefined,
+              },
+              refinements: {
+                sort: true,
+                pinned: undefined,
+              }
+            }
+          },
+        };
         const flux: any = {
           actions: { receiveNavigationSort, receiveProducts },
-          config: {
-            search: {
-              redirectSingleResult: false
-            },
-            recommendations: {
-              iNav: {
-                navigations: {
-                  sort: true,
-                  pinned: undefined,
-                },
-                refinements: {
-                  sort: true,
-                  pinned: undefined,
-                }
-              }
-            },
-          },
           emit: () => undefined,
           saveState: () => undefined
         };
@@ -349,12 +354,13 @@ suite('products saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchProducts(<any>flux, <any>{});
         task.next();
-        expect(task.next([{ availableNavigation: avail }, sortArray]).value).
+        task.next([{ availableNavigation: avail }, sortArray]);
+        expect(task.next(config).value).
           to.eql(effects.put(<any>[receiveRecommendationsNavigationsAction, receiveProductsAction]));
         expect(receiveProducts.getCall(0).args[0]).to.eql({ availableNavigation: sortedNavigations });
       });
 
-      it('should call pinNavigations and pinRefinements navigations received', () => {
+      it('should call pinNavigations and pinRefinements when navigations received', () => {
         const receiveRecommendationsNavigationsAction: any = { c: 'd' };
         const record: any = { g: 'h' };
         const receiveNavigationSort = spy(() => receiveRecommendationsNavigationsAction);
@@ -362,27 +368,27 @@ suite('products saga', ({ expect, spy, stub }) => {
         const receiveProductsAction: any = { c: 'd' };
         const receiveProducts = spy(() => receiveProductsAction);
         const sortAndPinNavigations = stub(RecommendationsAdapter, 'sortAndPinNavigations').returnsArg(0);
-        const flux: any = {
-          actions: { receiveNavigationSort, receiveProducts },
-          config: {
-            search: {
-              redirectSingleResult: false
-            },
-            recommendations: {
-              iNav: {
-                navigations: {
-                  sort: false,
-                  pinned: ['1', '2', '3', '4'],
-                },
-                refinements: {
-                  sort: false,
-                  pinned: {
-                    1: ['1']
-                  }
+        const config = {
+          search: {
+            redirectSingleResult: false
+          },
+          recommendations: {
+            iNav: {
+              navigations: {
+                sort: false,
+                pinned: ['1', '2', '3', '4'],
+              },
+              refinements: {
+                sort: false,
+                pinned: {
+                  1: ['1']
                 }
               }
-            },
+            }
           },
+        };
+        const flux: any = {
+          actions: { receiveNavigationSort, receiveProducts },
           emit: () => undefined,
           saveState: () => undefined
         };
@@ -396,10 +402,11 @@ suite('products saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchProducts(<any>flux, <any>{});
         task.next();
-        expect(task.next([{ availableNavigation }, sortArray]).value)
+        task.next([{ availableNavigation }, sortArray]);
+        expect(task.next(config).value)
           .to.eql(effects.put(<any>[receiveRecommendationsNavigationsAction, receiveProductsAction]));
         expect(receiveProducts.getCall(0).args[0]).to.eql({ availableNavigation });
-        expect(sortAndPinNavigations).to.be.calledWith(availableNavigation, sortArray, flux.config);
+        expect(sortAndPinNavigations).to.be.calledWith(availableNavigation, sortArray, config);
       });
     });
 
@@ -417,11 +424,11 @@ suite('products saga', ({ expect, spy, stub }) => {
         const request = { e: 'f' };
         const response = { id, totalRecordCount: 3 };
         const receiveProducts = spy(() => receiveProductsAction);
-        const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, config };
+        const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, };
 
         const task = Tasks.fetchProductsRequest(flux, action);
 
-        expect(task.next().value).to.eql(effects.select(Requests.search, config));
+        expect(task.next().value).to.eql(effects.select(Requests.search));
         const ret = effects.call([bridge, search], request);
         expect(task.next(request).value).to.eql(ret);
         expect(task.next(request).value).to.eql(request);
@@ -446,15 +453,6 @@ suite('products saga', ({ expect, spy, stub }) => {
 
     describe('fetchMoreProducts()', () => {
       it('should return more products', () => {
-        const iNav = {
-          ...iNavDefaults,
-          navigations: {
-            sort: true
-          },
-          refinements: {
-            sort: true
-          }
-        };
         const id = '41892';
         const pageSize = 14;
         const emit = spy();
@@ -474,7 +472,8 @@ suite('products saga', ({ expect, spy, stub }) => {
         const task = Tasks.fetchMoreProducts(flux, action);
 
         expect(task.next().value).to.eql(effects.select());
-        expect(task.next(state).value).to.eql(effects.call([bridge, search], {
+        expect(task.next(state).value).to.eql(effects.select(Selectors.config));
+        expect(task.next().value).to.eql(effects.call([bridge, search], {
           e: 'f',
           pageSize,
           skip: 3
@@ -507,21 +506,18 @@ suite('products saga', ({ expect, spy, stub }) => {
       it('should return two actions', () => {
         const customerId = 'id';
         const state = 1;
-        const flux: any = {
-          store: { getState: () => state },
-          config: {
-            customerId,
-            recommendations: {
-              iNav: {
-                ...iNavDefaults,
-                navigations: {
-                  sort: true
-                },
-                refinements: {
-                  sort: true
-                }
+        const config = {
+          customerId,
+          recommendations: {
+            iNav: {
+              ...iNavDefaults,
+              navigations: {
+                sort: true
+              },
+              refinements: {
+                sort: true
               }
-            },
+            }
           },
         };
         const url = 'url';
@@ -535,11 +531,12 @@ suite('products saga', ({ expect, spy, stub }) => {
         const buildUrl = stub(RecommendationsAdapter, 'buildUrl').returns(url);
         const buildBody = stub(RecommendationsAdapter, 'buildBody').returns(body);
         const fetch = stub(utils, 'fetch');
-        const task = Tasks.fetchNavigations(flux, <any>{ payload: {} });
+        const task = Tasks.fetchNavigations(<any>{}, <any>{ payload: {} });
         const query = stub(Selectors, 'query');
         const queryReturn = 2;
 
-        expect(task.next().value).to.eql(effects.select(query, state));
+        expect(task.next().value).to.eql(effects.select(Selectors.config));
+        expect(task.next(config).value).to.eql(effects.select(Selectors.query));
         expect(task.next(queryReturn).value).to.eql(effects.call(fetch, url, body));
         expect(buildUrl).to.be.calledWith(customerId, 'refinements', 'Popular');
         expect(task.next({ json: () => jsonResult }).value).to.eql(jsonResult);
@@ -561,22 +558,19 @@ suite('products saga', ({ expect, spy, stub }) => {
 
       it('should call receive navigations only when refinements sort is false', () => {
         const customerId = 'id';
-        const flux: any = {
-          store: { getState: () => 1 },
-          config: {
-            customerId,
-            recommendations: {
-              iNav: {
-                ...iNavDefaults,
-                minSize: undefined,
-                navigations: {
-                  sort: true
-                },
-                refinements: {
-                  sort: false
-                }
+        const config = {
+          customerId,
+          recommendations: {
+            iNav: {
+              ...iNavDefaults,
+              minSize: undefined,
+              navigations: {
+                sort: true
+              },
+              refinements: {
+                sort: false
               }
-            },
+            }
           },
         };
         const url = 'url';
@@ -590,11 +584,12 @@ suite('products saga', ({ expect, spy, stub }) => {
         const buildUrl = stub(RecommendationsAdapter, 'buildUrl').returns(url);
         const buildBody = stub(RecommendationsAdapter, 'buildBody').returns(body);
         const fetch = stub(utils, 'fetch');
-        const task = Tasks.fetchNavigations(flux, <any>{ payload: {} });
+        const task = Tasks.fetchNavigations(<any>{}, <any>{ payload: {} });
         const queryReturn = 2;
         const query = stub(Selectors, 'query');
 
         task.next();
+        task.next(config);
         expect(task.next(queryReturn).value).to.eql(effects.call(fetch, url, body));
         expect(buildUrl).to.be.calledWith(customerId, 'refinements', 'Popular');
         expect(task.next({ json: () => jsonResult }).value).to.eql(jsonResult);
@@ -616,20 +611,17 @@ suite('products saga', ({ expect, spy, stub }) => {
 
       it('should return nothing when navigations sort is off', () => {
         const customerId = 'id';
-        const flux: any = {
-          store: { getState: () => 1 },
-          config: {
-            customerId,
-            recommendations: {
-              iNav: {
-                navigations: {
-                  sort: false
-                },
-                refinements: {
-                  sort: false
-                }
+        const config =  {
+          customerId,
+          recommendations: {
+            iNav: {
+              navigations: {
+                sort: false
+              },
+              refinements: {
+                sort: false
               }
-            },
+            }
           },
         };
         const url = 'url';
@@ -643,9 +635,10 @@ suite('products saga', ({ expect, spy, stub }) => {
         const buildUrl = stub(RecommendationsAdapter, 'buildUrl').returns(url);
         const buildBody = stub(RecommendationsAdapter, 'buildBody').returns(body);
         const fetch = stub(utils, 'fetch');
-        const task = Tasks.fetchNavigations(flux, <any>{ payload: {} });
+        const task = Tasks.fetchNavigations(<any>{}, <any>{ payload: {} });
 
-        expect(task.next().value).to.eql([]);
+        task.next();
+        expect(task.next(config).value).to.eql([]);
       });
       it('should not call any actions when both navigations and refinements sort are off', () => {
         const receiveNavigationSort = spy((val) => val);

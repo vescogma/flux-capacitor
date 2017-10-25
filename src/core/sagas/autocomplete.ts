@@ -16,20 +16,21 @@ export namespace Tasks {
   export function* fetchSuggestions(flux: FluxCapacitor, { payload: query }: Actions.FetchAutocompleteSuggestions) {
     try {
       const state = yield effects.select();
+      const config = yield effects.select(Selectors.config);
       const field = Selectors.autocompleteCategoryField(state);
       const suggestionsRequest = effects.call(
         [flux.clients.sayt, flux.clients.sayt.autocomplete],
         query,
-        Requests.autocompleteSuggestions(flux.config)
+        Requests.autocompleteSuggestions(config)
       );
-      const config = flux.config.autocomplete.recommendations;
+      const recommendationsConfig = config.autocomplete.recommendations;
       // fall back to default mode "popular" if not provided
       // "popular" default will likely provide the most consistently strong data
-      const suggestionMode = Configuration.RECOMMENDATION_MODES[config.suggestionMode || 'popular'];
+      const suggestionMode = Configuration.RECOMMENDATION_MODES[recommendationsConfig.suggestionMode || 'popular'];
       // tslint:disable-next-line max-line-length
-      const trendingUrl = RecommendationsAdapter.buildUrl(flux.config.customerId, 'searches', suggestionMode);
-      const trendingBody: any = {
-        size: config.suggestionCount,
+      const trendingUrl = RecommendationsAdapter.buildUrl(config.customerId, 'searches', suggestionMode);
+      const trendingBody = {
+        size: recommendationsConfig.suggestionCount,
         matchPartial: {
           and: [{
             search: { query }
@@ -39,17 +40,17 @@ export namespace Tasks {
       const trendingRequest = effects.call(fetch, trendingUrl, {
         method: 'POST',
         body: JSON.stringify(
-          RecommendationsAdapter.addLocationToRequest(trendingBody, state, flux.config))
+          RecommendationsAdapter.addLocationToRequest(trendingBody, state))
       });
       const requests = [suggestionsRequest];
-      if (config.suggestionCount > 0) {
+      if (recommendationsConfig.suggestionCount > 0) {
         requests.push(trendingRequest);
       }
 
       const responses = yield effects.all(requests);
-      const navigationLabels = ConfigAdapter.extractAutocompleteNavigationLabels(flux.config);
+      const navigationLabels = ConfigAdapter.extractAutocompleteNavigationLabels(config);
       const autocompleteSuggestions = Adapter.extractSuggestions(responses[0], query, field, navigationLabels);
-      const suggestions = config.suggestionCount > 0 ?
+      const suggestions = recommendationsConfig.suggestionCount > 0 ?
         {
           ...autocompleteSuggestions,
           suggestions: Adapter.mergeSuggestions(autocompleteSuggestions.suggestions, yield responses[1].json())
@@ -65,7 +66,7 @@ export namespace Tasks {
   // tslint:disable-next-line max-line-length
   export function* fetchProducts(flux: FluxCapacitor, { payload: { query, refinements } }: Actions.FetchAutocompleteProducts) {
     try {
-      const request = yield effects.select(Requests.autocompleteProducts, flux.config);
+      const request = yield effects.select(Requests.autocompleteProducts);
       const res = yield effects.call(
         [flux.clients.bridge, flux.clients.bridge.search],
         {

@@ -66,8 +66,8 @@ namespace Recommendations {
   };
 
   // tslint:disable-next-line max-line-length
-  export const addLocationToRequest = (request, state, config: Configuration): RecommendationsBody | RecommendationsRequest => {
-    const locationConfig = ConfigurationAdapter.extractLocation(config);
+  export const addLocationToRequest = (request: RecommendationsRequest, state: Store.State): RecommendationsBody | RecommendationsRequest => {
+    const locationConfig = ConfigurationAdapter.extractLocation(Selectors.config(state));
     const location = Selectors.location(state);
     if (locationConfig && location) {
       return {
@@ -102,7 +102,8 @@ namespace Recommendations {
   };
 
   // tslint:disable-next-line max-line-length
-  export const pastPurchaseBiasing = (state: Store.State, { recommendations: { idField, pastPurchases } }: Configuration) => {
+  export const pastPurchaseBiasing = (state: Store.State) => {
+    const { recommendations: { idField, pastPurchases } } = Selectors.config(state);
     return {
       bringToTop: [],
       augmentBiases: true,
@@ -117,6 +118,7 @@ namespace Recommendations {
     size?: number;
     window?: string;
     matchPartial?: object;
+    matchExact?: object;
     type?: string;
     target?: string;
   }

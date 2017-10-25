@@ -271,6 +271,12 @@ namespace Selectors {
     state.session.location;
 
   /**
+   * Returns the current session config
+   */
+  export const config = (state: Store.State) =>
+    state.session.config;
+
+  /**
    * Returns the current recommendations product suggestions.
    */
   export const recommendationsProducts = (state: Store.State) =>

@@ -11,8 +11,9 @@ import suite from '../../_suite';
 suite('Store', ({ expect, spy, stub }) => {
   describe('create()', () => {
     it('should create a store using middleware and initialState', () => {
-      const config = { a: 'b' };
-      const flux: any = { config };
+      // tslint:disable-next-line variable-name
+      const __config = { a: 'b' };
+      const flux: any = { __config };
       const state = { c: 'd' };
       const middleware = ['e', 'f', 'g'];
       const storeInstance = { h: 'i' };
@@ -28,7 +29,7 @@ suite('Store', ({ expect, spy, stub }) => {
 
       expect(store).to.eq(storeInstance);
       expect(createMiddleware).to.be.calledWith(sagaMiddleware, flux);
-      expect(initialState).to.be.calledWith(config);
+      expect(initialState).to.be.calledWith(__config);
       expect(createStore).to.be.calledWithExactly(rootReducer, state, middleware);
       expect(createSagas).to.be.calledWith(sagas.SAGA_CREATORS, flux);
       expect(runSagaMiddleware).to.be.calledThrice

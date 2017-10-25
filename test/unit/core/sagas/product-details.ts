@@ -4,6 +4,7 @@ import Actions from '../../../../src/core/actions';
 import Events from '../../../../src/core/events';
 import Requests from '../../../../src/core/requests';
 import sagaCreator, { Tasks } from '../../../../src/core/sagas/product-details';
+import Selectors from '../../../../src/core/selectors';
 import suite from '../../_suite';
 
 suite('product details saga', ({ expect, spy, stub }) => {
@@ -29,11 +30,11 @@ suite('product details saga', ({ expect, spy, stub }) => {
         const bridge = { search };
         const record = { allMeta: { e: 'f' } };
         const request = { g: 'h' };
-        const flux: any = { clients: { bridge }, config };
+        const flux: any = { clients: { bridge } };
 
         const task = Tasks.fetchProductDetails(flux, <any>{ payload: id });
 
-        expect(task.next().value).to.eql(effects.select(Requests.search, config));
+        expect(task.next().value).to.eql(effects.select(Requests.search));
         expect(task.next(request).value).to.eql(effects.call([bridge, search], {
           g: 'h',
           query: null,

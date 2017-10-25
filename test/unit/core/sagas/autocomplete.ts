@@ -40,7 +40,7 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const config = { a: 'b', customerId, recommendations: { location }, autocomplete: { recommendations } };
         const receiveAutocompleteSuggestionsAction: any = { c: 'd' };
         const receiveAutocompleteSuggestions = spy(() => receiveAutocompleteSuggestionsAction);
-        const flux: any = { clients: { sayt }, actions: { receiveAutocompleteSuggestions }, config };
+        const flux: any = { clients: { sayt }, actions: { receiveAutocompleteSuggestions } };
         const suggestions = { e: 'f', suggestions: {} };
         const request = { g: 'h' };
         const response = { i: 'j' };
@@ -75,8 +75,9 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         stub(RecommendationsAdapter, 'addLocationToRequest').returns(matchExact);
 
         expect(task.next().value).to.eql(effects.select());
+        expect(task.next(state).value).to.eql(effects.select(Selectors.config));
         // tslint:disable-next-line max-line-length
-        expect(task.next(state).value).to.eql(effects.all([effects.call([sayt, autocomplete], query, request), effects.call(fetch, trendingUrl, postRequest)]));
+        expect(task.next(config).value).to.eql(effects.all([effects.call([sayt, autocomplete], query, request), effects.call(fetch, trendingUrl, postRequest)]));
         expect(task.next([response, trendingResponse]).value).to.eql(trendingBodyPromise);
         expect(task.next(trendingResponseValue).value).to.eql(effects.put(receiveAutocompleteSuggestionsAction));
         expect(extractAutocompleteNavigationLabels).to.be.calledWithExactly(config);
@@ -99,12 +100,13 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const config = { a: 'b', customerId, recommendations: { location }, autocomplete: { recommendations } };
         const receiveAutocompleteSuggestionsAction: any = { c: 'd' };
         const receiveAutocompleteSuggestions = spy(() => receiveAutocompleteSuggestionsAction);
-        const flux: any = { clients: { sayt }, actions: { receiveAutocompleteSuggestions }, config };
+        const flux: any = { clients: { sayt }, actions: { receiveAutocompleteSuggestions } };
         const suggestions = { e: 'f', suggestions: {} };
         const request = { g: 'h' };
         const response = { i: 'j' };
         const state = { s: 't' };
         stub(Requests, 'autocompleteSuggestions').returns(request);
+        stub(Selectors, 'config').returns(config);
         stub(Selectors, 'location');
         stub(Selectors, 'autocompleteCategoryField');
         stub(Adapter, 'extractSuggestions').returns(suggestions);
@@ -112,7 +114,8 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const task = Tasks.fetchSuggestions(flux, <any>{ payload: query });
 
         task.next();
-        expect(task.next(state).value).to.eql(effects.all([effects.call([sayt, autocomplete], query, request)]));
+        task.next(state);
+        expect(task.next(config).value).to.eql(effects.all([effects.call([sayt, autocomplete], query, request)]));
         expect(task.next([response]).value).to.eql(effects.put(receiveAutocompleteSuggestionsAction));
         expect(receiveAutocompleteSuggestions).to.be.calledWithExactly(suggestions);
         task.next();
@@ -127,7 +130,7 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const location = { minSize: 10 };
         const recommendations = { suggestionCount, suggestionMode: 'trending' };
         const config = { a: 'b', customerId, recommendations: { location}, autocomplete: { recommendations } };
-        const flux: any = { clients: { sayt }, config };
+        const flux: any = { clients: { sayt } };
         const request = { g: 'h' };
         // tslint:disable-next-line max-line-length
         const trendingUrl = `https://${customerId}.groupbycloud.com/wisdom/v2/public/recommendations/searches/_getTrending`;
@@ -153,8 +156,9 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const task = Tasks.fetchSuggestions(flux, <any>{ payload: query });
 
         task.next();
+        task.next();
         // tslint:disable-next-line max-line-length
-        expect(task.next().value).to.eql(effects.all([effects.call([sayt, autocomplete], query, request), effects.call(fetch, trendingUrl, postRequest)]));
+        expect(task.next(config).value).to.eql(effects.all([effects.call([sayt, autocomplete], query, request), effects.call(fetch, trendingUrl, postRequest)]));
       });
 
       it('should add location filter', () => {
@@ -168,7 +172,7 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
                          autocomplete: { recommendations: { suggestionCount } } };
         const receiveAutocompleteSuggestionsAction: any = { c: 'd' };
         const receiveAutocompleteSuggestions = spy(() => receiveAutocompleteSuggestionsAction);
-        const flux: any = { clients: { sayt }, actions: { receiveAutocompleteSuggestions }, config };
+        const flux: any = { clients: { sayt }, actions: { receiveAutocompleteSuggestions } };
         const request = { g: 'h' };
         const latitude = 30.401;
         const longitude = -132.140;
@@ -200,8 +204,9 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const task = Tasks.fetchSuggestions(flux, <any>{ payload: query });
 
         task.next();
+        task.next();
         // tslint:disable-next-line max-line-length
-        expect(task.next().value).to.eql(effects.all([effects.call([sayt, autocomplete], query, request), effects.call(fetch, trendingUrl, postRequest)]));
+        expect(task.next(config).value).to.eql(effects.all([effects.call([sayt, autocomplete], query, request), effects.call(fetch, trendingUrl, postRequest)]));
         expect(addLocationToRequest).to.be.calledWith(originalBody);
         task.next();
         task.next();
@@ -239,11 +244,12 @@ suite('autocomplete saga', ({ expect, spy, stub }) => {
         const request = { g: 'h' };
         const response = { i: 'j' };
         const config: any = { k: 'l' };
-        const flux: any = { clients: { bridge }, actions: { receiveAutocompleteProducts }, config };
+        const flux: any = { clients: { bridge }, actions: { receiveAutocompleteProducts } };
+        stub(Selectors,'config').returns(config);
 
         const task = Tasks.fetchProducts(flux, action);
 
-        expect(task.next().value).to.eql(effects.select(Requests.autocompleteProducts, config));
+        expect(task.next().value).to.eql(effects.select(Requests.autocompleteProducts));
         expect(task.next(request).value).to.eql(effects.call([bridge, search], {
           ...request,
           query,

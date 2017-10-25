@@ -22,7 +22,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
     afterEach(() => delete process.env.NODE_ENV);
 
     it('should return composed middleware', () => {
-      const flux: any = { config: {} };
+      const flux: any = { __config: {} };
       const composed = ['e', 'f'];
       const simpleMiddleware = ['k', 'l'];
       const batchMiddleware = ['k', 'l'];
@@ -64,7 +64,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
     });
 
     it('should include redux-logger when running in development and debug set', () => {
-      const flux: any = { config: { services: { logging: { debug: { flux: true } } } } };
+      const flux: any = { __config: { services: { logging: { debug: { flux: true } } } } };
       const applyMiddleware = stub(redux, 'applyMiddleware');
       stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
       stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
@@ -88,7 +88,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
     });
 
     it('should not include redux-logger when running in development and debug not set', () => {
-      const flux: any = { config: {} };
+      const flux: any = { __config: {} };
       const applyMiddleware = stub(redux, 'applyMiddleware');
       stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
       stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
