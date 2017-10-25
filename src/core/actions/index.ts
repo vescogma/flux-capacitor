@@ -58,6 +58,8 @@ namespace Actions {
   export type ResetPage = Action<typeof RESET_PAGE, undefined>;
   export const ADD_REFINEMENT = 'ADD_REFINEMENT';
   export type AddRefinement = Action<typeof ADD_REFINEMENT, Actions.Payload.Navigation.AddRefinement>;
+  export const UPDATE_BIASING = 'UPDATE_BIASING';
+  export type UpdateBiasing = Action<typeof UPDATE_BIASING, Payload.Navigation.Refinement>;
 
   // batch actions
   // tslint:disable-next-line max-line-length
