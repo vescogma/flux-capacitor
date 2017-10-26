@@ -347,15 +347,22 @@ namespace Store {
 
   export namespace Personalization {
     export interface RealTimeBiases {
-      totalBiases: number;
-      allBiases: {
-        [key: string]: SingleBias[];
+      allIds: BiasKey[];
+      byId: {
+        [variant: string]: {
+          [key: string]: SingleBias;
+        }
       };
     }
 
+    export interface BiasKey {
+      variant: string;
+      key: string;
+    }
+
     export interface SingleBias {
-      name: string;
       created: number;
+      lastUsed: number;
       timesClicked: number;
     }
   }

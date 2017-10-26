@@ -28,33 +28,38 @@ namespace Adapter {
           },
           personalization: {
             realtimeBiases: {
-              totalBiases: 2,
-              allBiases: {
-                brand: [
-                  {
-                    name: 'nike',
+              byId: {
+                brand: {
+                  nike: {
                     created: 111111111,
+                    lastUsed: 111111111,
                     timesClicked: 10
                   },
-                  {
-                    name: 'adidas',
+                  adidas: {
                     created: 222222222,
+                    lastUsed: 222222222,
                     timesClicked: 9
                   },
-                ],
-                color: [
-                  {
-                    name: 'red',
+                },
+                color: {
+                  red: {
                     created: 111111111,
+                    lastUsed: 222222222,
                     timesClicked: 7,
                   },
-                  {
-                    name: 'blue',
+                  blue: {
                     created: 222222222,
+                    lastUsed: 222222222,
                     timesClicked: 8,
                   },
-                ]
-              }
+                }
+              },
+              allIds: [
+                { variant: 'brand', key: 'nike' },
+                { variant: 'color', key: 'blue' },
+                { variant: 'color', key: 'red' },
+                { variant: 'brand', key: 'adidas' },
+              ]
             }
           },
           fields: Adapter.extractFields(config),
