@@ -59,7 +59,7 @@ namespace Actions {
   export const ADD_REFINEMENT = 'ADD_REFINEMENT';
   export type AddRefinement = Action<typeof ADD_REFINEMENT, Actions.Payload.Navigation.AddRefinement>;
   export const UPDATE_BIASING = 'UPDATE_BIASING';
-  export type UpdateBiasing = Action<typeof UPDATE_BIASING, Payload.Navigation.Refinement>;
+  export type UpdateBiasing = Action<typeof UPDATE_BIASING, Actions.Payload.Personalization.Biasing>;
 
   // batch actions
   // tslint:disable-next-line max-line-length
@@ -168,6 +168,14 @@ namespace Actions {
   export const SAVE_STATE = 'SAVE_STATE';
 
   export namespace Payload {
+    export namespace Personalization {
+      export interface Biasing {
+        variant: string;
+        key: string;
+        bias: Store.Personalization.SingleBias;
+      }
+    }
+
     export namespace Component {
       export interface Identifier {
         tagName: string;
@@ -251,6 +259,7 @@ namespace Actions {
       to: number;
     }
   }
+
 }
 
 export default Actions;

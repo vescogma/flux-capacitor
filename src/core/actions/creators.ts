@@ -386,6 +386,10 @@ namespace ActionCreators {
     });
   }
 
+  export function updateBiasing(payload: Actions.Payload.Personalization.Biasing): Actions.UpdateBiasing {
+    return createAction(Actions.UPDATE_BIASING, payload);
+  }
+
   // response action creators
   /**
    * The query object to receive and update state with.

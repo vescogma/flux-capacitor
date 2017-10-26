@@ -5,6 +5,8 @@ import { ActionCreators } from 'redux-undo';
 import * as validatorMiddleware from 'redux-validator';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
+import Creators from '../actions/creators';
+import PersonalizationAdapter from '../adapters/personalization';
 import Events from '../events';
 import StorageManager from '../storage-manager';
 import * as utils from '../utils';
@@ -85,10 +87,13 @@ export namespace Middleware {
     };
   }
 
-  export function personalizationAnalyzer() {
+  export function personalizationAnalyzer(store: Store<any>) {
     return (next) => (action) => {
       if (PERSONALIZATION_CHANGE_ACTIONS.includes(action.type)) {
-        // todo
+        return [
+          action,
+          Creators.updateBiasing(PersonalizationAdapter.extractBias(action, store.getState()))
+        ];
       }
       return next(action);
     };
@@ -102,9 +107,9 @@ export namespace Middleware {
       Middleware.idGenerator('searchId', SEARCH_CHANGE_ACTIONS),
       Middleware.errorHandler(flux),
       sagaMiddleware,
+      personalizationAnalyzer,
       thunkEvaluator,
       saveStateAnalyzer,
-      personalizationAnalyzer,
     ];
 
     // tslint:disable-next-line max-line-length
