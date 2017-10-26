@@ -4,14 +4,19 @@ import Selectors from '../selectors';
 import Store from '../store';
 
 namespace Personalization {
- export const extractBias = ({ payload }: Actions.SelectRefinement, state: Store.State) => {
-  const config = Selectors.config(state).personalization.realtimeBiasing;
-  const globalMaxBiases = config.globalMaxBiases;
+ export const extractBias = ({ payload }: Actions.SelectRefinement, store: Store.State) => {
+   const config = Selectors.config(store).personalization.realtimeBiasing;
+   const byId = Selectors.realTimeBiasesById(store);
 
-  const { value, field } = Selectors.refinementCrumb(state, payload.navigationId, payload.index);
-
-
-
+   const { value, field } = Selectors.refinementCrumb(store, payload.navigationId, payload.index);
+   if (byId[field] && byId[field][value]) {
+     return {
+       ...byId[field][value],
+     };
+   }
+   else {
+     
+   }
  };
 
 }

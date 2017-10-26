@@ -311,7 +311,13 @@ namespace Selectors {
    */
   export const pastPurchaseProductsBySku = (state: Store.State) =>
     state.data.present.recommendations.pastPurchases.products
-      .reduce((products, product) => Object.assign(products, { [product.sku]: product.quantity }), {});
+    .reduce((products, product) => Object.assign(products, { [product.sku]: product.quantity }), {});
+
+  export const realTimeBiasesById = (state: Store.State) =>
+    state.data.present.personalization.byId;
+
+  export const realTimeBiasesAllIds = (state: Store.State) =>
+    state.data.present.personalization.allIds;
 
   export const pastPurchases = (state: Store.State) =>
     state.data.present.recommendations.pastPurchases.products;

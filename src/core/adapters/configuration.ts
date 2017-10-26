@@ -27,40 +27,38 @@ namespace Adapter {
             orderHistory: []
           },
           personalization: {
-            realtimeBiases: {
-              byId: {
-                brand: {
-                  nike: {
-                    created: 111111111,
-                    lastUsed: 111111111,
-                    timesClicked: 10
-                  },
-                  adidas: {
-                    created: 222222222,
-                    lastUsed: 222222222,
-                    timesClicked: 9
-                  },
+            byId: {
+              brand: {
+                nike: {
+                  created: 111111111,
+                  lastUsed: 111111111,
+                  timesClicked: 10
                 },
-                color: {
-                  red: {
-                    created: 111111111,
-                    lastUsed: 222222222,
-                    timesClicked: 7,
-                  },
-                  blue: {
-                    created: 222222222,
-                    lastUsed: 222222222,
-                    timesClicked: 8,
-                  },
-                }
+                adidas: {
+                  created: 222222222,
+                  lastUsed: 222222222,
+                  timesClicked: 9
+                },
               },
-              allIds: [
-                { variant: 'brand', key: 'nike' },
-                { variant: 'color', key: 'blue' },
-                { variant: 'color', key: 'red' },
-                { variant: 'brand', key: 'adidas' },
-              ]
-            }
+              color: {
+                red: {
+                  created: 111111111,
+                  lastUsed: 222222222,
+                  timesClicked: 7,
+                },
+                blue: {
+                  created: 222222222,
+                  lastUsed: 222222222,
+                  timesClicked: 8,
+                },
+              }
+            },
+            allIds: [
+              { variant: 'brand', key: 'nike' },
+              { variant: 'color', key: 'blue' },
+              { variant: 'color', key: 'red' },
+              { variant: 'brand', key: 'adidas' },
+            ]
           },
           fields: Adapter.extractFields(config),
           collections: Adapter.extractCollections(config, CollectionsReducer.DEFAULT_COLLECTION),

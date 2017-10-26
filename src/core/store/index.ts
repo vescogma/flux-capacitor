@@ -342,16 +342,14 @@ namespace Store {
   }
 
   export interface Personalization {
-    realTimeBiases: Personalization.RealTimeBiases;
+    allIds: Personalization.BiasKey[];
+    byId: Personalization.BiasById;
   }
 
   export namespace Personalization {
-    export interface RealTimeBiases {
-      allIds: BiasKey[];
-      byId: {
-        [variant: string]: {
-          [key: string]: SingleBias;
-        }
+    export interface BiasById {
+      [variant: string]: {
+        [key: string]: SingleBias;
       };
     }
 

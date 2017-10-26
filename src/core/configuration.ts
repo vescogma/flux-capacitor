@@ -328,12 +328,12 @@ namespace Configuration {
       attributes: {
         [attribute: string]: RealtimeBiasingAttribute
       };
-      globalStrength: number;
+      globalStrength: string;
       globalMaxBiases: number;
     }
 
     export interface RealtimeBiasingAttribute {
-      strength: number;
+      strength: string;
       maxBiases: number;
     }
   }
