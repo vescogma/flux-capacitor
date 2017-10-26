@@ -26,6 +26,45 @@ namespace Adapter {
             queryPastPurchases: [],
             orderHistory: []
           },
+          personalization: {
+            realtimeBiases: {
+              totalBiases: 2,
+              allBiases: {
+                brand: {
+                  strength: 4,
+                  maxBiases: 2,
+                  biases: [
+                    {
+                      name: 'nike',
+                      created: 111111111,
+                      timesClicked: 10
+                    },
+                    {
+                      name: 'adidas',
+                      created: 222222222,
+                      timesClicked: 9
+                    },
+                  ]
+                },
+                color: {
+                  strength: 9,
+                  maxBiases: 2,
+                  biases: [
+                    {
+                      name: 'red',
+                      created: 111111111,
+                      timesClicked: 7,
+                    },
+                    {
+                      name: 'blue',
+                      created: 222222222,
+                      timesClicked: 8,
+                    },
+                  ]
+                }
+              }
+            }
+          },
           fields: Adapter.extractFields(config),
           collections: Adapter.extractCollections(config, CollectionsReducer.DEFAULT_COLLECTION),
           sorts: Adapter.extractSorts(config),

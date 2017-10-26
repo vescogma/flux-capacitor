@@ -65,6 +65,8 @@ namespace Store {
 
     recommendations: Recommendations; // mixed
 
+    personalization?: Personalization;
+
     recordCount: number; // post
 
     redirect?: string; // post
@@ -340,7 +342,7 @@ namespace Store {
   }
 
   export interface Personalization {
-    realTimeBias: Personalization.RealTimeBiases;
+    realTimeBiases: Personalization.RealTimeBiases;
   }
 
   export namespace Personalization {
