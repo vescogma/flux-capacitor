@@ -30,26 +30,26 @@ namespace Adapter {
             byId: {
               brand: {
                 nike: {
-                  created: 111111111,
+                  // created: 111111111,
                   lastUsed: 111111111,
-                  timesClicked: 10
+                  // timesClicked: 10
                 },
                 adidas: {
-                  created: 222222222,
+                  // created: 222222222,
                   lastUsed: 222222222,
-                  timesClicked: 9
+                  // timesClicked: 9
                 },
               },
               color: {
                 red: {
-                  created: 111111111,
+                  // created: 111111111,
                   lastUsed: 222222222,
-                  timesClicked: 7,
+                  // timesClicked: 7,
                 },
                 blue: {
-                  created: 222222222,
+                  // created: 222222222,
                   lastUsed: 222222222,
-                  timesClicked: 8,
+                  // timesClicked: 8,
                 },
               }
             },
