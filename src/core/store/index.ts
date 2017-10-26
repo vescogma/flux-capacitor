@@ -340,7 +340,28 @@ namespace Store {
   }
 
   export interface Personalization {
+    realTimeBias: Personalization.RealTimeBiases;
+  }
 
+  export namespace Personalization {
+    export interface RealTimeBiases {
+      totalBiases: number;
+      allBiases: {
+        [key: string]: RealTimeBias;
+      }
+    }
+
+    export interface RealTimeBias {
+      strength: number;
+      maxBiases: number;
+      biases: SingleBias[];
+    }
+
+    export interface SingleBias {
+      name: string;
+      created: number;
+      timesClicked: number;
+    }
   }
 
 }
