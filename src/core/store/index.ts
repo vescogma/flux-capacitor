@@ -347,11 +347,11 @@ namespace Store {
     export interface RealTimeBiases {
       totalBiases: number;
       allBiases: {
-        [key: string]: RealTimeBias;
-      }
+        [key: string]: BiasAttributes;
+      };
     }
 
-    export interface RealTimeBias {
+    export interface BiasAttributes {
       strength: number;
       maxBiases: number;
       biases: SingleBias[];
