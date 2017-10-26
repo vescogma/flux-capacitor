@@ -7,6 +7,12 @@ export type State = Store.Personalization;
 
 export default function updatePersonalization(state: State = <any>{}, action: Action): State {
   switch (action.type) {
+    case Actions.UPDATE_BIASING: return state;
+
     default: return state;
   }
 }
+
+export function updateAllIds () {
+
+};
