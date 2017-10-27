@@ -28,7 +28,7 @@ namespace Adapter {
           },
           personalization: {
             byId: {
-              brand: {
+              'productThumbnail.brand': {
                 nike: {
                   // created: 111111111,
                   lastUsed: 111111111,
@@ -54,10 +54,10 @@ namespace Adapter {
               }
             },
             allIds: [
-              { variant: 'brand', key: 'nike' },
+              { variant: 'productThumbnail.brand', key: 'nike' },
               { variant: 'color', key: 'blue' },
               { variant: 'color', key: 'red' },
-              { variant: 'brand', key: 'adidas' },
+              { variant: 'productThumbnail.brand', key: 'adidas' },
             ]
           },
           fields: Adapter.extractFields(config),
