@@ -90,10 +90,10 @@ export namespace Middleware {
   export function personalizationAnalyzer(store: Store<any>) {
     return (next) => (action) => {
       if (PERSONALIZATION_CHANGE_ACTIONS.includes(action.type)) {
-        return [
+        return next([
           action,
           Creators.updateBiasing(PersonalizationAdapter.extractBias(action, store.getState()))
-        ];
+        ]);
       }
       return next(action);
     };

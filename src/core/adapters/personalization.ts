@@ -10,8 +10,8 @@ namespace Personalization {
 
     const { value, field } = Selectors.refinementCrumb(store, payload.navigationId, payload.index);
     return {
-      variant: value,
-      key: field,
+      variant: field,
+      key: value,
       bias: (byId[field] && byId[field][value]) ? {
         ...byId[field][value],
         lastUsed: Date.now()
