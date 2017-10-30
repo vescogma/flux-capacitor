@@ -21,27 +21,18 @@ namespace Personalization {
     };
   };
 
-  export const generateNewBias = (value, field) => {
-    return {
+  export const generateNewBias = (value, field) => ({
       lastUsed: Math.floor(Date.now() / 1000)
-    };
-  };
+    });
 
-  export const transformToBrowser = (state, reducerKey) => {
-    if (state.rehydrated) {
-      return;
-    }
-    return state.allIds.map(({ variant, key }) => ({
+  export const transformToBrowser = (state, reducerKey) =>
+    state.allIds.map(({ variant, key }) => ({
       variant,
       key,
       ...state.byId[variant][key]
     }));
-  };
 
   export const transformFromBrowser = (state: any, reducerKey) => {
-    if (state.rehydrated) {
-      return;
-    }
     const olderThanTime = Math.floor(Date.now() / 1000) - 2628000;
     const filteredState = state.filter((element) => element.lastUsed >= olderThanTime);
     let allIds = [];
@@ -57,6 +48,19 @@ namespace Personalization {
       allIds,
       byId
     };
+  };
+
+  export const convertToBias = (store) => {
+    // const byId = Selectors.realTimeBiasesById(store);
+    const allIds = Selectors.realTimeBiasesAllIds(store);
+    const config = Selectors.config(store).personalization.realtimeBiasing;
+
+    console.log('1', allIds, 'store', store);
+    return allIds.map(({ variant, key }) => ({
+        name: variant,
+        content: key,
+        strength: config.attributes[variant].strength || config.globalStrength
+    }));
   };
 }
 

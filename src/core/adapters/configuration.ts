@@ -26,42 +26,6 @@ namespace Adapter {
             queryPastPurchases: [],
             orderHistory: []
           },
-          personalization: {
-            biasing: {
-              byId: {
-                'productThumbnail.brand': {
-                  nike: {
-                    // created: 111111111,
-                    lastUsed: 1509391006,
-                    // timesClicked: 10
-                  },
-                  adidas: {
-                    // created: 222222222,
-                    lastUsed: 222222222,
-                    // timesClicked: 9
-                  },
-                },
-                color: {
-                  red: {
-                    // created: 111111111,
-                    lastUsed: 1509391006,
-                    // timesClicked: 7,
-                  },
-                  blue: {
-                    // created: 222222222,
-                    lastUsed: 222222222,
-                    // timesClicked: 8,
-                  },
-                }
-              },
-              allIds: [
-                { variant: 'productThumbnail.brand', key: 'nike' },
-                { variant: 'color', key: 'blue' },
-                { variant: 'color', key: 'red' },
-                { variant: 'productThumbnail.brand', key: 'adidas' },
-              ]
-            },
-          },
           fields: Adapter.extractFields(config),
           collections: Adapter.extractCollections(config, CollectionsReducer.DEFAULT_COLLECTION),
           sorts: Adapter.extractSorts(config),

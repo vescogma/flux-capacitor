@@ -8,7 +8,14 @@ import Store from '../../store';
 export type Action = Actions.UpdateBiasing;
 export type State = Store.Personalization;
 
-function updatePersonalization(state: State = <any>{}, action: Action): State {
+export const DEFAULT = {
+  biasing: {
+    allIds: [],
+    byId: {}
+  }
+};
+
+function updatePersonalization(state: State = DEFAULT, action: Action): State {
   switch (action.type) {
     case Actions.UPDATE_BIASING: return updateBiasing(state, action.payload);
     default: return state;
@@ -55,8 +62,10 @@ const personalizationTransform = createTransform(
   // transform state coming from redux on its way to being serialized and stored
   Adapter.transformToBrowser,
   // transform state coming from storage, on its way to be rehydrated into redux
-  Adapter.transformFromBrowser);
-// configuration options
+  Adapter.transformFromBrowser,
+  // configuration options
+  {whitelist: ['biasing']}
+);
 
 export default persistReducer({ transforms: [personalizationTransform], key: 'gb-personalization', storage },
   updatePersonalization);
