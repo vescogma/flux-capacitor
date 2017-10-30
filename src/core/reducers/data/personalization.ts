@@ -2,6 +2,7 @@
 import Actions from '../../actions';
 import Selectors from '../../selectors';
 import Store from '../../store';
+import Adapter from '../../adapters/personalization';
 
 export type Action = Actions.UpdateBiasing;
 export type State = Store.Personalization;
@@ -31,12 +32,13 @@ export const updateBiasing = (state: State, payload: Actions.Payload.Personaliza
   if (allIds.length > config.globalMaxBiases) {
     allIds = allIds.slice(0, config.globalMaxBiases);
   }
-  return {...state, byId, allIds};
+
+  return { ...state, byId, allIds };
 };
 
 const insertSorted = (allIds: Store.Personalization.BiasKey[], { variant, key }: Store.Personalization.BiasKey) => {
   const noDuplicate = allIds.filter((id) => !(id.variant === variant && id.key === key));
-  return [ { variant, key }, ...noDuplicate ]; //TODO: insert sorted
+  return [{ variant, key }, ...noDuplicate]; //TODO: insert sorted
 };
 
 const removeLast = (allIds, variant) => {

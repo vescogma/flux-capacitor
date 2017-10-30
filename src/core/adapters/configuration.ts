@@ -31,7 +31,7 @@ namespace Adapter {
               'productThumbnail.brand': {
                 nike: {
                   // created: 111111111,
-                  lastUsed: 111111111,
+                  lastUsed: 1509387724205,
                   // timesClicked: 10
                 },
                 adidas: {
@@ -43,7 +43,7 @@ namespace Adapter {
               color: {
                 red: {
                   // created: 111111111,
-                  lastUsed: 222222222,
+                  lastUsed: 1509387724205,
                   // timesClicked: 7,
                 },
                 blue: {

@@ -27,6 +27,31 @@ namespace Personalization {
     };
   };
 
+  export const transformToBrowser = (state, reducerKey) =>
+    state.allIds.map(({ variant, key }) => ({
+      variant,
+      key,
+      ...state.byId[variant][key]
+    }));
+
+  export const transformFromBrowser = (state: any[], reducerKey) => {
+    const olderThanTime = Date.now() - 2592000;
+    const filteredState = state.filter((element) => element.lastUsed >= olderThanTime);
+    let allIds = [];
+    let byId = {};
+    filteredState.forEach(({ variant, key, lastUsed }) => {
+      allIds.push({ variant, key });
+      if (!byId[variant]) {
+        byId[variant] = {};
+      }
+      byId[variant][key] = { lastUsed };
+    });
+
+    return {
+      allIds,
+      byId
+    };
+  };
 }
 
 export default Personalization;
