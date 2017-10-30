@@ -1,5 +1,6 @@
 import { Results } from 'groupby-api';
 import Store from '../store';
+import Configuration from '../configuration';
 
 namespace Actions {
   export interface Action<S = string, T = any> {
@@ -173,6 +174,7 @@ namespace Actions {
         variant: string;
         key: string;
         bias: Store.Personalization.SingleBias;
+        config: Configuration;
       }
     }
 

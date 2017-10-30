@@ -5,6 +5,7 @@ import Store from '../store';
 
 namespace Personalization {
   export const extractBias = ({ payload }: Actions.SelectRefinement, store: Store.State) => {
+    // TODO: check if we need to bias for it, we're not using config at all
     const config = Selectors.config(store).personalization.realtimeBiasing;
     const byId = Selectors.realTimeBiasesById(store);
 
@@ -12,6 +13,7 @@ namespace Personalization {
     return {
       variant: field,
       key: value,
+      config: Selectors.config(store),
       bias: (byId[field] && byId[field][value]) ? {
         ...byId[field][value],
         lastUsed: Date.now()
