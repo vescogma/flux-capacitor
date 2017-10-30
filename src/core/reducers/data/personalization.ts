@@ -17,14 +17,14 @@ function updatePersonalization(state: State = <any>{}, action: Action): State {
 
 export const updateBiasing = (state: State, payload: Actions.Payload.Personalization.Biasing) => {
   const byId = {
-    ...state.byId,
+    ...state.biasing.byId,
     [payload.variant]: {
-      ...state.byId[payload.variant],
+      ...state.biasing.byId[payload.variant],
       [payload.key]: payload.bias
     }
   };
 
-  let allIds = insertSorted(state.allIds, { variant: payload.variant, key: payload.key });
+  let allIds = insertSorted(state.biasing.allIds, { variant: payload.variant, key: payload.key });
   const keyCount = Object.keys(byId[payload.variant]).length;
   const config = payload.config.personalization.realtimeBiasing;
   if (config.attributes[payload.variant] && (keyCount > config.attributes[payload.variant].maxBiases)) {
@@ -34,7 +34,7 @@ export const updateBiasing = (state: State, payload: Actions.Payload.Personaliza
     allIds = allIds.slice(0, config.globalMaxBiases);
   }
 
-  return { ...state, byId, allIds };
+  return { ...state, biasing: { ...state.biasing, byId, allIds }};
 };
 
 const insertSorted = (allIds: Store.Personalization.BiasKey[], { variant, key }: Store.Personalization.BiasKey) => {

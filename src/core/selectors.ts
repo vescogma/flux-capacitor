@@ -314,10 +314,10 @@ namespace Selectors {
     .reduce((products, product) => Object.assign(products, { [product.sku]: product.quantity }), {});
 
   export const realTimeBiasesById = (state: Store.State) =>
-    state.data.present.personalization.byId;
+    state.data.present.personalization.biasing.byId;
 
   export const realTimeBiasesAllIds = (state: Store.State) =>
-    state.data.present.personalization.allIds;
+    state.data.present.personalization.biasing.allIds;
 
   export const pastPurchases = (state: Store.State) =>
     state.data.present.recommendations.pastPurchases.products;

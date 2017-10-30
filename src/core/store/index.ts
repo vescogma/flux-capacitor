@@ -345,8 +345,10 @@ namespace Store {
   }
 
   export interface Personalization {
-    allIds: Personalization.BiasKey[];
-    byId: Personalization.BiasById;
+    biasing: {
+      allIds: Personalization.BiasKey[];
+      byId: Personalization.BiasById;
+    };
   }
 
   export namespace Personalization {

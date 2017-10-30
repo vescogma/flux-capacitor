@@ -16,27 +16,33 @@ namespace Personalization {
       config: Selectors.config(store),
       bias: (byId[field] && byId[field][value]) ? {
         ...byId[field][value],
-        lastUsed: Date.now()
+        lastUsed: Math.floor(Date.now() / 1000)
       } : generateNewBias(value, field)
     };
   };
 
   export const generateNewBias = (value, field) => {
     return {
-      lastUsed: Date.now()
+      lastUsed: Math.floor(Date.now() / 1000)
     };
   };
 
-  export const transformToBrowser = (state, reducerKey) =>
-    console.log('state from toBrowser', state) || state.allIds.map(({ variant, key }) => ({
+  export const transformToBrowser = (state, reducerKey) => {
+    if (state.rehydrated) {
+      return;
+    }
+    return state.allIds.map(({ variant, key }) => ({
       variant,
       key,
       ...state.byId[variant][key]
     }));
+  };
 
-  export const transformFromBrowser = (state: any[], reducerKey) => {
-    console.log('statefrom fromBrowser', state);
-    const olderThanTime = Date.now() - 2592000;
+  export const transformFromBrowser = (state: any, reducerKey) => {
+    if (state.rehydrated) {
+      return;
+    }
+    const olderThanTime = Math.floor(Date.now() / 1000) - 2628000;
     const filteredState = state.filter((element) => element.lastUsed >= olderThanTime);
     let allIds = [];
     let byId = {};
@@ -47,7 +53,6 @@ namespace Personalization {
       }
       byId[variant][key] = { lastUsed };
     });
-
     return {
       allIds,
       byId
