@@ -1,13 +1,14 @@
-
+import { createTransform, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import Actions from '../../actions';
+import Adapter from '../../adapters/personalization';
 import Selectors from '../../selectors';
 import Store from '../../store';
-import Adapter from '../../adapters/personalization';
 
 export type Action = Actions.UpdateBiasing;
 export type State = Store.Personalization;
 
-export default function updatePersonalization(state: State = <any>{}, action: Action): State {
+function updatePersonalization(state: State = <any>{}, action: Action): State {
   switch (action.type) {
     case Actions.UPDATE_BIASING: return updateBiasing(state, action.payload);
     default: return state;
@@ -49,3 +50,13 @@ const removeLast = (allIds, variant) => {
   }
   return allIds;
 };
+
+const personalizationTransform = createTransform(
+  // transform state coming from redux on its way to being serialized and stored
+  Adapter.transformToBrowser,
+  // transform state coming from storage, on its way to be rehydrated into redux
+  Adapter.transformFromBrowser);
+// configuration options
+
+export default persistReducer({ transforms: [personalizationTransform], key: 'gb-personalization', storage },
+  updatePersonalization);

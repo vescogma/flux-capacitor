@@ -27,14 +27,19 @@ namespace Personalization {
     };
   };
 
-  export const transformToBrowser = (state, reducerKey) =>
+  export const transformToBrowser = (state, reducerKey) => {
     state.allIds.map(({ variant, key }) => ({
       variant,
       key,
       ...state.byId[variant][key]
     }));
 
+    console.log('state from toBrowser', state);
+
+  }
+
   export const transformFromBrowser = (state: any[], reducerKey) => {
+    console.log('statefrom fromBrowser', state);
     const olderThanTime = Date.now() - 2592000;
     const filteredState = state.filter((element) => element.lastUsed >= olderThanTime);
     let allIds = [];
