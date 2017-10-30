@@ -27,16 +27,12 @@ namespace Personalization {
     };
   };
 
-  export const transformToBrowser = (state, reducerKey) => {
-    state.allIds.map(({ variant, key }) => ({
+  export const transformToBrowser = (state, reducerKey) =>
+    console.log('state from toBrowser', state) || state.allIds.map(({ variant, key }) => ({
       variant,
       key,
       ...state.byId[variant][key]
     }));
-
-    console.log('state from toBrowser', state);
-
-  }
 
   export const transformFromBrowser = (state: any[], reducerKey) => {
     console.log('statefrom fromBrowser', state);

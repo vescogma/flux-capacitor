@@ -1,5 +1,6 @@
 import { reduxBatch } from '@manaflair/redux-batch';
 import { applyMiddleware, compose, createStore, Store as ReduxStore } from 'redux';
+import { persistStore } from 'redux-persist';
 import createSagaMiddleware from 'redux-saga';
 import * as validatorMiddleware from 'redux-validator';
 import FluxCapacitor from '../../flux-capacitor';
@@ -24,6 +25,8 @@ namespace Store {
       <State>Adapter.initialState(flux.__config),
       middleware,
     );
+
+    persistStore(store);
 
     createSagas(SAGA_CREATORS, flux).forEach(sagaMiddleware.run);
 
