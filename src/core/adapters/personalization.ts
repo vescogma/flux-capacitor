@@ -57,9 +57,9 @@ namespace Personalization {
 
     console.log('1', allIds, 'store', store);
     return allIds.map(({ variant, key }) => ({
-        name: variant,
-        content: key,
-        strength: config.attributes[variant].strength || config.globalStrength
+      name: variant,
+      content: key,
+      strength: (config.attributes[variant] && config.attributes[variant].strength) || config.globalStrength
     }));
   };
 }
