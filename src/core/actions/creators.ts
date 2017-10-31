@@ -387,7 +387,10 @@ namespace ActionCreators {
   }
 
   export function updateBiasing(payload: Actions.Payload.Personalization.Biasing): Actions.UpdateBiasing {
-    return createAction(Actions.UPDATE_BIASING, payload);
+    console.log('benlo', validators.isValidBias);
+    return createAction(Actions.UPDATE_BIASING, payload, {
+      payload: validators.isValidBias
+    });
   }
 
   // response action creators

@@ -114,3 +114,8 @@ export const isDifferentAutocompleteQuery: Validator<string> = {
   func: (query, state) => Selectors.autocompleteQuery(state) !== query,
   msg: 'suggestions for query have already been requested'
 };
+
+export const isValidBias: Validator<Actions.Payload.Personalization.Biasing> = {
+  func: (payload) => console.log('cenlo') || console.log('henlo', Boolean(payload && payload.key && payload.variant)) || Boolean(payload && payload.key && payload.variant),
+  msg: 'bias is invalid or empty'
+};

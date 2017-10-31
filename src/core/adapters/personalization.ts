@@ -5,11 +5,14 @@ import Store from '../store';
 
 namespace Personalization {
   export const extractBias = ({ payload }: Actions.SelectRefinement, store: Store.State) => {
-    // TODO: check if we need to bias for it, we're not using config at all
     const config = Selectors.config(store).personalization.realtimeBiasing;
     const byId = Selectors.realTimeBiasesById(store);
-
     const { value, field } = Selectors.refinementCrumb(store, payload.navigationId, payload.index);
+
+    // TODO: check if we need to bias for it, we're not using config at all
+    if (!config.attributes[field]) {
+      return <any>{};
+    }
     return {
       variant: field,
       key: value,
