@@ -16,7 +16,6 @@ namespace Personalization {
     return {
       variant: field,
       key: value,
-      config: Selectors.config(store),
       bias: (byId[field] && byId[field][value]) ? {
         ...byId[field][value],
         lastUsed: Math.floor(Date.now() / 1000)

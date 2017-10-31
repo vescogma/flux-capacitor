@@ -386,10 +386,14 @@ namespace ActionCreators {
     });
   }
 
-  export function updateBiasing(payload: Actions.Payload.Personalization.Biasing): Actions.UpdateBiasing {
-    return createAction(Actions.UPDATE_BIASING, payload, {
-      payload: validators.isValidBias
-    });
+  export function updateBiasing(payload: Actions.Payload.Personalization.Biasing) {
+    return (state: Store.State): Actions.UpdateBiasing =>
+      createAction(Actions.UPDATE_BIASING, {
+        ...payload,
+        config: Selectors.config(state).personalization.realtimeBiasing,
+      }, {
+        payload: validators.isValidBias
+      });
   }
 
   // response action creators
