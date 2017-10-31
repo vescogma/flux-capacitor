@@ -63,9 +63,9 @@ const personalizationTransform = createTransform(
   Adapter.transformToBrowser,
   // transform state coming from storage, on its way to be rehydrated into redux
   Adapter.transformFromBrowser,
-  // configuration options
-  {whitelist: ['biasing']}
+  // configuration options (if any)
 );
 
-export default persistReducer({ transforms: [personalizationTransform], key: 'gb-personalization', storage },
-  updatePersonalization);
+export default persistReducer({ transforms: [personalizationTransform], key: 'gb-personalization', storage,
+                                whitelist: ['biasing'] },
+                              updatePersonalization);
