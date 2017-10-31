@@ -329,6 +329,7 @@ namespace Selectors {
     state.data.present.recommendations.orderHistory;
 
   export const realTimeBiasesHydrated = (state: Store.State) =>
+    !Configuration.isRealTimeBiasEnabled(Selectors.config(state)) ||
     state.data.present.personalization['_persist'].rehydrated;
 
   /**

@@ -6,9 +6,10 @@ import * as validatorMiddleware from 'redux-validator';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import Creators from '../actions/creators';
+import ConfigurationAdapter from '../adapters/configuration';
 import PersonalizationAdapter from '../adapters/personalization';
 import Events from '../events';
-import StorageManager from '../storage-manager';
+import Selectors from '../selectors';
 import * as utils from '../utils';
 
 export const HISTORY_UPDATE_ACTIONS = [
@@ -89,7 +90,8 @@ export namespace Middleware {
 
   export function personalizationAnalyzer(store: Store<any>) {
     return (next) => (action) => {
-      if (PERSONALIZATION_CHANGE_ACTIONS.includes(action.type)) {
+      if (ConfigurationAdapter.isRealTimeBiasEnabled(Selectors.config(store.getState())) &&
+          PERSONALIZATION_CHANGE_ACTIONS.includes(action.type)) {
         return next([
           action,
           Creators.updateBiasing(PersonalizationAdapter.extractBias(action, store.getState()))

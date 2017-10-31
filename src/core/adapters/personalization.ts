@@ -5,7 +5,7 @@ import Store from '../store';
 
 namespace Personalization {
   export const extractBias = ({ payload }: Actions.SelectRefinement, store: Store.State) => {
-    const config = Selectors.config(store).personalization.realtimeBiasing;
+    const config = Selectors.config(store).personalization.realTimeBiasing;
     const byId = Selectors.realTimeBiasesById(store);
     const { value, field } = Selectors.refinementCrumb(store, payload.navigationId, payload.index);
 
@@ -55,7 +55,7 @@ namespace Personalization {
   export const convertToBias = (store) => {
     // const byId = Selectors.realTimeBiasesById(store);
     const allIds = Selectors.realTimeBiasesAllIds(store);
-    const config = Selectors.config(store).personalization.realtimeBiasing;
+    const config = Selectors.config(store).personalization.realTimeBiasing;
 
     return allIds.map(({ variant, key }) => ({
       name: variant,

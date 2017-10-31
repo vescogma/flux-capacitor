@@ -390,7 +390,7 @@ namespace ActionCreators {
     return (state: Store.State): Actions.UpdateBiasing =>
       createAction(Actions.UPDATE_BIASING, {
         ...payload,
-        config: Selectors.config(state).personalization.realtimeBiasing,
+        config: Selectors.config(state).personalization.realTimeBiasing,
       }, {
         payload: validators.isValidBias
       });

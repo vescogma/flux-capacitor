@@ -230,7 +230,7 @@ namespace Configuration {
   }
 
   export interface Personalization {
-    realtimeBiasing?: Personalization.RealtimeBiasing;
+    realTimeBiasing?: Personalization.RealTimeBiasing;
   }
 
   export namespace Recommendations {
@@ -324,15 +324,15 @@ namespace Configuration {
   }
 
   export namespace Personalization {
-    export interface RealtimeBiasing {
+    export interface RealTimeBiasing {
       attributes: {
-        [attribute: string]: RealtimeBiasingAttribute
+        [attribute: string]: RealTimeBiasingAttribute
       };
       globalStrength: string;
       globalMaxBiases: number;
     }
 
-    export interface RealtimeBiasingAttribute {
+    export interface RealTimeBiasingAttribute {
       strength: string;
       maxBiases: number;
     }

@@ -174,7 +174,7 @@ namespace Actions {
         variant: string;
         key: string;
         bias: Store.Personalization.SingleBias;
-        config?: Configuration.Personalization.RealtimeBiasing;
+        config?: Configuration.Personalization.RealTimeBiasing;
       }
     }
 

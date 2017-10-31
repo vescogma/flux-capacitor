@@ -26,7 +26,9 @@ namespace Store {
       middleware,
     );
 
-    persistStore(store);
+    if (Adapter.isRealTimeBiasEnabled(flux.__config)) {
+      persistStore(store);
+    }
 
     createSagas(SAGA_CREATORS, flux).forEach(sagaMiddleware.run);
 

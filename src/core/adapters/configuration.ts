@@ -154,6 +154,9 @@ namespace Adapter {
 
   export const shouldAddPastPurchaseBias = (config: Configuration) =>
     config.recommendations.pastPurchases.biasCount > 0;
+
+  export const isRealTimeBiasEnabled = (config: Configuration) =>
+    !!config.personalization.realTimeBiasing
 }
 
 export default Adapter;
