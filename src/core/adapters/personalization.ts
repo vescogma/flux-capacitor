@@ -58,7 +58,6 @@ namespace Personalization {
     const allIds = Selectors.realTimeBiasesAllIds(store);
     const config = Selectors.config(store).personalization.realtimeBiasing;
 
-    console.log('1', allIds, 'store', store);
     return allIds.map(({ variant, key }) => ({
       name: variant,
       content: key,

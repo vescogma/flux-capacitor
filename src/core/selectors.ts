@@ -327,6 +327,10 @@ namespace Selectors {
 
   export const orderHistory = (state: Store.State) =>
     state.data.present.recommendations.orderHistory;
+
+  export const realTimeBiasesHydrated = (state: Store.State) =>
+    state.data.present.personalization['_persist'].rehydrated;
+
   /**
    * Returns the ui state for the all of the tags with the given tagName.
    */

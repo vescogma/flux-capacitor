@@ -124,7 +124,7 @@ export namespace Middleware {
       reduxBatch,
       applyMiddleware(...middleware),
       reduxBatch,
-      applyMiddleware(thunkEvaluator),
+      applyMiddleware(Middleware.validator(), thunkEvaluator),
       reduxBatch,
     );
   }

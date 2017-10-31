@@ -269,6 +269,13 @@ namespace Events {
    * Returns the url.
    */
   export const URL_UPDATED = 'url:updated';
+
+  // personalization events
+  /**
+   * Triggered when biasing is rehydrated
+   * returns true
+   */
+  export const PERSONALIZATION_BIASING_REHYDRATED = 'personalization:biasing_rehydrated';
 }
 
 export default Events;
