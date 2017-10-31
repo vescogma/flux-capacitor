@@ -100,7 +100,7 @@ namespace Actions {
   export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS';
   export type ReceiveProducts = Action<typeof RECEIVE_PRODUCTS, Results>;
   export const RECEIVE_MORE_PRODUCTS = 'RECEIVE_MORE_PRODUCTS';
-  export type ReceiveMoreProducts = Action<typeof RECEIVE_MORE_PRODUCTS, Store.Product[]>;
+  export type ReceiveMoreProducts = Action<typeof RECEIVE_MORE_PRODUCTS, Payload.Products.Records>;
   export const RECEIVE_AUTOCOMPLETE_SUGGESTIONS = 'RECEIVE_AUTOCOMPLETE_SUGGESTIONS';
   // tslint:disable-next-line max-line-length
   export type ReceiveAutocompleteSuggestions = Action<typeof RECEIVE_AUTOCOMPLETE_SUGGESTIONS, Payload.Autocomplete.Suggestions>;
@@ -115,7 +115,7 @@ namespace Actions {
   export const RECEIVE_QUERY = 'RECEIVE_QUERY';
   export type ReceiveQuery = Action<typeof RECEIVE_QUERY, Payload.Query>;
   export const RECEIVE_PRODUCT_RECORDS = 'RECEIVE_PRODUCT_RECORDS';
-  export type ReceiveProductRecords = Action<typeof RECEIVE_PRODUCT_RECORDS, Store.Product[]>;
+  export type ReceiveProductRecords = Action<typeof RECEIVE_PRODUCT_RECORDS, Payload.Products.Records>;
   export const RECEIVE_COLLECTION_COUNT = 'RECEIVE_COLLECTION_COUNT';
   export type ReceiveCollectionCount = Action<typeof RECEIVE_COLLECTION_COUNT, Payload.Collection.Count>;
   export const RECEIVE_NAVIGATIONS = 'RECEIVE_NAVIGATIONS';
@@ -172,6 +172,13 @@ namespace Actions {
       export interface Count {
         collection: string;
         count: number;
+      }
+    }
+
+    export namespace Products {
+      export interface Records {
+        products: Store.Product[];
+        structure: any;
       }
     }
 

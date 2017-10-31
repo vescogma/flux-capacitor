@@ -417,8 +417,9 @@ namespace ActionCreators {
    * received and updated to in the state.
    * @return {Actions.ReceiveProductRecords}          - Action with products.
    */
-  export function receiveProductRecords(products: Store.Product[]): Actions.ReceiveProductRecords {
-    return createAction(Actions.RECEIVE_PRODUCT_RECORDS, products);
+  export function receiveProductRecords(products: Store.Product[]) {
+    return (state: Store.State): Actions.ReceiveProductRecords =>
+      createAction(Actions.RECEIVE_PRODUCT_RECORDS, { products, structure: Selectors.config(state).structure });
   }
 
   /**
@@ -511,8 +512,9 @@ namespace ActionCreators {
    * @param  {Store.Product[]}             products - The products to add to the state.
    * @return {Actions.ReceiveMoreProducts}          - Action with products.
    */
-  export function receiveMoreProducts(products: Store.Product[]): Actions.ReceiveMoreProducts {
-    return createAction(Actions.RECEIVE_MORE_PRODUCTS, products);
+  export function receiveMoreProducts(products: Store.Product[]) {
+    return (state: Store.State): Actions.ReceiveMoreProducts =>
+      createAction(Actions.RECEIVE_MORE_PRODUCTS, { products, structure: Selectors.config(state).structure });
   }
 
   /**

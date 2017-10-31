@@ -237,6 +237,18 @@ namespace Store {
     }
   }
 
+  export interface AllProducts {
+    products: Product[];
+    transformedProducts: Products.TransformedProduct[];
+  }
+
+  export namespace Products {
+    export interface TransformedProduct {
+      data: object;
+      variants: object[];
+    }
+  }
+
   export interface Product {
     id: string; // post
     [key: string]: any; // post
