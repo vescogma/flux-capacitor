@@ -202,6 +202,7 @@ suite('Observer', ({ expect, spy, stub }) => {
       expect(present.redirect).to.be.a('function');
       expect(present.sorts).to.be.a('function');
       expect(present.template).to.be.a('function');
+      expect(present.personalization._persist.rehydrated).to.be.a('function');
     });
 
     describe('data', () => {
