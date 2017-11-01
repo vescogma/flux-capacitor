@@ -1,6 +1,7 @@
 import * as effects from 'redux-saga/effects';
 import { ActionCreators } from 'redux-undo';
 import Actions from '../../../../src/core/actions';
+import PersonalizationAdapter from '../../../../src/core/adapters/personalization';
 import RecommendationsAdapter from '../../../../src/core/adapters/recommendations';
 import Events from '../../../../src/core/events';
 import Requests from '../../../../src/core/requests';
@@ -424,14 +425,19 @@ suite('products saga', ({ expect, spy, stub }) => {
         const payload = { a: 'b' };
         const action: any = { payload };
         const receiveProductsAction: any = { c: 'd' };
-        const request = { e: 'f' };
+        const biases = [];
+        const request = { e: 'f',
+                          biasing: {
+                            biases
+                          }};
         const response = { id, totalRecordCount: 3 };
         const receiveProducts = spy(() => receiveProductsAction);
         const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, };
 
         const task = Tasks.fetchProductsRequest(flux, action);
 
-        expect(task.next().value).to.eql(effects.select(Requests.search));
+        expect(task.next().value).to.eql(effects.select(PersonalizationAdapter.convertToBias));
+        expect(task.next(biases).value).to.eql(effects.select(Requests.search));
         const ret = effects.call([bridge, search], request);
         expect(task.next(request).value).to.eql(ret);
         expect(task.next(request).value).to.eql(request);
