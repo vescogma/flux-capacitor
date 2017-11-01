@@ -46,12 +46,13 @@ export const updateBiasing = (state: State, payload: Actions.Payload.Personaliza
   return { ...state, biasing: { ...state.biasing, byId, allIds }};
 };
 
-const insertSorted = (allIds: Store.Personalization.BiasKey[], { variant, key }: Store.Personalization.BiasKey) => {
+// tslint:disable-next-line max-line-length
+export const insertSorted = (allIds: Store.Personalization.BiasKey[], { variant, key }: Store.Personalization.BiasKey) => {
   const noDuplicate = allIds.filter((id) => !(id.variant === variant && id.key === key));
   return [{ variant, key }, ...noDuplicate]; //TODO: insert sorted
 };
 
-const removeLast = (allIds, variant) => {
+export const removeLast = (allIds, variant) => {
   for (let i = allIds.length - 1; i >= 0; i--) {
     if (allIds[i].variant === variant) {
       return [...allIds.slice(0, i), ...allIds.slice(i + 1)];
