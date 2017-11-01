@@ -31,9 +31,9 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const errorHandler = stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
       const compose = stub(redux, 'compose').returns(composed);
       const applyMiddleware = stub(redux, 'applyMiddleware');
-      stub(Middleware, 'validator').returns(validatorMiddleware);
+      const validator = stub(Middleware, 'validator').returns(validatorMiddleware);
       applyMiddleware.withArgs().returns(batchMiddleware);
-      applyMiddleware.withArgs(Middleware.thunkEvaluator).returns(thunkMiddleware);
+      applyMiddleware.withArgs(Middleware.thunkEvaluator, validator).returns(thunkMiddleware);
       applyMiddleware.withArgs(Middleware.thunkEvaluator, Middleware.saveStateAnalyzer).returns(simpleMiddleware);
 
       const middleware = Middleware.create(sagaMiddleware, flux);
@@ -49,6 +49,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
         idGeneratorMiddleware,
         errorHandlerMiddleware,
         sagaMiddleware,
+        Middleware.personalizationAnalyzer,
         Middleware.thunkEvaluator,
         Middleware.saveStateAnalyzer
       );
@@ -81,6 +82,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
         idGeneratorMiddleware,
         errorHandlerMiddleware,
         sagaMiddleware,
+        Middleware.personalizationAnalyzer,
         Middleware.thunkEvaluator,
         Middleware.saveStateAnalyzer,
         reduxLogger
@@ -105,6 +107,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
         idGeneratorMiddleware,
         errorHandlerMiddleware,
         sagaMiddleware,
+        Middleware.personalizationAnalyzer,
         Middleware.thunkEvaluator,
         Middleware.saveStateAnalyzer
       );
