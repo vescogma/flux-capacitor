@@ -19,11 +19,11 @@ namespace Personalization {
       bias: (byId[field] && byId[field][value]) ? {
         ...byId[field][value],
         lastUsed: Math.floor(Date.now() / 1000)
-      } : generateNewBias(value, field)
+      } : generateNewBias()
     };
   };
 
-  export const generateNewBias = (value, field) => ({
+  export const generateNewBias = () => ({
     lastUsed: Math.floor(Date.now() / 1000)
   });
 
