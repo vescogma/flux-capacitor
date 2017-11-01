@@ -2,6 +2,7 @@ import Configuration from '../configuration';
 import * as AreaReducer from '../reducers/data/area';
 import * as CollectionsReducer from '../reducers/data/collections';
 import * as PageReducer from '../reducers/data/page';
+import { DEFAULT } from '../reducers/data/personalization';
 import Store from '../store';
 
 namespace Adapter {
@@ -34,7 +35,9 @@ namespace Adapter {
             sizes: Adapter.extractPageSizes(config, PageReducer.DEFAULT_PAGE_SIZE)
           },
           personalization: {
+            ...DEFAULT,
             biasing: {
+              ...DEFAULT.biasing,
               globalExpiry: Adapter.extractRealTimeBiasingExpiry(config)
             }
           }

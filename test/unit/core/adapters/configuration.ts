@@ -3,6 +3,7 @@ import SearchAdapter from '../../../../src/core/adapters/search';
 import { DEFAULT_AREA } from '../../../../src/core/reducers/data/area';
 import { DEFAULT_COLLECTION } from '../../../../src/core/reducers/data/collections';
 import * as PageReducer from '../../../../src/core/reducers/data/page';
+import { DEFAULT as DEFAULT_BIASING } from '../../../../src/core/reducers/data/personalization';
 import suite from '../../_suite';
 
 suite('Configuration Adapter', ({ expect, stub }) => {
@@ -11,12 +12,18 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     it('should return initialState based on defaults', () => {
       const category = 'cat';
       const sort = 'prices';
+      const globalExpiry = 0;
       const config = <any>{
         autocomplete: {
           category
         },
         search: {
           sort
+        },
+        personalization: {
+          realTimeBiasing: {
+            globalExpiry
+          }
         }
       };
 
@@ -59,7 +66,8 @@ suite('Configuration Adapter', ({ expect, stub }) => {
                 selected: 0,
                 items: [PageReducer.DEFAULT_PAGE_SIZE]
               }
-            }
+            },
+            personalization: DEFAULT_BIASING
           }
         },
         session: {
@@ -84,6 +92,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
         default: 'stuff',
         options: [{ field: 'stuff', descending: true }, { field: 'other stuff' }]
       };
+      const globalExpiry = 2000;
       const config = <any>{
         area,
         collection,
@@ -95,6 +104,11 @@ suite('Configuration Adapter', ({ expect, stub }) => {
           pageSize,
           sort
         },
+        personalization: {
+          realTimeBiasing: {
+            globalExpiry
+          }
+        }
       };
       const state = {
         data: {
@@ -137,6 +151,13 @@ suite('Configuration Adapter', ({ expect, stub }) => {
               sizes: {
                 selected: 2,
                 items: pageSize.options
+              }
+            },
+            personalization: {
+              ...DEFAULT_BIASING,
+              biasing: {
+                ...DEFAULT_BIASING.biasing,
+                globalExpiry
               }
             }
           }
