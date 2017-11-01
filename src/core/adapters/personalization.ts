@@ -27,7 +27,7 @@ namespace Personalization {
       lastUsed: Math.floor(Date.now() / 1000)
     });
 
-  export const transformToBrowser = (state, reducerKey) => ({
+  export const transformToBrowser = (state: Store.Personalization.Biasing, reducerKey: string) => ({
     expiry: state.globalExpiry,
     allIds: state.allIds ? state.allIds.map(({ variant, key }) => ({
       variant,
@@ -36,7 +36,7 @@ namespace Personalization {
     })) : []
   });
 
-  export const transformFromBrowser = (state: any, reducerKey) => {
+  export const transformFromBrowser = (state: any, reducerKey: string) => {
     const olderThanTime = Math.floor(Date.now() / 1000) - state.expiry;
     const filteredState = state.allIds.filter((element) => element.lastUsed >= olderThanTime);
     let allIds = [];
@@ -66,6 +66,7 @@ namespace Personalization {
       strength: (config.attributes[variant] && config.attributes[variant].strength) || config.globalStrength
     }));
   };
+
 }
 
 export default Personalization;
