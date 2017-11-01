@@ -7,6 +7,7 @@ import ActionCreators from '../../src/core/actions/creators';
 import ConfigAdapter from '../../src/core/adapters/configuration';
 import Events from '../../src/core/events';
 import Observer from '../../src/core/observer';
+import Selectors from '../../src/core/selectors';
 import Store from '../../src/core/store';
 import FluxCapacitor from '../../src/flux-capacitor';
 import suite from './_suite';
@@ -277,6 +278,34 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
         expect(queryPastPurchases).to.be.calledWithExactly(state);
         expect(receiveAutocompleteProductRecords).to.be.calledWithExactly(pastPurchases);
         expect(dispatch).to.be.calledWithExactly(action);
+      });
+    });
+
+    describe.only('awaitBiasingRehydration()', () => {
+      it('should dispatch given action if data loaded from browser', () => {
+        const action = 'action';
+        const getState = store.getState = spy();
+        const dispatch = store.dispatch = spy();
+        stub(Selectors, 'realTimeBiasesHydrated').returns(true);
+
+        flux.awaitBiasingRehydration(<any>action);
+        expect(getState).to.be.calledWith();
+        expect(dispatch).to.be.calledWith(action);
+      });
+
+      it('should wait on personalization biasing rehydrated if data not loaded from browser', () => {
+        const action = 'action';
+        const realtimeBiasesHydrated = stub(Selectors, 'realTimeBiasesHydrated').returns(false);
+        const once = flux.once = spy();
+        const dispatch = store.dispatch = spy();
+        store.getState = spy();
+
+        flux.awaitBiasingRehydration(<any>action);
+        expect(dispatch).to.not.be.called;
+        expect(once).to.be.calledWith(Events.PERSONALIZATION_BIASING_REHYDRATED);
+
+        once.getCall(0).args[1]();
+        expect(dispatch).to.be.calledWith(action);
       });
     });
   });
