@@ -281,7 +281,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       });
     });
 
-    describe.only('awaitBiasingRehydration()', () => {
+    describe('awaitBiasingRehydration()', () => {
       it('should dispatch given action if data loaded from browser', () => {
         const action = 'action';
         const getState = store.getState = spy();
