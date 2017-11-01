@@ -24,10 +24,11 @@ namespace Personalization {
   };
 
   export const generateNewBias = (value, field) => ({
-      lastUsed: Math.floor(Date.now() / 1000)
-    });
+    lastUsed: Math.floor(Date.now() / 1000)
+  });
 
-  export const transformToBrowser = (state: Store.Personalization.Biasing, reducerKey: string) => ({
+  // tslint:disable-next-line max-line-length
+  export const transformToBrowser = (state: Store.Personalization.RealTimeBiasing, reducerKey): BrowserStorageState => ({
     expiry: state.globalExpiry,
     allIds: state.allIds ? state.allIds.map(({ variant, key }) => ({
       variant,
@@ -36,7 +37,8 @@ namespace Personalization {
     })) : []
   });
 
-  export const transformFromBrowser = (state: any, reducerKey: string) => {
+  // tslint:disable-next-line max-line-length
+  export const transformFromBrowser = (state: BrowserStorageState, reducerKey): Store.Personalization.RealTimeBiasing => {
     const olderThanTime = Math.floor(Date.now() / 1000) - state.expiry;
     const filteredState = state.allIds.filter((element) => element.lastUsed >= olderThanTime);
     let allIds = [];
@@ -67,6 +69,15 @@ namespace Personalization {
     }));
   };
 
+<<<<<<< HEAD
+=======
+  export interface BrowserStorageState {
+    allIds: BrowserBiasKey[];
+    expiry: number;
+  }
+
+  export interface BrowserBiasKey extends Store.Personalization.BiasKey, Store.Personalization.SingleBias {}
+>>>>>>> Update types
 }
 
 export default Personalization;

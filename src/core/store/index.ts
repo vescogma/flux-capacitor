@@ -347,11 +347,12 @@ namespace Store {
   }
 
   export interface Personalization {
-    biasing: Personalization.Biasing;
+    biasing: Personalization.RealTimeBiasing;
   }
 
   export namespace Personalization {
-    export interface Biasing {
+
+    export interface RealTimeBiasing {
       globalExpiry: number;
       allIds: Personalization.BiasKey[];
       byId: Personalization.BiasById;
