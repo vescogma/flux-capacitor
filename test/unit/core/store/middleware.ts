@@ -4,7 +4,9 @@ import reduxLogger from 'redux-logger';
 import { ActionCreators } from 'redux-undo';
 import * as sinon from 'sinon';
 import Actions from '../../../../src/core/actions';
+import Creators from '../../../../src/core/actions/creators';
 import ConfigurationAdapter from '../../../../src/core/adapters/configuration';
+import PersonalizationAdapter from '../../../../src/core/adapters/personalization';
 import Events from '../../../../src/core/events';
 import Selectors from '../../../../src/core/selectors';
 import Middleware, {
@@ -246,7 +248,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const conf = 'f';
       const state = 'state';
       const action = { a: 'b', type: PERSONALIZATION_CHANGE_ACTIONS[0] };
-      const config = stub(Selectors, 'config').returns(conf);;
+      const config = stub(Selectors, 'config').returns(conf);
       const enabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(false);
       const next = spy();
       const getState = spy(() => state);
@@ -256,6 +258,29 @@ suite('Middleware', ({ expect, spy, stub }) => {
       expect(next).to.be.calledWithExactly(action);
       expect(config).to.be.calledWithExactly(state);
       expect(enabled).to.be.calledWithExactly(conf);
+    });
+
+    it('should make a batch action if action correct type', () => {
+      const conf = 'f';
+      const state = 'state';
+      const action = { a: 'b', type: PERSONALIZATION_CHANGE_ACTIONS[0] };
+      const returnAction = 'return';
+      const extracted = 'extra';
+      const config = stub(Selectors, 'config').returns(conf);
+      const enabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(true);
+      const updateBiasing = stub(Creators, 'updateBiasing').returns(returnAction);
+      const extract = stub(PersonalizationAdapter, 'extractBias').returns(extracted);
+      const next = spy();
+      const getState = spy(() => state);
+
+      Middleware.personalizationAnalyzer(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWith([
+        action,
+        returnAction
+      ]);
+      expect(extract).to.be.calledWithExactly(action, state);
+      expect(updateBiasing).to.be.calledWithExactly(extracted);
     });
   });
 });
