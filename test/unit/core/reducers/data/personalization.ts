@@ -108,5 +108,83 @@ suite('personalization', ({ expect, spy, stub }) => {
 
       expect(removeLast).to.be.calledWithExactly(allIds, variant);
     });
+
+    it('should slice allIds when it\'s length exceeds globalMaxBiases', () => {
+      const variant = 'a';
+      const payload = {
+        variant,
+        key: 'z',
+        bias: 3,
+        config
+      };
+      const slice = spy();
+      const allIds = {
+        length: 10020000,
+        slice
+      };
+      stub(personalization, 'insertSorted').returns(allIds);
+      const removeLast = stub(personalization, 'removeLast').returns(allIds);
+
+      personalization.updateBiasing(state, <any>payload);
+
+      expect(slice).to.be.calledOnce;
+    });
+  });
+
+  describe('removeLast', () => {
+    const arr = [
+      { variant: 'a', key: 1},
+      { variant: 'b', key: 2},
+      { variant: 'c', key: 3},
+    ];
+
+    it('shoud remove last element of a specific variant if it exists ', () => {
+      const newArr = [
+        { variant: 'a', key: 1 },
+        { variant: 'c', key: 3 },
+      ];
+
+      const ret = personalization.removeLast(arr, 'b');
+
+      expect(ret).to.eql(newArr);
+    });
+
+    it('shoud not modify input array if variant does not exists in array', () => {
+      const ret = personalization.removeLast(arr, 'd');
+
+      expect(ret).to.eql(arr);
+    });
+  });
+  describe('insertSorted', () => {
+    const arr = [
+      { variant: 'a', key: 1},
+      { variant: 'b', key: 2},
+      { variant: 'c', key: 3},
+    ];
+
+    it('shoud insert element to front of array', () => {
+      const obj = { variant: 'd', key: 4};
+      const newArr = [
+        obj,
+        ...arr
+      ];
+
+      const ret = personalization.insertSorted(<any>arr, <any>obj);
+
+      expect(ret).to.eql(newArr);
+    });
+
+    it('shoud insert element to front of array and remove duplicates', () => {
+      const obj = { variant: 'b', key: 2};
+      const newArr = [
+        { variant: 'b', key: 2 },
+        { variant: 'a', key: 1 },
+        { variant: 'c', key: 3 },
+      ];
+
+      const ret = personalization.insertSorted(<any>arr, <any>obj);
+
+      expect(ret).to.eql(newArr);
+    });
   });
 });
