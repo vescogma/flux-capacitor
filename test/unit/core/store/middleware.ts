@@ -4,10 +4,13 @@ import reduxLogger from 'redux-logger';
 import { ActionCreators } from 'redux-undo';
 import * as sinon from 'sinon';
 import Actions from '../../../../src/core/actions';
+import ConfigurationAdapter from '../../../../src/core/adapters/configuration';
 import Events from '../../../../src/core/events';
+import Selectors from '../../../../src/core/selectors';
 import Middleware, {
   RECALL_CHANGE_ACTIONS,
-  SEARCH_CHANGE_ACTIONS
+  SEARCH_CHANGE_ACTIONS,
+  PERSONALIZATION_CHANGE_ACTIONS
 } from '../../../../src/core/store/middleware';
 import suite from '../../_suite';
 
@@ -219,6 +222,40 @@ suite('Middleware', ({ expect, spy, stub }) => {
 
       expect(next).to.be.calledWithExactly(action);
       expect(thunk).to.be.calledWithExactly(state);
+    });
+  });
+
+  describe('personalizationAnalyzer()', () => {
+    it('should pass the action forward unchanged if not in list of relevant actions', () => {
+      const conf = 'f';
+      const state = 'state';
+      const action = { a: 'b', type: 'NOT_VALID_ACTION' };
+      const config = stub(Selectors, 'config').returns(conf);
+      const enabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(true);
+      const next = spy();
+      const getState = spy(() => state);
+
+      Middleware.personalizationAnalyzer(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+      expect(config).to.be.calledWithExactly(state);
+      expect(enabled).to.be.calledWithExactly(conf);
+    });
+
+    it('should pass the action forward unchanged if real time biasing disabled', () => {
+      const conf = 'f';
+      const state = 'state';
+      const action = { a: 'b', type: PERSONALIZATION_CHANGE_ACTIONS[0] };
+      const config = stub(Selectors, 'config').returns(conf);;
+      const enabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(false);
+      const next = spy();
+      const getState = spy(() => state);
+
+      Middleware.personalizationAnalyzer(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+      expect(config).to.be.calledWithExactly(state);
+      expect(enabled).to.be.calledWithExactly(conf);
     });
   });
 });
