@@ -8,10 +8,12 @@ import Store from '../../store';
 export type Action = Actions.UpdateBiasing;
 export type State = Store.Personalization;
 
-export const DEFAULT = {
+export const DEFAULT: State = {
   biasing: {
     allIds: [],
-    byId: {}
+    byId: {},
+    // TODO
+    globalExpiry: 0
   }
 };
 

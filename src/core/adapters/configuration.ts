@@ -32,6 +32,11 @@ namespace Adapter {
           page: {
             ...PageReducer.DEFAULTS,
             sizes: Adapter.extractPageSizes(config, PageReducer.DEFAULT_PAGE_SIZE)
+          },
+          personalization: {
+            biasing: {
+              globalExpiry: Adapter.extractRealTimeBiasingExpiry(config)
+            }
           }
         }
       },
@@ -157,6 +162,9 @@ namespace Adapter {
 
   export const isRealTimeBiasEnabled = (config: Configuration) =>
     !!config.personalization.realTimeBiasing;
+
+  export const extractRealTimeBiasingExpiry = (config: Configuration) =>
+    config.personalization.realTimeBiasing.globalExpiry;
 }
 
 export default Adapter;

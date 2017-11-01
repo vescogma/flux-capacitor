@@ -330,6 +330,7 @@ namespace Configuration {
       };
       globalStrength: string;
       globalMaxBiases: number;
+      globalExpiry: number;
     }
 
     export interface RealTimeBiasingAttribute {

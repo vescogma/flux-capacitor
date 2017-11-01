@@ -11,7 +11,7 @@ namespace Personalization {
 
     // TODO: check if we need to bias for it, we're not using config at all
     if (!config.attributes[field]) {
-      return <any>{};
+      return null;
     }
     return {
       variant: field,
@@ -27,16 +27,18 @@ namespace Personalization {
       lastUsed: Math.floor(Date.now() / 1000)
     });
 
-  export const transformToBrowser = (state, reducerKey) =>
-    state.allIds.map(({ variant, key }) => ({
+  export const transformToBrowser = (state, reducerKey) => ({
+    expiry: state.globalExpiry,
+    allIds: state.allIds ? state.allIds.map(({ variant, key }) => ({
       variant,
       key,
       ...state.byId[variant][key]
-    }));
+    })) : []
+  });
 
   export const transformFromBrowser = (state: any, reducerKey) => {
-    const olderThanTime = Math.floor(Date.now() / 1000) - 2628000;
-    const filteredState = state.filter((element) => element.lastUsed >= olderThanTime);
+    const olderThanTime = Math.floor(Date.now() / 1000) - state.expiry;
+    const filteredState = state.allIds.filter((element) => element.lastUsed >= olderThanTime);
     let allIds = [];
     let byId = {};
     filteredState.forEach(({ variant, key, lastUsed }) => {
@@ -47,6 +49,7 @@ namespace Personalization {
       byId[variant][key] = { lastUsed };
     });
     return {
+      globalExpiry: state.expiry,
       allIds,
       byId
     };

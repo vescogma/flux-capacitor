@@ -348,6 +348,7 @@ namespace Store {
 
   export interface Personalization {
     biasing: {
+      globalExpiry: number;
       allIds: Personalization.BiasKey[];
       byId: Personalization.BiasById;
     };
