@@ -596,6 +596,38 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         });
       });
     });
+
+    describe('updateBiasing()', () => {
+      it('should return an UPDATE_AUTOCOMPLETE_QUERY thunk action with config injected in', () => {
+        const payload = {
+          a: 'b',
+          c: 'd'
+        };
+        const state = 'a';
+        const config = {
+          personalization: {
+            realTimeBiasing: 'real'
+          }
+        };
+        const selector = stub(Selectors, 'config').returns(config);
+        const actionThunk = ActionCreators.updateBiasing(<any>payload);
+
+        expect(actionThunk).to.be.a('function');
+
+        actionThunk(<any>state);
+
+        expect(createAction).to.be.calledWith(
+          Actions.UPDATE_BIASING,
+          {
+            ...payload,
+            config: config.personalization.realTimeBiasing
+          },
+          {
+            payload: validators.isValidBias
+          }
+        );
+      });
+    });
   });
 
   describe('response action creators', () => {
