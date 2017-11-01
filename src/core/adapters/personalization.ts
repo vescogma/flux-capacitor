@@ -38,7 +38,7 @@ namespace Personalization {
   });
 
   // tslint:disable-next-line max-line-length
-  export const transformFromBrowser = (state: BrowserStorageState, reducerKey): Store.Personalization.RealTimeBiasing => {
+  export const transformFromBrowser = (state: BrowserStorageState, reducerKey: string): Store.Personalization.Biasing => {
     const olderThanTime = Math.floor(Date.now() / 1000) - state.expiry;
     const filteredState = state.allIds.filter((element) => element.lastUsed >= olderThanTime);
     let allIds = [];
@@ -57,10 +57,10 @@ namespace Personalization {
     };
   };
 
-  export const convertToBias = (store) => {
-    // const byId = Selectors.realTimeBiasesById(store);
-    const allIds = Selectors.realTimeBiasesAllIds(store);
-    const config = Selectors.config(store).personalization.realTimeBiasing;
+  export const convertToBias = (state: Store.State) => {
+    // const byId = Selectors.realTimeBiasesById(state);
+    const allIds = Selectors.realTimeBiasesAllIds(state);
+    const config = Selectors.config(state).personalization.realTimeBiasing;
 
     return allIds.map(({ variant, key }) => ({
       name: variant,
@@ -69,15 +69,12 @@ namespace Personalization {
     }));
   };
 
-<<<<<<< HEAD
-=======
   export interface BrowserStorageState {
     allIds: BrowserBiasKey[];
     expiry: number;
   }
 
   export interface BrowserBiasKey extends Store.Personalization.BiasKey, Store.Personalization.SingleBias {}
->>>>>>> Update types
 }
 
 export default Personalization;
