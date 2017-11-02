@@ -436,7 +436,7 @@ suite('products saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchProductsRequest(flux, action);
 
-        expect(task.next().value).to.eql(effects.select(PersonalizationAdapter.convertToBias));
+        expect(task.next().value).to.eql(effects.select(PersonalizationAdapter.convertBiasToSearch));
         expect(task.next(biases).value).to.eql(effects.select(Requests.search));
         const ret = effects.call([bridge, search], request);
         expect(task.next(request).value).to.eql(ret);

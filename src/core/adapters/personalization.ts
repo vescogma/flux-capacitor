@@ -57,7 +57,7 @@ namespace Personalization {
     };
   };
 
-  export const convertToBias = (state: Store.State) => {
+  export const convertBiasToSearch = (state: Store.State) => {
     // const byId = Selectors.realTimeBiasesById(state);
     const allIds = Selectors.realTimeBiasesAllIds(state);
     const config = Selectors.config(state).personalization.realTimeBiasing;
