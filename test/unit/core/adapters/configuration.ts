@@ -12,7 +12,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     it('should return initialState based on defaults', () => {
       const category = 'cat';
       const sort = 'prices';
-      const globalExpiry = 0;
+      const expiry = 0;
       const config = <any>{
         autocomplete: {
           category
@@ -22,7 +22,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
         },
         personalization: {
           realTimeBiasing: {
-            globalExpiry
+            expiry
           }
         }
       };
@@ -92,7 +92,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
         default: 'stuff',
         options: [{ field: 'stuff', descending: true }, { field: 'other stuff' }]
       };
-      const globalExpiry = 2000;
+      const expiry = 2000;
       const config = <any>{
         area,
         collection,
@@ -106,7 +106,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
         },
         personalization: {
           realTimeBiasing: {
-            globalExpiry
+            expiry
           }
         }
       };
@@ -157,7 +157,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
               ...DEFAULT_BIASING,
               biasing: {
                 ...DEFAULT_BIASING.biasing,
-                globalExpiry
+                expiry
               }
             }
           }

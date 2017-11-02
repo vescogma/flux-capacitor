@@ -125,7 +125,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
     it('should return empty array if the state does not have allIds', () => {
       const state: any = {
-        globalExpiry: 2000
+        expiry: 2000
       };
       const key = 'test';
       const result = Adapter.transformToBrowser(state, key);
@@ -137,7 +137,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
     it('should return data in certain format when allIds exist in the state', () => {
       const state: any = {
-        globalExpiry: 2000,
+        expiry: 2000,
         allIds: [{
           variant: 'color',
           key: 'blue',
@@ -177,7 +177,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
       const result = Adapter.transformFromBrowser(browserStorage, key);
       const biasFromBrowser = {
-        globalExpiry: oneDayInSec * 30,
+        expiry: oneDayInSec * 30,
         allIds: [{ variant: 'color', key: 'blue' }, { variant: 'color', key: 'red' }],
         byId: {
           color: {
@@ -201,7 +201,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       const config = {
         personalization: {
           realTimeBiasing: {
-            globalStrength: 'Absolute_Decrease',
+            strength: 'Absolute_Decrease',
             attributes: {
               color: {
                 strength: 'Absolute_Increase'

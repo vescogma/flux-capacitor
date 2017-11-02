@@ -351,9 +351,8 @@ namespace Store {
   }
 
   export namespace Personalization {
-
-    export interface RealTimeBiasing {
-      globalExpiry: number;
+    export interface Biasing {
+      expiry: number;
       allIds: Personalization.BiasKey[];
       byId: Personalization.BiasById;
     }

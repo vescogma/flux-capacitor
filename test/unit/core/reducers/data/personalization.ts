@@ -42,12 +42,12 @@ suite('personalization', ({ expect, spy, stub }) => {
           { variant: 'a', key: 'b' },
           { variant: 'c', key: 'd' },
         ],
-        globalExpiry: 2
+        expiry: 2
       }
     };
 
     const config = {
-      globalMaxBiases: 4095,
+      maxBiases: 4095,
       attributes: {
         a: {
           maxBiases: 1023
@@ -109,7 +109,7 @@ suite('personalization', ({ expect, spy, stub }) => {
       expect(removeLast).to.be.calledWithExactly(allIds, variant);
     });
 
-    it('should slice allIds when it\'s length exceeds globalMaxBiases', () => {
+    it('should slice allIds when it\'s length exceeds maxBiases', () => {
       const variant = 'a';
       const payload = {
         variant,

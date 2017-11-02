@@ -12,7 +12,7 @@ export const DEFAULT: State = {
   biasing: {
     allIds: [],
     byId: {},
-    globalExpiry: 0
+    expiry: 0
   }
 };
 
@@ -38,8 +38,8 @@ export const updateBiasing = (state: State, payload: Actions.Payload.Personaliza
   if (config.attributes[payload.variant] && (keyCount > config.attributes[payload.variant].maxBiases)) {
     allIds = removeLast(allIds, payload.variant);
   }
-  if (allIds.length > config.globalMaxBiases) {
-    allIds = allIds.slice(0, config.globalMaxBiases);
+  if (allIds.length > config.maxBiases) {
+    allIds = allIds.slice(0, config.maxBiases);
   }
 
   return { ...state, biasing: { ...state.biasing, byId, allIds }};

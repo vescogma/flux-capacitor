@@ -28,8 +28,8 @@ namespace Personalization {
   });
 
   // tslint:disable-next-line max-line-length
-  export const transformToBrowser = (state: Store.Personalization.RealTimeBiasing, reducerKey): BrowserStorageState => ({
-    expiry: state.globalExpiry,
+  export const transformToBrowser = (state: Store.Personalization.Biasing, reducerKey: string): BrowserStorageState => ({
+    expiry: state.expiry,
     allIds: state.allIds ? state.allIds.map(({ variant, key }) => ({
       variant,
       key,
@@ -51,7 +51,7 @@ namespace Personalization {
       byId[variant][key] = { lastUsed };
     });
     return {
-      globalExpiry: state.expiry,
+      expiry: state.expiry,
       allIds,
       byId
     };
@@ -65,7 +65,7 @@ namespace Personalization {
     return allIds.map(({ variant, key }) => ({
       name: variant,
       content: key,
-      strength: (config.attributes[variant] && config.attributes[variant].strength) || config.globalStrength
+      strength: (config.attributes[variant] && config.attributes[variant].strength) || config.strength
     }));
   };
 

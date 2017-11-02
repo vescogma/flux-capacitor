@@ -38,7 +38,7 @@ namespace Adapter {
             ...DEFAULT,
             biasing: {
               ...DEFAULT.biasing,
-              globalExpiry: Adapter.extractRealTimeBiasingExpiry(config)
+              expiry: Adapter.extractRealTimeBiasingExpiry(config)
             }
           }
         }
@@ -167,7 +167,7 @@ namespace Adapter {
     !!config.personalization.realTimeBiasing;
 
   export const extractRealTimeBiasingExpiry = (config: Configuration) =>
-    config.personalization.realTimeBiasing.globalExpiry;
+    config.personalization.realTimeBiasing.expiry;
 }
 
 export default Adapter;
