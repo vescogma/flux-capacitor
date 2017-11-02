@@ -11,8 +11,8 @@ import Events from '../../../../src/core/events';
 import Selectors from '../../../../src/core/selectors';
 import Middleware, {
   RECALL_CHANGE_ACTIONS,
+  PERSONALIZATION_CHANGE_ACTIONS,
   SEARCH_CHANGE_ACTIONS,
-  PERSONALIZATION_CHANGE_ACTIONS
 } from '../../../../src/core/store/middleware';
 import suite from '../../_suite';
 

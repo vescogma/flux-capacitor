@@ -30,8 +30,8 @@ namespace Selectors {
    * Returns the corrected query if it exists, otherwise returns the original query.
    */
   export const currentQuery = (state: Store.State) => {
-    const query = state.data.present.query;
-    return query.corrected || query.original;
+    const stateQuery = state.data.present.query;
+    return stateQuery.corrected || stateQuery.original;
   };
 
   /**
@@ -311,7 +311,7 @@ namespace Selectors {
    */
   export const pastPurchaseProductsBySku = (state: Store.State) =>
     state.data.present.recommendations.pastPurchases.products
-    .reduce((products, product) => Object.assign(products, { [product.sku]: product.quantity }), {});
+      .reduce((allProducts, product) => Object.assign(allProducts, { [product.sku]: product.quantity }), {});
 
   /**
    * Returns the entire byId object from biasing

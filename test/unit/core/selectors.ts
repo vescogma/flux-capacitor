@@ -1,5 +1,5 @@
-import Selectors from '../../../src/core/selectors';
 import ConfigurationAdapter from '../../../src/core/adapters/configuration';
+import Selectors from '../../../src/core/selectors';
 import suite from '../_suite';
 
 suite('selectors', ({ expect, stub }) => {

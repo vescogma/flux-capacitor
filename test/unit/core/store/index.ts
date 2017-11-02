@@ -26,21 +26,8 @@ suite('Store', ({ expect, spy, stub }) => {
       const createMiddleware = stub(Middleware, 'create').returns(middleware);
       const createSagas = stub(sagas, 'default').returns(['m', 'n', 'o']);
       const isRealTimeBiasEnabled = stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
-      //console.log(persist);
-      //const asdf = sinon.sandbox.create();
-
-      // Object.defineProperty(persist, 'persistStore', {
-      //   configurable: true,
-      //   writable: true,
-      //   get() {
-      //     return 3;
-      //   },
-      // });
-      // console.log(persist.persistStore, 'aa2');
-      // console.log(persistStore);
-      // const persistStorf = stub(persist, 'persistStore').callsFake(() => {});//.get(() => {});
-      // console.log(persistStore);
-      // console.log(persist.persistStore, 'waaaa');
+      // const persistStore = stub(persist, 'persistStore');
+      // TODO: make this work
 
       const store = Store.create(flux);
 
@@ -53,7 +40,7 @@ suite('Store', ({ expect, spy, stub }) => {
         .and.calledWith('m')
         .and.calledWith('n')
         .and.calledWith('o');
-      //expect(persistStore).to.be.calledWith('f');
+      // expect(persistStore).to.be.called;
     });
 
     it('should not persist store if real time bias disabled', () => {

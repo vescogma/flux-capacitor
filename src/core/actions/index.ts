@@ -1,6 +1,6 @@
 import { Results } from 'groupby-api';
-import Store from '../store';
 import Configuration from '../configuration';
+import Store from '../store';
 
 namespace Actions {
   export interface Action<S = string, T = any> {

@@ -9,7 +9,6 @@ namespace Personalization {
     const byId = Selectors.realTimeBiasesById(store);
     const { value, field } = Selectors.refinementCrumb(store, payload.navigationId, payload.index);
 
-    // TODO: check if we need to bias for it, we're not using config at all
     if (!config.attributes[field]) {
       return null;
     }

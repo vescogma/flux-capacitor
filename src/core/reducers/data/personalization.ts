@@ -12,7 +12,6 @@ export const DEFAULT: State = {
   biasing: {
     allIds: [],
     byId: {},
-    // TODO
     globalExpiry: 0
   }
 };
