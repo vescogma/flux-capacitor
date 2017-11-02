@@ -164,7 +164,7 @@ namespace Adapter {
     config.recommendations.pastPurchases.biasCount > 0;
 
   export const isRealTimeBiasEnabled = (config: Configuration) =>
-    !!config.personalization.realTimeBiasing;
+    !!config.personalization.realTimeBiasing.attributes;
 
   export const extractRealTimeBiasingExpiry = (config: Configuration) =>
     config.personalization.realTimeBiasing.expiry;

@@ -401,12 +401,12 @@ suite('Configuration Adapter', ({ expect, stub }) => {
   describe('isRealTimeBiasEnabled()', () => {
     it('should return config.personalization.realTimeBiasing casted to Boolean (truthy)', () => {
       // tslint:disable-next-line max-line-length
-      expect(Adapter.isRealTimeBiasEnabled(<any>{ personalization: { realTimeBiasing: {} } })).to.be.true;
+      expect(Adapter.isRealTimeBiasEnabled(<any>{ personalization: { realTimeBiasing: { attributes: {} } } })).to.be.true;
     });
 
     it('should return config.personalization.realTimeBiasing casted to Boolean (falsy)', () => {
       // tslint:disable-next-line max-line-length
-      expect(Adapter.isRealTimeBiasEnabled(<any>{ personalization: { realTimeBiasing: null } })).to.be.false;
+      expect(Adapter.isRealTimeBiasEnabled(<any>{ personalization: { realTimeBiasing: { attributes: null } } })).to.be.false;
     });
   });
 });
