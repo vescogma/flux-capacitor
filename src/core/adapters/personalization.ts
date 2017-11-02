@@ -13,6 +13,7 @@ namespace Personalization {
     if (!config.attributes[field]) {
       return null;
     }
+
     return {
       variant: field,
       key: value,
