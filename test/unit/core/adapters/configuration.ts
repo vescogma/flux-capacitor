@@ -397,4 +397,16 @@ suite('Configuration Adapter', ({ expect, stub }) => {
       expect(Adapter.shouldAddPastPurchaseBias(<any>{ recommendations: { pastPurchases: { biasCount: 0 } } })).to.be.false;
     });
   });
+
+  describe('isRealTimeBiasEnabled()', () => {
+    it('should return config.personalization.realTimeBiasing casted to Boolean (truthy)', () => {
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.isRealTimeBiasEnabled(<any>{ personalization: { realTimeBiasing: {} } })).to.be.true;
+    });
+
+    it('should return config.personalization.realTimeBiasing casted to Boolean (falsy)', () => {
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.isRealTimeBiasEnabled(<any>{ personalization: { realTimeBiasing: null } })).to.be.false;
+    });
+  });
 });
