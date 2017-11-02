@@ -313,9 +313,15 @@ namespace Selectors {
     state.data.present.recommendations.pastPurchases.products
     .reduce((products, product) => Object.assign(products, { [product.sku]: product.quantity }), {});
 
+  /**
+   * Returns the entire byId object from biasing
+   */
   export const realTimeBiasesById = (state: Store.State) =>
     state.data.present.personalization.biasing.byId;
 
+  /**
+   * Returns the entire allIds object from biasing
+   */
   export const realTimeBiasesAllIds = (state: Store.State) =>
     state.data.present.personalization.biasing.allIds;
 
@@ -328,6 +334,9 @@ namespace Selectors {
   export const orderHistory = (state: Store.State) =>
     state.data.present.recommendations.orderHistory;
 
+  /**
+   * Returns whether or not biasing has been rehydrated from localstorage
+   */
   export const realTimeBiasesHydrated = (state: Store.State) =>
     !Configuration.isRealTimeBiasEnabled(Selectors.config(state)) ||
     state.data.present.personalization['_persist'].rehydrated;

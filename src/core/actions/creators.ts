@@ -386,6 +386,11 @@ namespace ActionCreators {
     });
   }
 
+  /**
+   * The biasing object to receive and update biasing with
+   * @param  {Actions.Payload.Personalization.Biasing} payload - Biasing object
+   * @return {Actions.UpdateBiasing}
+   */
   export function updateBiasing(payload: Actions.Payload.Personalization.Biasing) {
     return (state: Store.State): Actions.UpdateBiasing =>
       createAction(Actions.UPDATE_BIASING, {
