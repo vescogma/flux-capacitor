@@ -36,7 +36,7 @@ export namespace Tasks {
         const refinements = recommendations.result
           .filter(({ productId }) => productId)
           .map(({ productId }) => ({ navigationName: idField, type: 'Value', value: productId }));
-        const { records } = yield effects.call(
+        const results = yield effects.call(
           [flux.clients.bridge, flux.clients.bridge.search],
           {
             ...Requests.search(state),
@@ -47,7 +47,7 @@ export namespace Tasks {
           }
         );
 
-        yield effects.put(flux.actions.receiveRecommendationsProducts(records.map(SearchAdapter.extractProduct)));
+        yield effects.put(flux.actions.receiveRecommendationsProducts(SearchAdapter.augmentProducts(results)));
       }
       return [];
     } catch (e) {

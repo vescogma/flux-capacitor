@@ -2,7 +2,7 @@ import Actions from '../../actions';
 import Store from '../../store';
 
 export type Action = Actions.ReceiveProductRecords | Actions.ReceiveMoreProducts;
-export type State = Store.Product[];
+export type State = Store.ProductWithMetadata[];
 
 export default function updateProducts(state: State = [], action: Action): State {
   switch (action.type) {

@@ -76,9 +76,9 @@ export namespace Tasks {
         }
       );
 
-      yield effects.put(flux.actions.receiveAutocompleteProducts(res));
+      yield effects.put(<any>flux.actions.receiveAutocompleteProducts(res));
     } catch (e) {
-      yield effects.put(flux.actions.receiveAutocompleteProducts(e));
+      yield effects.put(<any>flux.actions.receiveAutocompleteProducts(e));
     }
   }
 }

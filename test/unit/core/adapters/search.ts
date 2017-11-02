@@ -335,28 +335,48 @@ suite('Search Adapter', ({ expect, stub }) => {
     });
   });
 
-  describe('extractProducts()', () => {
-    it('should return the products remapped using extractProduct()', () => {
-      const allMeta1 = { a: 'b' };
-      const allMeta2 = { c: 'd' };
-      const allMeta3 = { e: 'f' };
-      const results: any = {
-        records: [
-          { allMeta: allMeta1 },
-          { allMeta: allMeta2 },
-          { allMeta: allMeta3 }
-        ]
-      };
+  describe('extractData()', () => {
+    it('should return data', () => {
+      const prod1 = { a: 'b' };
+      const prod2 = { c: 'd' };
+      const prod3 = { e: 'f' };
+      const products: any = [
+        { index: 2, meta: {}, data: prod1 },
+        { index: 3, meta: {}, data: prod2 },
+        { index: 4, meta: {}, data: prod3 },
+      ];
 
-      expect(Adapter.extractProducts(results)).to.eql([allMeta1, allMeta2, allMeta3]);
+      expect(Adapter.extractData(products)).to.eql([prod1, prod2, prod3]);
     });
   });
 
-  describe('extractProduct()', () => {
-    it('should return the allMeta property', () => {
-      const allMeta = { a: 'b' };
+  describe('augmentProducts()', () => {
+    it('should return the products remapped, with data, meta, and index', () => {
+      const purchase1 = 'idk';
+      const purchase2 = 'another one';
+      const allMeta1 = { a: 'b' };
+      const allMeta2 = { c: 'd' };
+      const allMeta3 = { e: 'f' };
+      const collection1 = 'heyy';
+      const collection2 = 'heyyo';
+      const collection3 = 'heyyoeh';
+      const results: any = {
+        records: [
+          { allMeta: allMeta1, collection: collection1 },
+          { allMeta: allMeta2, collection: collection2 },
+          { allMeta: allMeta3, collection: collection3 },
+        ],
+        pageInfo: {
+          recordStart: 1,
+        }
+      };
+      const extracted = [
+        { data: allMeta1, index: 1, meta: { collection: collection1 } },
+        { data: allMeta2, index: 2, meta: { collection: collection2 } },
+        { data: allMeta3, index: 3, meta: { collection: collection3 } },
+      ];
 
-      expect(Adapter.extractProduct({ allMeta })).to.eq(allMeta);
+      expect(Adapter.augmentProducts(results)).to.eql(extracted);
     });
   });
 

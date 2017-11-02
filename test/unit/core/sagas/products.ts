@@ -479,7 +479,7 @@ suite('products saga', ({ expect, spy, stub }) => {
           skip: 3
         }));
         expect(task.next(results).value).to.eql(effects.put(receiveMoreProductsAction));
-        expect(receiveMoreProducts).to.be.calledWithExactly(records);
+        expect(receiveMoreProducts).to.be.calledWithExactly(results);
         expect(emit).to.be.calledWithExactly(Events.BEACON_SEARCH, id);
         task.next();
       });

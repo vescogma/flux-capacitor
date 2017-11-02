@@ -42,7 +42,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const flux: any = { clients: { bridge }, actions: { receiveRecommendationsProducts }, };
         const url = `https://${customerId}.groupbycloud.com/wisdom/v2/public/recommendations/products/_getPopular`;
         const searchRequestSelector = stub(Requests, 'search').returns({ e: 'f' });
-        const extractProduct = stub(Adapter, 'extractProduct').returns('x');
+        const augmentProducts = stub(Adapter, 'augmentProducts').returns(['x', 'x', 'x']);
         const matchExact = 'match exact';
         const fetch = stub(utils, 'fetch');
         const originalBody = {
@@ -80,10 +80,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         expect(task.next({ records }).value).to.eql(effects.put(receiveRecommendationsProductsAction));
         expect(searchRequestSelector).to.be.calledWithExactly(state);
         expect(receiveRecommendationsProducts).to.be.calledWithExactly(['x', 'x', 'x']);
-        expect(extractProduct).to.be.calledThrice
-          .and.calledWith('a')
-          .and.calledWith('b')
-          .and.calledWith('c');
+        expect(augmentProducts).to.be.calledWithExactly({ records });
         task.next();
       });
 

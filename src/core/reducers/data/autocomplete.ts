@@ -39,7 +39,7 @@ export const receiveSuggestions = (state: State, { categoryValues, suggestions, 
     suggestions,
   });
 
-export const receiveProductRecords = (state: State, products: Store.Product[]) =>
+export const receiveProductRecords = (state: State, products: Store.ProductWithMetadata[]) =>
   ({ ...state, products });
 
 export const receiveTemplate = (state: State, template: Store.Template) =>

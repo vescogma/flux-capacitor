@@ -1,5 +1,6 @@
 import { Store as ReduxStore } from 'redux';
 import FluxCapacitor from '../flux-capacitor';
+import SearchAdapter from './adapters/search';
 import Events from './events';
 import Store from './store';
 
@@ -73,7 +74,8 @@ namespace Observer {
                   emitQueryUpdated(oldState.query, newState.query, `${path}.query`);
                 }
                 if (oldState.products !== newState.products) {
-                  emitProductsUpdated(oldState.products, newState.products, `${path}.products`);
+                  // tslint:disable-next-line max-line-length
+                  emitProductsUpdated(SearchAdapter.extractData(oldState.products), SearchAdapter.extractData(newState.products), `${path}.products`);
                 }
                 if (oldState.template !== newState.template) {
                   emitTemplateUpdated(oldState.template, newState.template, `${path}.template`);
@@ -119,12 +121,12 @@ namespace Observer {
           }),
 
           products: ((emitMoreProductsAdded: Observer, emitProductsUpdated: Observer) =>
-            (oldState: Store.Product[], newState: Store.Product[], path: string) => {
+            (oldState: Store.ProductWithMetadata[], newState: Store.ProductWithMetadata[], path: string) => {
               const oldLength = oldState.length;
               if (oldLength < newState.length && oldState[0] === newState[0]) {
                 emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
               } else {
-                emitProductsUpdated(oldState, newState, path);
+                emitProductsUpdated(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path);
               }
             })(emit(Events.MORE_PRODUCTS_ADDED), emit(Events.PRODUCTS_UPDATED)),
 
@@ -137,7 +139,9 @@ namespace Observer {
           },
 
           recommendations: {
-            products: emit(Events.RECOMMENDATIONS_PRODUCTS_UPDATED),
+            products: (oldState, newState, path) =>
+              // tslint:disable-next-line max-line-length
+              emit(Events.RECOMMENDATIONS_PRODUCTS_UPDATED)(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path),
             pastPurchases: emit(Events.PAST_PURCHASES_UPDATED),
             orderHistory: emit(Events.ORDER_HISTORY_UPDATED)
           },

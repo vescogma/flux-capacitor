@@ -40,8 +40,6 @@ namespace Adapter {
   export const extractCategoryValues = ({ additionalInfo }: { additionalInfo: object }, category: string) =>
     ((additionalInfo || {})[category] || []).map((value) => ({ value }));
 
-  export const extractProducts = ({ result: { products } }: any) => products.map(Search.extractProduct);
-
   export const mergeSuggestions = (suggestions: Array<{ value: string }>, recommendations: RecommendationsResponse) =>
     [...recommendations.result.map(({ query }) => ({ value: query, trending: true })), ...suggestions];
 

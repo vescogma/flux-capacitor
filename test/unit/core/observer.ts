@@ -1,4 +1,5 @@
 import * as sinon from 'sinon';
+import Search from '../../../src/core/adapters/search';
 import Events from '../../../src/core/events';
 import Observer from '../../../src/core/observer';
 import suite from '../_suite';
@@ -262,10 +263,14 @@ suite('Observer', ({ expect, spy, stub }) => {
         it('should emit AUTOCOMPLETE_PRODUCTS_UPDATED event when products differ', () => {
           const oldState = { products: 'idk' };
           const newState = { products: 'im different o wow' };
+          const products = { a: 'b' };
+          const extractedData = stub(Search, 'extractData').returns(products);
 
           observers.data.present.autocomplete(oldState, newState, path);
 
           expect(emit).to.be.calledWith(Events.AUTOCOMPLETE_PRODUCTS_UPDATED);
+          expect(extractedData).to.be.calledWithExactly(oldState.products);
+          expect(extractedData).to.be.calledWithExactly(newState.products);
         });
 
         it('should emit AUTOCOMPLETE_TEMPLATE_UPDATED event when templates differ', () => {
@@ -418,9 +423,13 @@ suite('Observer', ({ expect, spy, stub }) => {
 
       describe('recommendations', () => {
         it('should emit RECOMMENDATIONS_PRODUCTS_UPDATED event', () => {
+          const products = { a: 'b' };
+          const extractData = stub(Search, 'extractData').returns(products);
           observers.data.present.recommendations.products(undefined, testObject);
 
           expect(emit).to.be.calledWith(Events.RECOMMENDATIONS_PRODUCTS_UPDATED, testObject);
+          expect(extractData).to.be.calledWithExactly(undefined);
+          expect(extractData).to.be.calledWithExactly(testObject);
         });
       });
 

@@ -105,18 +105,6 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
     });
   });
 
-  describe('extractProducts()', () => {
-    it('should call extractProduct()', () => {
-      const extractProduct = stub(SearchAdapter, 'extractProduct').returns('x');
-
-      const products = Adapter.extractProducts({ result: { products: ['a', 'b'] } });
-
-      expect(products).to.eql(['x', 'x']);
-      expect(extractProduct).to.be.calledWith('a');
-      expect(extractProduct).to.be.calledWith('b');
-    });
-  });
-
   describe('extractArea()', () => {
     const area = 'myArea';
 

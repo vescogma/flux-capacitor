@@ -144,10 +144,18 @@ namespace Adapter {
     };
   };
 
-  export const extractProducts = (results: Results) =>
-    results.records.map(Adapter.extractProduct);
+  export const extractData = (products: Store.ProductWithMetadata[]) =>
+    products.map(({ data }) => data);
 
-  export const extractProduct = ({ allMeta }) => allMeta;
+  export const augmentProducts = (results: Results) => {
+    const startIndex = results.pageInfo.recordStart;
+    return results.records.map(({ collection, allMeta }, index) =>
+      ({
+        meta: { collection },
+        index: startIndex + index,
+        data: allMeta,
+      }));
+  };
 
   export const requestSort = ({ field, descending }: Store.Sort) =>
     ({ field, order: descending ? 'Descending' : undefined });

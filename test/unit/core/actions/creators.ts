@@ -620,7 +620,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const receiveQuery = stub(ActionCreators, 'receiveQuery').returns(receiveQueryAction);
         const receivePage = stub(ActionCreators, 'receivePage').returns(receivePageAction);
         const extractTemplate = stub(SearchAdapter, 'extractTemplate').returns(template);
-        const extractProducts = stub(SearchAdapter, 'extractProducts').returns(products);
+        const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(products);
         const selectCollection = stub(Selectors, 'collection').returns(collection);
         const extractQuery = stub(SearchAdapter, 'extractQuery').returns(query);
         const extractPage = stub(SearchAdapter, 'extractPage').returns(page);
@@ -637,7 +637,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         expect(receivePage).to.be.calledWith(page);
         expect(extractRecordCount).to.be.calledWith(results);
         expect(extractQuery).to.be.calledWith(results);
-        expect(extractProducts).to.be.calledWith(results);
+        expect(augmentProducts).to.be.calledWith(results);
         expect(combineNavigations).to.be.calledWith(results);
         expect(selectCollection).to.be.calledWith(state);
         expect(extractPage).to.be.calledWith(state);
@@ -760,9 +760,12 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
 
     describe('receiveMoreProducts()', () => {
       it('should return an action', () => {
-        const products: any[] = ['a', 'b'];
+        const products: any = { a: 'b' };
+        const newProds = { c: 'd' };
+        const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(newProds);
 
-        expectAction(ActionCreators.receiveMoreProducts(products), Actions.RECEIVE_MORE_PRODUCTS, products);
+        expectAction(ActionCreators.receiveMoreProducts(products)(null), Actions.RECEIVE_MORE_PRODUCTS, newProds);
+        expect(augmentProducts).to.be.calledWithExactly(products);
       });
     });
 
@@ -773,17 +776,18 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const products: any[] = ['c', 'd'];
         const receiveAutocompleteProductRecordsAction = { e: 'f' };
         const receiveAutocompleteTemplateAction = { g: 'h' };
-        const extractProducts = stub(SearchAdapter, 'extractProducts').returns(products);
+        const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(products);
         const extractTemplate = stub(SearchAdapter, 'extractTemplate').returns(template);
         // tslint:disable-next-line max-line-length
         const receiveAutocompleteProductRecords = stub(ActionCreators, 'receiveAutocompleteProductRecords').returns(receiveAutocompleteProductRecordsAction);
         const receiveAutocompleteTemplate = stub(ActionCreators, 'receiveAutocompleteTemplate').returns(receiveAutocompleteTemplateAction);
 
-        const batchAction = ActionCreators.receiveAutocompleteProducts(response);
+        const batchAction = ActionCreators.receiveAutocompleteProducts(response)(null);
 
         expect(createAction).to.be.calledWith(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, response);
         expect(receiveAutocompleteProductRecords).to.be.calledWith(products);
         expect(receiveAutocompleteTemplate).to.be.calledWith(template);
+        expect(augmentProducts).to.be.calledWithExactly(response);
         expect(batchAction).to.eql([
           ACTION,
           receiveAutocompleteProductRecordsAction,
@@ -796,7 +800,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const action = { a: 'b', error: true };
         createAction.returns(action);
 
-        const batchAction = ActionCreators.receiveAutocompleteProducts(results);
+        const batchAction = ActionCreators.receiveAutocompleteProducts(results)(null);
 
         expect(createAction).to.be.calledWith(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, results);
         expect(batchAction).to.eql(action);

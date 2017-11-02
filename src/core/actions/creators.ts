@@ -401,7 +401,7 @@ namespace ActionCreators {
         return [
           receiveProductsAction,
           ActionCreators.receiveQuery(SearchAdapter.extractQuery(res)),
-          ActionCreators.receiveProductRecords(SearchAdapter.extractProducts(res)),
+          ActionCreators.receiveProductRecords(SearchAdapter.augmentProducts(res)),
           ActionCreators.receiveNavigations(SearchAdapter.combineNavigations(res)),
           ActionCreators.receiveRecordCount(recordCount),
           ActionCreators.receiveCollectionCount({
@@ -417,11 +417,11 @@ namespace ActionCreators {
 
   /**
    * The products to receive and update the state with.
-   * @param  {Store.Product[]}               products - Products that will be
+   * @param  {Store.ProductWithMetadata[]}               products - Products that will be
    * received and updated to in the state.
    * @return {Actions.ReceiveProductRecords}          - Action with products.
    */
-  export function receiveProductRecords(products: Store.Product[]): Actions.ReceiveProductRecords {
+  export function receiveProductRecords(products: Store.ProductWithMetadata[]): Actions.ReceiveProductRecords {
     return createAction(Actions.RECEIVE_PRODUCT_RECORDS, products);
   }
 
@@ -512,11 +512,12 @@ namespace ActionCreators {
   /**
    * The more products to receive and update state with. Products will be added on
    * to the products array in the store.
-   * @param  {Store.Product[]}             products - The products to add to the state.
+   * @param  {Store.ProductWithMetadata[]}             products - The products to add to the state.
    * @return {Actions.ReceiveMoreProducts}          - Action with products.
    */
-  export function receiveMoreProducts(products: Store.Product[]): Actions.ReceiveMoreProducts {
-    return createAction(Actions.RECEIVE_MORE_PRODUCTS, products);
+  export function receiveMoreProducts(res: Results) {
+    return (state: Store.State): Actions.ReceiveMoreProducts =>
+      createAction(Actions.RECEIVE_MORE_PRODUCTS, SearchAdapter.augmentProducts(res));
   }
 
   /**
@@ -524,24 +525,26 @@ namespace ActionCreators {
    * @param  {Results}                             res - Response object, as returned in the request.
    * @return {Actions.ReceiveAutocompleteProducts}     - Action and res.
    */
-  export function receiveAutocompleteProducts(res: Results): Actions.ReceiveAutocompleteProducts {
-    const receiveProductsAction = createAction(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, res);
+  export function receiveAutocompleteProducts(res: Results) {
+    return (state: Store.State): Actions.Action<string, any>[] | Actions.ReceiveAutocompleteProducts => {
+      const receiveProductsAction = createAction(Actions.RECEIVE_AUTOCOMPLETE_PRODUCTS, res);
 
-    return handleError(receiveProductsAction, () => [
-      receiveProductsAction,
-      ActionCreators.receiveAutocompleteProductRecords(SearchAdapter.extractProducts(res)),
-      ActionCreators.receiveAutocompleteTemplate(SearchAdapter.extractTemplate(res.template)),
-    ]);
+      return handleError(receiveProductsAction, () => [
+        receiveProductsAction,
+        ActionCreators.receiveAutocompleteProductRecords(SearchAdapter.augmentProducts(res)),
+        ActionCreators.receiveAutocompleteTemplate(SearchAdapter.extractTemplate(res.template)),
+      ]);
+    };
   }
 
   /**
    * The autocomplete products to receive and update state with.
-   * @param  {Store.Product[]}                           products - The products to add to the
+   * @param  {Store.ProductWithMetadata[]}                           products - The products to add to the
    * autocomplete state.
    * @return {Actions.ReceiveAutocompleteProductRecords}          - Action with products.
    */
   // tslint:disable-next-line max-line-length
-  export function receiveAutocompleteProductRecords(products: Store.Product[]): Actions.ReceiveAutocompleteProductRecords {
+  export function receiveAutocompleteProductRecords(products: Store.ProductWithMetadata[]): Actions.ReceiveAutocompleteProductRecords {
     return createAction(Actions.RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS, products);
   }
 
@@ -566,10 +569,11 @@ namespace ActionCreators {
 
   /**
    * The recommendations products to receive and update state with.
-   * @param  {Store.Product[]}                         products - The products to add to the recommendations state.
+   * @param  {Store.ProductWithMetadata[]}             products - The products to add to the recommendations state.
    * @return {Actions.ReceiveRecommendationsProducts}           - Action with products.
    */
-  export function receiveRecommendationsProducts(products: Store.Product[]): Actions.ReceiveRecommendationsProducts {
+  // tslint:disable-next-line max-line-length
+  export function receiveRecommendationsProducts(products: Store.ProductWithMetadata[]): Actions.ReceiveRecommendationsProducts {
     return createAction(Actions.RECEIVE_RECOMMENDATIONS_PRODUCTS, products);
   }
 
