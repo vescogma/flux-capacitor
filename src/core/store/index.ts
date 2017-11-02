@@ -347,7 +347,7 @@ namespace Store {
   }
 
   export interface Personalization {
-    biasing: Personalization.RealTimeBiasing;
+    biasing: Personalization.Biasing;
   }
 
   export namespace Personalization {
