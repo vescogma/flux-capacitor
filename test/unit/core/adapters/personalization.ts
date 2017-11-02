@@ -76,7 +76,6 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       const result = Adapter.extractBias(action, store);
       expect(result).to.deep.equal(bias);
       expect(Adapter.generateNewBias).to.not.have.been.called;
-      //s.restore();
     });
 
     it('should generate new timestamp if variant exist and key does not exist', () => {
