@@ -56,4 +56,50 @@ suite('recommendations', ({ expect }) => {
       expect(reducer).to.eql(state);
     });
   });
+
+  describe('updateOrderHistory()', () => {
+    const state: Store.Recommendations = <any>{
+      orderHistory: [{ a: 1 }]
+    };
+
+    it('should update state on RECEIVE_ORDER_HISTORY', () => {
+      const payload = [{ a: 1 }];
+      const newState = {
+        orderHistory: payload
+      };
+
+      const reducer = recommendations(state, <any>{ type: Actions.RECEIVE_ORDER_HISTORY, payload });
+
+      expect(reducer).to.eql(newState);
+    });
+
+    it('should return state on default', () => {
+      const reducer = recommendations(state, <any>{});
+
+      expect(reducer).to.eql(state);
+    });
+  });
+
+  describe('updateQueryPastPurchases()', () => {
+    const state: Store.Recommendations = <any>{
+      queryPastPurchases: [{ a: 1 }]
+    };
+
+    it('should update state on RECEIVE_QUERY_PAST_PURCHASES', () => {
+      const payload = [{ a: 1 }];
+      const newState = {
+        queryPastPurchases: payload
+      };
+
+      const reducer = recommendations(state, <any>{ type: Actions.RECEIVE_QUERY_PAST_PURCHASES, payload });
+
+      expect(reducer).to.eql(newState);
+    });
+
+    it('should return state on default', () => {
+      const reducer = recommendations(state, <any>{});
+
+      expect(reducer).to.eql(state);
+    });
+  });
 });

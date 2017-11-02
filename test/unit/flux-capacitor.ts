@@ -249,6 +249,14 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
         expectDispatch(() => flux.saytProducts(query), 'fetchAutocompleteProducts', query, []);
       });
     });
+
+    describe('saytPastPurchases()', () => {
+      it('should call fetchPastPurchases() action', () => {
+        const query = 'hat';
+
+        expectDispatch(() => flux.saytPastPurchases(query), 'fetchPastPurchases', query);
+      });
+    });
   });
 
   describe('static', () => {

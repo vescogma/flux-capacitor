@@ -289,6 +289,14 @@ namespace Selectors {
     state.data.present.recommendations.pastPurchases.products
       .reduce((products, product) => Object.assign(products, { [product.sku]: product.quantity }), {});
 
+  export const pastPurchases = (state: Store.State) =>
+    state.data.present.recommendations.pastPurchases.products;
+
+  export const queryPastPurchases = (state: Store.State) =>
+    state.data.present.recommendations.queryPastPurchases;
+
+  export const orderHistory = (state: Store.State) =>
+    state.data.present.recommendations.orderHistory;
   /**
    * Returns the ui state for the all of the tags with the given tagName.
    */

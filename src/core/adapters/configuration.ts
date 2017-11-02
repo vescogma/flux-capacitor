@@ -18,7 +18,13 @@ namespace Adapter {
             category: {
               field: Adapter.extractSaytCategoryField(config),
               values: []
-            }
+            },
+          },
+          recommendations: {
+            suggested: { products: [] },
+            pastPurchases: { products: []},
+            queryPastPurchases: [],
+            orderHistory: []
           },
           fields: Adapter.extractFields(config),
           collections: Adapter.extractCollections(config, CollectionsReducer.DEFAULT_COLLECTION),

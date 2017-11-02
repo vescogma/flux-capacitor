@@ -212,6 +212,8 @@ namespace Store {
     pastPurchases: {
       products: Recommendations.PastPurchase[];
     };
+    queryPastPurchases: Product[];
+    orderHistory: any[];
   }
 
   export type AvailableNavigations = Indexed<Navigation> & {
@@ -234,6 +236,14 @@ namespace Store {
     export interface PastPurchase {
       sku: string;
       quantity: number;
+    }
+
+    // slide 18 of epic
+    export interface OrderHistoryProduct {
+      sku: string;
+      quantity: number;
+      collection: string;
+      metadata: object;
     }
   }
 

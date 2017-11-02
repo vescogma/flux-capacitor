@@ -102,8 +102,12 @@ namespace ActionCreators {
    * Makes a request for past purchases.
    * @return {Actions.FetchPastPurchases} - Action with null.
    */
-  export function fetchPastPurchases(): Actions.FetchPastPurchases {
-    return createAction(Actions.FETCH_PAST_PURCHASES, null);
+  export function fetchPastPurchases(query: string = null): Actions.FetchPastPurchases {
+    return createAction(Actions.FETCH_PAST_PURCHASES, query);
+  }
+
+  export function fetchOrderHistory() {
+    return createAction(Actions.FETCH_ORDER_HISTORY, null);
   }
 
   // request action creators
@@ -588,6 +592,14 @@ namespace ActionCreators {
     return createAction(Actions.RECEIVE_NAVIGATION_SORT, navigations);
   }
 
+  // wip fix types
+  export function receiveQueryPastPurchases(products: any[]) {
+    return createAction(Actions.RECEIVE_QUERY_PAST_PURCHASES, products);
+  }
+
+  export function receiveOrderHistory (products: Store.Recommendations.OrderHistoryProduct[]) {
+    return createAction(Actions.RECEIVE_ORDER_HISTORY, products);
+  }
   // ui action creators
   /**
    * Adds state for a given tag to the store.

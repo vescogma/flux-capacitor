@@ -18,7 +18,8 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
       // tslint:disable-next-line max-line-length
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_RECOMMENDATIONS_PRODUCTS, Tasks.fetchProducts, flux));
-      expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PAST_PURCHASES, Tasks.fetchPastPurchases, flux));
+      // expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PAST_PURCHASES, Tasks.fetchPastPurchases, flux));
+      // expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_ORDER_HISTORY, Tasks.fetchOrderHistory, flux));
       saga.next();
     });
   });
@@ -115,6 +116,8 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const productCount = 0;
         const productSuggestions = { productCount };
         const config = { customerId, recommendations: { productSuggestions } };
+        const flux: any = { config, store: { getState: () => 1 } };
+        stub(Selectors, 'pastPurchases').returns([]);
 
         const task = Tasks.fetchProducts(<any>{}, <any>{ payload: {} });
 
@@ -147,13 +150,12 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const receivePastPurchasesAction: any = { a: 'b' };
         const receivePastPurchases = spy(() => receivePastPurchasesAction);
         const flux: any = { config, actions: { receivePastPurchases } };
-        const url = `http://${customerId}.groupbycloud.com/orders/public/skus/popular`;
+        const url = `http://${customerId}.groupbycloud.com/orders/public/skus/_search`;
 
         const fetch = stub(utils, 'fetch');
         const request = {
           method: 'POST',
           body: JSON.stringify({
-            size: productCount
           })
         };
         const promise = Promise.resolve();
@@ -176,6 +178,8 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const productCount = 0;
         const pastPurchases = { productCount };
         const config = { customerId, recommendations: { pastPurchases } };
+        const flux: any = { config, store: { getState: () => 1 } };
+        stub(Selectors, 'pastPurchases').returns([]);
 
         const task = Tasks.fetchPastPurchases(<any>{}, <any>{ payload: {} });
 
@@ -200,6 +204,60 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         expect(receivePastPurchases).to.be.calledWithExactly(error);
         task.next();
       });
+    });
+  });
+
+  describe('fetchOrderHistory()', () => {
+    it('should return orderHistory', () => {
+      const customerId = 'myCustomer';
+      const config = { customerId };
+      const receiveOrderHistoryAction: any = { a: 'b' };
+      const receiveOrderHistory = spy(() => receiveOrderHistoryAction);
+      const flux: any = { config, actions: { receiveOrderHistory } };
+      const url = `http://${customerId}.groupbycloud.com/orders/public/_search`;
+
+      const fetch = stub(utils, 'fetch');
+      const request = {
+        method: 'POST',
+        body: JSON.stringify({
+          cartType: 'online',
+          skip: 0,
+          pageSize: 100
+        })
+      };
+      const promise = Promise.resolve();
+      const response = {
+        result: [
+          {
+            items: [{ sku: '12314', quantity: 1 }, { sku: '0932', quantity: 2 }, { sku: '19235', quantity: 1 }]
+          }
+        ]
+      };
+
+      const task = Tasks.fetchOrderHistory(flux, <any>{ payload: {} });
+
+      expect(task.next().value).to.eql(effects.call(fetch, url, request));
+      expect(task.next({ json: () => promise }).value).to.eql(promise);
+      expect(task.next(response).value).to.eql(effects.put(receiveOrderHistoryAction));
+      expect(receiveOrderHistory).to.be.calledWithExactly(response.result[0].items);
+      task.next();
+    });
+
+    it('should handle request failure', () => {
+      const customerId = 'myCustomer';
+      const config = { customerId };
+      const receiveOrderHistoryAction: any = { a: 'b' };
+      const receiveOrderHistory = spy(() => receiveOrderHistoryAction);
+      const flux: any = { config, actions: { receiveOrderHistory } };
+      const url = `http://${customerId}.groupbycloud.com/orders/public/_search`;
+      const error = new Error();
+
+      const task = Tasks.fetchOrderHistory(flux, <any>{ payload: {} });
+
+      task.next();
+      expect(task.throw(error).value).to.eql(effects.put(receiveOrderHistoryAction));
+      expect(receiveOrderHistory).to.be.calledWithExactly(error);
+      task.next();
     });
   });
 });
