@@ -139,9 +139,11 @@ namespace Observer {
           },
 
           recommendations: {
-            products: (oldState, newState, path) =>
-              // tslint:disable-next-line max-line-length
-              emit(Events.RECOMMENDATIONS_PRODUCTS_UPDATED)(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path),
+            suggested: {
+              products: (oldState, newState, path) =>
+                // tslint:disable-next-line max-line-length
+                emit(Events.RECOMMENDATIONS_PRODUCTS_UPDATED)(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path)
+            },
             pastPurchases: emit(Events.PAST_PURCHASES_UPDATED),
             orderHistory: emit(Events.ORDER_HISTORY_UPDATED)
           },

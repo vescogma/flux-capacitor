@@ -198,7 +198,8 @@ suite('Observer', ({ expect, spy, stub }) => {
       expect(present.query.related).to.be.a('function');
       expect(present.query.rewrites).to.be.a('function');
       expect(present.recommendations).to.be.an('object');
-      expect(present.recommendations.products).to.be.a('function');
+      expect(present.recommendations.suggested).to.be.an('object');
+      expect(present.recommendations.suggested.products).to.be.a('function');
       expect(present.redirect).to.be.a('function');
       expect(present.sorts).to.be.a('function');
       expect(present.template).to.be.a('function');
@@ -425,7 +426,7 @@ suite('Observer', ({ expect, spy, stub }) => {
         it('should emit RECOMMENDATIONS_PRODUCTS_UPDATED event', () => {
           const products = { a: 'b' };
           const extractData = stub(Search, 'extractData').returns(products);
-          observers.data.present.recommendations.products(undefined, testObject);
+          observers.data.present.recommendations.suggested.products(undefined, testObject);
 
           expect(emit).to.be.calledWith(Events.RECOMMENDATIONS_PRODUCTS_UPDATED, testObject);
           expect(extractData).to.be.calledWithExactly(undefined);
