@@ -358,7 +358,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         expect(augmentProducts).to.be.calledWithExactly(productData);
         expect(extractRecordCount).to.be.calledWithExactly(productData);
         expect(extractPage).to.be.calledWithExactly(getState(), productData,
-          Selectors.pastPurchasePage, Selectors.pastPurchasePageSize);
+          Selectors.pastPurchasePage(getState()), Selectors.pastPurchasePageSize(getState()));
         expect(saveState).to.be.calledWithExactly(utils.Routes.PAST_PURCHASE);
       });
 

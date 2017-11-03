@@ -129,10 +129,15 @@ export namespace Tasks {
             flux.actions.receivePastPurchaseRefinements(navigations),
           ]);
         } else {
+          const state = flux.store.getState();
           yield effects.put(<any>[
-            flux.actions.receivePastPurchasePage(SearchAdapter.extractPage(
-              flux.store.getState(), SearchAdapter.extractRecordCount(results),
-              Selectors.pastPurchasePage,Selectors.pastPurchasePageSize)),
+            flux.actions.receivePastPurchasePage(
+              SearchAdapter.extractPage(
+                state, SearchAdapter.extractRecordCount(results),
+                Selectors.pastPurchasePage(state),
+                Selectors.pastPurchasePageSize(state)
+              )
+            ),
             flux.actions.receivePastPurchaseCurrentRecordCount(results.totalRecordCount),
             flux.actions.receivePastPurchaseProducts(SearchAdapter.augmentProducts(results)),
           ]);

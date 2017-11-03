@@ -703,7 +703,6 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(products);
         const selectCollection = stub(Selectors, 'collection').returns(collection);
         const extractQuery = stub(SearchAdapter, 'extractQuery').returns(query);
-        const extractPage = stub(SearchAdapter, 'extractPage').returns(page);
 
         const batchAction = ActionCreators.receiveProducts(results)(state);
 
@@ -714,14 +713,13 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         expect(receiveRecordCount).to.be.calledWith(recordCount);
         expect(receiveTemplate).to.be.calledWith(template);
         expect(receiveCollectionCount).to.be.calledWith({ collection, count: recordCount });
-        expect(receivePage).to.be.calledWith(page);
+        expect(receivePage).to.be.calledWith(recordCount);
         expect(extractRecordCount).to.be.calledWith(results);
         expect(extractQuery).to.be.calledWith(results);
         expect(augmentProducts).to.be.calledWith(results);
         expect(combineNavigations).to.be.calledWith(results);
         expect(pruneRefinements).to.be.calledWith(navigations);
         expect(selectCollection).to.be.calledWith(state);
-        expect(extractPage).to.be.calledWith(state);
         expect(extractTemplate).to.be.calledWith(results.template);
         expect(batchAction).to.eql([
           ACTION,
@@ -786,8 +784,13 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
     describe('receivePage()', () => {
       it('should return an action', () => {
         const page: any = { a: 'b' };
+        const state: any = { c: 'd' };
+        const recordCount = 300;
+        const current = 2;
+        const payload = stub(SearchAdapter, 'extractPage').returns(page);
 
-        expectAction(ActionCreators.receivePage(page), Actions.RECEIVE_PAGE, page);
+        expectAction(ActionCreators.receivePage(recordCount, current)(state), Actions.RECEIVE_PAGE, page);
+        expect(payload).to.be.calledWithExactly(state, recordCount, current);
       });
     });
 

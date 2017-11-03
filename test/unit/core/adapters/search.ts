@@ -360,7 +360,8 @@ suite('Search Adapter', ({ expect, stub }) => {
         to,
         last,
         next,
-        previous
+        previous,
+        current: 4,
       });
       expect(pageSize).to.be.calledWith(state);
       expect(page).to.be.calledWith(state);
@@ -389,7 +390,7 @@ suite('Search Adapter', ({ expect, stub }) => {
       const nextPage = stub(PageAdapter, 'nextPage').returns(next);
       const previousPage = stub(PageAdapter, 'previousPage').returns(previous);
 
-      const pageInfo = Adapter.extractPage(state, total, pastPurchasePage, pastPurchasePageSize);
+      const pageInfo = Adapter.extractPage(state, total, pastPurchasePage(), pastPurchasePageSize());
 
       expect(pageInfo).to.eql({
         from,
