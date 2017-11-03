@@ -126,8 +126,14 @@ namespace Observer {
           products: ((emitMoreProductsAdded: Observer, emitProductsUpdated: Observer) =>
             (oldState: Store.ProductWithMetadata[], newState: Store.ProductWithMetadata[], path: string) => {
               const oldLength = oldState.length;
-              if (oldLength < newState.length && oldState[0] === newState[0]) {
-                emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
+              // tslint:disable-next-line max-line-length
+              if (oldLength < newState.length && (oldState[0] === newState[0] || oldState[oldState.length - 1] === newState[newState.length - 1])) {
+                // TODO: Add appendProducts action
+                if (oldState[0] === newState[0]) {
+                  emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
+                } else if (oldState[oldState.length - 1] === newState[newState.length - 1]) {
+                  emitMoreProductsAdded(oldState, newState.slice(0, newState.length - oldState.length), path);
+                }
               } else {
                 emitProductsUpdated(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path);
               }
@@ -169,6 +175,8 @@ namespace Observer {
             ),
             sort: emit(Events.PAST_PURCHASE_SORT_UPDATED),
           },
+
+          infiniteScroll: emit(Events.INFINITE_SCROLL_UPDATED),
 
           recordCount: emit(Events.RECORD_COUNT_UPDATED),
 

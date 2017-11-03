@@ -360,7 +360,8 @@ suite('Search Adapter', ({ expect, stub }) => {
         to,
         last,
         next,
-        previous
+        previous,
+        current: 4,
       });
       expect(pageSize).to.be.calledWith(state);
       expect(page).to.be.calledWith(state);

@@ -130,9 +130,14 @@ export namespace Tasks {
           ]);
         } else {
           yield effects.put(<any>[
-            flux.actions.receivePastPurchasePage(SearchAdapter.extractPage(
-              flux.store.getState(), SearchAdapter.extractRecordCount(results),
-              Selectors.pastPurchasePage,Selectors.pastPurchasePageSize)),
+            flux.actions.receivePastPurchasePage(
+              SearchAdapter.extractPage(
+                flux.store.getState(),
+                SearchAdapter.extractRecordCount(results),
+                Selectors.pastPurchasePage(flux.store.getState()),
+                Selectors.pastPurchasePageSize(flux.store.getState())
+              )
+            ),
             flux.actions.receivePastPurchaseCurrentRecordCount(results.totalRecordCount),
             flux.actions.receivePastPurchaseProducts(SearchAdapter.augmentProducts(results)),
           ]);

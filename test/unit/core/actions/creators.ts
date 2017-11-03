@@ -79,7 +79,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       it('should return an action', () => {
         const amount = 15;
 
-        expectAction(ActionCreators.fetchMoreProducts(amount), Actions.FETCH_MORE_PRODUCTS, amount);
+        expectAction(ActionCreators.fetchMoreProducts(amount), Actions.FETCH_MORE_PRODUCTS, { amount, forward: true });
       });
     });
 
@@ -677,6 +677,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const receiveRecordCountAction = { gg: 'hh' };
         const receiveCollectionCountAction = { ii: 'jj' };
         const receivePageAction = { kk: 'll' };
+        const receivePageFunc = () => receivePageAction;
         const receiveTemplateAction = { mm: 'nn' };
         const products = ['x', 'x'];
         const results: any = {};
@@ -698,12 +699,11 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const pruneRefinements = stub(SearchAdapter, 'pruneRefinements').returns(prunedNavigations);
         const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(recordCount);
         const receiveQuery = stub(ActionCreators, 'receiveQuery').returns(receiveQueryAction);
-        const receivePage = stub(ActionCreators, 'receivePage').returns(receivePageAction);
+        const receivePage = stub(ActionCreators, 'receivePage').returns(receivePageFunc);
         const extractTemplate = stub(SearchAdapter, 'extractTemplate').returns(template);
         const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(products);
         const selectCollection = stub(Selectors, 'collection').returns(collection);
         const extractQuery = stub(SearchAdapter, 'extractQuery').returns(query);
-        const extractPage = stub(SearchAdapter, 'extractPage').returns(page);
 
         const batchAction = ActionCreators.receiveProducts(results)(state);
 
@@ -714,14 +714,13 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         expect(receiveRecordCount).to.be.calledWith(recordCount);
         expect(receiveTemplate).to.be.calledWith(template);
         expect(receiveCollectionCount).to.be.calledWith({ collection, count: recordCount });
-        expect(receivePage).to.be.calledWith(page);
+        expect(receivePage).to.be.calledWith(recordCount);
         expect(extractRecordCount).to.be.calledWith(results);
         expect(extractQuery).to.be.calledWith(results);
         expect(augmentProducts).to.be.calledWith(results);
         expect(combineNavigations).to.be.calledWith(results);
         expect(pruneRefinements).to.be.calledWith(navigations);
         expect(selectCollection).to.be.calledWith(state);
-        expect(extractPage).to.be.calledWith(state);
         expect(extractTemplate).to.be.calledWith(results.template);
         expect(batchAction).to.eql([
           ACTION,
@@ -786,8 +785,13 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
     describe('receivePage()', () => {
       it('should return an action', () => {
         const page: any = { a: 'b' };
+        const state: any = { c: 'd' };
+        const recordCount = 300;
+        const current = 2;
+        const payload = stub(SearchAdapter, 'extractPage').returns(page);
 
-        expectAction(ActionCreators.receivePage(page), Actions.RECEIVE_PAGE, page);
+        expectAction(ActionCreators.receivePage(recordCount, current)(state), Actions.RECEIVE_PAGE, page);
+        expect(payload).to.be.calledWithExactly(state, recordCount, current);
       });
     });
 
@@ -1188,7 +1192,17 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const state = { a: 'b' };
 
         // tslint:disable-next-line max-line-length
-        expectAction(ActionCreators.createComponentState(tagName, id, state), Actions.CREATE_COMPONENT_STATE, { tagName, id, state });
+        expectAction(ActionCreators.createComponentState(tagName, id, state), Actions.CREATE_COMPONENT_STATE, { tagName, id, state, persist: false });
+      });
+
+      it('should return an action with persist true', () => {
+        const tagName = 'my-tag';
+        const id = '123';
+        const state = { a: 'b' };
+        const persist = true;
+
+        // tslint:disable-next-line max-line-length
+        expectAction(ActionCreators.createComponentState(tagName, id, state, persist), Actions.CREATE_COMPONENT_STATE, { tagName, id, state, persist: true });
       });
 
       it('should return an action if no state is passed as an argument', () => {
@@ -1196,12 +1210,12 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const id = '123';
 
         // tslint:disable-next-line max-line-length
-        expectAction(ActionCreators.createComponentState(tagName, id), Actions.CREATE_COMPONENT_STATE, { tagName, id, state: {} });
+        expectAction(ActionCreators.createComponentState(tagName, id), Actions.CREATE_COMPONENT_STATE, { tagName, id, state: {}, persist: false });
       });
     });
 
     describe('removeComponentState()', () => {
-      it('should create a CREATE_COMPONENT_STATE action', () => {
+      it('should create a REMOVE_COMPONENT_STATE action', () => {
         const tagName = 'my-tag';
         const id = '123';
 

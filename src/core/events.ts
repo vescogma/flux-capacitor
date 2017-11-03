@@ -123,6 +123,12 @@ namespace Events {
    */
   export const CURRENT_PAGE_UPDATED = 'current_page_updated'; // pre
 
+  /**
+   * Triggered when infinite scroll is updated.
+   * Returns the current infinite scroll object.
+   */
+  export const INFINITE_SCROLL_UPDATED = 'infinite_scroll_updated';
+
   // record count event
   /**
    * Triggered when record count is updated.
@@ -324,6 +330,11 @@ namespace Events {
    * Returns the state.
    */
   export const HISTORY_SAVE = 'history:save';
+  /**
+   * Triggered when history is replaced.
+   * Returns the state.
+   */
+  export const HISTORY_REPLACE = 'history:replace';
 
   // url events
   /**

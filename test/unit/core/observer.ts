@@ -387,11 +387,18 @@ suite('Observer', ({ expect, spy, stub }) => {
           expect(emit).to.be.calledWith(Events.PRODUCTS_UPDATED, newProducts);
         });
 
-        it('should emit PRODUCTS_UPDATED event', () => {
-          const newProducts = ['a', 'b'];
-          observers.data.present.products(['a'], newProducts);
+        it('should emit MORE_PRODUCTS_ADDED event with more products from fetching forward', () => {
+          const newProducts = ['a', 'b', 'c', 'd'];
+          observers.data.present.products(['a', 'b'], newProducts);
 
-          expect(emit).to.be.calledWith(Events.MORE_PRODUCTS_ADDED, ['b']);
+          expect(emit).to.be.calledWith(Events.MORE_PRODUCTS_ADDED, ['c', 'd']);
+        });
+
+        it('should emit MORE_PRODUCTS_ADDED event with more products from fetching backward', () => {
+          const newProducts = ['a', 'b', 'c', 'd'];
+          observers.data.present.products(['c', 'd'], newProducts);
+
+          expect(emit).to.be.calledWith(Events.MORE_PRODUCTS_ADDED, ['a', 'b']);
         });
       });
 

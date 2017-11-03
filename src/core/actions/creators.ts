@@ -48,8 +48,10 @@ namespace ActionCreators {
    * @param  {number}                    amount - Amount of more products to fetch.
    * @return {Actions.FetchMoreProducts}        - Action with amount.
    */
-  export function fetchMoreProducts(amount: number): Actions.FetchMoreProducts {
-    return createAction(Actions.FETCH_MORE_PRODUCTS, amount);
+  export function fetchMoreProducts(amount: number, forward: boolean = true): Actions.FetchMoreProducts {
+    return createAction(Actions.FETCH_MORE_PRODUCTS, { amount, forward }, {
+      forward: validators.isNotFetching,
+    });
   }
 
   /**
@@ -421,6 +423,10 @@ namespace ActionCreators {
     return createAction(Actions.UPDATE_SECURED_PAYLOAD, payload);
   }
 
+  export function infiniteScrollRequestState(fetchObj: Actions.Payload.InfiniteScroll): Actions.ReceiveInfiniteScroll {
+    return createAction(Actions.RECEIVE_INFINITE_SCROLL, fetchObj);
+  }
+
   // response action creators
   /**
    * The query object to receive and update state with.
@@ -454,7 +460,7 @@ namespace ActionCreators {
             collection: Selectors.collection(state),
             count: recordCount
           }),
-          ActionCreators.receivePage(SearchAdapter.extractPage(state, recordCount)),
+          ActionCreators.receivePage(recordCount)(state),
           ActionCreators.receiveTemplate(SearchAdapter.extractTemplate(res.template)),
         ];
       });
@@ -496,8 +502,11 @@ namespace ActionCreators {
    * @param  {Actions.Payload.Page} page - The page object state will update to.
    * @return {Actions.ReceivePage}       - Action with page.
    */
-  export function receivePage(page: Actions.Payload.Page): Actions.ReceivePage {
-    return createAction(Actions.RECEIVE_PAGE, page);
+  export function receivePage(recordCount: number, current?: number) {
+    return (state: Store.State): Actions.ReceivePage => {
+      // console.log('extractedPage: ', SearchAdapter.extractPage(state, recordCount, current));
+      return createAction(Actions.RECEIVE_PAGE, SearchAdapter.extractPage(state, recordCount, current));
+    };
   }
 
   /**
@@ -562,8 +571,10 @@ namespace ActionCreators {
    * @return {Actions.ReceiveMoreProducts}          - Action with products.
    */
   export function receiveMoreProducts(res: Results) {
-    return (state: Store.State): Actions.ReceiveMoreProducts =>
-      createAction(Actions.RECEIVE_MORE_PRODUCTS, SearchAdapter.augmentProducts(res));
+    return (state: Store.State): Actions.ReceiveMoreProducts => {
+      // tslint:disable-next-line max-line-length
+      return handleError(createAction(Actions.RECEIVE_MORE_PRODUCTS, res), () => createAction(Actions.RECEIVE_MORE_PRODUCTS, SearchAdapter.augmentProducts(res)));
+    };
   }
 
   /**
@@ -796,8 +807,9 @@ namespace ActionCreators {
    * @param  {any={}}                       state   - The state to add in the store.
    * @return {Actions.CreateComponentState}         - Action with tagName, id, and state.
    */
-  export function createComponentState(tagName: string, id: string, state: any = {}): Actions.CreateComponentState {
-    return createAction(Actions.CREATE_COMPONENT_STATE, { tagName, id, state });
+  // tslint:disable-next-line max-line-length
+  export function createComponentState(tagName: string, id: string, state: any = {}, persist: boolean = false): Actions.CreateComponentState {
+    return createAction(Actions.CREATE_COMPONENT_STATE, { tagName, id, state, persist });
   }
 
   /**

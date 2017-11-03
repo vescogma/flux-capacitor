@@ -95,19 +95,35 @@ export namespace Tasks {
   export function* fetchMoreProducts(flux: FluxCapacitor, action: Actions.FetchMoreProducts) {
     try {
       const state: Store.State = yield effects.select();
-      const config = yield effects.select(Selectors.config);
+      const products = Selectors.productsWithMetadata(state);
+      const pageSize = action.payload.amount;
+
+      let product;
+      if (action.payload.forward) {
+        product = products[products.length - 1].index;
+        yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingForward: true }));
+      } else {
+        product = products[0].index - pageSize - 1;
+        yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingBackward: true }));
+      }
 
       const result = yield effects.call(
         [flux.clients.bridge, flux.clients.bridge.search],
         {
           ...Requests.search(state),
-          pageSize: action.payload,
-          skip: Selectors.products(state).length
+          pageSize,
+          skip: product,
         }
       );
 
       flux.emit(Events.BEACON_SEARCH, result.id);
+
       yield effects.put(<any>flux.actions.receiveMoreProducts(result));
+      if (action.payload.forward) {
+        yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingForward: false }));
+      } else {
+        yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingBackward: false }));
+      }
     } catch (e) {
       yield effects.put(<any>flux.actions.receiveMoreProducts(e));
     }
@@ -126,6 +142,6 @@ export default (flux: FluxCapacitor) => {
   return function* saga() {
     yield effects.takeLatest(Actions.FETCH_PRODUCTS, Tasks.fetchProducts, flux);
     yield effects.takeLatest(Actions.FETCH_PRODUCTS_WHEN_HYDRATED, Tasks.fetchProductsWhenHydrated, flux);
-    yield effects.takeLatest(Actions.FETCH_MORE_PRODUCTS, Tasks.fetchMoreProducts, flux);
+    yield effects.takeEvery(Actions.FETCH_MORE_PRODUCTS, Tasks.fetchMoreProducts, flux);
   };
 };
