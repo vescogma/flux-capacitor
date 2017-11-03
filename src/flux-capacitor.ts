@@ -56,6 +56,10 @@ class FluxCapacitor extends EventEmitter {
     this.emit(Events.HISTORY_SAVE, { route, state: this.store.getState() });
   }
 
+  replaceState(route: string) {
+    this.emit(Events.HISTORY_REPLACE, { route, state: this.store.getState() });
+  }
+
   /* ACTION SUGAR */
 
   search(query?: string) {

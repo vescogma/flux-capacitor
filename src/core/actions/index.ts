@@ -1,7 +1,7 @@
 import { Results } from 'groupby-api';
-import Payloads from './payloads';
 import Configuration from '../configuration';
 import Store from '../store';
+import Payloads from './payloads';
 
 namespace Actions {
   export interface Action<S = string, T = any> {
@@ -80,6 +80,7 @@ namespace Actions {
   export type ResetPageAndAddRefinement = [Actions.ResetPage, Actions.AddRefinement];
   export type CheckAndResetRefinements = ResetPageAndResetRefinements | Action<any>[];
   export type ResetPageAndUpdateQuery = [Actions.ResetPage, Actions.UpdateQuery];
+  export type ReceiveMoreProductsAndPage = [Actions.ReceiveMoreProducts, Actions.ReceivePage];
 
   // fetch actions
   export const FETCH_MORE_REFINEMENTS = 'FETCH_MORE_REFINEMENTS';
@@ -89,7 +90,7 @@ namespace Actions {
   export const FETCH_PRODUCTS_WHEN_HYDRATED = 'FETCH_PRODUCTS_WHEN_HYDRATED';
   export type fetchProductsWhenHydrated = Action<typeof FETCH_PRODUCTS_WHEN_HYDRATED, Actions.FetchProducts>;
   export const FETCH_MORE_PRODUCTS = 'FETCH_MORE_PRODUCTS';
-  export type FetchMoreProducts = Action<typeof FETCH_MORE_PRODUCTS, number>;
+  export type FetchMoreProducts = Action<typeof FETCH_MORE_PRODUCTS, { amount: number, forward: boolean }>;
   export const FETCH_AUTOCOMPLETE_SUGGESTIONS = 'FETCH_AUTOCOMPLETE_SUGGESTIONS';
   export type FetchAutocompleteSuggestions = Action<typeof FETCH_AUTOCOMPLETE_SUGGESTIONS, string>;
   export const FETCH_AUTOCOMPLETE_PRODUCTS = 'FETCH_AUTOCOMPLETE_PRODUCTS';
@@ -185,6 +186,8 @@ namespace Actions {
   export const SELECT_PAST_PURCHASE_SORT = 'SELECT_PAST_PURCHASE_SORT';
   export type SelectPastPurchaseSort = Action<typeof SELECT_PAST_PURCHASE_SORT, number>;
   export const RECEIVE_NAVIGATION_SORT = 'RECEIVE_NAVIGATION_SORT';
+  export const RECEIVE_INFINITE_SCROLL = 'RECEIVE_INFINITE_SCROLL';
+  export type ReceiveInfiniteScroll = Action<typeof RECEIVE_INFINITE_SCROLL, Payload.InfiniteScroll>;
 
   // ui
   export const CREATE_COMPONENT_STATE = 'CREATE_COMPONENT_STATE';
@@ -205,6 +208,98 @@ namespace Actions {
   export type RefreshState = Action<typeof REFRESH_STATE, any>;
   // added automatically by middleware to interact with redux-undo
   export const SAVE_STATE = 'SAVE_STATE';
+
+  export namespace Payload {
+    export namespace Component {
+      export interface Identifier {
+        tagName: string;
+        id: string;
+      }
+
+      export interface State extends Identifier {
+        state: object;
+        persist: boolean;
+      }
+    }
+
+    export namespace Collection {
+      export interface Count {
+        collection: string;
+        count: number;
+      }
+    }
+
+    export interface Query {
+      corrected?: string;
+      related: string[];
+      didYouMean: string[];
+      rewrites: string[];
+    }
+
+    // NOTE: Isn't getting the right type in generated doc for some reason
+    export interface Search extends Partial<Navigation.Refinement>, Partial<Navigation.AddRefinement> {
+      query?: string;
+
+      /**
+       * only for refinements
+       * if true, replace refinements with the provided ones
+       * if false, add the provided refinements
+       */
+      clear?: boolean | string;
+    }
+
+    export namespace Autocomplete {
+      export interface Suggestions {
+        suggestions: Store.Autocomplete.Suggestion[];
+        categoryValues: string[];
+        navigations: Store.Autocomplete.Navigation[];
+      }
+
+      export interface Refinement {
+        field: string;
+        value: string;
+      }
+    }
+
+    export namespace Navigation {
+      export interface Refinement {
+        navigationId: string;
+        index: number;
+      }
+
+      export interface AddRefinement {
+        navigationId: string;
+        range?: boolean;
+
+        // used to add new value refinement
+        value?: string;
+
+        // used to add new range refinement
+        low?: number;
+        high?: number;
+      }
+
+      export interface MoreRefinements {
+        navigationId: string;
+        refinements: Store.Refinement[];
+        selected: number[];
+      }
+    }
+
+    export interface Page {
+      previous: number;
+      next: number;
+      last: number;
+      from: number;
+      to: number;
+      current?: number;
+    }
+
+    export interface InfiniteScroll {
+      isFetchingForward?: boolean;
+      isFetchingBackward?: boolean;
+    }
+  }
   // tslint:enable max-line-length
 }
 
