@@ -11,7 +11,7 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
 
       const { suggestions } = Adapter.extractSuggestions(response, '', '', {});
 
-      expect(suggestions).to.eql([{ value: 'a' }, { value: 'b' }]);
+      expect(suggestions).to.eql([{ value: 'a', disabled: undefined }, { value: 'b', disabled: undefined }]);
     });
 
     it('should not extract category values if query does not match', () => {
@@ -72,15 +72,20 @@ suite('Autocomplete Adapter', ({ expect, stub }) => {
       expect(extractCategoryValues.called).to.be.false;
     });
 
-    it ('should shift searchTerms by one element',() => {
-      const searchTerms = ['g', 'r', 'o', 'u', 'p', 'b', 'y'];
+    it ('should set first searchTerms element to disabled',() => {
+      const searchTerms = [{ value: 'g' }, { value: 'r' },
+                           { value: 'o' }, { value: 'u' },
+                           { value: 'p' }, { value: 'b' },
+                           { value: 'y' }];
 
       stub(Adapter, 'termsMatch').returns(true);
       stub(Adapter, 'extractCategoryValues');
 
       Adapter.extractSuggestions({ result: { searchTerms } }, '', 'brand', {});
 
-      expect(searchTerms).to.eql(['r', 'o', 'u', 'p', 'b', 'y']);
+      expect(searchTerms).to.eql([{ value: 'g', disabled: true }, { value: 'r' },
+                                  { value: 'o' }, { value: 'u' }, { value: 'p' },
+                                  { value: 'b' }, { value: 'y' }]);
     });
   });
 

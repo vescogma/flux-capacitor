@@ -257,6 +257,28 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
         expectDispatch(() => flux.saytPastPurchases(query), 'fetchPastPurchases', query);
       });
     });
+
+    describe('pastPurchaseProducts()', () => {
+      it('should call receiveAutocompleteProductRecords() action', () => {
+        const pastPurchases = [1,2,3];
+        const state = 's';
+        const action = 'ac';
+        const queryPastPurchases = spy(() => pastPurchases);
+        const getState = spy(() => state);
+        const dispatch = spy();
+        const receiveAutocompleteProductRecords = spy(() => action);
+
+        flux.store = <any>{ getState, dispatch };
+        flux.actions = <any> { receiveAutocompleteProductRecords };
+        flux.selectors = <any>{ queryPastPurchases };
+
+        flux.pastPurchaseProducts();
+        expect(getState).to.be.calledWithExactly();
+        expect(queryPastPurchases).to.be.calledWithExactly(state);
+        expect(receiveAutocompleteProductRecords).to.be.calledWithExactly(pastPurchases);
+        expect(dispatch).to.be.calledWithExactly(action);
+      });
+    });
   });
 
   describe('static', () => {

@@ -140,7 +140,7 @@ namespace Actions {
   export type ReceiveOrderHistory = Action<typeof RECEIVE_ORDER_HISTORY, Store.Recommendations.OrderHistoryProduct[]>;
   export const RECEIVE_QUERY_PAST_PURCHASES = 'RECEIVE_QUERY_PAST_PURCHASES';
   // tslint:disable-next-line max-line-length
-  export type ReceiveQueryPastPurchases = Action<typeof RECEIVE_QUERY_PAST_PURCHASES, Store.Product[]>;
+  export type ReceiveQueryPastPurchases = Action<typeof RECEIVE_QUERY_PAST_PURCHASES, Store.ProductWithMetadata[]>;
   export const RECEIVE_NAVIGATION_SORT = 'RECEIVE_NAVIGATION_SORT';
   // tslint:disable-next-line max-line-length
   export type ReceiveNavigationSort = Action<typeof RECEIVE_NAVIGATION_SORT, Store.Recommendations.Navigation[]>;

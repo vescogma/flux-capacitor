@@ -212,7 +212,7 @@ namespace Store {
     pastPurchases: {
       products: Recommendations.PastPurchase[];
     };
-    queryPastPurchases: Product[];
+    queryPastPurchases: ProductWithMetadata[];
     orderHistory: any[];
   }
 

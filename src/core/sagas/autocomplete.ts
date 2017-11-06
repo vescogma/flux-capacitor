@@ -54,8 +54,7 @@ export namespace Tasks {
         {
           ...autocompleteSuggestions,
           suggestions: Adapter.mergeSuggestions(autocompleteSuggestions.suggestions, yield responses[1].json())
-        } :
-        autocompleteSuggestions;
+        } : autocompleteSuggestions;
 
       yield effects.put(flux.actions.receiveAutocompleteSuggestions(suggestions));
     } catch (e) {
