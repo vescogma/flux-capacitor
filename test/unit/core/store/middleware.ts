@@ -10,8 +10,8 @@ import PersonalizationAdapter from '../../../../src/core/adapters/personalizatio
 import Events from '../../../../src/core/events';
 import Selectors from '../../../../src/core/selectors';
 import Middleware, {
-  RECALL_CHANGE_ACTIONS,
   PERSONALIZATION_CHANGE_ACTIONS,
+  RECALL_CHANGE_ACTIONS,
   SEARCH_CHANGE_ACTIONS,
 } from '../../../../src/core/store/middleware';
 import suite from '../../_suite';
@@ -22,7 +22,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
     const sagaMiddleware = { a: 'b' };
     const idGeneratorMiddleware = { g: 'h' };
     const errorHandlerMiddleware = { i: 'j' };
-    const validatorMiddleware = { m: 'n' };
 
     afterEach(() => delete process.env.NODE_ENV);
 
@@ -36,9 +35,8 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const errorHandler = stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
       const compose = stub(redux, 'compose').returns(composed);
       const applyMiddleware = stub(redux, 'applyMiddleware');
-      const validator = stub(Middleware, 'validator').returns(validatorMiddleware);
       applyMiddleware.withArgs().returns(batchMiddleware);
-      applyMiddleware.withArgs(Middleware.thunkEvaluator, validator).returns(thunkMiddleware);
+      applyMiddleware.withArgs(Middleware.thunkEvaluator, Middleware.validator).returns(thunkMiddleware);
       applyMiddleware.withArgs(Middleware.thunkEvaluator, Middleware.saveStateAnalyzer).returns(simpleMiddleware);
 
       const middleware = Middleware.create(sagaMiddleware, flux);
@@ -49,7 +47,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       expect(errorHandler).to.be.calledWithExactly(flux);
       expect(applyMiddleware).to.be.calledWithExactly(
         Middleware.thunkEvaluator,
-        validatorMiddleware,
+        Middleware.validator,
         idGeneratorMiddleware,
         idGeneratorMiddleware,
         errorHandlerMiddleware,
@@ -74,7 +72,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const applyMiddleware = stub(redux, 'applyMiddleware');
       stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
       stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
-      stub(Middleware, 'validator').returns(validatorMiddleware);
+      stub(Middleware, 'validator').returns(Middleware.validator);
       stub(redux, 'compose');
       process.env.NODE_ENV = 'development';
 
@@ -82,7 +80,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
 
       expect(applyMiddleware).to.be.calledWithExactly(
         Middleware.thunkEvaluator,
-        validatorMiddleware,
+        Middleware.validator,
         idGeneratorMiddleware,
         idGeneratorMiddleware,
         errorHandlerMiddleware,
@@ -99,7 +97,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const applyMiddleware = stub(redux, 'applyMiddleware');
       stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
       stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
-      stub(Middleware, 'validator').returns(validatorMiddleware);
+      stub(Middleware, 'validator').returns(Middleware.validator);
       stub(redux, 'compose');
       process.env.NODE_ENV = 'development';
 
@@ -107,7 +105,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
 
       expect(applyMiddleware).to.be.calledWithExactly(
         Middleware.thunkEvaluator,
-        validatorMiddleware,
+        Middleware.validator,
         idGeneratorMiddleware,
         idGeneratorMiddleware,
         errorHandlerMiddleware,

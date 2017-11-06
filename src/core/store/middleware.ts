@@ -43,7 +43,7 @@ export const PERSONALIZATION_CHANGE_ACTIONS = [
 ];
 
 export namespace Middleware {
-  export const validator = validatorMiddleware;
+  export const validator = validatorMiddleware();
 
   export function idGenerator(key: string, actions: string[]): ReduxMiddleware {
     return () => (next) => (action) =>
@@ -106,7 +106,7 @@ export namespace Middleware {
   export function create(sagaMiddleware: any, flux: FluxCapacitor): any {
     const middleware = [
       thunkEvaluator,
-      Middleware.validator(),
+      Middleware.validator,
       Middleware.idGenerator('recallId', RECALL_CHANGE_ACTIONS),
       Middleware.idGenerator('searchId', SEARCH_CHANGE_ACTIONS),
       Middleware.errorHandler(flux),
@@ -128,7 +128,7 @@ export namespace Middleware {
       reduxBatch,
       applyMiddleware(...middleware),
       reduxBatch,
-      applyMiddleware(thunkEvaluator, Middleware.validator()),
+      applyMiddleware(thunkEvaluator, Middleware.validator),
       reduxBatch,
     );
   }
