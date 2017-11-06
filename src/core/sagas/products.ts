@@ -100,7 +100,7 @@ export namespace Tasks {
         [flux.clients.bridge, flux.clients.bridge.search],
         {
           ...Requests.search(state),
-          pageSize: action.payload,
+          pageSize: action.payload.amount,
           skip: Selectors.products(state).length
         }
       );
