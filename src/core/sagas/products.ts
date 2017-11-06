@@ -95,13 +95,22 @@ export namespace Tasks {
     try {
       const state: Store.State = yield effects.select();
       const config = yield effects.select(Selectors.config);
+      const products = Selectors.productsWithMetadata(state);
+      const pageSize = action.payload.amount;
+
+      let product;
+      if (action.payload.forward) {
+        product = products[products.length - 1].index;
+      } else {
+        product = products[0].index - pageSize - 1;
+      }
 
       const result = yield effects.call(
         [flux.clients.bridge, flux.clients.bridge.search],
         {
           ...Requests.search(state),
-          pageSize: action.payload.amount,
-          skip: Selectors.products(state).length
+          pageSize,
+          skip: product,
         }
       );
 

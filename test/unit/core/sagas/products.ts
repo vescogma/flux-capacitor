@@ -551,7 +551,7 @@ suite('products saga', ({ expect, spy, stub }) => {
         const saveState = spy();
         const search = () => null;
         const bridge = { search };
-        const action: any = { payload: { amount: pageSize } };
+        const action: any = { payload: { amount: pageSize, forward: true } };
         const receiveMoreProductsAction: any = { c: 'd' };
         const receiveMoreProducts = spy(() => receiveMoreProductsAction);
         const state = { e: 'f' };
@@ -559,7 +559,7 @@ suite('products saga', ({ expect, spy, stub }) => {
         const results = { records, id };
         const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveMoreProducts } };
         stub(Requests, 'search').returns({ e: 'f' });
-        stub(Selectors, 'products').returns(['a', 'b', 'c']);
+        stub(Selectors, 'productsWithMetadata').returns([{ index: 1 }, { index: 2 }, { index: 3 }]);
 
         const task = Tasks.fetchMoreProducts(flux, action);
 
@@ -569,6 +569,38 @@ suite('products saga', ({ expect, spy, stub }) => {
           e: 'f',
           pageSize,
           skip: 3
+        }));
+        expect(task.next(results).value).to.eql(effects.put(receiveMoreProductsAction));
+        expect(receiveMoreProducts).to.be.calledWithExactly(results);
+        expect(emit).to.be.calledWithExactly(Events.BEACON_SEARCH, id);
+        task.next();
+      });
+
+      it('should return previous products', () => {
+        const id = '41892';
+        const pageSize = 14;
+        const emit = spy();
+        const saveState = spy();
+        const search = () => null;
+        const bridge = { search };
+        const action: any = { payload: { amount: pageSize, forward: false } };
+        const receiveMoreProductsAction: any = { c: 'd' };
+        const receiveMoreProducts = spy(() => receiveMoreProductsAction);
+        const state = { e: 'f' };
+        const records = ['g', 'h'];
+        const results = { records, id };
+        const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveMoreProducts } };
+        stub(Requests, 'search').returns({ e: 'f' });
+        stub(Selectors, 'productsWithMetadata').returns([{ index: 15 }, { index: 16 }, { index: 17 }]);
+
+        const task = Tasks.fetchMoreProducts(flux, action);
+
+        expect(task.next().value).to.eql(effects.select());
+        expect(task.next(state).value).to.eql(effects.select(Selectors.config));
+        expect(task.next().value).to.eql(effects.call([bridge, search], {
+          e: 'f',
+          pageSize,
+          skip: 0
         }));
         expect(task.next(results).value).to.eql(effects.put(receiveMoreProductsAction));
         expect(receiveMoreProducts).to.be.calledWithExactly(results);
