@@ -79,7 +79,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       it('should return an action', () => {
         const amount = 15;
 
-        expectAction(ActionCreators.fetchMoreProducts(amount), Actions.FETCH_MORE_PRODUCTS, amount);
+        expectAction(ActionCreators.fetchMoreProducts(amount), Actions.FETCH_MORE_PRODUCTS, { amount, forward: true });
       });
     });
 
@@ -677,6 +677,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const receiveRecordCountAction = { gg: 'hh' };
         const receiveCollectionCountAction = { ii: 'jj' };
         const receivePageAction = { kk: 'll' };
+        const receivePageFunc = () => receivePageAction;
         const receiveTemplateAction = { mm: 'nn' };
         const products = ['x', 'x'];
         const results: any = {};
@@ -698,7 +699,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const pruneRefinements = stub(SearchAdapter, 'pruneRefinements').returns(prunedNavigations);
         const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(recordCount);
         const receiveQuery = stub(ActionCreators, 'receiveQuery').returns(receiveQueryAction);
-        const receivePage = stub(ActionCreators, 'receivePage').returns(receivePageAction);
+        const receivePage = stub(ActionCreators, 'receivePage').returns(receivePageFunc);
         const extractTemplate = stub(SearchAdapter, 'extractTemplate').returns(template);
         const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(products);
         const selectCollection = stub(Selectors, 'collection').returns(collection);

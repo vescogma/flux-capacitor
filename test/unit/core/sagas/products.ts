@@ -551,7 +551,7 @@ suite('products saga', ({ expect, spy, stub }) => {
         const saveState = spy();
         const search = () => null;
         const bridge = { search };
-        const action: any = { payload: pageSize };
+        const action: any = { payload: { amount: pageSize } };
         const receiveMoreProductsAction: any = { c: 'd' };
         const receiveMoreProducts = spy(() => receiveMoreProductsAction);
         const state = { e: 'f' };
