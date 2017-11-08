@@ -282,28 +282,29 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     });
 
     describe('awaitBiasingRehydration()', () => {
+      const action: any = { a: 1 };
+
       it('should dispatch given action if data loaded from browser', () => {
-        const action = 'action';
         const getState = store.getState = spy();
         const dispatch = store.dispatch = spy();
         stub(Selectors, 'realTimeBiasesHydrated').returns(true);
 
-        flux.awaitBiasingRehydration(<any>action);
+        flux.awaitBiasingRehydration(action);
+
         expect(getState).to.be.calledWith();
         expect(dispatch).to.be.calledWith(action);
       });
 
       it('should wait on personalization biasing rehydrated if data not loaded from browser', () => {
-        const action = 'action';
         const realtimeBiasesHydrated = stub(Selectors, 'realTimeBiasesHydrated').returns(false);
         const once = flux.once = spy();
         const dispatch = store.dispatch = spy();
         store.getState = spy();
 
-        flux.awaitBiasingRehydration(<any>action);
+        flux.awaitBiasingRehydration(action);
+
         expect(dispatch).to.not.be.called;
         expect(once).to.be.calledWith(Events.PERSONALIZATION_BIASING_REHYDRATED);
-
         once.getCall(0).args[1]();
         expect(dispatch).to.be.calledWith(action);
       });

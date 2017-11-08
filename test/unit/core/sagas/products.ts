@@ -426,10 +426,7 @@ suite('products saga', ({ expect, spy, stub }) => {
         const action: any = { payload };
         const receiveProductsAction: any = { c: 'd' };
         const biases = [];
-        const request = { e: 'f',
-                          biasing: {
-                            biases
-                          }};
+        const request = { e: 'f', biasing: { biases }};
         const response = { id, totalRecordCount: 3 };
         const receiveProducts = spy(() => receiveProductsAction);
         const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, };

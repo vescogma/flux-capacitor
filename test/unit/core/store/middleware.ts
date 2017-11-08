@@ -226,9 +226,10 @@ suite('Middleware', ({ expect, spy, stub }) => {
   });
 
   describe('personalizationAnalyzer()', () => {
+    const conf = { a: 1 };
+    const state = { b: 2 };
+
     it('should pass the action forward unchanged if not in list of relevant actions', () => {
-      const conf = 'f';
-      const state = 'state';
       const action = { a: 'b', type: 'NOT_VALID_ACTION' };
       const config = stub(Selectors, 'config').returns(conf);
       const enabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(true);
@@ -243,8 +244,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
     });
 
     it('should pass the action forward unchanged if real time biasing disabled', () => {
-      const conf = 'f';
-      const state = 'state';
       const action = { a: 'b', type: PERSONALIZATION_CHANGE_ACTIONS[0] };
       const config = stub(Selectors, 'config').returns(conf);
       const enabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(false);

@@ -1,5 +1,5 @@
 import { Actions, Store } from '../../../../../src/core';
-import * as personalization from '../../../../../src/core/reducers/data/personalization';
+import updatePersonalization, * as personalization from '../../../../../src/core/reducers/data/personalization';
 import suite from '../../../_suite';
 
 suite('personalization', ({ expect, spy, stub }) => {
@@ -7,7 +7,6 @@ suite('personalization', ({ expect, spy, stub }) => {
     const state: Store.Personalization = {
       biasing: <any>{ a: 1 }
     };
-    const updatePersonalization = personalization.default;
 
     it('should call updateBiasing when action type is UPDATE_BIASING', () => {
       const type = Actions.UPDATE_BIASING;
@@ -45,7 +44,6 @@ suite('personalization', ({ expect, spy, stub }) => {
         expiry: 2
       }
     };
-
     const config = {
       maxBiases: 4095,
       attributes: {
@@ -101,8 +99,8 @@ suite('personalization', ({ expect, spy, stub }) => {
         }
       };
       const allIds = [0, 1, 2, 3, { variant: 'a' }, 4];
-      stub(personalization, 'insertSorted').returns(allIds);
       const removeLast = stub(personalization, 'removeLast').returns(allIds);
+      stub(personalization, 'insertSorted').returns(allIds);
 
       personalization.updateBiasing(state, <any>payload);
 
@@ -122,8 +120,8 @@ suite('personalization', ({ expect, spy, stub }) => {
         length: 10020000,
         slice
       };
-      stub(personalization, 'insertSorted').returns(allIds);
       const removeLast = stub(personalization, 'removeLast').returns(allIds);
+      stub(personalization, 'insertSorted').returns(allIds);
 
       personalization.updateBiasing(state, <any>payload);
 
@@ -155,34 +153,32 @@ suite('personalization', ({ expect, spy, stub }) => {
       expect(ret).to.eql(arr);
     });
   });
+
   describe('insertSorted', () => {
-    const arr = [
+    const arr: any = [
       { variant: 'a', key: 1},
       { variant: 'b', key: 2},
       { variant: 'c', key: 3},
     ];
 
-    it('shoud insert element to front of array', () => {
-      const obj = { variant: 'd', key: 4};
-      const newArr = [
-        obj,
-        ...arr
-      ];
+    it('should insert element to front of array', () => {
+      const obj: any = { variant: 'd', key: 4 };
+      const newArr = [obj, ...arr];
 
-      const ret = personalization.insertSorted(<any>arr, <any>obj);
+      const ret = personalization.insertSorted(arr, obj);
 
       expect(ret).to.eql(newArr);
     });
 
     it('shoud insert element to front of array and remove duplicates', () => {
-      const obj = { variant: 'b', key: 2};
+      const obj: any = { variant: 'b', key: 2};
       const newArr = [
         { variant: 'b', key: 2 },
         { variant: 'a', key: 1 },
         { variant: 'c', key: 3 },
       ];
 
-      const ret = personalization.insertSorted(<any>arr, <any>obj);
+      const ret = personalization.insertSorted(arr, obj);
 
       expect(ret).to.eql(newArr);
     });

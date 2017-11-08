@@ -568,55 +568,38 @@ suite('selectors', ({ expect, stub }) => {
     });
   });
 
-  describe('realTimeBiasesById()', () => {
-    it('should return byId', () => {
-      const allIds = [1,2,3,4,5];
-      const byId = {
-        1: 1,
-        2: 2,
-        3: 3
-      };
-      const state = {
-        data: {
-          present: {
-            personalization: {
-              biasing: {
-                allIds,
-                byId
-              }
+  {
+    const allIds = [1, 2, 3, 4, 5];
+    const byId = {
+      1: 1,
+      2: 2,
+      3: 3
+    };
+    const state = {
+      data: {
+        present: {
+          personalization: {
+            biasing: {
+              allIds,
+              byId
             }
           }
         }
-      };
+      }
+    };
 
-      expect(Selectors.realTimeBiasesById(<any>state)).to.eq(byId);
+    describe('realTimeBiasesById()', () => {
+      it('should return byId', () => {
+        expect(Selectors.realTimeBiasesById(<any>state)).to.eq(byId);
+      });
     });
-  });
 
-  describe('realTimeBiasesAllIds()', () => {
-    it('should return allIds', () => {
-      const allIds = [1,2,3,4,5];
-      const byId = {
-        1: 1,
-        2: 2,
-        3: 3
-      };
-      const state = {
-        data: {
-          present: {
-            personalization: {
-              biasing: {
-                allIds,
-                byId
-              }
-            }
-          }
-        }
-      };
-
-      expect(Selectors.realTimeBiasesAllIds(<any>state)).to.eq(allIds);
+    describe('realTimeBiasesAllIds()', () => {
+      it('should return allIds', () => {
+        expect(Selectors.realTimeBiasesAllIds(<any>state)).to.eq(allIds);
+      });
     });
-  });
+  }
 
   describe('realTimeBiasesHydrated()', () => {
     it('should be true on false/true', () => {
@@ -638,7 +621,7 @@ suite('selectors', ({ expect, stub }) => {
     });
 
     it('should be true on false/false', () => {
-      const state = {
+      const state: any = {
         data: {
           present: {
             personalization: {
@@ -652,11 +635,11 @@ suite('selectors', ({ expect, stub }) => {
       const isRealTimeBiasEnabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(false);
       const config = stub(Selectors, 'config');
 
-      expect(Selectors.realTimeBiasesHydrated(<any>state)).to.be.true;
+      expect(Selectors.realTimeBiasesHydrated(state)).to.be.true;
     });
 
     it('should be true on true/true', () => {
-      const state = {
+      const state: any = {
         data: {
           present: {
             personalization: {
@@ -670,11 +653,11 @@ suite('selectors', ({ expect, stub }) => {
       const isRealTimeBiasEnabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(true);
       const config = stub(Selectors, 'config');
 
-      expect(Selectors.realTimeBiasesHydrated(<any>state)).to.be.true;
+      expect(Selectors.realTimeBiasesHydrated(state)).to.be.true;
     });
 
     it('should be false on true/false', () => {
-      const state = {
+      const state: any = {
         data: {
           present: {
             personalization: {
@@ -688,7 +671,7 @@ suite('selectors', ({ expect, stub }) => {
       const isRealTimeBiasEnabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(true);
       const config = stub(Selectors, 'config');
 
-      expect(Selectors.realTimeBiasesHydrated(<any>state)).to.be.false;
+      expect(Selectors.realTimeBiasesHydrated(state)).to.be.false;
     });
   });
 

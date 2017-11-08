@@ -26,8 +26,6 @@ suite('Store', ({ expect, spy, stub }) => {
       const createMiddleware = stub(Middleware, 'create').returns(middleware);
       const createSagas = stub(sagas, 'default').returns(['m', 'n', 'o']);
       const isRealTimeBiasEnabled = stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
-      // const persistStore = stub(persist, 'persistStore');
-      // TODO: make this work
 
       const store = Store.create(flux);
 
@@ -52,13 +50,13 @@ suite('Store', ({ expect, spy, stub }) => {
       const storeInstance = { h: 'i' };
       const runSagaMiddleware = spy();
       const sagaMiddleware = { run: runSagaMiddleware };
-      const initialState = stub(Adapter, 'initialState').returns(state);
-      const createStore = stub(redux, 'createStore').returns(storeInstance);
-      const createSagaMiddleware = stub(reduxSaga, 'default').returns(sagaMiddleware);
-      const createMiddleware = stub(Middleware, 'create').returns(middleware);
-      const createSagas = stub(sagas, 'default').returns([]);
       const persistStore = stub(persist, 'persistStore');
-      const isRealTimeBiasEnabled = stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
+      stub(Adapter, 'initialState').returns(state);
+      stub(redux, 'createStore').returns(storeInstance);
+      stub(reduxSaga, 'default').returns(sagaMiddleware);
+      stub(Middleware, 'create').returns(middleware);
+      stub(sagas, 'default').returns([]);
+      stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
 
       const store = Store.create(flux);
 
