@@ -466,12 +466,6 @@ suite('Observer', ({ expect, spy, stub }) => {
 
               expect(emit).to.not.be.called;
             });
-
-            it('should not emit PERSONALIZATION_BIASING_REHYDRATED if state unchanged', () => {
-              observers.data.present.personalization._persist.rehydrated(true, true);
-
-              expect(emit).to.not.be.called;
-            });
           });
         });
       });

@@ -1,10 +1,10 @@
 import { reduxBatch } from '@manaflair/redux-batch';
 import * as redux from 'redux';
 import reduxLogger from 'redux-logger';
-import { ActionCreators } from 'redux-undo';
+import { ActionCreators as ReduxActionCreators } from 'redux-undo';
 import * as sinon from 'sinon';
 import Actions from '../../../../src/core/actions';
-import Creators from '../../../../src/core/actions/creators';
+import ActionCreators from '../../../../src/core/actions/creators';
 import ConfigurationAdapter from '../../../../src/core/adapters/configuration';
 import PersonalizationAdapter from '../../../../src/core/adapters/personalization';
 import Events from '../../../../src/core/events';
@@ -173,7 +173,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const action = { type: Actions.RECEIVE_PRODUCTS, error: true };
       const undoAction = { a: 'b' };
       const next = spy();
-      stub(ActionCreators, 'undo').returns(undoAction);
+      stub(ReduxActionCreators, 'undo').returns(undoAction);
 
       Middleware.errorHandler(<any>{})(null)(next)(action);
 
@@ -266,7 +266,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const extracted = 'extra';
       const config = stub(Selectors, 'config').returns(conf);
       const enabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(true);
-      const updateBiasing = stub(Creators, 'updateBiasing').returns(returnAction);
+      const updateBiasing = stub(ActionCreators, 'updateBiasing').returns(returnAction);
       const extract = stub(PersonalizationAdapter, 'extractBias').returns(extracted);
       const next = spy();
       const getState = spy(() => state);
