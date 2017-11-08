@@ -5,7 +5,7 @@ import suite from '../../_suite';
 suite('Personalization Adapter', ({ expect, stub }) => {
 
   describe('extractBias()', () => {
-    let config = {
+    const config = {
       personalization: {
         realTimeBiasing: {
           attributes: {
@@ -15,19 +15,19 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       }
     };
 
-    let refinement = {
+    const refinement = {
       field: 'color',
       value: 'blue'
     };
 
-    let action: any = {
+    const action: any = {
       payload: {
         navigationId: 'a',
         index: 1
       }
     };
 
-    let store: any = {};
+    const store: any = {};
 
     beforeEach(() => {
       stub(Selectors, 'config').returns(config);
@@ -35,10 +35,6 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
     it('should generate new timeStamp if variant and key do not exist', () => {
       const byId = {};
-      stub(Selectors, 'realTimeBiasesById').returns(byId);
-      stub(Selectors, 'refinementCrumb').returns(refinement);
-      stub(Adapter, 'generateNewBias').returns({ lastUsed: 11111 });
-
       const bias = {
         variant: refinement.field,
         key: refinement.value,
@@ -46,6 +42,9 @@ suite('Personalization Adapter', ({ expect, stub }) => {
           lastUsed: 11111
         }
       };
+      stub(Selectors, 'realTimeBiasesById').returns(byId);
+      stub(Selectors, 'refinementCrumb').returns(refinement);
+      stub(Adapter, 'generateNewBias').returns({ lastUsed: 11111 });
 
       const result = Adapter.extractBias(action, store);
 
@@ -56,14 +55,10 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       );
       expect(result).to.deep.equal(bias);
       expect(Adapter.generateNewBias).to.have.been.called;
-
     });
 
     it('should overwrite the timestamp if variant and key already exist', () => {
-      const byId = { color: { blue: { lastUsed: 11111 }}};
-      stub(Selectors, 'realTimeBiasesById').returns(byId);
-      stub(Selectors, 'refinementCrumb').returns(refinement);
-      stub(Adapter, 'generateNewBias');
+      const byId = { color: { blue: { lastUsed: 11111 } } };
       const s = stub(Date, 'now').returns(20000000);
       const bias = {
         variant: refinement.field,
@@ -72,17 +67,18 @@ suite('Personalization Adapter', ({ expect, stub }) => {
           lastUsed: 20000
         }
       };
+      stub(Selectors, 'realTimeBiasesById').returns(byId);
+      stub(Selectors, 'refinementCrumb').returns(refinement);
+      stub(Adapter, 'generateNewBias');
 
       const result = Adapter.extractBias(action, store);
+
       expect(result).to.deep.equal(bias);
       expect(Adapter.generateNewBias).to.not.have.been.called;
     });
 
     it('should generate new timestamp if variant exist and key does not exist', () => {
-      const byId = { color: { red: { lastUsed: 11111 }}};
-      stub(Selectors, 'realTimeBiasesById').returns(byId);
-      stub(Selectors, 'refinementCrumb').returns(refinement);
-      stub(Adapter, 'generateNewBias').returns({ lastUsed: 22222 });
+      const byId = { color: { red: { lastUsed: 11111 } } };
       const bias = {
         variant: refinement.field,
         key: refinement.value,
@@ -90,8 +86,12 @@ suite('Personalization Adapter', ({ expect, stub }) => {
           lastUsed: 22222
         }
       };
+      stub(Selectors, 'realTimeBiasesById').returns(byId);
+      stub(Selectors, 'refinementCrumb').returns(refinement);
+      stub(Adapter, 'generateNewBias').returns({ lastUsed: 22222 });
 
       const result = Adapter.extractBias(action, store);
+
       expect(Adapter.generateNewBias).to.have.been.called;
       expect(result).to.deep.equal(bias);
     });
@@ -106,28 +106,28 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       stub(Selectors, 'refinementCrumb').returns(newRefinement);
 
       const result = Adapter.extractBias(action, store);
+
       expect(result).to.deep.equal(null);
     });
   });
 
   describe('generateNewBias()', () => {
-
     it('should generate new bias', () => {
       stub(Date, 'now').returns(1000000);
 
       const result = Adapter.generateNewBias();
+
       expect(result).to.deep.equal({ lastUsed: 1000000 / 1000 });
     });
   });
 
   describe('transformToBrowser()', () => {
-
     it('should return empty array if the state does not have allIds', () => {
-      const state: any = {
-        expiry: 2000
-      };
+      const state: any = { expiry: 2000 };
       const key = 'test';
+
       const result = Adapter.transformToBrowser(state, key);
+
       expect(result).to.deep.equal({
         expiry: 2000,
         allIds: []
@@ -150,7 +150,9 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         }
       };
       const key = 'test';
+
       const result = Adapter.transformToBrowser(state, key);
+
       expect(result).to.deep.equal({
         expiry: 2000,
         allIds: [{
@@ -173,8 +175,6 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
         { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 33 }]
       };
-
-      const result = Adapter.transformFromBrowser(browserStorage, key);
       const biasFromBrowser = {
         expiry: oneDayInSec * 30,
         allIds: [{ variant: 'color', key: 'blue' }, { variant: 'color', key: 'red' }],
@@ -189,6 +189,9 @@ suite('Personalization Adapter', ({ expect, stub }) => {
           }
         }
       };
+
+      const result = Adapter.transformFromBrowser(browserStorage, key);
+
       expect(result).to.deep.equal(biasFromBrowser);
     });
   });
@@ -213,6 +216,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       stub(Selectors, 'config').returns(config);
 
       const result = Adapter.convertBiasToSearch(state);
+
       expect(result).to.deep.equal([{
         name: 'color',
         content: 'blue',
