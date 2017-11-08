@@ -345,19 +345,19 @@ suite('validators', ({ expect, spy, stub }) => {
   });
 
   describe('isValidBias', () => {
-    it('should be invalid valid if payload is falsy', () => {
+    it('should be invalid if payload is falsy', () => {
       const payload = false;
 
       expect(validators.isValidBias.func(<any>payload)).to.be.false;
     });
 
-    it('should be invalid valid if payload.key is falsy and payload.variant is falsy', () => {
+    it('should be invalid if payload.key is falsy and payload.variant is falsy', () => {
       const payload = {};
 
       expect(validators.isValidBias.func(<any>payload)).to.be.false;
     });
 
-    it('should be invalid valid if payload.key is falsy', () => {
+    it('should be invalid if payload.key is falsy', () => {
       const payload = {
         variant: 'asdf',
         key: false
@@ -366,7 +366,7 @@ suite('validators', ({ expect, spy, stub }) => {
       expect(validators.isValidBias.func(<any>payload)).to.be.false;
     });
 
-    it('should be invalid valid if payload.variant is falsy', () => {
+    it('should be invalid if payload.variant is falsy', () => {
       const payload = {
         key: 'asdf',
         variant: false

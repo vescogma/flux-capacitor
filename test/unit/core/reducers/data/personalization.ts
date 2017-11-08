@@ -86,7 +86,7 @@ suite('personalization', ({ expect, spy, stub }) => {
       expect(reducer).to.eql(newState);
     });
 
-    it('should call removeLast with allIds when attribute\'s maxBiases exceeded', () => {
+    it('should call removeOldest with allIds when attribute\'s maxBiases exceeded', () => {
       const variant = 'a';
       const payload = {
         variant,
@@ -99,12 +99,12 @@ suite('personalization', ({ expect, spy, stub }) => {
         }
       };
       const allIds = [0, 1, 2, 3, { variant: 'a' }, 4];
-      const removeLast = stub(personalization, 'removeLast').returns(allIds);
+      const removeOldest = stub(personalization, 'removeOldest').returns(allIds);
       stub(personalization, 'insertSorted').returns(allIds);
 
       personalization.updateBiasing(state, <any>payload);
 
-      expect(removeLast).to.be.calledWithExactly(allIds, variant);
+      expect(removeOldest).to.be.calledWithExactly(allIds, variant);
     });
 
     it('should slice allIds when it\'s length exceeds maxBiases', () => {
@@ -120,7 +120,7 @@ suite('personalization', ({ expect, spy, stub }) => {
         length: 10020000,
         slice
       };
-      const removeLast = stub(personalization, 'removeLast').returns(allIds);
+      const removeOldest = stub(personalization, 'removeOldest').returns(allIds);
       stub(personalization, 'insertSorted').returns(allIds);
 
       personalization.updateBiasing(state, <any>payload);
@@ -129,7 +129,7 @@ suite('personalization', ({ expect, spy, stub }) => {
     });
   });
 
-  describe('removeLast', () => {
+  describe('removeOldest', () => {
     const arr = [
       { variant: 'a', key: 1},
       { variant: 'b', key: 2},
@@ -142,13 +142,13 @@ suite('personalization', ({ expect, spy, stub }) => {
         { variant: 'c', key: 3 },
       ];
 
-      const ret = personalization.removeLast(arr, 'b');
+      const ret = personalization.removeOldest(arr, 'b');
 
       expect(ret).to.eql(newArr);
     });
 
     it('shoud not modify input array if variant does not exists in array', () => {
-      const ret = personalization.removeLast(arr, 'd');
+      const ret = personalization.removeOldest(arr, 'd');
 
       expect(ret).to.eql(arr);
     });

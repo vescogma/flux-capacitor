@@ -39,7 +39,7 @@ export const updateBiasing = (state: State, payload: Actions.Payload.Personaliza
   const keyCount = Object.keys(byId[payload.variant]).length;
   const config = payload.config;
   if (config.attributes[payload.variant] && (keyCount > config.attributes[payload.variant].maxBiases)) {
-    allIds = removeLast(allIds, payload.variant);
+    allIds = removeOldest(allIds, payload.variant);
   }
   if (allIds.length > config.maxBiases) {
     allIds = allIds.slice(0, config.maxBiases);
@@ -54,7 +54,7 @@ export const insertSorted = (allIds: Store.Personalization.BiasKey[], { variant,
   return [{ variant, key }, ...noDuplicate]; //TODO: insert sorted
 };
 
-export const removeLast = (allIds, variant) => {
+export const removeOldest = (allIds, variant) => {
   for (let i = allIds.length - 1; i >= 0; i--) {
     if (allIds[i].variant === variant) {
       return [...allIds.slice(0, i), ...allIds.slice(i + 1)];

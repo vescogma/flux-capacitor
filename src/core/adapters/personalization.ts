@@ -45,10 +45,7 @@ namespace Personalization {
     const byId = {};
     filteredState.forEach(({ variant, key, lastUsed }) => {
       allIds.push({ variant, key });
-      if (!byId[variant]) {
-        byId[variant] = {};
-      }
-      byId[variant][key] = { lastUsed };
+      byId[variant] = { ...byId[variant], [key]: { lastUsed } };
     });
     return {
       expiry: state.expiry,
