@@ -158,7 +158,7 @@ namespace Observer {
           personalization: {
             _persist: {
               rehydrated: (oldState, newState, path) => {
-                if (newState && newState !== oldState) {
+                if (newState) {
                   emit(Events.PERSONALIZATION_BIASING_REHYDRATED)(oldState, newState, path);
                 }
               }

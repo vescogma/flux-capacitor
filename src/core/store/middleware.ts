@@ -1,11 +1,11 @@
 import { reduxBatch } from '@manaflair/redux-batch';
 import * as cuid from 'cuid';
 import { applyMiddleware, compose, createStore, Middleware as ReduxMiddleware, Store } from 'redux';
-import { ActionCreators } from 'redux-undo';
+import { ReduxActionCreators } from 'redux-undo';
 import * as validatorMiddleware from 'redux-validator';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
-import Creators from '../actions/creators';
+import ActionCreators from '../actions/creators';
 import ConfigurationAdapter from '../adapters/configuration';
 import PersonalizationAdapter from '../adapters/personalization';
 import Events from '../events';
@@ -56,7 +56,7 @@ export namespace Middleware {
     return () => (next) => (action) => {
       if (action.error) {
         switch (action.type) {
-          case Actions.RECEIVE_PRODUCTS: return next(ActionCreators.undo());
+          case Actions.RECEIVE_PRODUCTS: return next(ReduxActionCreators.undo());
           default:
             flux.emit(Events.ERROR_FETCH_ACTION, action.payload);
             return action.payload;
@@ -96,7 +96,7 @@ export namespace Middleware {
           PERSONALIZATION_CHANGE_ACTIONS.includes(action.type)) {
         return next([
           action,
-          Creators.updateBiasing(PersonalizationAdapter.extractBias(action, state))
+          ActionCreators.updateBiasing(PersonalizationAdapter.extractBias(action, state))
         ]);
       }
       return next(action);

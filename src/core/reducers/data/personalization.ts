@@ -5,6 +5,9 @@ import Adapter from '../../adapters/personalization';
 import Selectors from '../../selectors';
 import Store from '../../store';
 
+const STORAGE_KEY = 'gb-personalization';
+const STORAGE_WHITELIST = ['biasing'];
+
 export type Action = Actions.UpdateBiasing;
 export type State = Store.Personalization;
 
@@ -68,6 +71,6 @@ const personalizationTransform = createTransform(
   // configuration options (if any)
 );
 
-export default persistReducer({ transforms: [personalizationTransform], key: 'gb-personalization', storage,
-                                whitelist: ['biasing'] },
+export default persistReducer({ transforms: [personalizationTransform], key: STORAGE_KEY, storage,
+                                whitelist: STORAGE_WHITELIST },
                               updatePersonalization);

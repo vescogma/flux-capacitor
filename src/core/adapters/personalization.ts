@@ -4,10 +4,10 @@ import Selectors from '../selectors';
 import Store from '../store';
 
 namespace Personalization {
-  export const extractBias = ({ payload }: Actions.SelectRefinement, store: Store.State) => {
-    const config = Selectors.config(store).personalization.realTimeBiasing;
-    const byId = Selectors.realTimeBiasesById(store);
-    const { value, field } = Selectors.refinementCrumb(store, payload.navigationId, payload.index);
+  export const extractBias = ({ payload }: Actions.SelectRefinement, state: Store.State) => {
+    const config = Selectors.config(state).personalization.realTimeBiasing;
+    const byId = Selectors.realTimeBiasesById(state);
+    const { value, field } = Selectors.refinementCrumb(state, payload.navigationId, payload.index);
 
     if (!config.attributes[field]) {
       return null;
@@ -41,8 +41,8 @@ namespace Personalization {
   export const transformFromBrowser = (state: BrowserStorageState, reducerKey: string): Store.Personalization.Biasing => {
     const olderThanTime = Math.floor(Date.now() / 1000) - state.expiry;
     const filteredState = state.allIds.filter((element) => element.lastUsed >= olderThanTime);
-    let allIds = [];
-    let byId = {};
+    const allIds = [];
+    const byId = {};
     filteredState.forEach(({ variant, key, lastUsed }) => {
       allIds.push({ variant, key });
       if (!byId[variant]) {
