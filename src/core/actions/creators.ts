@@ -565,8 +565,10 @@ namespace ActionCreators {
    * @return {Actions.ReceiveMoreProducts}          - Action with products.
    */
   export function receiveMoreProducts(res: Results) {
-    return (state: Store.State): Actions.ReceiveMoreProducts =>
-      createAction(Actions.RECEIVE_MORE_PRODUCTS, SearchAdapter.augmentProducts(res));
+    return (state: Store.State): Actions.ReceiveMoreProducts => {
+      // tslint:disable-next-line max-line-length
+      return handleError(createAction(Actions.RECEIVE_MORE_PRODUCTS, res), () => createAction(Actions.RECEIVE_MORE_PRODUCTS, SearchAdapter.augmentProducts(res)));
+    };
   }
 
   /**
