@@ -14,19 +14,16 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         }
       }
     };
-
     const refinement = {
       field: 'color',
       value: 'blue'
     };
-
     const action: any = {
       payload: {
         navigationId: 'a',
         index: 1
       }
     };
-
     const store: any = {};
 
     beforeEach(() => {
