@@ -258,17 +258,15 @@ suite('Middleware', ({ expect, spy, stub }) => {
     });
 
     it('should make a batch action if action correct type', () => {
-      const conf = 'f';
-      const state = 'state';
       const action = { a: 'b', type: PERSONALIZATION_CHANGE_ACTIONS[0] };
       const returnAction = 'return';
       const extracted = 'extra';
       const config = stub(Selectors, 'config').returns(conf);
-      const enabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(true);
       const updateBiasing = stub(ActionCreators, 'updateBiasing').returns(returnAction);
       const extract = stub(PersonalizationAdapter, 'extractBias').returns(extracted);
       const next = spy();
       const getState = spy(() => state);
+      stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(true);
 
       Middleware.personalizationAnalyzer(<any>{ getState })(next)(action);
 
