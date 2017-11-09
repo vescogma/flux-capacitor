@@ -4,10 +4,12 @@ import Selectors from '../selectors';
 import Store from '../store';
 
 namespace Personalization {
-  export const extractBias = ({ payload }: Actions.SelectRefinement, state: Store.State) => {
+  type ExtractableAction = Actions.SelectRefinement & Actions.AddRefinement;
+
+  export const extractBias = (action: ExtractableAction, state: Store.State) => {
     const config = Selectors.config(state).personalization.realTimeBiasing;
     const byId = Selectors.realTimeBiasesById(state);
-    const { value, field } = Selectors.refinementCrumb(state, payload.navigationId, payload.index);
+    const { field, value } = extractRefinement(action, state);
 
     if (!config.attributes[field]) {
       return null;
@@ -21,6 +23,30 @@ namespace Personalization {
         lastUsed: Math.floor(Date.now() / 1000)
       } : generateNewBias()
     };
+  };
+
+  // tslint:disable-next-line max-line-length
+  export const extractRefinement = ({ type, payload }: ExtractableAction, state: Store.State): { field: string, value: string } => {
+    // tslint:disable-next-line one-variable-per-declaration
+    let field = undefined, value = undefined;
+
+    switch (type) {
+      case Actions.ADD_REFINEMENT:
+        if (payload.range) {
+          break;
+        }
+        field = payload.navigationId;
+        value = payload.value;
+        break;
+      case Actions.SELECT_REFINEMENT:
+        const refinement = Selectors.refinementCrumb(state, payload.navigationId, payload.index);
+        field = refinement.field;
+        value = refinement.value;
+        break;
+      default:
+    }
+
+    return { field, value };
   };
 
   export const generateNewBias = () => ({

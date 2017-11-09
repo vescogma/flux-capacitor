@@ -1,3 +1,4 @@
+import Actions from '../../../../src/core/actions/index';
 import Adapter from '../../../../src/core/adapters/personalization';
 import Selectors from '../../../../src/core/selectors';
 import suite from '../../_suite';
@@ -40,16 +41,14 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         }
       };
       stub(Selectors, 'realTimeBiasesById').returns(byId);
-      stub(Selectors, 'refinementCrumb').returns(refinement);
+      stub(Adapter, 'extractRefinement').returns(refinement);
       stub(Adapter, 'generateNewBias').returns({ lastUsed: 11111 });
 
       const result = Adapter.extractBias(action, store);
 
       expect(Selectors.config).to.be.calledWithExactly(store);
       expect(Selectors.realTimeBiasesById).to.be.calledWithExactly(store);
-      expect(Selectors.refinementCrumb).to.be.calledWithExactly(
-        store, action.payload.navigationId, action.payload.index
-      );
+      expect(Adapter.extractRefinement).to.be.calledWithExactly(action, store);
       expect(result).to.deep.equal(bias);
       expect(Adapter.generateNewBias).to.have.been.called;
     });
@@ -65,7 +64,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         }
       };
       stub(Selectors, 'realTimeBiasesById').returns(byId);
-      stub(Selectors, 'refinementCrumb').returns(refinement);
+      stub(Adapter, 'extractRefinement').returns(refinement);
       stub(Adapter, 'generateNewBias');
 
       const result = Adapter.extractBias(action, store);
@@ -84,7 +83,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         }
       };
       stub(Selectors, 'realTimeBiasesById').returns(byId);
-      stub(Selectors, 'refinementCrumb').returns(refinement);
+      stub(Adapter, 'extractRefinement').returns(refinement);
       stub(Adapter, 'generateNewBias').returns({ lastUsed: 22222 });
 
       const result = Adapter.extractBias(action, store);
@@ -100,11 +99,45 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       };
       const byId = {};
       stub(Selectors, 'realTimeBiasesById').returns(byId);
-      stub(Selectors, 'refinementCrumb').returns(newRefinement);
+      stub(Adapter, 'extractRefinement').returns(newRefinement);
 
       const result = Adapter.extractBias(action, store);
 
       expect(result).to.deep.equal(null);
+    });
+  });
+
+  describe('extractRefinement', () => {
+    const payload = { field: 'blue', value: 'green' };
+    const state: any = { a: 1 };
+
+    it('should extract bias for Actions.ADD_REFINEMENT', () => {
+      const type = Actions.ADD_REFINEMENT;
+      const newPayload = { ...payload, navigationId: payload.field };
+      const action: any = { type, payload: newPayload };
+
+      const refinement = Adapter.extractRefinement(action, state);
+
+      expect(refinement).to.eql(payload);
+    });
+
+    it('should not extract bias for Actions.ADD_REFINEMENT if range is defined', () => {
+      const type = Actions.ADD_REFINEMENT;
+      const action: any = { type, payload: { range: true } };
+
+      const refinement = Adapter.extractRefinement(action, state);
+
+      expect(refinement).to.eql({ value: undefined, field: undefined });
+    });
+
+    it('should extract bias for Actions.SELECT_REFINEMENT', () => {
+      const type = Actions.SELECT_REFINEMENT;
+      const action: any = { type, payload: {} };
+      stub(Selectors, 'refinementCrumb').returns(payload);
+
+      const refinement = Adapter.extractRefinement(action, state);
+
+      expect(refinement).to.eql(payload);
     });
   });
 

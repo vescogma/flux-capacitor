@@ -40,6 +40,7 @@ export const SEARCH_CHANGE_ACTIONS = [
 
 export const PERSONALIZATION_CHANGE_ACTIONS = [
   Actions.SELECT_REFINEMENT,
+  Actions.ADD_REFINEMENT,
 ];
 
 export namespace Middleware {
