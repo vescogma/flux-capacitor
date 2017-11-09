@@ -599,33 +599,26 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
 
     describe('updateBiasing()', () => {
       it('should return an UPDATE_AUTOCOMPLETE_QUERY thunk action with config injected in', () => {
-        const payload = {
+        const payload: any = {
           a: 'b',
           c: 'd'
         };
-        const state = 'a';
+        const state: any = 'a';
         const config = {
           personalization: {
             realTimeBiasing: 'real'
           }
         };
         const selector = stub(Selectors, 'config').returns(config);
-        const actionThunk = ActionCreators.updateBiasing(<any>payload);
 
-        expect(actionThunk).to.be.a('function');
+        expectAction(ActionCreators.updateBiasing(payload)(state), Actions.UPDATE_BIASING, {
+          ...payload,
+          config: config.personalization.realTimeBiasing
+        });
 
-        actionThunk(<any>state);
-
-        expect(createAction).to.be.calledWith(
-          Actions.UPDATE_BIASING,
-          {
-            ...payload,
-            config: config.personalization.realTimeBiasing
-          },
-          {
-            payload: validators.isValidBias
-          }
-        );
+        expectValidators(ActionCreators.updateBiasing(payload)(state), Actions.UPDATE_BIASING, {
+          payload: validators.isValidBias
+        });
       });
     });
   });
