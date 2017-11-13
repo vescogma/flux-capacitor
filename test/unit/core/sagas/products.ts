@@ -32,6 +32,7 @@ suite('products saga', ({ expect, spy, stub }) => {
 
       // tslint:disable-next-line max-line-length
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PRODUCTS, Tasks.fetchProducts, flux));
+      expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PRODUCTS_WHEN_HYDRATED, Tasks.fetchProductsWhenHydrated, flux));
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_MORE_PRODUCTS, Tasks.fetchMoreProducts, flux));
       saga.next();
     });
@@ -411,6 +412,40 @@ suite('products saga', ({ expect, spy, stub }) => {
           .to.eql(effects.put(<any>[receiveRecommendationsNavigationsAction, receiveProductsAction]));
         expect(receiveProducts.getCall(0).args[0]).to.eql({ availableNavigation });
         expect(sortAndPinNavigations).to.be.calledWith(availableNavigation, sortArray, config);
+      });
+    });
+
+    describe('fetchProductsWhenHydrated()', () => {
+      const payload: any = { a: 1 };
+
+      it('should dispatch given action if data loaded from browser', () => {
+        const getState = spy();
+        const dispatch = spy();
+        const flux: any = { store: { getState, dispatch } };
+        stub(Selectors, 'realTimeBiasesHydrated').returns(true);
+
+        const task = Tasks.fetchProductsWhenHydrated(flux, <any>{ payload });
+        task.next();
+
+        expect(getState).to.be.calledWith();
+        expect(dispatch).to.be.calledWith(payload);
+      });
+
+      it('should wait on personalization biasing rehydrated if data not loaded from browser', () => {
+        const once = spy();
+        const dispatch = spy();
+        const getState = spy();
+        stub(Selectors, 'realTimeBiasesHydrated').returns(false);
+
+        const flux: any = { store: { getState, dispatch }, once };
+
+        const task = Tasks.fetchProductsWhenHydrated(flux, <any>{ payload });
+        task.next();
+
+        expect(dispatch).to.not.be.called;
+        expect(once).to.be.calledWith(Events.PERSONALIZATION_BIASING_REHYDRATED);
+        once.getCall(0).args[1]();
+        expect(dispatch).to.be.calledWith(payload);
       });
     });
 

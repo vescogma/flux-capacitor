@@ -35,6 +35,11 @@ namespace ActionCreators {
     return createAction(Actions.FETCH_PRODUCTS, null);
   }
 
+  export function fetchProductsWhenHydrated(): Actions.fetchProductsWhenHydrated {
+    console.log(fetchProducts);
+    console.log(fetchProducts());
+    return createAction(Actions.FETCH_PRODUCTS_WHEN_HYDRATED, fetchProducts());
+  }
   /**
    * Makes a request for additional products beyond currently requested products.
    * @param  {number}                    amount - Amount of more products to fetch.

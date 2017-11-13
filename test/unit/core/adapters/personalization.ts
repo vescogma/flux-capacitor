@@ -139,6 +139,17 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
       expect(refinement).to.eql(payload);
     });
+
+    it('should return undefined if Action type is incorrect', () => {
+      const type = 'aa';
+      const action: any = { type, payload: {} };
+      const refinementCrumb = stub(Selectors, 'refinementCrumb');
+
+      const refinement = Adapter.extractRefinement(action, state);
+
+      expect(refinement).to.eql({ value: undefined, field: undefined });
+      expect(refinementCrumb).to.not.have.been.called;
+    });
   });
 
   describe('generateNewBias()', () => {

@@ -130,14 +130,6 @@ class FluxCapacitor extends EventEmitter {
     this.store.dispatch(this.actions.receiveAutocompleteProductRecords(
       this.selectors.queryPastPurchases(this.store.getState())));
   }
-  
-  awaitBiasingRehydration(action: Actions.Action) {
-    if (Selectors.realTimeBiasesHydrated(this.store.getState())) {
-      this.store.dispatch(action);
-    } else {
-      this.once(Events.PERSONALIZATION_BIASING_REHYDRATED, () => this.store.dispatch(action));
-    }
-  }
 
   /**
    * create instances of all clients used to contact microservices

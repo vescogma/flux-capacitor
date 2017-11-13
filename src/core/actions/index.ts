@@ -83,6 +83,9 @@ namespace Actions {
   export type FetchMoreRefinements = Action<typeof FETCH_MORE_REFINEMENTS, string>;
   export const FETCH_PRODUCTS = 'FETCH_PRODUCTS';
   export type FetchProducts = Action<typeof FETCH_PRODUCTS>;
+  export const FETCH_PRODUCTS_WHEN_HYDRATED = 'FETCH_PRODUCTS_WHEN_HYDRATED';
+  // tslint:disable-next-line max-line-length
+  export type fetchProductsWhenHydrated = Action<typeof FETCH_PRODUCTS_WHEN_HYDRATED, Actions.FetchProducts>;
   export const FETCH_MORE_PRODUCTS = 'FETCH_MORE_PRODUCTS';
   export type FetchMoreProducts = Action<typeof FETCH_MORE_PRODUCTS, number>;
   export const FETCH_AUTOCOMPLETE_SUGGESTIONS = 'FETCH_AUTOCOMPLETE_SUGGESTIONS';

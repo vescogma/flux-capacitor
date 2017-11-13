@@ -69,6 +69,12 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('fetchProductsWhenHydrated()', () => {
+      it('should return an action', () => {
+        expectAction(ActionCreators.fetchProductsWhenHydrated(), Actions.FETCH_PRODUCTS_WHEN_HYDRATED, ACTION);
+      });
+    });
+
     describe('fetchMoreProducts()', () => {
       it('should return an action', () => {
         const amount = 15;

@@ -111,11 +111,20 @@ export namespace Tasks {
       yield effects.put(<any>flux.actions.receiveMoreProducts(e));
     }
   }
+
+  export function* fetchProductsWhenHydrated(flux: FluxCapacitor, action: Actions.fetchProductsWhenHydrated) {
+    if (Selectors.realTimeBiasesHydrated(flux.store.getState())) {
+      flux.store.dispatch(action.payload);
+    } else {
+      flux.once(Events.PERSONALIZATION_BIASING_REHYDRATED, () => flux.store.dispatch(action.payload));
+    }
+  }
 }
 
 export default (flux: FluxCapacitor) => {
   return function* saga() {
     yield effects.takeLatest(Actions.FETCH_PRODUCTS, Tasks.fetchProducts, flux);
+    yield effects.takeLatest(Actions.FETCH_PRODUCTS_WHEN_HYDRATED, Tasks.fetchProductsWhenHydrated, flux);
     yield effects.takeLatest(Actions.FETCH_MORE_PRODUCTS, Tasks.fetchMoreProducts, flux);
   };
 };
