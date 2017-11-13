@@ -36,8 +36,6 @@ namespace ActionCreators {
   }
 
   export function fetchProductsWhenHydrated(): Actions.fetchProductsWhenHydrated {
-    console.log(fetchProducts);
-    console.log(fetchProducts());
     return createAction(Actions.FETCH_PRODUCTS_WHEN_HYDRATED, fetchProducts());
   }
   /**
