@@ -35,6 +35,10 @@ namespace ActionCreators {
     return createAction(Actions.FETCH_PRODUCTS, null);
   }
 
+  /**
+   * Wrapper for fetchProducts, dispatches it within saga when store is rehydrated
+   * @return {Actions.FetchProductsWhenHydrated} - Action with null.
+   */
   export function fetchProductsWhenHydrated(): Actions.fetchProductsWhenHydrated {
     return createAction(Actions.FETCH_PRODUCTS_WHEN_HYDRATED, fetchProducts());
   }
