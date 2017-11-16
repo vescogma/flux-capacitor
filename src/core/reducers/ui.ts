@@ -18,12 +18,16 @@ export default function updateUi(state: State = {}, { type, payload, meta = <Act
   }
 }
 
-export const createComponentState = (state: State, { tagName, id, state: tagState }: Actions.Payload.Component.State) =>
+// tslint:disable-next-line max-line-length
+export const createComponentState = (state: State, { tagName, id, state: tagState, persist }: Actions.Payload.Component.State) =>
   ({
     ...state,
     [tagName]: {
       ...state[tagName],
-      [id]: tagState
+      [id]: {
+        persist,
+        data: tagState,
+      }
     }
   });
 
@@ -37,4 +41,9 @@ export const removeComponentState = (state: State, { tagName, id }: Actions.Payl
     }
   });
 
-export const clearComponentState = (state: State): State => ({});
+export const clearComponentState = (state: State): State => (
+  Object.keys(state)
+    .reduce((all, tagName) => ({ ...all, [tagName]: Object.keys(state[tagName])
+      .filter((id) => state[tagName][id].persist)
+      .reduce((tags, key) => ({ ...tags, [key]: state[tagName][key] }), {}) }), {})
+);

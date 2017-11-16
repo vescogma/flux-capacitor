@@ -801,8 +801,9 @@ namespace ActionCreators {
    * @param  {any={}}                       state   - The state to add in the store.
    * @return {Actions.CreateComponentState}         - Action with tagName, id, and state.
    */
-  export function createComponentState(tagName: string, id: string, state: any = {}): Actions.CreateComponentState {
-    return createAction(Actions.CREATE_COMPONENT_STATE, { tagName, id, state });
+  // tslint:disable-next-line max-line-length
+  export function createComponentState(tagName: string, id: string, state: any = {}, persist: boolean = false): Actions.CreateComponentState {
+    return createAction(Actions.CREATE_COMPONENT_STATE, { tagName, id, state, persist });
   }
 
   /**

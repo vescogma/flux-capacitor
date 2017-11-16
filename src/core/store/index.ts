@@ -90,7 +90,10 @@ namespace Store {
   export interface UI {
     [tagName: string]: {
       global?: any;
-      [tagId: string]: any;
+      [tagId: string]: {
+        persist: boolean;
+        data: any;
+      };
     };
   }
 
