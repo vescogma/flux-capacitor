@@ -55,7 +55,13 @@ suite('ui', ({ expect }) => {
         meta: { recallId: 'a' } }
       );
 
-      expect(reducer).to.eql({});
+      expect(reducer).to.eql({
+        ['gb-sort']: {
+          4: { persist: true, data: { eyy: 'yo' } },
+          6: { persist: true, data: { anotha: 'one' } },
+        },
+        ['gb-infinite-scroll']: { 1: { persist: true } },
+      });
     });
 
     it('should return state on default', () => {

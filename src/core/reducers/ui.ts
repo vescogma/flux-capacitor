@@ -43,7 +43,11 @@ export const removeComponentState = (state: State, { tagName, id }: Actions.Payl
 
 export const clearComponentState = (state: State): State => (
   Object.keys(state)
-    .reduce((all, tagName) => ({ ...all, [tagName]: Object.keys(state[tagName])
-      .filter((id) => state[tagName][id].persist)
-      .reduce((tags, key) => ({ ...tags, [key]: state[tagName][key] }), {}) }), {})
+    .reduce((all, tagName) => {
+      const tagState = Object.keys(state[tagName])
+        .filter((id) => state[tagName][id].persist)
+        .reduce((tags, key) => ({ ...tags, [key]: state[tagName][key] }), {});
+
+      return Object.keys(tagState).length > 0 ? { ...all, [tagName]: tagState } : all;
+    }, {})
 );
