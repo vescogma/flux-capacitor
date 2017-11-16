@@ -4,11 +4,14 @@ import suite from '../../_suite';
 
 suite('ui', ({ expect }) => {
   const global = true;
-  const ID = '5';
+  const ID = 5;
   const state: Store.UI = {
     breadcrumbs: {
       global,
-      [ID]: 'yeah',
+      [ID]: {
+        persist: false,
+        data: { a: 'yeah' },
+      },
     }
   };
 
