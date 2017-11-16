@@ -26,6 +26,8 @@ namespace Store {
       middleware,
     );
 
+    // cannot stub persistStore
+    /* istanbul ignore next */
     if (Adapter.isRealTimeBiasEnabled(flux.__config)) {
       persistStore(store);
     }
