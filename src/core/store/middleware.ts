@@ -90,9 +90,8 @@ export namespace Middleware {
   }
 
   export function personalizationAnalyzer(store: Store<any>) {
-    const state = store.getState();
-
     return (next) => (action) => {
+      const state = store.getState();
       if (ConfigurationAdapter.isRealTimeBiasEnabled(Selectors.config(state)) &&
           PERSONALIZATION_CHANGE_ACTIONS.includes(action.type)) {
         return next([
