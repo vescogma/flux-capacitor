@@ -1,7 +1,7 @@
 import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
-import Adapter from '../adapters/autocomplete';
+import Adapter from '../adapters/cart';
 import ConfigAdapter from '../adapters/configuration';
 import Configuration from '../configuration';
 import Requests from '../requests';
@@ -10,22 +10,20 @@ import Store from '../store';
 import { fetch } from '../utils';
 
 export namespace Tasks {
-  export function* createCart(flux: FluxCapacitor, { payload: { loginId, sessionId, visitorId }}: Actions.CreateCart) {
+  export function* createCart(flux: FluxCapacitor, { payload: { loginId, sessionId, visitorId } }: Actions.CreateCart) {
     try {
-      const request = yield effects.select(Requests.autocompleteProducts);
+      const config = yield effects.select(Selectors.config);
+      const customerId = config.customerId;
+      const url = Adapter.buildUrl(customerId);
       const res = yield effects.call(
-        // [flux.clients.bridge, flux.clients.bridge.search],
-        {
-          ...request,
-          loginId,
-          sessionId,
-          visitorId
-        }
-      );
+        fetch,
+        url,
+        Adapter.buildCreateCartBody({ loginId, sessionId, visitorId }));
 
-      // yield effects.put(<any>flux.actions.receiveAutocompleteProducts(res));
+      // check the response is valid
+      yield effects.put(flux.actions.receiveRecommendationsProducts(SearchAdapter.augmentProducts(results)));
     } catch (e) {
-      // yield effects.put(<any>flux.actions.receiveAutocompleteProducts(e));
+      console.log(e);
     }
   }
 }
