@@ -48,13 +48,13 @@ export namespace Tasks {
   }
 
   export function* fetchProductsRequest(flux: FluxCapacitor, action: Actions.FetchProducts) {
-    const biases = yield effects.select(PersonalizationAdapter.convertBiasToSearch);
+    const rtbBiases = yield effects.select(PersonalizationAdapter.convertBiasToSearch);
     const request = yield effects.select(Requests.search);
     const requestWithBiases = {
       ...request,
       biasing: {
         ...request.biasing,
-        biases
+        biases: request.biasing.biases.concat(rtbBiases)
       }
     };
     return yield effects.call([flux.clients.bridge, flux.clients.bridge.search], requestWithBiases);

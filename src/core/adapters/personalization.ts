@@ -6,6 +6,8 @@ import Store from '../store';
 namespace Personalization {
   type ExtractableAction = Actions.SelectRefinement & Actions.AddRefinement;
 
+  export const DAYS_IN_SECONDS = 86400;
+
   export const extractBias = (action: ExtractableAction, state: Store.State) => {
     const config = Selectors.config(state).personalization.realTimeBiasing;
     const byId = Selectors.realTimeBiasesById(state);
@@ -65,7 +67,7 @@ namespace Personalization {
 
   // tslint:disable-next-line max-line-length
   export const transformFromBrowser = (state: BrowserStorageState, reducerKey: string): Store.Personalization.Biasing => {
-    const olderThanTime = Math.floor(Date.now() / 1000) - state.expiry;
+    const olderThanTime = Math.floor(Date.now() / 1000) - DAYS_IN_SECONDS * state.expiry;
     const filteredState = state.allIds.filter((element) => element.lastUsed >= olderThanTime);
     const allIds = [];
     const byId = {};
@@ -82,7 +84,19 @@ namespace Personalization {
 
   export const convertBiasToSearch = (state: Store.State) => {
     const allIds = Selectors.realTimeBiasesAllIds(state);
+    const memoize = {};
     const config = Selectors.config(state).personalization.realTimeBiasing;
+
+    allIds.filter(({ variant, key }) => {
+      // TODO DECANCERFY
+      // tslint:disable-next-line max-line-length
+      const navigation: Store.Navigation = memoize[variant] || (memoize[variant] = Selectors.navigation(state, variant));
+      const refinements = <Store.ValueRefinement[]>navigation.refinements;
+      const index = refinements.findIndex((refinement) => refinement.value === key);
+      const isSelected = navigation.selected.find((element) => element === index);
+
+      return !isSelected;
+    });
 
     return allIds.map(({ variant, key }) => ({
       name: variant,

@@ -38,7 +38,8 @@ export const updateBiasing = (state: State, payload: Actions.Payload.Personaliza
   let allIds = insertSorted(state.biasing.allIds, { variant: payload.variant, key: payload.key });
   const keyCount = Object.keys(byId[payload.variant]).length;
   const config = payload.config;
-  if (config.attributes[payload.variant] && (keyCount > config.attributes[payload.variant].maxBiases)) {
+  // TODO MAGIC NUMBER
+  if (config.attributes[payload.variant] && (keyCount > (config.attributes[payload.variant].maxBiases || 3))) {
     allIds = removeOldest(allIds, payload.variant);
   }
   if (allIds.length > config.maxBiases) {
