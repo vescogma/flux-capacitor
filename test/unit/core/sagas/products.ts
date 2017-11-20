@@ -460,8 +460,9 @@ suite('products saga', ({ expect, spy, stub }) => {
         const payload = { a: 'b' };
         const action: any = { payload };
         const receiveProductsAction: any = { c: 'd' };
-        const biases = [];
+        const biases = ['bias'];
         const request = { e: 'f', biasing: { biases }};
+        const searchRequest = { e: 'f' };
         const response = { id, totalRecordCount: 3 };
         const receiveProducts = spy(() => receiveProductsAction);
         const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, };
@@ -470,9 +471,60 @@ suite('products saga', ({ expect, spy, stub }) => {
 
         expect(task.next().value).to.eql(effects.select(PersonalizationAdapter.convertBiasToSearch));
         expect(task.next(biases).value).to.eql(effects.select(Requests.search));
-        const ret = effects.call([bridge, search], request);
-        expect(task.next(request).value).to.eql(ret);
+        expect(task.next(searchRequest).value).to.eql(effects.call([bridge, search], request));
         expect(task.next(request).value).to.eql(request);
+      });
+
+      it('should return products and not overwrite biases of original request', () => {
+        const id = '1459';
+        const config: any = { e: 'f', search: { redirectSingleResult: false } };
+        const emit = spy();
+        const saveState = spy();
+        const search = () => null;
+        const bridge = { search };
+        const payload = { a: 'b' };
+        const action: any = { payload };
+        const receiveProductsAction: any = { c: 'd' };
+        const biases = ['morebiases'];
+        const originalBiases = ['origina', 'l'];
+        const request = { e: 'f', biasing: { biases: [...originalBiases, ...biases] }};
+        const searchRequest = { e: 'f', biasing: { biases: originalBiases }};
+        const response = { id, totalRecordCount: 3 };
+        const receiveProducts = spy(() => receiveProductsAction);
+        const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, };
+
+        const task = Tasks.fetchProductsRequest(flux, action);
+
+        task.next();
+        task.next(biases);
+        expect(task.next(searchRequest).value).to.eql(effects.call([bridge, search], request));
+        task.next();
+      });
+
+      it('should return products and not overwrite biasing key of original request', () => {
+        const id = '1459';
+        const config: any = { e: 'f', search: { redirectSingleResult: false } };
+        const emit = spy();
+        const saveState = spy();
+        const search = () => null;
+        const bridge = { search };
+        const payload = { a: 'b' };
+        const action: any = { payload };
+        const receiveProductsAction: any = { c: 'd' };
+        const biases = ['morebiases'];
+        const biasing = { someOtherStuff: 3 };
+        const request = { e: 'f', biasing: { ...biasing, biases } };
+        const searchRequest = { e: 'f', biasing };
+        const response = { id, totalRecordCount: 3 };
+        const receiveProducts = spy(() => receiveProductsAction);
+        const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, };
+
+        const task = Tasks.fetchProductsRequest(flux, action);
+
+        task.next();
+        task.next(biases);
+        expect(task.next(searchRequest).value).to.eql(effects.call([bridge, search], request));
+        task.next();
       });
 
       it('should handle request failure', () => {
