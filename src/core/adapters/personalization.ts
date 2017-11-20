@@ -84,21 +84,14 @@ namespace Personalization {
 
   export const convertBiasToSearch = (state: Store.State) => {
     const allIds = Selectors.realTimeBiasesAllIds(state);
-    const memoize = {};
     const config = Selectors.config(state).personalization.realTimeBiasing;
+    const selectedRefinements = Selectors.selectedRefinements(state);
 
-    allIds.filter(({ variant, key }) => {
-      // TODO DECANCERFY
-      // tslint:disable-next-line max-line-length
-      const navigation: Store.Navigation = memoize[variant] || (memoize[variant] = Selectors.navigation(state, variant));
-      const refinements = <Store.ValueRefinement[]>navigation.refinements;
-      const index = refinements.findIndex((refinement) => refinement.value === key);
-      const isSelected = navigation.selected.find((element) => element === index);
-
-      return !isSelected;
-    });
-
-    return allIds.map(({ variant, key }) => ({
+    return allIds.filter(({ variant, key }) => {
+      return !selectedRefinements.find(({ navigationName, type, value }) => {
+        return type === 'Value' && navigationName === variant && key && value === key;
+      });
+    }).map(({ variant, key }) => ({
       name: variant,
       content: key,
       strength: (config.attributes[variant] && config.attributes[variant].strength) || config.strength
@@ -110,7 +103,7 @@ namespace Personalization {
     expiry: number;
   }
 
-  export interface BrowserBiasKey extends Store.Personalization.BiasKey, Store.Personalization.SingleBias {}
+  export interface BrowserBiasKey extends Store.Personalization.BiasKey, Store.Personalization.SingleBias { }
 }
 
 export default Personalization;
