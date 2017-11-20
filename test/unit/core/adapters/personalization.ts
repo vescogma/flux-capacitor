@@ -251,31 +251,67 @@ suite('Personalization Adapter', ({ expect, stub }) => {
     });
   });
 
-  //   describe('removeOldest', () => {
-  //   const arr = [
-  //     { variant: 'a', key: 1},
-  //     { variant: 'b', key: 2},
-  //     { variant: 'c', key: 3},
-  //   ];
+  describe('pruneBiases()', () => {
+    const arr = [
+      { variant: 'a', key: 1},
+      { variant: 'b', key: 2},
+      { variant: 'b', key: 5},
+      { variant: 'c', key: 3},
+    ];
 
-  //   it('shoud remove last element of a specific variant if it exists ', () => {
-  //     const newArr = [
-  //       { variant: 'a', key: 1 },
-  //       { variant: 'c', key: 3 },
-  //     ];
+    it('shoud remove last element of a specific variant if it exists ', () => {
+      const newArr = [
+        { variant: 'a', key: 1 },
+        { variant: 'b', key: 2 },
+        { variant: 'c', key: 3 },
+      ];
 
-  //     const ret = personalization.removeOldest(arr, 'b');
+      const ret = Adapter.pruneBiases(<any>arr, 'b', 2, <any>{ attributes: {
+        b: {
+          maxBiases: 1
+        }}});
 
-  //     expect(ret).to.eql(newArr);
-  //   });
+      expect(ret).to.eql(newArr);
+    });
 
-  //   it('shoud not modify input array if variant does not exists in array', () => {
-  //     const ret = personalization.removeOldest(arr, 'd');
+    it('should remove last bias if too many total biases', () => {
+      const newArr = [
+        { variant: 'a', key: 1 },
+        { variant: 'b', key: 2 },
+        { variant: 'b', key: 5 },
+      ];
 
-  //     expect(ret).to.eql(arr);
-  //   });
-  // });
+      const ret = Adapter.pruneBiases(<any>arr, 'b', 2, <any>{
+        attributes: {
+          b: {
+            maxBiases: 8
+          },
+        },
+        maxBiases: 3
+      });
 
+      expect(ret).to.eql(newArr);
+    });
+
+    it('do nothing if too few biases', () => {
+      const newArr = [
+        { variant: 'a', key: 1 },
+        { variant: 'b', key: 2 },
+        { variant: 'b', key: 5 },
+      ];
+
+      const ret = Adapter.pruneBiases(<any>arr, 'b', 2, <any>{
+        attributes: {
+          b: {
+            maxBiases: 84343
+          },
+        },
+        maxBiases: 3094234
+      });
+
+      expect(ret).to.eql(arr);
+    });
+  });
 
   describe('convertBiasToSearch()', () => {
     it('should convert biasing to search API bias format', () => {

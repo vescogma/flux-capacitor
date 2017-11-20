@@ -169,6 +169,62 @@ suite('Middleware', ({ expect, spy, stub }) => {
   });
 
   describe('saveStateAnalyzer()', () => {
+    it('should pass through other actions', () => {
+      const next = spy();
+      const getState = spy();
+      const action = {
+        type: 'NOT_AN_ACTION',
+        payload: {}
+      };
+
+      Middleware.injectStateIntoRehydrate(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+    });
+
+    it('should pass through rehydrates without biasing', () => {
+      const next = spy();
+      const getState = spy();
+      const action = {
+        type: 'persist/REHYDRATE',
+        payload: {}
+      };
+
+      Middleware.injectStateIntoRehydrate(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+    });
+
+    it('should call transformFromBrowser if biasing present', () => {
+      const next = spy();
+      const state = 's';
+      const getState = stub().returns(state);
+      const biasing = 'bias';
+      const converted = 'conf';
+      const action = {
+        type: 'persist/REHYDRATE',
+        payload: {
+          biasing,
+          a: 3,
+          b: 6,
+        }
+      };
+      const transform = stub(PersonalizationAdapter, 'transformFromBrowser').returns(converted);
+
+      Middleware.injectStateIntoRehydrate(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly({
+        ...action,
+        payload: {
+          ...action.payload,
+          biasing: converted
+        }
+      });
+      expect(transform).to.be.calledWithExactly(biasing, state);
+    });
+  });
+
+  describe('saveStateAnalyzer()', () => {
     it('should add SAVE_STATE action if match found', () => {
       const batchAction = [{ type: 'a' }, { type: Actions.RECEIVE_PRODUCTS }];
       const next = spy();

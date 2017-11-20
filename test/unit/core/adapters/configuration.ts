@@ -388,4 +388,12 @@ suite('Configuration Adapter', ({ expect, stub }) => {
       expect(Adapter.isRealTimeBiasEnabled(<any>{ personalization: { realTimeBiasing: { attributes: null } } })).to.be.false;
     });
   });
+
+  describe('extractRealTimeBiasingExpiry()', () => {
+    it('should return the expiry time for real time biasing', () => {
+      const expiry = 3;
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.extractRealTimeBiasingExpiry(<any>{ personalization: { realTimeBiasing: { expiry } } })).to.eql(expiry);
+    });
+  });
 });

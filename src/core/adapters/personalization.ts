@@ -101,6 +101,7 @@ namespace Personalization {
     }));
   };
 
+  // tslint:disable-next-line max-line-length
   export const pruneBiases = (allIds: Store.Personalization.BiasKey[], variant: string, variantCount: number, config: Configuration.Personalization.RealTimeBiasing) => {
     if (config.attributes[variant] && (variantCount >= (config.attributes[variant].maxBiases))) {
       for (let i = allIds.length - 1; i >= 0; i--) {
@@ -108,7 +109,6 @@ namespace Personalization {
           return [...allIds.slice(0, i), ...allIds.slice(i + 1)];
         }
       }
-      return allIds;
     }
     if (allIds.length > config.maxBiases) {
       return allIds.slice(0, config.maxBiases);
