@@ -292,10 +292,12 @@ suite('selectors', ({ expect, stub }) => {
     it('should return products with pastPurchase metadata', () => {
       const state: any = { a: 'b' };
       const pastPurchaseProductsBySku = stub(Selectors, 'pastPurchaseProductsBySku').returns({ a: {}, c: {} });
-      const products = stub(Selectors, 'products').returns([{ id: 'a' }, { id: 'b' }, { id: 'c' }]);
+      const products = stub(Selectors, 'productsWithMetadata').returns([
+        { data: { id: 'a' }, meta: { a: 'b' } }, { data: { id: 'b' } }, { data: { id: 'c' } }
+      ]);
 
       expect(Selectors.productsWithPastPurchase(state, 'id')).to.eql([
-        { data: { id: 'a' }, meta: { pastPurchase: true } },
+        { data: { id: 'a' }, meta: { pastPurchase: true, a: 'b' } },
         { data: { id: 'b' }, meta: {} },
         { data: { id: 'c' }, meta: { pastPurchase: true } },
       ]);
@@ -306,7 +308,9 @@ suite('selectors', ({ expect, stub }) => {
     it('should use provided id field', () => {
       const state: any = { a: 'b' };
       stub(Selectors, 'pastPurchaseProductsBySku').returns({ a: {}, c: {} });
-      stub(Selectors, 'products').returns([{ sku: 'a' }, { sku: 'b' }, { sku: 'c' }]);
+      stub(Selectors, 'productsWithMetadata').returns([
+        { data: { sku: 'a' } }, { data: { sku: 'b' } }, { data: { sku: 'c' } }
+      ]);
 
       expect(Selectors.productsWithPastPurchase(state, 'sku')).to.eql([
         { data: { sku: 'a' }, meta: { pastPurchase: true } },
@@ -319,9 +323,9 @@ suite('selectors', ({ expect, stub }) => {
   describe('productsWithMetadata()', () => {
     it('should return products with metadata', () => {
       const products = [
-        { data: { id: 'a' }, id: 1, meta: { pastPurchase: true } },
+        { data: { id: 'a' }, id: 1, meta: { a: 'b' } },
         { data: { id: 'b' }, id: 2, meta: {} },
-        { data: { id: 'c' }, id: 3, meta: { pastPurchase: true } },
+        { data: { id: 'c' }, id: 3, meta: { c: 'd' } },
       ];
       const state: any = { a: 'b', data: { present: { products  } } };
 
