@@ -105,11 +105,6 @@ namespace Events {
    * Returns the details data.
    */
   export const DETAILS_UPDATED = 'details_updated'; // pre
-  /**
-   * Triggered when details product is updated.
-   * Returns the details products.
-   */
-  export const DETAILS_PRODUCT_UPDATED = 'details_product_updated'; // post
 
   // page events
   /**

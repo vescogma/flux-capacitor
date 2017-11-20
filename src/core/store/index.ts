@@ -201,8 +201,7 @@ namespace Store {
   }
 
   export interface Details {
-    data?: Product; // pre
-    product?: Product; // post
+    data?: Product;
   }
 
   export interface Recommendations {

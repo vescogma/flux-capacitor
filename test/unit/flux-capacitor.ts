@@ -187,11 +187,11 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
       });
     });
 
-    describe('details()', () => {
-      it('should call updateDetails() action', () => {
+    describe('detailsWithRouting()', () => {
+      it('should call setDetails() action', () => {
         const product: any = { a: 'b' };
 
-        expectDispatch(() => flux.details(product), 'updateDetails', product);
+        expectDispatch(() => flux.detailsWithRouting(product), 'setDetails', product);
       });
     });
 

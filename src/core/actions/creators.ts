@@ -365,6 +365,16 @@ namespace ActionCreators {
   }
 
   /**
+   * Sets the details product in the store, doing some additional emits and state changes.
+   * @param  {Store.Product}         product - The product to use as the details
+   * product.
+   * @return {Actions.SetDetails}         - Action with product.
+   */
+  export function setDetails(product: Store.Product): Actions.SetDetails {
+    return createAction(Actions.SET_DETAILS, product);
+  }
+
+  /**
    * Updates the autocomplete query with the given term.
    * @param  {string}                          query - The search term to update
    * the autocomplete query to and get suggestions based on.
@@ -556,15 +566,6 @@ namespace ActionCreators {
    */
   export function receiveAutocompleteTemplate(template: Store.Template): Actions.ReceiveAutocompleteTemplate {
     return createAction(Actions.RECEIVE_AUTOCOMPLETE_TEMPLATE, template);
-  }
-
-  /**
-   * The details product to receive and update state with.
-   * @param  {Store.Product}                 product - The product to add to the details state.
-   * @return {Actions.ReceiveDetailsProduct}         - Action with product.
-   */
-  export function receiveDetailsProduct(product: Store.Product): Actions.ReceiveDetailsProduct {
-    return createAction(Actions.RECEIVE_DETAILS_PRODUCT, product);
   }
 
   /**

@@ -126,16 +126,18 @@ suite('products saga', ({ expect, spy, stub }) => {
       it('should call receiveDetailsProduct when only a single result', () => {
         const receiveProductsAction: any = { c: 'd' };
         const receiveNavigationsAction: any = { e: 'f' };
+        const setDetailsAction: any = { j: 'e' };
         const record: any = { g: 'h' };
         const receiveRedirect = spy(() => receiveProductsAction);
         const receiveProducts = spy(() => receiveNavigationsAction);
+        const setDetails = spy(() => setDetailsAction);
         const config = {
           search: {
             redirectSingleResult: true
           }
         };
         const flux: any = {
-          actions: { receiveProducts, receiveRedirect },
+          actions: { receiveProducts, receiveRedirect, setDetails },
           emit: () => undefined,
           saveState: () => undefined
         };
@@ -144,7 +146,8 @@ suite('products saga', ({ expect, spy, stub }) => {
         task.next();
         task.next([{ redirect: false, totalRecordCount: 1, records: [record] }, undefined]);
         expect(task.next(config).value)
-          .to.eql(effects.call(productDetailsTasks.receiveDetailsProduct, flux, record));
+          .to.eql(effects.put(setDetailsAction));
+        expect(setDetails).to.be.calledWith(record);
         task.next();
       });
 

@@ -185,7 +185,6 @@ suite('Observer', ({ expect, spy, stub }) => {
       expect(present.collections.selected).to.be.a('function');
       expect(present.details).to.be.an('object');
       expect(present.details.data).to.be.a('function');
-      expect(present.details.product).to.be.a('function');
       expect(present.navigations).to.be.a('function');
       expect(present.page).to.be.a('function');
       expect(present.page.current).to.be.a('function');
@@ -306,12 +305,6 @@ suite('Observer', ({ expect, spy, stub }) => {
           observers.data.present.details.data(undefined, testObject);
 
           expect(emit).to.be.calledWith(Events.DETAILS_UPDATED, testObject);
-        });
-
-        it('should emit DETAILS_PRODUCT_UPDATED event', () => {
-          observers.data.present.details.product(undefined, testObject);
-
-          expect(emit).to.be.calledWith(Events.DETAILS_PRODUCT_UPDATED, testObject);
         });
       });
 

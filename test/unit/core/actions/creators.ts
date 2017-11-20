@@ -575,6 +575,14 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('setDetails()', () => {
+      it('should return an action', () => {
+        const product: any = { a: 'b' };
+
+        expectAction(ActionCreators.setDetails(product), Actions.SET_DETAILS, product);
+      });
+    });
+
     describe('updateAutocompleteQuery()', () => {
       const query = 'pink elephant';
 
@@ -822,14 +830,6 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
 
         // tslint:disable-next-line max-line-length
         expectAction(ActionCreators.receiveAutocompleteProductRecords(products), Actions.RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS, products);
-      });
-    });
-
-    describe('receiveDetailsProduct()', () => {
-      it('should return an action', () => {
-        const product: any = { a: 'b' };
-
-        expectAction(ActionCreators.receiveDetailsProduct(product), Actions.RECEIVE_DETAILS_PRODUCT, product);
       });
     });
 

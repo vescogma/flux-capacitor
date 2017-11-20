@@ -38,10 +38,6 @@ export const updateState = (state: Store.State, { payload }: Actions.RefreshStat
       present: {
         ...payload.data.present,
         autocomplete: state.data.present.autocomplete,
-        details: {
-          ...payload.data.present.details,
-          data: state.data.present.details.data
-        }
       },
       future: []
     }

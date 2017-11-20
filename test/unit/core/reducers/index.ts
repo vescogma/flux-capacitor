@@ -5,13 +5,14 @@ import suite from '../../_suite';
 
 suite('reducers', ({ expect, stub }) => {
   it('should handle REFRESH_STATE action', () => {
-    const payload = { a: 'b', data: { past: [], present: { autocomplete: { c: 'd' }, details: {} }, future: [] } };
+    // tslint:disable-next-line max-line-length
+    const payload = { a: 'b', data: { past: [], present: { autocomplete: { c: 'd' }, details: { data: '3' } }, future: [] } };
     const newState = {
       a: 'b',
       session: undefined,
       data: {
-        past: [{ autocomplete: { c: 'd' }, details: {} }],
-        present: { autocomplete: {}, details: { data: undefined } },
+        past: [{ autocomplete: { c: 'd' }, details: { data: '3' } }],
+        present: { autocomplete: {}, details: { data: '3' } },
         future: []
       }
     };
