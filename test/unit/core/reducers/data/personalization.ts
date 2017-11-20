@@ -1,4 +1,5 @@
 import { Actions, Store } from '../../../../../src/core';
+import Adapter from '../../../../../src/core/adapters/personalization';
 import updatePersonalization, * as personalization from '../../../../../src/core/reducers/data/personalization';
 import suite from '../../../_suite';
 
@@ -86,7 +87,7 @@ suite('personalization', ({ expect, spy, stub }) => {
       expect(reducer).to.eql(newState);
     });
 
-    it('should call removeOldest with allIds when attribute\'s maxBiases exceeded', () => {
+    it('should call pruneBiases', () => {
       const variant = 'a';
       const payload = {
         variant,
@@ -99,58 +100,12 @@ suite('personalization', ({ expect, spy, stub }) => {
         }
       };
       const allIds = [0, 1, 2, 3, { variant: 'a' }, 4];
-      const removeOldest = stub(personalization, 'removeOldest').returns(allIds);
+      const pruneBiases = stub(Adapter, 'pruneBiases').returns(allIds);
       stub(personalization, 'insertSorted').returns(allIds);
 
       personalization.updateBiasing(state, <any>payload);
 
-      expect(removeOldest).to.be.calledWithExactly(allIds, variant);
-    });
-
-    it('should slice allIds when it\'s length exceeds maxBiases', () => {
-      const variant = 'a';
-      const payload = {
-        variant,
-        key: 'z',
-        bias: 3,
-        config
-      };
-      const slice = spy();
-      const allIds = {
-        length: 10020000,
-        slice
-      };
-      const removeOldest = stub(personalization, 'removeOldest').returns(allIds);
-      stub(personalization, 'insertSorted').returns(allIds);
-
-      personalization.updateBiasing(state, <any>payload);
-
-      expect(slice).to.be.calledOnce;
-    });
-  });
-
-  describe('removeOldest', () => {
-    const arr = [
-      { variant: 'a', key: 1},
-      { variant: 'b', key: 2},
-      { variant: 'c', key: 3},
-    ];
-
-    it('shoud remove last element of a specific variant if it exists ', () => {
-      const newArr = [
-        { variant: 'a', key: 1 },
-        { variant: 'c', key: 3 },
-      ];
-
-      const ret = personalization.removeOldest(arr, 'b');
-
-      expect(ret).to.eql(newArr);
-    });
-
-    it('shoud not modify input array if variant does not exists in array', () => {
-      const ret = personalization.removeOldest(arr, 'd');
-
-      expect(ret).to.eql(arr);
+      expect(pruneBiases).to.be.calledWithExactly(allIds, variant, 2, payload.config);
     });
   });
 

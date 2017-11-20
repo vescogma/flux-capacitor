@@ -22,6 +22,18 @@ suite('Middleware', ({ expect, spy, stub }) => {
     const sagaMiddleware = { a: 'b' };
     const idGeneratorMiddleware = { g: 'h' };
     const errorHandlerMiddleware = { i: 'j' };
+    const allMiddleware = () => [
+        Middleware.thunkEvaluator,
+        Middleware.injectStateIntoRehydrate,
+        Middleware.validator,
+        idGeneratorMiddleware,
+        idGeneratorMiddleware,
+        errorHandlerMiddleware,
+        sagaMiddleware,
+        Middleware.personalizationAnalyzer,
+        Middleware.thunkEvaluator,
+        Middleware.saveStateAnalyzer
+      ];
 
     afterEach(() => delete process.env.NODE_ENV);
 
@@ -46,15 +58,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
         .and.calledWithExactly('searchId', SEARCH_CHANGE_ACTIONS);
       expect(errorHandler).to.be.calledWithExactly(flux);
       expect(applyMiddleware).to.be.calledWithExactly(
-        Middleware.thunkEvaluator,
-        Middleware.validator,
-        idGeneratorMiddleware,
-        idGeneratorMiddleware,
-        errorHandlerMiddleware,
-        sagaMiddleware,
-        Middleware.personalizationAnalyzer,
-        Middleware.thunkEvaluator,
-        Middleware.saveStateAnalyzer
+        ...allMiddleware(),
       );
       expect(compose).to.be.calledWithExactly(
         simpleMiddleware,
@@ -79,15 +83,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       Middleware.create(sagaMiddleware, flux);
 
       expect(applyMiddleware).to.be.calledWithExactly(
-        Middleware.thunkEvaluator,
-        Middleware.validator,
-        idGeneratorMiddleware,
-        idGeneratorMiddleware,
-        errorHandlerMiddleware,
-        sagaMiddleware,
-        Middleware.personalizationAnalyzer,
-        Middleware.thunkEvaluator,
-        Middleware.saveStateAnalyzer,
+        ...allMiddleware(),
         reduxLogger
       );
     });
@@ -104,16 +100,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       Middleware.create(sagaMiddleware, flux);
 
       expect(applyMiddleware).to.be.calledWithExactly(
-        Middleware.thunkEvaluator,
-        Middleware.validator,
-        idGeneratorMiddleware,
-        idGeneratorMiddleware,
-        errorHandlerMiddleware,
-        sagaMiddleware,
-        Middleware.personalizationAnalyzer,
-        Middleware.thunkEvaluator,
-        Middleware.saveStateAnalyzer
-      );
+        ...allMiddleware());
     });
   });
 

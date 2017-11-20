@@ -1,4 +1,5 @@
 import Actions from '../../../../src/core/actions/index';
+import ConfigAdapter from '../../../../src/core/adapters/configuration';
 import Adapter from '../../../../src/core/adapters/personalization';
 import Selectors from '../../../../src/core/selectors';
 import suite from '../../_suite';
@@ -170,14 +171,12 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       const result = Adapter.transformToBrowser(state, key);
 
       expect(result).to.deep.equal({
-        expiry: 2000,
         allIds: []
       });
     });
 
     it('should return data in certain format when allIds exist in the state', () => {
       const state: any = {
-        expiry: 2000,
         allIds: [{
           variant: 'color',
           key: 'blue',
@@ -195,7 +194,6 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       const result = Adapter.transformToBrowser(state, key);
 
       expect(result).to.deep.equal({
-        expiry: 2000,
         allIds: [{
           variant: 'color',
           key: 'blue',
@@ -208,18 +206,23 @@ suite('Personalization Adapter', ({ expect, stub }) => {
   describe('transformFromBrowser()', () => {
     it('should filter allIds that are older than the set time', () => {
       const oneDayInSec = 86400;
-      const key = 'test';
       const now = Date.now() / 1000;
+      const expiry = 30;
       const browserStorage = {
-        expiry: oneDayInSec * 30,
         allIds: [{ variant: 'color', key: 'blue', lastUsed: now - oneDayInSec * 5 },
-        { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
-        { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 33 }]
+                 { variant: 'brand', key: 'Shoe', lastUsed: now - oneDayInSec * 6 },
+                 { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
+                 { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 33 }]
       };
       const biasFromBrowser = {
-        expiry: oneDayInSec * 30,
-        allIds: [{ variant: 'color', key: 'blue' }, { variant: 'color', key: 'red' }],
+        allIds: [{ variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Shoe'},
+                 { variant: 'color', key: 'red' }],
         byId: {
+          brand: {
+            Shoe: {
+              lastUsed: now - oneDayInSec * 6
+            }
+          },
           color: {
             blue: {
               lastUsed: now - oneDayInSec * 5
@@ -230,12 +233,49 @@ suite('Personalization Adapter', ({ expect, stub }) => {
           }
         }
       };
+      const realTimeBiasing = 'real';
+      const conf = { personalization: { realTimeBiasing } };
+      const state: any = 's';
+      const config = stub(Selectors, 'config').returns(conf);
+      const extractExpiry = stub(ConfigAdapter, 'extractRealTimeBiasingExpiry').returns(expiry);
+      const pruneBiases = stub(Adapter, 'pruneBiases').returnsArg(0);
 
-      const result = Adapter.transformFromBrowser(browserStorage, key);
+      const result = Adapter.transformFromBrowser(browserStorage, state);
 
       expect(result).to.deep.equal(biasFromBrowser);
+      expect(config).to.be.calledWithExactly(state);
+      expect(extractExpiry).to.be.calledWithExactly(conf);
+      expect(pruneBiases).to.be.calledTwice.and
+        .calledWithExactly(biasFromBrowser.allIds, 'color', 2, realTimeBiasing).and
+        .calledWithExactly(biasFromBrowser.allIds, 'brand', 1, realTimeBiasing);
     });
   });
+
+  //   describe('removeOldest', () => {
+  //   const arr = [
+  //     { variant: 'a', key: 1},
+  //     { variant: 'b', key: 2},
+  //     { variant: 'c', key: 3},
+  //   ];
+
+  //   it('shoud remove last element of a specific variant if it exists ', () => {
+  //     const newArr = [
+  //       { variant: 'a', key: 1 },
+  //       { variant: 'c', key: 3 },
+  //     ];
+
+  //     const ret = personalization.removeOldest(arr, 'b');
+
+  //     expect(ret).to.eql(newArr);
+  //   });
+
+  //   it('shoud not modify input array if variant does not exists in array', () => {
+  //     const ret = personalization.removeOldest(arr, 'd');
+
+  //     expect(ret).to.eql(arr);
+  //   });
+  // });
+
 
   describe('convertBiasToSearch()', () => {
     it('should convert biasing to search API bias format', () => {
@@ -254,6 +294,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         }
       };
       stub(Selectors, 'realTimeBiasesAllIds').returns(allIds);
+      stub(Selectors, 'selectedRefinements').returns([]);
       stub(Selectors, 'config').returns(config);
 
       const result = Adapter.convertBiasToSearch(state);
@@ -263,6 +304,37 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         content: 'blue',
         strength: 'Absolute_Increase'
       }, {
+        name: 'brand',
+        content: 'Nike',
+        strength: 'Absolute_Decrease'
+      }]);
+    });
+
+    it('should exclude selected refinements', () => {
+      const state: any = {};
+      const allIds = [{ variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Nike' }];
+      const config = {
+        personalization: {
+          realTimeBiasing: {
+            strength: 'Absolute_Decrease',
+            attributes: {
+              color: {
+                strength: 'Absolute_Increase'
+              }
+            }
+          }
+        }
+      };
+      stub(Selectors, 'realTimeBiasesAllIds').returns(allIds);
+      stub(Selectors, 'selectedRefinements').returns([
+        { navigationName: 'color', type: 'Value', value: 'blue' },
+        { navigationName: 'color', type: 'Value', value: 'red' }
+      ]);
+      stub(Selectors, 'config').returns(config);
+
+      const result = Adapter.convertBiasToSearch(state);
+
+      expect(result).to.deep.equal([{
         name: 'brand',
         content: 'Nike',
         strength: 'Absolute_Decrease'
