@@ -354,7 +354,6 @@ namespace Store {
 
   export namespace Personalization {
     export interface Biasing {
-      expiry: number;
       allIds: Personalization.BiasKey[];
       byId: Personalization.BiasById;
     }

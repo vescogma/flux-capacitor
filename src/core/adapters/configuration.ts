@@ -34,13 +34,6 @@ namespace Adapter {
             ...PageReducer.DEFAULTS,
             sizes: Adapter.extractPageSizes(config, PageReducer.DEFAULT_PAGE_SIZE)
           },
-          personalization: {
-            ...PersonalizationAdapter.DEFAULT,
-            biasing: {
-              ...PersonalizationAdapter.DEFAULT.biasing,
-              expiry: Adapter.extractRealTimeBiasingExpiry(config)
-            }
-          }
         }
       },
       session: { config }

@@ -68,6 +68,17 @@ export namespace Middleware {
     };
   }
 
+  export function injectStateIntoRehydrate(store: Store<any>) {
+    return (next) => (action) =>
+      action.type === 'persist/REHYDRATE' && action.payload.biasing ? next({
+        ...action,
+        payload: {
+          ...action.payload,
+          biasing: PersonalizationAdapter.transformFromBrowser(action.payload.biasing, store.getState())
+        }
+      }) : next(action);
+  }
+
   export function saveStateAnalyzer() {
     return (next) => (batchAction) => {
       const actions = utils.rayify(batchAction);
@@ -106,6 +117,7 @@ export namespace Middleware {
   export function create(sagaMiddleware: any, flux: FluxCapacitor): any {
     const middleware = [
       thunkEvaluator,
+      Middleware.injectStateIntoRehydrate,
       Middleware.validator,
       Middleware.idGenerator('recallId', RECALL_CHANGE_ACTIONS),
       Middleware.idGenerator('searchId', SEARCH_CHANGE_ACTIONS),

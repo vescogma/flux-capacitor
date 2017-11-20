@@ -1,5 +1,6 @@
 import Actions from '../actions';
 import Configuration from '../configuration';
+import ConfigAdapter from './configuration';
 import Selectors from '../selectors';
 import Store from '../store';
 
@@ -57,7 +58,6 @@ namespace Personalization {
 
   // tslint:disable-next-line max-line-length
   export const transformToBrowser = (state: Store.Personalization.Biasing, reducerKey: string): BrowserStorageState => ({
-    expiry: state.expiry,
     allIds: state.allIds ? state.allIds.map(({ variant, key }) => ({
       variant,
       key,
@@ -66,17 +66,20 @@ namespace Personalization {
   });
 
   // tslint:disable-next-line max-line-length
-  export const transformFromBrowser = (state: BrowserStorageState, reducerKey: string): Store.Personalization.Biasing => {
-    const olderThanTime = Math.floor(Date.now() / 1000) - DAYS_IN_SECONDS * state.expiry;
-    const filteredState = state.allIds.filter((element) => element.lastUsed >= olderThanTime);
-    const allIds = [];
+  export const transformFromBrowser = (incomingState: BrowserStorageState, state: Store.State): Store.Personalization.Biasing => {
+    const config = Selectors.config(state);
+    const olderThanTime = Math.floor(Date.now() / 1000) - DAYS_IN_SECONDS * ConfigAdapter.extractRealTimeBiasingExpiry(config);
+    const filteredIncomingState = incomingState.allIds.filter((element) => element.lastUsed >= olderThanTime);
+    let allIds = [];
     const byId = {};
-    filteredState.forEach(({ variant, key, lastUsed }) => {
+    filteredIncomingState.forEach(({ variant, key, lastUsed }) => {
       allIds.push({ variant, key });
       byId[variant] = { ...byId[variant], [key]: { lastUsed } };
     });
+    Object.keys(byId).forEach((key) => {
+      allIds = pruneBiases(allIds, key, Object.keys(byId[key]).length, config.personalization.realTimeBiasing);
+    }); // filter allIds for each variant
     return {
-      expiry: state.expiry,
       allIds,
       byId
     };
@@ -98,9 +101,23 @@ namespace Personalization {
     }));
   };
 
+  export const pruneBiases = (allIds: Store.Personalization.BiasKey[], variant: string, variantCount: number, config: Configuration.Personalization.RealTimeBiasing) => {
+    if (config.attributes[variant] && (variantCount >= (config.attributes[variant].maxBiases))) {
+      for (let i = allIds.length - 1; i >= 0; i--) {
+        if (allIds[i].variant === variant) {
+          return [...allIds.slice(0, i), ...allIds.slice(i + 1)];
+        }
+      }
+      return allIds;
+    }
+    if (allIds.length > config.maxBiases) {
+      return allIds.slice(0, config.maxBiases);
+    }
+    return allIds;
+  };
+
   export interface BrowserStorageState {
     allIds: BrowserBiasKey[];
-    expiry: number;
   }
 
   export interface BrowserBiasKey extends Store.Personalization.BiasKey, Store.Personalization.SingleBias { }

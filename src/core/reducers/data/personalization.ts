@@ -15,7 +15,6 @@ export const DEFAULT: State = {
   biasing: {
     allIds: [],
     byId: {},
-    expiry: 0
   }
 };
 
@@ -36,15 +35,8 @@ export const updateBiasing = (state: State, payload: Actions.Payload.Personaliza
   };
 
   let allIds = insertSorted(state.biasing.allIds, { variant: payload.variant, key: payload.key });
-  const keyCount = Object.keys(byId[payload.variant]).length;
   const config = payload.config;
-  // TODO MAGIC NUMBER
-  if (config.attributes[payload.variant] && (keyCount >= (config.attributes[payload.variant].maxBiases || 3))) {
-    allIds = removeOldest(allIds, payload.variant);
-  }
-  if (allIds.length > config.maxBiases) {
-    allIds = allIds.slice(0, config.maxBiases);
-  }
+  allIds = Adapter.pruneBiases(allIds, payload.variant, Object.keys(byId[payload.variant]).length, config);
 
   return { ...state, biasing: { ...state.biasing, byId, allIds }};
 };
@@ -55,20 +47,9 @@ export const insertSorted = (allIds: Store.Personalization.BiasKey[], { variant,
   return [{ variant, key }, ...noDuplicate]; //TODO: insert sorted
 };
 
-export const removeOldest = (allIds, variant) => {
-  for (let i = allIds.length - 1; i >= 0; i--) {
-    if (allIds[i].variant === variant) {
-      return [...allIds.slice(0, i), ...allIds.slice(i + 1)];
-    }
-  }
-  return allIds;
-};
-
 const personalizationTransform = createTransform(
   // transform state coming from redux on its way to being serialized and stored
   Adapter.transformToBrowser,
-  // transform state coming from storage, on its way to be rehydrated into redux
-  Adapter.transformFromBrowser,
   // configuration options (if any)
 );
 
