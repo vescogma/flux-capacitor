@@ -128,20 +128,14 @@ namespace Selectors {
    */
   export const productsWithPastPurchase = (state: Store.State, idField: string) => {
     const pastPurchases = Selectors.pastPurchaseProductsBySku(state);
-    return Selectors.productsWithMetadata(state).map(({ data, meta: origMeta }) => {
+    return Selectors.productsWithMetadata(state).map((prod) => {
       const meta: any = {};
 
-      if (data[idField] in pastPurchases) {
+      if (prod.data[idField] in pastPurchases) {
         meta.pastPurchase = true;
       }
 
-      return {
-        data,
-        meta: {
-          ...origMeta,
-          ...meta,
-        }
-      };
+      return { ...prod, meta: { ...prod.meta, ...meta, } };
     });
   };
 
