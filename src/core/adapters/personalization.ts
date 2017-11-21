@@ -1,6 +1,6 @@
 import Actions from '../actions';
-import Configuration from '../configuration';
 import ConfigAdapter from './configuration';
+import Configuration from '../configuration';
 import Selectors from '../selectors';
 import Store from '../store';
 
@@ -30,26 +30,17 @@ namespace Personalization {
 
   // tslint:disable-next-line max-line-length
   export const extractRefinement = ({ type, payload }: ExtractableAction, state: Store.State): { field: string, value: string } => {
-    // tslint:disable-next-line one-variable-per-declaration
-    let field = undefined, value = undefined;
-
     switch (type) {
       case Actions.ADD_REFINEMENT:
-        if (payload.range) {
-          break;
+        if (!payload.range) {
+          return { field: payload.navigationId, value: payload.value };
         }
-        field = payload.navigationId;
-        value = payload.value;
         break;
       case Actions.SELECT_REFINEMENT:
-        const refinement = Selectors.refinementCrumb(state, payload.navigationId, payload.index);
-        field = refinement.field;
-        value = refinement.value;
-        break;
+        return Selectors.refinementCrumb(state, payload.navigationId, payload.index);
       default:
     }
-
-    return { field, value };
+    return { field: undefined, value: undefined };
   };
 
   export const generateNewBias = () => ({
@@ -58,16 +49,17 @@ namespace Personalization {
 
   // tslint:disable-next-line max-line-length
   export const transformToBrowser = (state: Store.Personalization.Biasing, reducerKey: string): BrowserStorageState => ({
-    allIds: state.allIds ? state.allIds.map(({ variant, key }) => ({
+    allIds: state.allIds.map(({ variant, key }) => ({
       variant,
       key,
       ...state.byId[variant][key]
-    })) : []
+    }))
   });
 
   // tslint:disable-next-line max-line-length
   export const transformFromBrowser = (incomingState: BrowserStorageState, state: Store.State): Store.Personalization.Biasing => {
     const config = Selectors.config(state);
+    // tslint:disable-next-line max-line-length
     const olderThanTime = Math.floor(Date.now() / 1000) - DAYS_IN_SECONDS * ConfigAdapter.extractRealTimeBiasingExpiry(config);
     const filteredIncomingState = incomingState.allIds.filter((element) => element.lastUsed >= olderThanTime);
     let allIds = [];
@@ -90,11 +82,10 @@ namespace Personalization {
     const config = Selectors.config(state).personalization.realTimeBiasing;
     const selectedRefinements = Selectors.selectedRefinements(state);
 
-    return allIds.filter(({ variant, key }) => {
-      return !selectedRefinements.find(({ navigationName, type, value }) => {
-        return type === 'Value' && navigationName === variant && key && value === key;
-      });
-    }).map(({ variant, key }) => ({
+    return allIds.filter(({ variant, key }) =>
+      !selectedRefinements.some(({ navigationName, type, value }) =>
+        type === 'Value' && navigationName === variant && key && value === key)
+    ).map(({ variant, key }) => ({
       name: variant,
       content: key,
       strength: (config.attributes[variant] && config.attributes[variant].strength) || config.strength
@@ -103,7 +94,7 @@ namespace Personalization {
 
   // tslint:disable-next-line max-line-length
   export const pruneBiases = (allIds: Store.Personalization.BiasKey[], variant: string, variantCount: number, config: Configuration.Personalization.RealTimeBiasing) => {
-    if (config.attributes[variant] && (variantCount >= (config.attributes[variant].maxBiases))) {
+    if (config.attributes[variant] && variantCount >= config.attributes[variant].maxBiases) {
       for (let i = allIds.length - 1; i >= 0; i--) {
         if (allIds[i].variant === variant) {
           return [...allIds.slice(0, i), ...allIds.slice(i + 1)];
