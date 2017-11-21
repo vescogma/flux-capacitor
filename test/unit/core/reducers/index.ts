@@ -5,7 +5,19 @@ import suite from '../../_suite';
 
 suite('reducers', ({ expect, stub }) => {
   it('should handle REFRESH_STATE action', () => {
-    const payload = { a: 'b', data: { past: [], present: { personalization: { biasing: 'bias' }, autocomplete: { c: 'd' }, details: { data: '3' } }, future: [] } };
+    const payload = {
+      a: 'b',
+      data: {
+        past: [],
+        present: {
+          personalization: { biasing: 'bias' },
+          autocomplete: { c: 'd' },
+          details: { data: '3' }
+        },
+        future: [],
+      }
+    };
+
     const newState = {
       a: 'b',
       session: undefined,
