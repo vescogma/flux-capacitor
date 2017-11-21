@@ -103,7 +103,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
       const result = Adapter.extractBias(action, store);
 
-      expect(result).to.be.null;
+      expect(result).to.be.undefined;
     });
   });
 
