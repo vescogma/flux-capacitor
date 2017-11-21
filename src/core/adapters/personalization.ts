@@ -15,7 +15,7 @@ namespace Personalization {
     const { field, value } = extractRefinement(action, state);
 
     if (!config.attributes[field]) {
-      return null;
+      return;
     }
 
     return {

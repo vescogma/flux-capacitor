@@ -105,10 +105,13 @@ export namespace Middleware {
       const state = store.getState();
       if (ConfigurationAdapter.isRealTimeBiasEnabled(Selectors.config(state)) &&
           PERSONALIZATION_CHANGE_ACTIONS.includes(action.type)) {
-        return next([
-          action,
-          ActionCreators.updateBiasing(PersonalizationAdapter.extractBias(action, state))
-        ]);
+        const biasing = PersonalizationAdapter.extractBias(action, state);
+        if (biasing) {
+          return next([
+            action,
+            ActionCreators.updateBiasing(biasing)
+          ]);
+        }
       }
       return next(action);
     };
