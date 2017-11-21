@@ -98,13 +98,12 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         field: 'brand',
         value: 'Nike'
       };
-      const byId = {};
-      stub(Selectors, 'realTimeBiasesById').returns(byId);
+      stub(Selectors, 'realTimeBiasesById').returns({});
       stub(Adapter, 'extractRefinement').returns(newRefinement);
 
       const result = Adapter.extractBias(action, store);
 
-      expect(result).to.eql(null);
+      expect(result).to.be.null;
     });
   });
 
@@ -164,17 +163,6 @@ suite('Personalization Adapter', ({ expect, stub }) => {
   });
 
   describe('transformToBrowser()', () => {
-    it('should return empty array if the state does not have allIds', () => {
-      const state: any = { expiry: 2000 };
-      const key = 'test';
-
-      const result = Adapter.transformToBrowser(state, key);
-
-      expect(result).to.eql({
-        allIds: []
-      });
-    });
-
     it('should return data in certain format when allIds exist in the state', () => {
       const state: any = {
         allIds: [{
