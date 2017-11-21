@@ -1,8 +1,8 @@
 import Actions from '../actions';
-import ConfigAdapter from './configuration';
 import Configuration from '../configuration';
 import Selectors from '../selectors';
 import Store from '../store';
+import ConfigAdapter from './configuration';
 
 namespace Personalization {
   type ExtractableAction = Actions.SelectRefinement & Actions.AddRefinement;
