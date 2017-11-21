@@ -57,9 +57,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
         .and.calledWithExactly('recallId', RECALL_CHANGE_ACTIONS)
         .and.calledWithExactly('searchId', SEARCH_CHANGE_ACTIONS);
       expect(errorHandler).to.be.calledWithExactly(flux);
-      expect(applyMiddleware).to.be.calledWithExactly(
-        ...allMiddleware(),
-      );
+      expect(applyMiddleware).to.be.calledWithExactly(...allMiddleware());
       expect(compose).to.be.calledWithExactly(
         simpleMiddleware,
         reduxBatch,
@@ -82,10 +80,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
 
       Middleware.create(sagaMiddleware, flux);
 
-      expect(applyMiddleware).to.be.calledWithExactly(
-        ...allMiddleware(),
-        reduxLogger
-      );
+      expect(applyMiddleware).to.be.calledWithExactly(...allMiddleware(), reduxLogger);
     });
 
     it('should not include redux-logger when running in development and debug not set', () => {
@@ -99,8 +94,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
 
       Middleware.create(sagaMiddleware, flux);
 
-      expect(applyMiddleware).to.be.calledWithExactly(
-        ...allMiddleware());
+      expect(applyMiddleware).to.be.calledWithExactly(...allMiddleware());
     });
   });
 

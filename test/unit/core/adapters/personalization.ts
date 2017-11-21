@@ -177,9 +177,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
           }
         }
       };
-      const key = 'test';
-
-      const result = Adapter.transformToBrowser(state, key);
+      const result = Adapter.transformToBrowser(state, 'test');
 
       expect(result).to.eql({
         allIds: [{
@@ -223,7 +221,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       };
       const realTimeBiasing = 'real';
       const conf = { personalization: { realTimeBiasing } };
-      const state: any = 's';
+      const state: any = {};
       const config = stub(Selectors, 'config').returns(conf);
       const extractExpiry = stub(ConfigAdapter, 'extractRealTimeBiasingExpiry').returns(expiry);
       const pruneBiases = stub(Adapter, 'pruneBiases').returnsArg(0);
@@ -240,7 +238,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
   });
 
   describe('pruneBiases()', () => {
-    const arr = [
+    const arr: any[] = [
       { variant: 'a', key: 1},
       { variant: 'b', key: 2},
       { variant: 'b', key: 5},
@@ -254,10 +252,13 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         { variant: 'c', key: 3 },
       ];
 
-      const ret = Adapter.pruneBiases(<any>arr, 'b', 2, <any>{ attributes: {
-        b: {
-          maxBiases: 1
-        }}});
+      const ret = Adapter.pruneBiases(arr, 'b', 2, <any>{
+        attributes: {
+          b: {
+            maxBiases: 1
+          }
+        }
+      });
 
       expect(ret).to.eql(newArr);
     });
@@ -269,7 +270,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         { variant: 'b', key: 5 },
       ];
 
-      const ret = Adapter.pruneBiases(<any>arr, 'b', 2, <any>{
+      const ret = Adapter.pruneBiases(arr, 'b', 2, <any>{
         attributes: {
           b: {
             maxBiases: 8
@@ -288,7 +289,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         { variant: 'b', key: 5 },
       ];
 
-      const ret = Adapter.pruneBiases(<any>arr, 'b', 2, <any>{
+      const ret = Adapter.pruneBiases(arr, 'b', 2, <any>{
         attributes: {
           b: {
             maxBiases: 84343

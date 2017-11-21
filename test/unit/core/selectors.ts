@@ -602,7 +602,7 @@ suite('selectors', ({ expect, stub }) => {
   }
 
   describe('realTimeBiasesHydrated()', () => {
-    it('should be true on false/true', () => {
+    it('should be true when configuration value/persist value are false/true', () => {
       const state = {
         data: {
           present: {
@@ -620,7 +620,7 @@ suite('selectors', ({ expect, stub }) => {
       expect(Selectors.realTimeBiasesHydrated(<any>state)).to.be.true;
     });
 
-    it('should be true on false/false', () => {
+    it('should be true when configuration value/persist value are false/false', () => {
       const state: any = {
         data: {
           present: {
@@ -638,7 +638,7 @@ suite('selectors', ({ expect, stub }) => {
       expect(Selectors.realTimeBiasesHydrated(state)).to.be.true;
     });
 
-    it('should be true on true/true', () => {
+    it('should be true when configuration value/persist value are true/true', () => {
       const state: any = {
         data: {
           present: {
@@ -656,7 +656,7 @@ suite('selectors', ({ expect, stub }) => {
       expect(Selectors.realTimeBiasesHydrated(state)).to.be.true;
     });
 
-    it('should be false on true/false', () => {
+    it('should be false when configuration value/persist value are true/false', () => {
       const state: any = {
         data: {
           present: {

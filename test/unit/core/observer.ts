@@ -456,13 +456,13 @@ suite('Observer', ({ expect, spy, stub }) => {
         describe('_persist', () => {
           describe('rehydrated', () => {
             it('should emit PERSONALIZATION_BIASING_REHYDRATED if newState true', () => {
-              observers.data.present.personalization._persist.rehydrated(undefined, true);
+              observers.data.present.personalization._persist.rehydrated(null, true);
 
               expect(emit).to.be.calledWith(Events.PERSONALIZATION_BIASING_REHYDRATED, true);
             });
 
             it('should not emit PERSONALIZATION_BIASING_REHYDRATED if newState false', () => {
-              observers.data.present.personalization._persist.rehydrated(undefined, false);
+              observers.data.present.personalization._persist.rehydrated(null, false);
 
               expect(emit).to.not.be.called;
             });

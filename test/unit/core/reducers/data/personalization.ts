@@ -78,9 +78,7 @@ suite('personalization', ({ expect, spy, stub }) => {
           ]
         }
       };
-      stub(personalization, 'insertSorted').returns(
-        newState.biasing.allIds
-      );
+      stub(personalization, 'insertSorted').returns(newState.biasing.allIds);
 
       const reducer = personalization.updateBiasing(state, <any>payload);
 
