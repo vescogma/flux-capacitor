@@ -278,6 +278,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       expect(next).to.be.calledWithExactly(action);
       expect(config).to.be.calledWithExactly(state);
       expect(enabled).to.be.calledWithExactly(conf);
+      expect(getState).to.be.calledWithExactly();
     });
 
     it('should pass the action forward unchanged if real time biasing disabled', () => {
@@ -292,6 +293,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       expect(next).to.be.calledWithExactly(action);
       expect(config).to.be.calledWithExactly(state);
       expect(enabled).to.be.calledWithExactly(conf);
+      expect(getState).to.be.calledWithExactly();
     });
 
     it('should make a batch action if action correct type', () => {
@@ -307,12 +309,10 @@ suite('Middleware', ({ expect, spy, stub }) => {
 
       Middleware.personalizationAnalyzer(<any>{ getState })(next)(action);
 
-      expect(next).to.be.calledWith([
-        action,
-        returnAction
-      ]);
+      expect(next).to.be.calledWith([action, returnAction]);
       expect(extract).to.be.calledWithExactly(action, state);
       expect(updateBiasing).to.be.calledWithExactly(extracted);
+      expect(getState).to.be.calledWithExactly();
     });
   });
 });
