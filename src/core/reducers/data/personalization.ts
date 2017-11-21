@@ -34,9 +34,8 @@ export const updateBiasing = (state: State, payload: Actions.Payload.Personaliza
     }
   };
 
-  const config = payload.config;
   const allIds = Adapter.pruneBiases(insertSorted(state.biasing.allIds, { variant: payload.variant, key: payload.key }),
-                               payload.variant, Object.keys(byId[payload.variant]).length, config);
+    payload.variant, Object.keys(byId[payload.variant]).length, payload.config);
 
   return { ...state, biasing: { ...state.biasing, byId, allIds }};
 };
