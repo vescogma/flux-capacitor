@@ -50,13 +50,12 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       expect(Selectors.config).to.be.calledWithExactly(store);
       expect(Selectors.realTimeBiasesById).to.be.calledWithExactly(store);
       expect(Adapter.extractRefinement).to.be.calledWithExactly(action, store);
-      expect(result).to.deep.equal(bias);
+      expect(result).to.eql(bias);
       expect(Adapter.generateNewBias).to.have.been.called;
     });
 
     it('should overwrite the timestamp if variant and key already exist', () => {
       const byId = { color: { blue: { lastUsed: 11111 } } };
-      const s = stub(Date, 'now').returns(20000000);
       const bias = {
         variant: refinement.field,
         key: refinement.value,
@@ -67,10 +66,11 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       stub(Selectors, 'realTimeBiasesById').returns(byId);
       stub(Adapter, 'extractRefinement').returns(refinement);
       stub(Adapter, 'generateNewBias');
+      stub(Date, 'now').returns(20000000);
 
       const result = Adapter.extractBias(action, store);
 
-      expect(result).to.deep.equal(bias);
+      expect(result).to.eql(bias);
       expect(Adapter.generateNewBias).to.not.have.been.called;
     });
 
@@ -90,7 +90,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       const result = Adapter.extractBias(action, store);
 
       expect(Adapter.generateNewBias).to.have.been.called;
-      expect(result).to.deep.equal(bias);
+      expect(result).to.eql(bias);
     });
 
     it('should return null if the attribute is not in the config', () => {
@@ -104,7 +104,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
       const result = Adapter.extractBias(action, store);
 
-      expect(result).to.deep.equal(null);
+      expect(result).to.eql(null);
     });
   });
 
@@ -159,7 +159,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
       const result = Adapter.generateNewBias();
 
-      expect(result).to.deep.equal({ lastUsed: 1000000 / 1000 });
+      expect(result).to.eql({ lastUsed: 1000000 / 1000 });
     });
   });
 
@@ -170,7 +170,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
       const result = Adapter.transformToBrowser(state, key);
 
-      expect(result).to.deep.equal({
+      expect(result).to.eql({
         allIds: []
       });
     });
@@ -193,7 +193,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
       const result = Adapter.transformToBrowser(state, key);
 
-      expect(result).to.deep.equal({
+      expect(result).to.eql({
         allIds: [{
           variant: 'color',
           key: 'blue',
@@ -242,7 +242,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
       const result = Adapter.transformFromBrowser(browserStorage, state);
 
-      expect(result).to.deep.equal(biasFromBrowser);
+      expect(result).to.eql(biasFromBrowser);
       expect(config).to.be.calledWithExactly(state);
       expect(extractExpiry).to.be.calledWithExactly(conf);
       expect(pruneBiases).to.be.calledTwice.and
@@ -335,7 +335,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
       const result = Adapter.convertBiasToSearch(state);
 
-      expect(result).to.deep.equal([{
+      expect(result).to.eql([{
         name: 'color',
         content: 'blue',
         strength: 'Absolute_Increase'
@@ -370,7 +370,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
       const result = Adapter.convertBiasToSearch(state);
 
-      expect(result).to.deep.equal([{
+      expect(result).to.eql([{
         name: 'brand',
         content: 'Nike',
         strength: 'Absolute_Decrease'

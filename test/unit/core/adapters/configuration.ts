@@ -393,7 +393,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     it('should return the expiry time for real time biasing', () => {
       const expiry = 3;
       // tslint:disable-next-line max-line-length
-      expect(Adapter.extractRealTimeBiasingExpiry(<any>{ personalization: { realTimeBiasing: { expiry } } })).to.eql(expiry);
+      expect(Adapter.extractRealTimeBiasingExpiry(<any>{ personalization: { realTimeBiasing: { expiry } } })).to.eq(expiry);
     });
   });
 });
