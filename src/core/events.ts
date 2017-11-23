@@ -318,6 +318,11 @@ namespace Events {
    * Returns the state.
    */
   export const HISTORY_SAVE = 'history:save';
+  /**
+   * Triggered when history is replaced.
+   * Returns the state.
+   */
+  export const HISTORY_REPLACE = 'history:replace';
 
   // url events
   /**
