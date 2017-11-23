@@ -76,6 +76,8 @@ namespace Store {
     personalization?: Personalization;
 
     pastPurchases: PastPurchase;
+    
+    infiniteScroll: InfiniteScroll;
 
     recordCount: number; // post
 
@@ -272,6 +274,11 @@ namespace Store {
       value: string;
       count: number;
     }
+  }
+
+  export interface InfiniteScroll {
+    isFetchingForward: boolean;
+    isFetchingBackward: boolean;
   }
 
   export interface Product {

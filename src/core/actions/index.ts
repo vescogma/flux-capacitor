@@ -186,6 +186,8 @@ namespace Actions {
   export const SELECT_PAST_PURCHASE_SORT = 'SELECT_PAST_PURCHASE_SORT';
   export type SelectPastPurchaseSort = Action<typeof SELECT_PAST_PURCHASE_SORT, number>;
   export const RECEIVE_NAVIGATION_SORT = 'RECEIVE_NAVIGATION_SORT';
+  export const RECEIVE_INFINITE_SCROLL = 'RECEIVE_INFINITE_SCROLL';
+  export type ReceiveInfiniteScroll = Action<typeof RECEIVE_INFINITE_SCROLL, Store.InfiniteScroll>;
 
   // ui
   export const CREATE_COMPONENT_STATE = 'CREATE_COMPONENT_STATE';

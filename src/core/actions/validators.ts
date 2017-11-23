@@ -165,3 +165,10 @@ export const isValidBias: Validator<Actions.Payload.Personalization.Biasing> = {
   func: (payload) => Boolean(payload && payload.field && payload.value),
   msg: 'bias is invalid'
 };
+
+export const isNotFetching: Validator<boolean> = {
+  func: (forward) => forward ?
+    Selectors.infiniteScroll(state).isFetchingForward :
+    Selectors.infiniteScroll(state).isFetchingBackward;
+  msg: 'is already fetching'
+};

@@ -101,6 +101,7 @@ export namespace Tasks {
       let product;
       if (action.payload.forward) {
         product = products[products.length - 1].index;
+        yield effects.put(<any>flux.actions.receiveInfiniteScroll({ isFetchingForward: forward }));
       } else {
         product = products[0].index - pageSize - 1;
       }
