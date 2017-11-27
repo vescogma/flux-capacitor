@@ -14,18 +14,16 @@ namespace Personalization {
     const byId = Selectors.realTimeBiasesById(state);
     const { field, value } = extractRefinement(action, state);
 
-    if (!config.attributes[field]) {
-      return;
+    if (config.attributes[field]) {
+      return {
+        variant: field,
+        key: value,
+        bias: (byId[field] && byId[field][value]) ? {
+          ...byId[field][value],
+          lastUsed: Math.floor(Date.now() / 1000)
+        } : generateNewBias()
+      };
     }
-
-    return {
-      variant: field,
-      key: value,
-      bias: (byId[field] && byId[field][value]) ? {
-        ...byId[field][value],
-        lastUsed: Math.floor(Date.now() / 1000)
-      } : generateNewBias()
-    };
   };
 
   // tslint:disable-next-line max-line-length
@@ -38,14 +36,12 @@ namespace Personalization {
         break;
       case Actions.SELECT_REFINEMENT:
         return Selectors.refinementCrumb(state, payload.navigationId, payload.index);
-      default:
     }
+
     return { field: undefined, value: undefined };
   };
 
-  export const generateNewBias = () => ({
-    lastUsed: Math.floor(Date.now() / 1000)
-  });
+  export const generateNewBias = () => ({ lastUsed: Math.floor(Date.now() / 1000) });
 
   // tslint:disable-next-line max-line-length
   export const transformToBrowser = (state: Store.Personalization.Biasing, reducerKey: string): BrowserStorageState => ({
@@ -64,17 +60,17 @@ namespace Personalization {
     const filteredIncomingState = incomingState.allIds.filter((element) => element.lastUsed >= olderThanTime);
     let allIds = [];
     const byId = {};
+
     filteredIncomingState.forEach(({ variant, key, lastUsed }) => {
       allIds.push({ variant, key });
       byId[variant] = { ...byId[variant], [key]: { lastUsed } };
     });
+
     Object.keys(byId).forEach((key) => {
       allIds = pruneBiases(allIds, key, Object.keys(byId[key]).length, config.personalization.realTimeBiasing);
     }); // filter allIds for each variant
-    return {
-      allIds,
-      byId
-    };
+
+    return { allIds, byId };
   };
 
   export const convertBiasToSearch = (state: Store.State) => {
