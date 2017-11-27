@@ -37,7 +37,6 @@ suite('Store', ({ expect, spy, stub }) => {
         .and.calledWith('m')
         .and.calledWith('n')
         .and.calledWith('o');
-      // expect(persistStore).to.be.called; // this does not work currently
     });
 
     it('should not persist store if real time bias disabled', () => {

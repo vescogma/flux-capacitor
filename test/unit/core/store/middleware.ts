@@ -165,13 +165,12 @@ suite('Middleware', ({ expect, spy, stub }) => {
   describe('saveStateAnalyzer()', () => {
     it('should pass through other actions', () => {
       const next = spy();
-      const getState = spy();
       const action = {
         type: 'NOT_AN_ACTION',
         payload: {}
       };
 
-      Middleware.injectStateIntoRehydrate(<any>{ getState })(next)(action);
+      Middleware.injectStateIntoRehydrate(<any>{ getState: () => null })(next)(action);
 
       expect(next).to.be.calledWithExactly(action);
     });
@@ -278,7 +277,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       expect(next).to.be.calledWithExactly(action);
       expect(config).to.be.calledWithExactly(state);
       expect(enabled).to.be.calledWithExactly(conf);
-      expect(getState).to.be.calledWithExactly();
+      expect(getState).to.be.called;
     });
 
     it('should pass the action forward unchanged if real time biasing disabled', () => {
@@ -291,9 +290,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
       Middleware.personalizationAnalyzer(<any>{ getState })(next)(action);
 
       expect(next).to.be.calledWithExactly(action);
-      expect(config).to.be.calledWithExactly(state);
-      expect(enabled).to.be.calledWithExactly(conf);
-      expect(getState).to.be.calledWithExactly();
     });
 
     it('should pass the action forward if extractBias returns falsy', () => {
@@ -312,8 +308,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
       expect(next).to.be.calledWithExactly(action);
       expect(extract).to.be.calledWithExactly(action, state);
       expect(updateBiasing).to.not.be.called;
-      expect(config).to.be.calledWithExactly(state);
-      expect(getState).to.be.calledWithExactly();
     });
 
     it('should make a batch action if action correct type', () => {
@@ -332,7 +326,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
       expect(next).to.be.calledWith([action, returnAction]);
       expect(extract).to.be.calledWithExactly(action, state);
       expect(updateBiasing).to.be.calledWithExactly(extracted);
-      expect(getState).to.be.calledWithExactly();
     });
   });
 });

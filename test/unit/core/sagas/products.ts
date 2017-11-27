@@ -434,9 +434,8 @@ suite('products saga', ({ expect, spy, stub }) => {
         const once = spy();
         const dispatch = spy();
         const getState = spy();
-        stub(Selectors, 'realTimeBiasesHydrated').returns(false);
-
         const flux: any = { store: { getState, dispatch }, once };
+        stub(Selectors, 'realTimeBiasesHydrated').returns(false);
 
         const task = Tasks.fetchProductsWhenHydrated(flux, <any>{ payload });
         task.next();
