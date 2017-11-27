@@ -43,7 +43,7 @@ export const updateBiasing = (state: State, payload: Actions.Payload.Personaliza
 // tslint:disable-next-line max-line-length
 export const insertSorted = (allIds: Store.Personalization.BiasKey[], { variant, key }: Store.Personalization.BiasKey) => {
   const noDuplicate = allIds.filter((id) => !(id.variant === variant && id.key === key));
-  return [{ variant, key }, ...noDuplicate]; //TODO: insert sorted
+  return [{ variant, key }, ...noDuplicate];
 };
 
 const personalizationTransform = createTransform(
