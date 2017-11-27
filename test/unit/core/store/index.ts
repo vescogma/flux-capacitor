@@ -13,8 +13,7 @@ suite('Store', ({ expect, spy, stub }) => {
   describe('create()', () => {
     it('should create a store using middleware and initialState', () => {
       // tslint:disable-next-line variable-name
-      const __config = { a: 'b' };
-      const flux: any = { __config };
+      const flux: any = { __config: { a: 'b' }};
       const state = { c: 'd' };
       const middleware = ['e', 'f', 'g'];
       const storeInstance = { h: 'i' };
@@ -31,30 +30,24 @@ suite('Store', ({ expect, spy, stub }) => {
 
       expect(store).to.eq(storeInstance);
       expect(createMiddleware).to.be.calledWith(sagaMiddleware, flux);
-      expect(initialState).to.be.calledWith(__config);
+      expect(initialState).to.be.calledWith(flux.__config);
       expect(createStore).to.be.calledWithExactly(rootReducer, state, middleware);
       expect(createSagas).to.be.calledWith(sagas.SAGA_CREATORS, flux);
       expect(runSagaMiddleware).to.be.calledThrice
         .and.calledWith('m')
         .and.calledWith('n')
         .and.calledWith('o');
-      // expect(persistStore).to.be.called;
+      // expect(persistStore).to.be.called; // this does not work currently
     });
 
     it('should not persist store if real time bias disabled', () => {
       // tslint:disable-next-line variable-name
-      const __config = { a: 'b' };
-      const flux: any = { __config };
-      const state = { c: 'd' };
-      const middleware = ['e', 'f', 'g'];
-      const storeInstance = { h: 'i' };
-      const runSagaMiddleware = spy();
-      const sagaMiddleware = { run: runSagaMiddleware };
+      const flux: any = {};
       const persistStore = stub(persist, 'persistStore');
-      stub(Adapter, 'initialState').returns(state);
-      stub(redux, 'createStore').returns(storeInstance);
-      stub(reduxSaga, 'default').returns(sagaMiddleware);
-      stub(Middleware, 'create').returns(middleware);
+      stub(Adapter, 'initialState').returns({});
+      stub(redux, 'createStore').returns({});
+      stub(reduxSaga, 'default').returns({ run: spy() });
+      stub(Middleware, 'create').returns(['e', 'f', 'g']);
       stub(sagas, 'default').returns([]);
       stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
 

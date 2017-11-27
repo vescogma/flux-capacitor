@@ -575,7 +575,7 @@ suite('selectors', ({ expect, stub }) => {
       2: 2,
       3: 3
     };
-    const state = {
+    const state: any = {
       data: {
         present: {
           personalization: {
@@ -590,13 +590,13 @@ suite('selectors', ({ expect, stub }) => {
 
     describe('realTimeBiasesById()', () => {
       it('should return byId', () => {
-        expect(Selectors.realTimeBiasesById(<any>state)).to.eq(byId);
+        expect(Selectors.realTimeBiasesById(state)).to.eq(byId);
       });
     });
 
     describe('realTimeBiasesAllIds()', () => {
       it('should return allIds', () => {
-        expect(Selectors.realTimeBiasesAllIds(<any>state)).to.eq(allIds);
+        expect(Selectors.realTimeBiasesAllIds(state)).to.eq(allIds);
       });
     });
   }
