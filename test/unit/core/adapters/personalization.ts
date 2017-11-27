@@ -305,7 +305,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
   describe('convertBiasToSearch()', () => {
     it('should convert biasing to search API bias format', () => {
       const state: any = {};
-      const allIds = [{ variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Nike' }];
+      const allIds = [{ variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Nike' }, { variant: 'other', key: 'f' }];
       const config = {
         personalization: {
           realTimeBiasing: {
@@ -313,7 +313,8 @@ suite('Personalization Adapter', ({ expect, stub }) => {
             attributes: {
               color: {
                 strength: 'Absolute_Increase'
-              }
+              },
+              brand: {}
             }
           }
         }
@@ -328,7 +329,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
         name: 'color',
         content: 'blue',
         strength: 'Absolute_Increase'
-      }, {
+      },{
         name: 'brand',
         content: 'Nike',
         strength: 'Absolute_Decrease'
@@ -345,6 +346,8 @@ suite('Personalization Adapter', ({ expect, stub }) => {
             attributes: {
               color: {
                 strength: 'Absolute_Increase'
+              },
+              brand: {
               }
             }
           }

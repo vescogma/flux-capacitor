@@ -79,12 +79,12 @@ namespace Personalization {
     const selectedRefinements = Selectors.selectedRefinements(state);
 
     return allIds.filter(({ variant, key }) =>
-      !selectedRefinements.some(({ navigationName, type, value }) =>
+      config.attributes[variant] && !selectedRefinements.some(({ navigationName, type, value }) =>
         type === 'Value' && navigationName === variant && key && value === key)
     ).map(({ variant, key }) => ({
       name: variant,
       content: key,
-      strength: (config.attributes[variant] && config.attributes[variant].strength) || config.strength
+      strength: config.attributes[variant].strength || config.strength,
     }));
   };
 
