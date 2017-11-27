@@ -426,6 +426,7 @@ suite('products saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchProductsWhenHydrated(flux, <any>{ payload });
         expect(task.next().value).to.eql(effects.put(payload));
+        task.next();
 
         expect(getState).to.be.calledWith();
       });
