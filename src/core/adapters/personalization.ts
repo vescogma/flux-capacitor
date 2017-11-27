@@ -58,17 +58,23 @@ namespace Personalization {
     // tslint:disable-next-line max-line-length
     const olderThanTime = Math.floor(Date.now() / 1000) - DAYS_IN_SECONDS * ConfigAdapter.extractRealTimeBiasingExpiry(config);
     const filteredIncomingState = incomingState.allIds.filter((element) => element.lastUsed >= olderThanTime);
+    const biasingConfig = config.personalization.realTimeBiasing;
     let allIds = [];
     const byId = {};
 
     filteredIncomingState.forEach(({ variant, key, lastUsed }) => {
-      allIds.push({ variant, key });
-      byId[variant] = { ...byId[variant], [key]: { lastUsed } };
+      if (!byId[variant]) {
+        byId[variant] = {}; // init
+      }
+      if (allIds.length < biasingConfig.maxBiases && // do not push if too many biases
+           // if no max defined for variant, push
+          (!(biasingConfig.attributes[variant] && biasingConfig.attributes[variant].strength) ||
+           // tslint:disable-next-line max-line-length
+           Object.keys(byId[variant]).length < biasingConfig.attributes[variant].maxBiases)) { // if max defined and over, do not push
+        allIds.push({ variant, key });
+        byId[variant][key] = { lastUsed };
+      }
     });
-
-    Object.keys(byId).forEach((key) => {
-      allIds = pruneBiases(allIds, key, Object.keys(byId[key]).length, config.personalization.realTimeBiasing);
-    }); // filter allIds for each variant
 
     return { allIds, byId };
   };

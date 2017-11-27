@@ -370,9 +370,7 @@ namespace Store {
     }
 
     export interface SingleBias {
-      // created: number;
       lastUsed: number;
-      // timesClicked: number;
     }
   }
 

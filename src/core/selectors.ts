@@ -30,8 +30,8 @@ namespace Selectors {
    * Returns the corrected query if it exists, otherwise returns the original query.
    */
   export const currentQuery = (state: Store.State) => {
-    const stateQuery = state.data.present.query;
-    return stateQuery.corrected || stateQuery.original;
+    const { original, corrected } = state.data.present.query;
+    return corrected || original;
   };
 
   /**
