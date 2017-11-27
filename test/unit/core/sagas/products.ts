@@ -425,10 +425,9 @@ suite('products saga', ({ expect, spy, stub }) => {
         stub(Selectors, 'realTimeBiasesHydrated').returns(true);
 
         const task = Tasks.fetchProductsWhenHydrated(flux, <any>{ payload });
-        task.next();
+        expect(task.next().value).to.eql(effects.put(payload));
 
         expect(getState).to.be.calledWith();
-        expect(dispatch).to.be.calledWith(payload);
       });
 
       it('should wait on personalization biasing rehydrated if data not loaded from browser', () => {

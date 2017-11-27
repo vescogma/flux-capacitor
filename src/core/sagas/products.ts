@@ -114,7 +114,7 @@ export namespace Tasks {
 
   export function* fetchProductsWhenHydrated(flux: FluxCapacitor, action: Actions.fetchProductsWhenHydrated) {
     if (Selectors.realTimeBiasesHydrated(flux.store.getState())) {
-      flux.store.dispatch(action.payload);
+      yield effects.put(action.payload);
     } else {
       flux.once(Events.PERSONALIZATION_BIASING_REHYDRATED, () => flux.store.dispatch(action.payload));
     }

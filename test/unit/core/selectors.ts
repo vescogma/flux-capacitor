@@ -603,7 +603,7 @@ suite('selectors', ({ expect, stub }) => {
 
   describe('realTimeBiasesHydrated()', () => {
     it('should be true when configuration value/persist value are false/true', () => {
-      const state = {
+      const state: any = {
         data: {
           present: {
             personalization: {
@@ -617,7 +617,7 @@ suite('selectors', ({ expect, stub }) => {
       const isRealTimeBiasEnabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(false);
       const config = stub(Selectors, 'config');
 
-      expect(Selectors.realTimeBiasesHydrated(<any>state)).to.be.true;
+      expect(Selectors.realTimeBiasesHydrated(state)).to.be.true;
     });
 
     it('should be true when configuration value/persist value are false/false', () => {

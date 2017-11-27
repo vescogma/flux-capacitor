@@ -59,7 +59,7 @@ namespace Personalization {
     const olderThanTime = Math.floor(Date.now() / 1000) - DAYS_IN_SECONDS * ConfigAdapter.extractRealTimeBiasingExpiry(config);
     const filteredIncomingState = incomingState.allIds.filter((element) => element.lastUsed >= olderThanTime);
     const biasingConfig = config.personalization.realTimeBiasing;
-    let allIds = [];
+    const allIds = [];
     const byId = {};
 
     filteredIncomingState.forEach(({ variant, key, lastUsed }) => {
