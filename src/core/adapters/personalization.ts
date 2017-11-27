@@ -66,11 +66,12 @@ namespace Personalization {
       if (!byId[variant]) {
         byId[variant] = {}; // init
       }
-      if (allIds.length < biasingConfig.maxBiases && // do not push if too many biases
+      // do not push if too many biases
+      if (allIds.length < biasingConfig.maxBiases &&
            // if no max defined for variant, push
-          (!(biasingConfig.attributes[variant] && biasingConfig.attributes[variant].strength) ||
-           // tslint:disable-next-line max-line-length
-           Object.keys(byId[variant]).length < biasingConfig.attributes[variant].maxBiases)) { // if max defined and over, do not push
+          (!(biasingConfig.attributes[variant] && biasingConfig.attributes[variant].maxBiases) ||
+           // if max defined and over, do not push
+           Object.keys(byId[variant]).length < biasingConfig.attributes[variant].maxBiases)) {
         allIds.push({ variant, key });
         byId[variant][key] = { lastUsed };
       }

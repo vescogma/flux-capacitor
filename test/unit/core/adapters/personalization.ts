@@ -219,21 +219,131 @@ suite('Personalization Adapter', ({ expect, stub }) => {
           }
         }
       };
-      const realTimeBiasing = 'real';
+      const realTimeBiasing = {
+        maxBiases: 8,
+        attributes: {
+          color: {
+            maxBiases: 8,
+          },
+          brand: {
+            maxBiases: 3,
+          },
+        }
+      };
       const conf = { personalization: { realTimeBiasing } };
       const state: any = {};
       const config = stub(Selectors, 'config').returns(conf);
       const extractExpiry = stub(ConfigAdapter, 'extractRealTimeBiasingExpiry').returns(expiry);
-      const pruneBiases = stub(Adapter, 'pruneBiases').returnsArg(0);
 
       const result = Adapter.transformFromBrowser(browserStorage, state);
 
       expect(result).to.eql(biasFromBrowser);
       expect(config).to.be.calledWithExactly(state);
       expect(extractExpiry).to.be.calledWithExactly(conf);
-      expect(pruneBiases).to.be.calledTwice.and
-        .calledWithExactly(biasFromBrowser.allIds, 'color', 2, realTimeBiasing).and
-        .calledWithExactly(biasFromBrowser.allIds, 'brand', 1, realTimeBiasing);
+    });
+
+    it('should not add in biases if too many', () => {
+      const oneDayInSec = 86400;
+      const now = Date.now() / 1000;
+      const expiry = 30;
+      const browserStorage = {
+        allIds: [{ variant: 'color', key: 'blue', lastUsed: now - oneDayInSec * 5 },
+                 { variant: 'brand', key: 'Shoe', lastUsed: now - oneDayInSec * 6 },
+                 { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
+                 { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 24 }]
+      };
+      const biasFromBrowser = {
+        allIds: [{ variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Shoe'},
+                 { variant: 'color', key: 'red' }],
+        byId: {
+          brand: {
+            Shoe: {
+              lastUsed: now - oneDayInSec * 6
+            }
+          },
+          color: {
+            blue: {
+              lastUsed: now - oneDayInSec * 5
+            },
+            red: {
+              lastUsed: now - oneDayInSec * 21
+            }
+          }
+        }
+      };
+      const realTimeBiasing = {
+        maxBiases: 3,
+        attributes: {
+          color: {
+            maxBiases: 8,
+          },
+          brand: {
+            maxBiases: 8,
+          },
+        }
+      };
+      const conf = { personalization: { realTimeBiasing } };
+      const state: any = {};
+      const config = stub(Selectors, 'config').returns(conf);
+      const extractExpiry = stub(ConfigAdapter, 'extractRealTimeBiasingExpiry').returns(expiry);
+
+      const result = Adapter.transformFromBrowser(browserStorage, state);
+
+      expect(result).to.eql(biasFromBrowser);
+      expect(config).to.be.calledWithExactly(state);
+      expect(extractExpiry).to.be.calledWithExactly(conf);
+    });
+
+    it('should not add in biases if too many of a brand', () => {
+      const oneDayInSec = 86400;
+      const now = Date.now() / 1000;
+      const expiry = 30;
+      const browserStorage = {
+        allIds: [{ variant: 'color', key: 'blue', lastUsed: now - oneDayInSec * 5 },
+                 { variant: 'brand', key: 'Shoe', lastUsed: now - oneDayInSec * 6 },
+                 { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
+                 { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 24 }]
+      };
+      const biasFromBrowser = {
+        allIds: [{ variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Shoe'},
+                 { variant: 'brand', key: 'Nike' }],
+        byId: {
+          brand: {
+            Shoe: {
+              lastUsed: now - oneDayInSec * 6
+            },
+            Nike: {
+              lastUsed: now - oneDayInSec * 24,
+            }
+          },
+          color: {
+            blue: {
+              lastUsed: now - oneDayInSec * 5
+            }
+          }
+        }
+      };
+      const realTimeBiasing = {
+        maxBiases: 8,
+        attributes: {
+          color: {
+            maxBiases: 1,
+          },
+          brand: {
+            maxBiases: 8,
+          },
+        }
+      };
+      const conf = { personalization: { realTimeBiasing } };
+      const state: any = {};
+      const config = stub(Selectors, 'config').returns(conf);
+      const extractExpiry = stub(ConfigAdapter, 'extractRealTimeBiasingExpiry').returns(expiry);
+
+      const result = Adapter.transformFromBrowser(browserStorage, state);
+
+      expect(result).to.eql(biasFromBrowser);
+      expect(config).to.be.calledWithExactly(state);
+      expect(extractExpiry).to.be.calledWithExactly(conf);
     });
   });
 
