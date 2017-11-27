@@ -419,7 +419,11 @@ suite('Personalization Adapter', ({ expect, stub }) => {
   describe('convertBiasToSearch()', () => {
     it('should convert biasing to search API bias format', () => {
       const state: any = {};
-      const allIds = [{ variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Nike' }, { variant: 'other', key: 'f' }];
+      const allIds = [
+        { variant: 'color', key: 'blue' },
+        { variant: 'brand', key: 'Nike' },
+        { variant: 'other', key: 'f' }
+      ];
       const config = {
         personalization: {
           realTimeBiasing: {
