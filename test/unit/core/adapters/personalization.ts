@@ -251,14 +251,18 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       const now = Date.now() / 1000;
       const expiry = 30;
       const browserStorage = {
-        allIds: [{ variant: 'color', key: 'blue', lastUsed: now - oneDayInSec * 5 },
-                 { variant: 'brand', key: 'Shoe', lastUsed: now - oneDayInSec * 6 },
-                 { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
-                 { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 24 }]
+        allIds: [
+          { variant: 'color', key: 'blue', lastUsed: now - oneDayInSec * 5 },
+          { variant: 'brand', key: 'Shoe', lastUsed: now - oneDayInSec * 6 },
+          { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
+          { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 24 }
+        ]
       };
       const biasFromBrowser = {
-        allIds: [{ variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Shoe'},
-                 { variant: 'color', key: 'red' }],
+        allIds: [
+          { variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Shoe'},
+          { variant: 'color', key: 'red' }
+        ],
         byId: {
           brand: {
             Shoe: {
@@ -303,14 +307,17 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       const now = Date.now() / 1000;
       const expiry = 30;
       const browserStorage = {
-        allIds: [{ variant: 'color', key: 'blue', lastUsed: now - oneDayInSec * 5 },
-                 { variant: 'brand', key: 'Shoe', lastUsed: now - oneDayInSec * 6 },
-                 { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
-                 { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 24 }]
+        allIds: [
+          { variant: 'color', key: 'blue', lastUsed: now - oneDayInSec * 5 },
+          { variant: 'brand', key: 'Shoe', lastUsed: now - oneDayInSec * 6 },
+          { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
+          { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 24 }]
       };
       const biasFromBrowser = {
-        allIds: [{ variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Shoe'},
-                 { variant: 'brand', key: 'Nike' }],
+        allIds: [
+          { variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Shoe'},
+          { variant: 'brand', key: 'Nike' }
+        ],
         byId: {
           brand: {
             Shoe: {
