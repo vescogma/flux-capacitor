@@ -21,9 +21,9 @@ export namespace Tasks {
         Adapter.buildCreateCartBody({ loginId, sessionId, visitorId }));
 
       // check the response is valid
-      yield effects.put(flux.actions.receiveRecommendationsProducts(SearchAdapter.augmentProducts(results)));
+      // yield effects.put(flux.actions.receiveRecommendationsProducts(SearchAdapter.augmentProducts(results)));
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   }
 }

@@ -35,6 +35,9 @@ namespace Adapter {
               sizes: Adapter.extractPageSizes(config, PastPurchaseReducer.DEFAULT_PAGE_SIZE)
             }
           }
+          // cart: {
+          //   id: 'bd23d1cce50542b3bf52dd0554203b12'
+          // }
         }
       },
       session: { config }

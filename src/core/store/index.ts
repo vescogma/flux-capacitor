@@ -73,6 +73,7 @@ namespace Store {
     recommendations: Recommendations; // mixed
 
     personalization?: Personalization;
+    cart: Cart; // TODO
 
     pastPurchases: PastPurchase;
 
@@ -268,6 +269,10 @@ namespace Store {
       value: string;
       count: number;
     }
+  }
+
+  export interface Cart {
+    cartId: string;
   }
 
   export interface Product {
