@@ -97,7 +97,9 @@ export namespace Middleware {
       middleware.push(require('redux-logger').default);
     }
 
-    return compose(
+    const composeEnhancers = global && global['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
+
+    return composeEnhancers(
       applyMiddleware(thunkEvaluator, saveStateAnalyzer),
       reduxBatch,
       applyMiddleware(...middleware),
