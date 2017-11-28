@@ -118,8 +118,12 @@ namespace Selectors {
   /**
    * Returns the product with the given id
    */
-  export const findProduct = (state: Store.State, productId: string) =>
-    Selectors.products(state).find(({ id }) => id === productId);
+  export const findProduct = (state: Store.State, productId: string) => {
+    const match = ({ id }) => id === productId;
+    return Selectors.autocompleteProducts(state).find(match) ||
+      Selectors.products(state).find(match) ||
+      Selectors.recommendationsProducts(state).find(match);
+  };
 
   /**
    * Returns products with past purchases metadata.
