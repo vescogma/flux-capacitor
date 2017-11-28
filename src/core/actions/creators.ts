@@ -788,6 +788,10 @@ namespace ActionCreators {
     ];
   }
 
+  // TODO; wip shopping cart (change type)
+  export function createCart (loginId: string, sessionId: string, visitorId: string) {
+    return createAction(Actions.CREATE_CART);
+  }
   // ui action creators
   /**
    * Adds state for a given tag to the store.
