@@ -454,6 +454,8 @@ namespace Selectors {
   export const realTimeBiasesHydrated = (state: Store.State) =>
     !Configuration.isRealTimeBiasEnabled(Selectors.config(state)) ||
     state.data.present.personalization['_persist'].rehydrated;
+  export const cart = (state: Store.State) =>
+    state.data.present.cart;
 
   /**
    * Returns the ui state for the all of the tags with the given tagName.

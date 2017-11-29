@@ -209,7 +209,7 @@ namespace Actions {
 
   // create
   export const CREATE_CART = 'CREATE_CART';
-  export type CreateCart = Action<typeof CREATE_CART, { loginId: string, sessionId: string, visitorId: string }>;
+  export type CreateCart = Action<typeof CREATE_CART, Payload.Cart.CreateCart>;
 
   export namespace Payload {
     export namespace Personalization {
@@ -302,6 +302,14 @@ namespace Actions {
       last: number;
       from: number;
       to: number;
+    }
+
+    export namespace Cart {
+      export interface CreateCart {
+        loginId: string;
+        sessionId: string;
+        visitorId: string;
+      }
     }
   }
 
