@@ -175,6 +175,18 @@ suite('Middleware', ({ expect, spy, stub }) => {
       expect(next).to.be.calledWithExactly(action);
     });
 
+    it('should pass through rehydrates without payload', () => {
+      const next = spy();
+      const getState = spy();
+      const action = {
+        type: 'persist/REHYDRATE',
+      };
+
+      Middleware.injectStateIntoRehydrate(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+    });
+
     it('should pass through rehydrates without biasing', () => {
       const next = spy();
       const getState = spy();

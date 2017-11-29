@@ -70,7 +70,7 @@ export namespace Middleware {
 
   export function injectStateIntoRehydrate(store: Store<any>) {
     return (next) => (action) =>
-      action.type === 'persist/REHYDRATE' && action.payload.biasing ? next({
+      action.type === 'persist/REHYDRATE' && action.payload && action.payload.biasing ? next({
         ...action,
         payload: {
           ...action.payload,
