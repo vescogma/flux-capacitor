@@ -6,6 +6,7 @@ import collections from './collections';
 import details from './details';
 import navigations from './navigations';
 import page from './page';
+import personalization from './personalization';
 import products from './products';
 import query from './query';
 import recommendations from './recommendations';
@@ -22,6 +23,7 @@ export default redux.combineReducers({
   fields: (state = []) => state,
   navigations,
   page,
+  personalization,
   products,
   query,
   recommendations,

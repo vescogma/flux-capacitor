@@ -36,6 +36,13 @@ namespace ActionCreators {
   }
 
   /**
+   * Wrapper for fetchProducts, dispatches it within saga when store is rehydrated
+   * @return {Actions.FetchProductsWhenHydrated} - Action with null.
+   */
+  export function fetchProductsWhenHydrated(): Actions.fetchProductsWhenHydrated {
+    return createAction(Actions.FETCH_PRODUCTS_WHEN_HYDRATED, fetchProducts());
+  }
+  /**
    * Makes a request for additional products beyond currently requested products.
    * @param  {number}                    amount - Amount of more products to fetch.
    * @return {Actions.FetchMoreProducts}        - Action with amount.
@@ -384,6 +391,21 @@ namespace ActionCreators {
     return createAction(Actions.UPDATE_AUTOCOMPLETE_QUERY, query, {
       payload: validators.isDifferentAutocompleteQuery
     });
+  }
+
+  /**
+   * The biasing object to receive and update biasing with
+   * @param  {Actions.Payload.Personalization.Biasing} payload - Biasing object
+   * @return {Actions.UpdateBiasing}
+   */
+  export function updateBiasing(payload: Actions.Payload.Personalization.Biasing) {
+    return (state: Store.State): Actions.UpdateBiasing =>
+      createAction(Actions.UPDATE_BIASING, {
+        ...payload,
+        config: Selectors.config(state).personalization.realTimeBiasing,
+      }, {
+        payload: validators.isValidBias
+      });
   }
 
   // response action creators

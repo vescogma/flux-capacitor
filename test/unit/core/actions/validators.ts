@@ -329,7 +329,7 @@ suite('validators', ({ expect, spy, stub }) => {
   describe('isDifferentAutocompleteQuery', () => {
     const query = 'red apple';
 
-    it('should be valid is autocomplete query is different', () => {
+    it('should be valid if autocomplete query is different', () => {
       const state: any = { a: 'b' };
       const autocompleteQuery = stub(Selectors, 'autocompleteQuery').returns('orange');
 
@@ -341,6 +341,47 @@ suite('validators', ({ expect, spy, stub }) => {
       stub(Selectors, 'autocompleteQuery').returns(query);
 
       expect(validators.isDifferentAutocompleteQuery.func(query)).to.be.false;
+    });
+  });
+
+  describe('isValidBias', () => {
+    it('should be invalid if payload is falsy', () => {
+      const payload = false;
+
+      expect(validators.isValidBias.func(<any>payload)).to.be.false;
+    });
+
+    it('should be invalid if payload.value is falsy and payload.field is falsy', () => {
+      const payload = {};
+
+      expect(validators.isValidBias.func(<any>payload)).to.be.false;
+    });
+
+    it('should be invalid if payload.value is falsy', () => {
+      const payload = {
+        field: 'asdf',
+        value: false
+      };
+
+      expect(validators.isValidBias.func(<any>payload)).to.be.false;
+    });
+
+    it('should be invalid if payload.field is falsy', () => {
+      const payload = {
+        value: 'asdf',
+        field: false
+      };
+
+      expect(validators.isValidBias.func(<any>payload)).to.be.false;
+    });
+
+    it('should be valid if payload.value is truthy and payload.field is truthy', () => {
+      const payload = {
+        value: 'asdf',
+        field: 'asdf2'
+      };
+
+      expect(validators.isValidBias.func(<any>payload)).to.be.true;
     });
   });
 

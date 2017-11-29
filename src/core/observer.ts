@@ -154,6 +154,16 @@ namespace Observer {
           sorts: emit(Events.SORTS_UPDATED),
 
           template: emit(Events.TEMPLATE_UPDATED),
+
+          personalization: {
+            _persist: {
+              rehydrated: (oldState, newState, path) => {
+                if (newState) {
+                  emit(Events.PERSONALIZATION_BIASING_REHYDRATED)(oldState, newState, path);
+                }
+              }
+            }
+          },
         },
       },
       isRunning: (oldState, newState, path) => {

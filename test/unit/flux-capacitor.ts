@@ -7,6 +7,7 @@ import ActionCreators from '../../src/core/actions/creators';
 import ConfigAdapter from '../../src/core/adapters/configuration';
 import Events from '../../src/core/events';
 import Observer from '../../src/core/observer';
+import Selectors from '../../src/core/selectors';
 import Store from '../../src/core/store';
 import FluxCapacitor from '../../src/flux-capacitor';
 import suite from './_suite';

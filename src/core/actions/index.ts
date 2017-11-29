@@ -1,4 +1,5 @@
 import { Results } from 'groupby-api';
+import Configuration from '../configuration';
 import Store from '../store';
 
 namespace Actions {
@@ -58,6 +59,8 @@ namespace Actions {
   export type ResetPage = Action<typeof RESET_PAGE, undefined>;
   export const ADD_REFINEMENT = 'ADD_REFINEMENT';
   export type AddRefinement = Action<typeof ADD_REFINEMENT, Actions.Payload.Navigation.AddRefinement>;
+  export const UPDATE_BIASING = 'UPDATE_BIASING';
+  export type UpdateBiasing = Action<typeof UPDATE_BIASING, Actions.Payload.Personalization.Biasing>;
 
   // batch actions
   // tslint:disable-next-line max-line-length
@@ -80,6 +83,9 @@ namespace Actions {
   export type FetchMoreRefinements = Action<typeof FETCH_MORE_REFINEMENTS, string>;
   export const FETCH_PRODUCTS = 'FETCH_PRODUCTS';
   export type FetchProducts = Action<typeof FETCH_PRODUCTS>;
+  export const FETCH_PRODUCTS_WHEN_HYDRATED = 'FETCH_PRODUCTS_WHEN_HYDRATED';
+  // tslint:disable-next-line max-line-length
+  export type fetchProductsWhenHydrated = Action<typeof FETCH_PRODUCTS_WHEN_HYDRATED, Actions.FetchProducts>;
   export const FETCH_MORE_PRODUCTS = 'FETCH_MORE_PRODUCTS';
   export type FetchMoreProducts = Action<typeof FETCH_MORE_PRODUCTS, number>;
   export const FETCH_AUTOCOMPLETE_SUGGESTIONS = 'FETCH_AUTOCOMPLETE_SUGGESTIONS';
@@ -166,6 +172,15 @@ namespace Actions {
   export const SAVE_STATE = 'SAVE_STATE';
 
   export namespace Payload {
+    export namespace Personalization {
+      export interface Biasing {
+        field: string;
+        value: string;
+        bias: Store.Personalization.SingleBias;
+        config?: Configuration.Personalization.RealTimeBiasing;
+      }
+    }
+
     export namespace Component {
       export interface Identifier {
         tagName: string;
@@ -249,6 +264,7 @@ namespace Actions {
       to: number;
     }
   }
+
 }
 
 export default Actions;

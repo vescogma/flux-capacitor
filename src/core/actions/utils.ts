@@ -36,7 +36,7 @@ export const handleError = (errorAction: Actions.Action<any>, actionCreator: () 
   errorAction.error ? errorAction : actionCreator();
 
 // tslint:disable-next-line max-line-length
-export const shouldResetRefinements = ({ low, high, value, navigationId, range, index }: Actions.Payload.Search, state: any): boolean => {
+export const shouldResetRefinements = ({ low, high, value, navigationId, range, index }: Actions.Payload.Search, state: Store.State): boolean => {
   const currentRefinements = Selectors.selectedRefinements(state);
   // assumes only one refinement can be added at once
   return (!navigationId || currentRefinements.length !== 1 ||
