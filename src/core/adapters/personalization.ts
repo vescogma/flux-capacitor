@@ -16,8 +16,8 @@ namespace Personalization {
 
     if (config.attributes[field]) {
       return {
-        variant: field,
-        key: value,
+        field,
+        value,
         bias: (byId[field] && byId[field][value]) ? {
           ...byId[field][value],
           lastUsed: Math.floor(Date.now() / 1000)
@@ -45,10 +45,10 @@ namespace Personalization {
 
   // tslint:disable-next-line max-line-length
   export const transformToBrowser = (state: Store.Personalization.Biasing, reducerKey: string): BrowserStorageState => ({
-    allIds: state.allIds.map(({ variant, key }) => ({
-      variant,
-      key,
-      ...state.byId[variant][key]
+    allIds: state.allIds.map(({ field, value }) => ({
+      field,
+      value,
+      ...state.byId[field][value]
     }))
   });
 
@@ -62,18 +62,18 @@ namespace Personalization {
     const allIds = [];
     const byId = {};
 
-    filteredIncomingState.forEach(({ variant, key, lastUsed }) => {
-      if (!byId[variant]) {
-        byId[variant] = {}; // init
+    filteredIncomingState.forEach(({ field, value, lastUsed }) => {
+      if (!byId[field]) {
+        byId[field] = {}; // init
       }
       // do not push if too many biases
       if (allIds.length < biasingConfig.maxBiases &&
            // if no max defined for variant, push
-          (!(biasingConfig.attributes[variant] && biasingConfig.attributes[variant].maxBiases) ||
+          (!(biasingConfig.attributes[field] && biasingConfig.attributes[field].maxBiases) ||
            // if max defined and over, do not push
-           Object.keys(byId[variant]).length < biasingConfig.attributes[variant].maxBiases)) {
-        allIds.push({ variant, key });
-        byId[variant][key] = { lastUsed };
+           Object.keys(byId[field]).length < biasingConfig.attributes[field].maxBiases)) {
+        allIds.push({ field, value });
+        byId[field][value] = { lastUsed };
       }
     });
 
@@ -85,29 +85,29 @@ namespace Personalization {
     const config = Selectors.config(state).personalization.realTimeBiasing;
     const selectedRefinements = Selectors.selectedRefinements(state);
 
-    return allIds.filter(({ variant, key }) =>
-      config.attributes[variant] && !selectedRefinements.some(({ navigationName, type, value }) =>
-        type === 'Value' && navigationName === variant && key && value === key)
-    ).map(({ variant, key }) => ({
-      name: variant,
-      content: key,
-      strength: config.attributes[variant].strength || config.strength,
+    return allIds.filter(({ field, value }) =>
+        config.attributes[field] && !selectedRefinements.some(({ navigationName, type, value: navigationValue }) =>
+        type === 'Value' && navigationName === field && navigationValue && value === navigationValue)
+    ).map(({ field, value }) => ({
+      name: field,
+      content: value,
+      strength: config.attributes[field].strength || config.strength,
     }));
   };
 
   // tslint:disable-next-line max-line-length
-  export const pruneBiases = (allIds: Store.Personalization.BiasKey[], variant: string, variantCount: number, config: Configuration.Personalization.RealTimeBiasing) => {
-    if (config.attributes[variant] && variantCount >= config.attributes[variant].maxBiases) {
-      for (let i = allIds.length - 1; i >= 0; i--) {
-        if (allIds[i].variant === variant) {
-          return [...allIds.slice(0, i), ...allIds.slice(i + 1)];
+  export const pruneBiases = (biasKeys: Store.Personalization.BiasKey[], field: string, fieldCount: number, config: Configuration.Personalization.RealTimeBiasing) => {
+    if (config.attributes[field] && fieldCount >= config.attributes[field].maxBiases) {
+      for (let i = biasKeys.length - 1; i >= 0; i--) {
+        if (biasKeys[i].field === field) {
+          return [...biasKeys.slice(0, i), ...biasKeys.slice(i + 1)];
         }
       }
     }
-    if (allIds.length > config.maxBiases) {
-      return allIds.slice(0, config.maxBiases);
+    if (biasKeys.length > config.maxBiases) {
+      return biasKeys.slice(0, config.maxBiases);
     }
-    return allIds;
+    return biasKeys;
   };
 
   export interface BrowserStorageState {

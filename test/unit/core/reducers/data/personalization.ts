@@ -39,8 +39,8 @@ suite('personalization', ({ expect, spy, stub }) => {
           },
         },
         allIds: [
-          { variant: 'a', key: 'b' },
-          { variant: 'c', key: 'd' },
+          { field: 'a', value: 'b' },
+          { field: 'c', value: 'd' },
         ],
         expiry: 2
       }
@@ -56,8 +56,8 @@ suite('personalization', ({ expect, spy, stub }) => {
 
     it('should update state\'s allId and byId', () => {
       const payload = {
-        variant: 'a',
-        key: 'z',
+        field: 'a',
+        value: 'z',
         bias: 3,
         config
       };
@@ -73,7 +73,7 @@ suite('personalization', ({ expect, spy, stub }) => {
             }
           },
           allIds: [
-            { variant: 'a', key: 'z' },
+            { field: 'a', value: 'z' },
             ...state.biasing.allIds
           ]
         }
@@ -86,10 +86,10 @@ suite('personalization', ({ expect, spy, stub }) => {
     });
 
     it('should call pruneBiases', () => {
-      const variant = 'a';
+      const field = 'a';
       const payload = {
-        variant,
-        key: 'z',
+        field,
+        value: 'z',
         bias: 3,
         config: {
           attributes: {
@@ -97,25 +97,25 @@ suite('personalization', ({ expect, spy, stub }) => {
           }
         }
       };
-      const allIds = [0, 1, 2, 3, { variant: 'a' }, 4];
+      const allIds = [0, 1, 2, 3, { field: 'a' }, 4];
       const pruneBiases = stub(Adapter, 'pruneBiases').returns(allIds);
       stub(personalization, 'insertSorted').returns(allIds);
 
       personalization.updateBiasing(state, <any>payload);
 
-      expect(pruneBiases).to.be.calledWithExactly(allIds, variant, 2, payload.config);
+      expect(pruneBiases).to.be.calledWithExactly(allIds, field, 2, payload.config);
     });
   });
 
   describe('insertSorted', () => {
     const arr: any = [
-      { variant: 'a', key: 1},
-      { variant: 'b', key: 2},
-      { variant: 'c', key: 3},
+      { field: 'a', value: 1},
+      { field: 'b', value: 2},
+      { field: 'c', value: 3},
     ];
 
     it('should insert element to front of array', () => {
-      const obj: any = { variant: 'd', key: 4 };
+      const obj: any = { field: 'd', value: 4 };
       const newArr = [obj, ...arr];
 
       const ret = personalization.insertSorted(arr, obj);
@@ -124,11 +124,11 @@ suite('personalization', ({ expect, spy, stub }) => {
     });
 
     it('shoud insert element to front of array and remove duplicates', () => {
-      const obj: any = { variant: 'b', key: 2};
+      const obj: any = { field: 'b', value: 2};
       const newArr = [
-        { variant: 'b', key: 2 },
-        { variant: 'a', key: 1 },
-        { variant: 'c', key: 3 },
+        { field: 'b', value: 2 },
+        { field: 'a', value: 1 },
+        { field: 'c', value: 3 },
       ];
 
       const ret = personalization.insertSorted(arr, obj);

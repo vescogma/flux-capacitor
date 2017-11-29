@@ -359,14 +359,14 @@ namespace Store {
     }
 
     export interface BiasById {
-      [variant: string]: {
-        [key: string]: SingleBias;
+      [field: string]: {
+        [value: string]: SingleBias;
       };
     }
 
     export interface BiasKey {
-      variant: string;
-      key: string;
+      field: string;
+      value: string;
     }
 
     export interface SingleBias {

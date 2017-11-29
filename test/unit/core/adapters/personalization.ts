@@ -32,11 +32,11 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       stub(Selectors, 'config').returns(config);
     });
 
-    it('should generate new timeStamp if variant and key do not exist', () => {
+    it('should generate new timeStamp if field and value do not exist', () => {
       const byId = {};
       const bias = {
-        variant: refinement.field,
-        key: refinement.value,
+        field: refinement.field,
+        value: refinement.value,
         bias: {
           lastUsed: 11111
         }
@@ -54,11 +54,11 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       expect(Adapter.generateNewBias).to.have.been.called;
     });
 
-    it('should overwrite the timestamp if variant and key already exist', () => {
+    it('should overwrite the timestamp if field and value already exist', () => {
       const byId = { color: { blue: { lastUsed: 11111 } } };
       const bias = {
-        variant: refinement.field,
-        key: refinement.value,
+        field: refinement.field,
+        value: refinement.value,
         bias: {
           lastUsed: 20000
         }
@@ -74,11 +74,11 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       expect(Adapter.generateNewBias).to.not.have.been.called;
     });
 
-    it('should generate new timestamp if variant exist and key does not exist', () => {
+    it('should generate new timestamp if field exist and value does not exist', () => {
       const byId = { color: { red: { lastUsed: 11111 } } };
       const bias = {
-        variant: refinement.field,
-        key: refinement.value,
+        field: refinement.field,
+        value: refinement.value,
         bias: {
           lastUsed: 22222
         }
@@ -166,8 +166,8 @@ suite('Personalization Adapter', ({ expect, stub }) => {
     it('should return data in certain format when allIds exist in the state', () => {
       const state: any = {
         allIds: [{
-          variant: 'color',
-          key: 'blue',
+          field: 'color',
+          value: 'blue',
         }],
         byId: {
           color: {
@@ -181,8 +181,8 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
       expect(result).to.eql({
         allIds: [{
-          variant: 'color',
-          key: 'blue',
+          field: 'color',
+          value: 'blue',
           lastUsed: 11111
         }]
       });
@@ -196,16 +196,16 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       const expiry = 30;
       const browserStorage = {
         allIds: [
-          { variant: 'color', key: 'blue', lastUsed: now - oneDayInSec * 5 },
-          { variant: 'brand', key: 'Shoe', lastUsed: now - oneDayInSec * 6 },
-          { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
-          { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 33 }
+          { field: 'color', value: 'blue', lastUsed: now - oneDayInSec * 5 },
+          { field: 'brand', value: 'Shoe', lastUsed: now - oneDayInSec * 6 },
+          { field: 'color', value: 'red', lastUsed: now - oneDayInSec * 21 },
+          { field: 'brand', value: 'Nike', lastUsed: now - oneDayInSec * 33 }
         ]
       };
       const biasFromBrowser = {
         allIds: [
-          { variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Shoe'},
-          { variant: 'color', key: 'red' }
+          { field: 'color', value: 'blue' }, { field: 'brand', value: 'Shoe'},
+          { field: 'color', value: 'red' }
         ],
         byId: {
           brand: {
@@ -252,16 +252,16 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       const expiry = 30;
       const browserStorage = {
         allIds: [
-          { variant: 'color', key: 'blue', lastUsed: now - oneDayInSec * 5 },
-          { variant: 'brand', key: 'Shoe', lastUsed: now - oneDayInSec * 6 },
-          { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
-          { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 24 }
+          { field: 'color', value: 'blue', lastUsed: now - oneDayInSec * 5 },
+          { field: 'brand', value: 'Shoe', lastUsed: now - oneDayInSec * 6 },
+          { field: 'color', value: 'red', lastUsed: now - oneDayInSec * 21 },
+          { field: 'brand', value: 'Nike', lastUsed: now - oneDayInSec * 24 }
         ]
       };
       const biasFromBrowser = {
         allIds: [
-          { variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Shoe'},
-          { variant: 'color', key: 'red' }
+          { field: 'color', value: 'blue' }, { field: 'brand', value: 'Shoe'},
+          { field: 'color', value: 'red' }
         ],
         byId: {
           brand: {
@@ -308,15 +308,15 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       const expiry = 30;
       const browserStorage = {
         allIds: [
-          { variant: 'color', key: 'blue', lastUsed: now - oneDayInSec * 5 },
-          { variant: 'brand', key: 'Shoe', lastUsed: now - oneDayInSec * 6 },
-          { variant: 'color', key: 'red', lastUsed: now - oneDayInSec * 21 },
-          { variant: 'brand', key: 'Nike', lastUsed: now - oneDayInSec * 24 }]
+          { field: 'color', value: 'blue', lastUsed: now - oneDayInSec * 5 },
+          { field: 'brand', value: 'Shoe', lastUsed: now - oneDayInSec * 6 },
+          { field: 'color', value: 'red', lastUsed: now - oneDayInSec * 21 },
+          { field: 'brand', value: 'Nike', lastUsed: now - oneDayInSec * 24 }]
       };
       const biasFromBrowser = {
         allIds: [
-          { variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Shoe'},
-          { variant: 'brand', key: 'Nike' }
+          { field: 'color', value: 'blue' }, { field: 'brand', value: 'Shoe'},
+          { field: 'brand', value: 'Nike' }
         ],
         byId: {
           brand: {
@@ -360,17 +360,17 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
   describe('pruneBiases()', () => {
     const arr: any[] = [
-      { variant: 'a', key: 1},
-      { variant: 'b', key: 2},
-      { variant: 'b', key: 5},
-      { variant: 'c', key: 3},
+      { field: 'a', value: 1},
+      { field: 'b', value: 2},
+      { field: 'b', value: 5},
+      { field: 'c', value: 3},
     ];
 
-    it('shoud remove last element of a specific variant if it exists ', () => {
+    it('shoud remove last element of a specific field if it exists ', () => {
       const newArr = [
-        { variant: 'a', key: 1 },
-        { variant: 'b', key: 2 },
-        { variant: 'c', key: 3 },
+        { field: 'a', value: 1 },
+        { field: 'b', value: 2 },
+        { field: 'c', value: 3 },
       ];
 
       const ret = Adapter.pruneBiases(arr, 'b', 2, <any>{
@@ -386,9 +386,9 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
     it('should remove last bias if too many total biases', () => {
       const newArr = [
-        { variant: 'a', key: 1 },
-        { variant: 'b', key: 2 },
-        { variant: 'b', key: 5 },
+        { field: 'a', value: 1 },
+        { field: 'b', value: 2 },
+        { field: 'b', value: 5 },
       ];
 
       const ret = Adapter.pruneBiases(arr, 'b', 2, <any>{
@@ -405,9 +405,9 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
     it('do nothing if too few biases', () => {
       const newArr = [
-        { variant: 'a', key: 1 },
-        { variant: 'b', key: 2 },
-        { variant: 'b', key: 5 },
+        { field: 'a', value: 1 },
+        { field: 'b', value: 2 },
+        { field: 'b', value: 5 },
       ];
 
       const ret = Adapter.pruneBiases(arr, 'b', 2, <any>{
@@ -427,9 +427,9 @@ suite('Personalization Adapter', ({ expect, stub }) => {
     it('should convert biasing to search API bias format', () => {
       const state: any = {};
       const allIds = [
-        { variant: 'color', key: 'blue' },
-        { variant: 'brand', key: 'Nike' },
-        { variant: 'other', key: 'f' }
+        { field: 'color', value: 'blue' },
+        { field: 'brand', value: 'Nike' },
+        { field: 'other', value: 'f' }
       ];
       const config = {
         personalization: {
@@ -463,7 +463,7 @@ suite('Personalization Adapter', ({ expect, stub }) => {
 
     it('should exclude selected refinements', () => {
       const state: any = {};
-      const allIds = [{ variant: 'color', key: 'blue' }, { variant: 'brand', key: 'Nike' }];
+      const allIds = [{ field: 'color', value: 'blue' }, { field: 'brand', value: 'Nike' }];
       const config = {
         personalization: {
           realTimeBiasing: {

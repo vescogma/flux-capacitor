@@ -28,22 +28,22 @@ function updatePersonalization(state: State = DEFAULT, action: Action): State {
 export const updateBiasing = (state: State, payload: Actions.Payload.Personalization.Biasing) => {
   const byId = {
     ...state.biasing.byId,
-    [payload.variant]: {
-      ...state.biasing.byId[payload.variant],
-      [payload.key]: payload.bias
+    [payload.field]: {
+      ...state.biasing.byId[payload.field],
+      [payload.value]: payload.bias
     }
   };
 
-  const allIds = Adapter.pruneBiases(insertSorted(state.biasing.allIds, { variant: payload.variant, key: payload.key }),
-    payload.variant, Object.keys(byId[payload.variant]).length, payload.config);
+  const allIds = Adapter.pruneBiases(insertSorted(state.biasing.allIds, { field: payload.field, value: payload.value }),
+    payload.field, Object.keys(byId[payload.field]).length, payload.config);
 
   return { ...state, biasing: { ...state.biasing, byId, allIds }};
 };
 
 // tslint:disable-next-line max-line-length
-export const insertSorted = (allIds: Store.Personalization.BiasKey[], { variant, key }: Store.Personalization.BiasKey) => {
-  const noDuplicate = allIds.filter((id) => !(id.variant === variant && id.key === key));
-  return [{ variant, key }, ...noDuplicate];
+export const insertSorted = (allIds: Store.Personalization.BiasKey[], { field, value }: Store.Personalization.BiasKey) => {
+  const noDuplicate = allIds.filter((id) => !(id.field === field && id.value === value));
+  return [{ field, value }, ...noDuplicate];
 };
 
 const personalizationTransform = createTransform(

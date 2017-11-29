@@ -116,6 +116,6 @@ export const isDifferentAutocompleteQuery: Validator<string> = {
 };
 
 export const isValidBias: Validator<Actions.Payload.Personalization.Biasing> = {
-  func: (payload) => Boolean(payload && payload.key && payload.variant),
+  func: (payload) => Boolean(payload && payload.field && payload.value),
   msg: 'bias is invalid'
 };

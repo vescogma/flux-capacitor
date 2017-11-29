@@ -174,8 +174,8 @@ namespace Actions {
   export namespace Payload {
     export namespace Personalization {
       export interface Biasing {
-        variant: string;
-        key: string;
+        field: string;
+        value: string;
         bias: Store.Personalization.SingleBias;
         config?: Configuration.Personalization.RealTimeBiasing;
       }
