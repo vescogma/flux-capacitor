@@ -86,8 +86,8 @@ namespace Personalization {
     const selectedRefinements = Selectors.selectedRefinements(state);
 
     return allIds.filter(({ field, value }) =>
-        config.attributes[field] && !selectedRefinements.some(({ navigationName, type, value: navigationValue }) =>
-        type === 'Value' && navigationName === field && navigationValue && value === navigationValue)
+      config.attributes[field] && !selectedRefinements.some(({ navigationName, type, value: navigationValue }) =>
+        type === 'Value' && navigationName === field && value && value === navigationValue)
     ).map(({ field, value }) => ({
       name: field,
       content: value,
