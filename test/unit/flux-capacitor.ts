@@ -10,7 +10,6 @@ import Observer from '../../src/core/observer';
 import Selectors from '../../src/core/selectors';
 import Store from '../../src/core/store';
 import FluxCapacitor from '../../src/flux-capacitor';
-import { Selectors } from '../../src/index';
 import suite from './_suite';
 
 suite('FluxCapacitor', ({ expect, spy, stub }) => {

@@ -35,7 +35,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       idGeneratorMiddleware,
       idGeneratorMiddleware,
       errorHandlerMiddleware,
-      Middleware.checkPastPurchaseSkus,
+      checkPastPurchaseSkusMiddleware,
       sagaMiddleware,
       Middleware.personalizationAnalyzer,
       Middleware.thunkEvaluator,
@@ -84,7 +84,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
       stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
       stub(Middleware, 'validator').returns(Middleware.validator);
       stub(Middleware, 'checkPastPurchaseSkus').returns(checkPastPurchaseSkusMiddleware);
-      stub(Middleware, 'validator').returns(validatorMiddleware);
       stub(redux, 'compose');
       process.env.NODE_ENV = 'development';
 
@@ -100,7 +99,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
       stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
       stub(Middleware, 'validator').returns(Middleware.validator);
       stub(Middleware, 'checkPastPurchaseSkus').returns(checkPastPurchaseSkusMiddleware);
-      stub(Middleware, 'validator').returns(validatorMiddleware);
       stub(redux, 'compose');
       process.env.NODE_ENV = 'development';
 
