@@ -97,7 +97,7 @@ namespace Personalization {
 
   // tslint:disable-next-line max-line-length
   export const pruneBiases = (biasKeys: Store.Personalization.BiasKey[], field: string, fieldCount: number, config: Configuration.Personalization.RealTimeBiasing) => {
-    if (config.attributes[field] && fieldCount >= config.attributes[field].maxBiases) {
+    if (config.attributes[field] && fieldCount >= (config.attributes[field].maxBiases || config.attributeDefaultBiases)) {
       for (let i = biasKeys.length - 1; i >= 0; i--) {
         if (biasKeys[i].field === field) {
           return [...biasKeys.slice(0, i), ...biasKeys.slice(i + 1)];
