@@ -39,6 +39,20 @@ namespace Requests {
     return <Request>Requests.chain(config.search.defaults, request, config.search.overrides);
   };
 
+  export const pastPurchaseProducts = (state: Store.State): Request => {
+    const request: Partial<Request> = {
+      ...search(state),
+      pageSize: Selectors.pastPurchasePageSize(state),
+      query: Selectors.pastPurchaseQuery(state),
+      refinements: Selectors.pastPurchaseSelectedRefinements(state),
+      skip: Selectors.pastPurchasePageSize(state) * (Selectors.pastPurchasePage(state) - 1),
+      // no sort needed, saves backend from processing this
+      sort: undefined,
+    };
+
+    return <Request>request;
+  };
+
   export const autocompleteSuggestions = (config: AppConfig): QueryTimeAutocompleteConfig =>
     Requests.chain(config.autocomplete.defaults.suggestions, {
       language: Autocomplete.extractLanguage(config),

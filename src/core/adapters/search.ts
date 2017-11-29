@@ -138,9 +138,10 @@ namespace Adapter {
   export const extractRecordCount = (results: Results) =>
     Math.min(results.totalRecordCount, MAX_RECORDS);
 
-  export const extractPage = (state: Store.State, totalRecords: number): Actions.Payload.Page => {
-    const pageSize = Selectors.pageSize(state);
-    const currentPage = Selectors.page(state);
+  // tslint:disable-next-line max-line-length
+  export const extractPage = (state: Store.State, totalRecords: number, selectors?: PageSelectors): Actions.Payload.Page => {
+    const pageSize = selectors ? selectors.pageSizeSelector(state) : Selectors.pageSize(state);
+    const currentPage = selectors ? selectors.pageSelector(state) : Selectors.page(state);
     const last = Page.finalPage(pageSize, totalRecords);
     const from = Page.fromResult(currentPage, pageSize);
     const to = Page.toResult(currentPage, pageSize, totalRecords);
@@ -169,6 +170,11 @@ namespace Adapter {
 
   export const requestSort = ({ field, descending }: Store.Sort) =>
     ({ field, order: descending ? 'Descending' : undefined });
+
+  export interface PageSelectors {
+    pageSelector: (state: Store.State) => number;
+    pageSizeSelector: (state: Store.State) => number;
+  }
 }
 
 export default Adapter;

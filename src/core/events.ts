@@ -163,11 +163,31 @@ namespace Events {
    */
   export const PAST_PURCHASES_UPDATED = 'past_purchases_updated';
 
+  export const PAST_PURCHASE_SKUS_UPDATED = 'past_purchase_skus_updated';
+
+  export const SAYT_PAST_PURCHASES_UPDATED = 'sayt_past_purchases_updated';
+
+  export const PAST_PURCHASE_PRODUCTS_UPDATED = 'past_purchase_products_updated';
+
+  export const PAST_PURCHASE_REFINEMENTS_UPDATED = 'past_purchase_refinements_updated';
+
+  export const PAST_PURCHASE_QUERY_UPDATED = 'past_purchase_query_updated';
+
+  export const PAST_PURCHASE_PAGE_UPDATED = 'past_purchase_page_updated';
+
+  export const PAST_PURCHASE_CURRENT_PAGE_UPDATED = 'past_purchase_current_page_updated';
+
+  export const PAST_PURCHASE_PAGE_SIZE_UPDATED = 'past_purchase_page_size_updated';
+
+  export const PAST_PURCHASE_SORT_UPDATED = 'past_purchase_sort_updated';
+
   /**
-   * Triggered when order history is updated
-   * Returns the order history products array
+   * Triggered when past purchase selected refinements are updated.
+   * Listened to in the format 'selected_refinements_updated:id', where id is the
+   * refinement's id.
+   * Returns the selected refinement.
    */
-  export const ORDER_HISTORY_UPDATED = 'order_history_updated';
+  export const PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED = 'past_purchase_selected_refinements_updated'; // post
 
   // error events
   /**

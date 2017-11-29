@@ -12,6 +12,17 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
     });
   });
 
+  describe('buildBody()', () => {
+    it('should build the body', () => {
+      const body: any = { a: 1 };
+
+      expect(RecommendationsAdapter.buildBody(body)).to.eql({
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+    });
+  });
+
   describe('pinNavigations() ', () => {
     it('should pin navigations', () => {
       const results: any = [{ name: 'a' }, { name: 'b' }, { name: 'c' }];
@@ -135,10 +146,8 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
     const state: any = {
       data: {
         present: {
-          recommendations: {
-            pastPurchases: {
-              products: [{ sku: 'a' }, { sku: 'b' }, { sku: 'c' }]
-            }
+          pastPurchases: {
+            skus: [{ sku: 'a' }, { sku: 'b' }, { sku: 'c' }]
           }
         }
       }
@@ -242,6 +251,93 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
       const added = RecommendationsAdapter.addLocationToRequest(request, state);
 
       expect(added).to.eql(request);
+    });
+  });
+
+  describe('pastPurchaseProducts', () => {
+    it('should create an object mapping product.id to each product', () => {
+      const product1 = { data: { id: '1' } };
+      const product2 = { data: { id: '2' } };
+      const product3 = { data: { id: '3' } };
+      const products: any = [product1, product2, product3];
+
+      expect(RecommendationsAdapter.pastPurchaseProducts(products)).to.eql({
+        1: product1,
+        2: product2,
+        3: product3,
+      });
+    });
+  });
+
+  describe('sku sorts', () => {
+    const product1 = { quantity: 1, lastPurchased: 20 };
+    const product2 = { quantity: 3, lastPurchased: 10 };
+    const product3 = { quantity: 2, lastPurchased: 30 };
+    const oldArr: any = [product1, product2, product3];
+
+    describe('sortSkusMostPurchased', () => {
+      it('should sort by quantity', () => {
+        const newArr = [product2, product3, product1];
+
+        expect(RecommendationsAdapter.sortSkusMostPurchased(oldArr)).to.eql(newArr);
+      });
+    });
+
+    describe('sortSkusMostRecent', () => {
+      it('should sort by lastPurchased', () => {
+        expect(RecommendationsAdapter.sortSkusMostRecent(oldArr)).to.eql([product3, product1, product2]);
+      });
+    });
+  });
+
+  describe('pastPurchaseNavigations()', () => {
+    it('should apply config navigation restrictions to given navigations', () => {
+      const config: any = 'conf';
+      const navigations = {
+        cat1: [],
+        cat3: ['a', 'c'],
+        cat4: [{ value: 'a', display: 'asdf'}, { value: 'no', display: 'not' }],
+        cat6: ['j', { value: 'e', display: 'oh' }, 'f'],
+      };
+      const prefiltered: any = [{
+        name: 'cat1',
+        a: 1,
+        b: 2,
+        c: 2,
+        refinements: [1,2,3],
+      }, {
+        name: 'cat2',
+        a: 1,
+        refinements: [2],
+      }, {
+        name: 'cat3',
+        c: 5,
+        refinements: [{ value: 'a' }, { value: 'b' }, { value: 'c' }, { high: 1, low: 4 }],
+      }, {
+        name: 'cat4',
+        j: 0,
+        refinements: [{ value: 'a' }, { value: 'j' }, { value: 'no' }, { value: 'h' }]
+      }, {
+        name: 'cat5',
+        i: 1,
+        refinements: [3,4,5,6,]
+      }, {
+        name: 'another',
+        p: 6,
+        refinements: [4,5,6,7]
+      }];
+      const extract = stub(ConfigurationAdapter, 'extractPastPurchaseNavigations').returns(navigations);
+
+      const returned = RecommendationsAdapter.pastPurchaseNavigations(config, prefiltered);
+
+      expect(returned).to.eql([
+        prefiltered[0], {
+          ...prefiltered[2],
+          refinements: [{ value: 'a' }, { value: 'c' }],
+        }, {
+          ...prefiltered[3],
+          refinements: [{ value: 'a', display: 'asdf' }, { value: 'no', display: 'not' }],
+        },]);
     });
   });
 });

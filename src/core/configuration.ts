@@ -275,6 +275,27 @@ namespace Configuration {
        * Strength of applied biases.
        */
       biasStrength: BiasStrength;
+
+      securedPayload?: Recommendations.SecuredPayload;
+
+      enabled: boolean;
+
+      navigations: PastPurchaseNavigation;
+    }
+
+    export interface PastPurchaseNavigation {
+      [field: string]: Array<string | {
+        value: string;
+        display: string;
+      }>;
+    }
+
+    export interface SecuredPayload {
+      cipherText?: string;
+
+      initialValue?: string;
+
+      messageAuthenticationCode?: string;
     }
 
     // tslint:disable-next-line interface-name

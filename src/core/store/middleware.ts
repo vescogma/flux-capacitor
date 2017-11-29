@@ -15,8 +15,6 @@ import * as utils from '../utils';
 export const HISTORY_UPDATE_ACTIONS = [
   Actions.RECEIVE_PRODUCTS,
   Actions.RECEIVE_RECOMMENDATIONS_PRODUCTS,
-  Actions.RECEIVE_PAST_PURCHASES,
-  Actions.RECEIVE_ORDER_HISTORY,
   Actions.RECEIVE_NAVIGATION_SORT,
   Actions.RECEIVE_COLLECTION_COUNT,
   Actions.RECEIVE_MORE_REFINEMENTS
@@ -28,6 +26,11 @@ export const RECALL_CHANGE_ACTIONS = [
   Actions.ADD_REFINEMENT,
   Actions.SELECT_REFINEMENT,
   Actions.DESELECT_REFINEMENT,
+];
+
+export const PAST_PURCHASE_SKU_ACTIONS = [
+  Actions.FETCH_PAST_PURCHASE_PRODUCTS,
+  Actions.FETCH_SAYT_PAST_PURCHASES,
 ];
 
 export const SEARCH_CHANGE_ACTIONS = [
@@ -78,6 +81,16 @@ export namespace Middleware {
         }
       }) : next(action);
   }
+  
+  export function checkPastPurchaseSkus(flux: FluxCapacitor): ReduxMiddleware {
+    return (store) => (next) => (action) => {
+      if (!PAST_PURCHASE_SKU_ACTIONS.includes(action.type) ||
+          Selectors.pastPurchases(flux.store.getState()).length > 0) {
+        return next(action);
+      }
+      flux.once(Events.PAST_PURCHASE_SKUS_UPDATED, () => store.dispatch(action));
+    };
+  }
 
   export function saveStateAnalyzer() {
     return (next) => (batchAction) => {
@@ -125,6 +138,7 @@ export namespace Middleware {
       Middleware.idGenerator('recallId', RECALL_CHANGE_ACTIONS),
       Middleware.idGenerator('searchId', SEARCH_CHANGE_ACTIONS),
       Middleware.errorHandler(flux),
+      Middleware.checkPastPurchaseSkus(flux),
       sagaMiddleware,
       personalizationAnalyzer,
       thunkEvaluator,

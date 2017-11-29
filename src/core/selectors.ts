@@ -159,15 +159,7 @@ namespace Selectors {
    * Returns the current selected refinements.
    */
   export const selectedRefinements = (state: Store.State) =>
-    Selectors.navigations(state)
-      .reduce((allRefinements, nav) =>
-        allRefinements.concat(nav.selected
-          .map<any>((refinementIndex) => nav.refinements[refinementIndex])
-          .reduce((refs, { low, high, value }) =>
-            refs.concat(nav.range
-              ? { navigationName: nav.field, type: 'Range', high, low }
-              : { navigationName: nav.field, type: 'Value', value }), [])), []);
-
+    getSelected(Selectors.navigations(state));
   /**
    * Returns the maximum value for the given range navigation.
    */
@@ -190,7 +182,8 @@ namespace Selectors {
    * Returns the navigations.
    */
   export const navigations = (state: Store.State) =>
-    state.data.present.navigations.allIds.map<Store.Navigation>(Selectors.navigation.bind(null, state));
+    state.data.present.navigations.allIds
+      .map((id) => Selectors.navigation(state, id));
 
   /**
    * Returns the navigation sort.
@@ -204,7 +197,7 @@ namespace Selectors {
    */
   export const isRefinementDeselected = (state: Store.State, navigationId: string, index: number) => {
     const nav = Selectors.navigation(state, navigationId);
-    return nav && !nav.selected.includes(index);
+    return !!nav && !nav.selected.includes(index);
   };
 
   /**
@@ -213,7 +206,7 @@ namespace Selectors {
    */
   export const isRefinementSelected = (state: Store.State, navigationId: string, index: number) => {
     const nav = Selectors.navigation(state, navigationId);
-    return nav && nav.selected.includes(index);
+    return !!nav && nav.selected.includes(index);
   };
 
   /**
@@ -310,8 +303,8 @@ namespace Selectors {
    * Returns the SKUs of previously purchased products.
    */
   export const pastPurchaseProductsBySku = (state: Store.State) =>
-    state.data.present.recommendations.pastPurchases.products
-      .reduce((allProducts, product) => Object.assign(allProducts, { [product.sku]: product.quantity }), {});
+    state.data.present.pastPurchases.skus
+      .reduce((products, product) => Object.assign(products, { [product.sku]: product.quantity }), {});
 
   /**
    * Returns the entire byId object from biasing
@@ -325,14 +318,113 @@ namespace Selectors {
   export const realTimeBiasesAllIds = (state: Store.State) =>
     state.data.present.personalization.biasing.allIds;
 
+  /**
+   * Returns all the past purchase skus
+   */
   export const pastPurchases = (state: Store.State) =>
-    state.data.present.recommendations.pastPurchases.products;
+    state.data.present.pastPurchases.skus;
 
-  export const queryPastPurchases = (state: Store.State) =>
-    state.data.present.recommendations.queryPastPurchases;
+  /**
+   * Returns the past purchases for the sayt window
+   */
+  export const saytPastPurchases = (state: Store.State) =>
+    state.data.present.pastPurchases.saytPastPurchases;
 
-  export const orderHistory = (state: Store.State) =>
-    state.data.present.recommendations.orderHistory;
+  /**
+   * Returns the past purchase product data
+   */
+  export const pastPurchaseProducts = (state: Store.State) =>
+    state.data.present.pastPurchases.products;
+
+  /**
+   * Returns the past purchase query string
+   */
+  export const pastPurchaseQuery = (state: Store.State) =>
+    state.data.present.pastPurchases.query;
+
+  /**
+   * Returns the past purchase navigation object for the given navigationId.
+   */
+  export const pastPurchaseNavigation = (state: Store.State, navigationId: string) =>
+    state.data.present.pastPurchases.navigations.byId[navigationId];
+
+  /**
+   * Returns the past purchase navigations.
+   */
+  export const pastPurchaseNavigations = (state: Store.State) =>
+    state.data.present.pastPurchases.navigations.allIds
+      .map((id) => Selectors.pastPurchaseNavigation(state, id));
+
+  /**
+   * Returns all selected refinements for the past purchase page
+   */
+  export const pastPurchaseSelectedRefinements = (state: Store.State) =>
+    getSelected(Selectors.pastPurchaseNavigations(state));
+
+  /**
+   * Finds the past purchase refinement based on the given navigationId and index and returns
+   * true if it is not selected, false otherwise.
+   */
+  export const isPastPurchaseRefinementDeselected = (state: Store.State, navigationId: string, index: number) => {
+    const nav = Selectors.pastPurchaseNavigation(state, navigationId);
+    return !!nav && !nav.selected.includes(index);
+  };
+
+  /**
+   * Finds the past purchase refinement based on the given navigationId and index and returns
+   * true if it is selected, false otherwise.
+   */
+  export const isPastPurchaseRefinementSelected = (state: Store.State, navigationId: string, index: number) => {
+    const nav = Selectors.pastPurchaseNavigation(state, navigationId);
+    return !!nav && nav.selected.includes(index);
+  };
+
+  /**
+   * Returns the past purchase page number
+   */
+  export const pastPurchasePage = (state: Store.State) =>
+    state.data.present.pastPurchases.page.current;
+
+  /**
+   * Returns the last page index, ie number of pages
+   */
+  export const pastPurchaseTotalPages = (state: Store.State) =>
+    state.data.present.pastPurchases.page.last;
+
+  /**
+   * Returns the page sizes object.
+   */
+  export const pastPurchasePageSizes = (state: Store.State) =>
+    state.data.present.pastPurchases.page.sizes;
+
+  /**
+   * Returns the current selected page size.
+   */
+  export const pastPurchasePageSize = (state: Store.State) => {
+    const selectedPageSizes = Selectors.pastPurchasePageSizes(state);
+    return selectedPageSizes.items[selectedPageSizes.selected];
+  };
+
+  /**
+   * Returns the index of the selected page size.
+   */
+  export const pastPurchasePageSizeIndex = (state: Store.State) =>
+    Selectors.pastPurchasePageSizes(state).selected;
+
+  /**
+   * Returns the sort list for past purchases
+   */
+  export const pastPurchaseSort = (state: Store.State) =>
+    state.data.present.pastPurchases.sort;
+
+  /**
+   * Returns the currently selected sort for past purchases
+   */
+  export const pastPurchaseSortSelected = (state: Store.State) => {
+    const ppSorts = pastPurchaseSort(state);
+
+    return ppSorts.items[ppSorts.selected];
+  };
 
   /**
    * Returns whether or not biasing has been rehydrated from localstorage
@@ -352,6 +444,19 @@ namespace Selectors {
    */
   export const uiTagState = (state: Store.State, tagName: string, id: string) =>
     (Selectors.uiTagStates(state, tagName) || {})[id];
+
+  /**
+   * Helper function to get selected navigations from an array of navigations
+   */
+  export const getSelected = (allNavigations: Store.Navigation[]) =>
+    allNavigations.reduce((allRefinements, nav) =>
+      allRefinements.concat(nav.selected
+        .map<any>((refinementIndex) => nav.refinements[refinementIndex])
+        .reduce((refs, { low, high, value }) =>
+          refs.concat(nav.range
+            ? { navigationName: nav.field, type: 'Range', high, low }
+            : { navigationName: nav.field, type: 'Value', value }), [])), []);
+
 }
 
 export default Selectors;

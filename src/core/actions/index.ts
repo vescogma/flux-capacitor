@@ -32,6 +32,7 @@ namespace Actions {
     (...args: any[]): Action | Action[] | Thunk<any>;
   }
 
+  // tslint:disable max-line-length
   // update actions
   export const UPDATE_AUTOCOMPLETE_QUERY = 'UPDATE_AUTOCOMPLETE_QUERY';
   export type UpdateAutocompleteQuery = Action<typeof UPDATE_AUTOCOMPLETE_QUERY, string>;
@@ -63,13 +64,10 @@ namespace Actions {
   export type UpdateBiasing = Action<typeof UPDATE_BIASING, Actions.Payload.Personalization.Biasing>;
 
   // batch actions
-  // tslint:disable-next-line max-line-length
   export type SwitchRefinement = [Actions.ResetPage, Actions.ResetPage, Actions.ResetRefinements, Actions.ResetPage, Actions.AddRefinement];
   export type Search = [Actions.ResetPage, Actions.ResetPage, Actions.ResetRefinements, Actions.ResetPage, Actions.AddRefinement];
-  // tslint:disable-next-line max-line-length
   export type ResetRecall = [Actions.ResetPage, Actions.ResetPage, Actions.ResetRefinements, Actions.ResetPage, Actions.UpdateQuery] |
     [Actions.ResetPage, Actions.ResetPage, Actions.ResetRefinements, Actions.ResetPage, Actions.UpdateQuery, Actions.ResetPage, Actions.SelectRefinement];
-  // tslint:disable-next-line max-line-length
   export type UpdateSearch = Array<Actions.ResetPage | Actions.UpdateQuery | Actions.ResetRefinements | Actions.SelectRefinement | Actions.AddRefinement>;
   export type ResetPageAndResetRefinements = [Actions.ResetPage, Actions.ResetRefinements];
   export type ResetPageAndSelectRefinement = [Actions.ResetPage, Actions.SelectRefinement];
@@ -91,7 +89,6 @@ namespace Actions {
   export const FETCH_AUTOCOMPLETE_SUGGESTIONS = 'FETCH_AUTOCOMPLETE_SUGGESTIONS';
   export type FetchAutocompleteSuggestions = Action<typeof FETCH_AUTOCOMPLETE_SUGGESTIONS, string>;
   export const FETCH_AUTOCOMPLETE_PRODUCTS = 'FETCH_AUTOCOMPLETE_PRODUCTS';
-  // tslint:disable-next-line max-line-length
   export type FetchAutocompleteProducts = Action<typeof FETCH_AUTOCOMPLETE_PRODUCTS, { query: string, refinements: Actions.Payload.Autocomplete.Refinement[] }>;
   export const FETCH_COLLECTION_COUNT = 'FETCH_COLLECTION_COUNT';
   export type FetchCollectionCount = Action<typeof FETCH_COLLECTION_COUNT, string>;
@@ -100,9 +97,11 @@ namespace Actions {
   export const FETCH_RECOMMENDATIONS_PRODUCTS = 'FETCH_RECOMMENDATIONS_PRODUCTS';
   export type FetchRecommendationsProducts = Action<typeof FETCH_RECOMMENDATIONS_PRODUCTS, string>;
   export const FETCH_PAST_PURCHASES = 'FETCH_PAST_PURCHASES';
-  export type FetchPastPurchases = Action<typeof FETCH_PAST_PURCHASES, string>;
-  export const FETCH_ORDER_HISTORY = 'FETCH_ORDER_HISTORY';
-  export type FetchOrderHistory = Action<typeof FETCH_ORDER_HISTORY>;
+  export type FetchPastPurchases = Action<typeof FETCH_PAST_PURCHASES>;
+  export const FETCH_PAST_PURCHASE_PRODUCTS = 'FETCH_PAST_PURCHASE_PRODUCTS';
+  export type FetchPastPurchaseProducts = Action<typeof FETCH_PAST_PURCHASE_PRODUCTS, string | null>;
+  export const FETCH_SAYT_PAST_PURCHASES = 'FETCH_SAYT_PAST_PURCHASES';
+  export type FetchSaytPastPurchases = Action<typeof FETCH_SAYT_PAST_PURCHASES, string>;
 
   // response actions
   export const RECEIVE_MORE_REFINEMENTS = 'RECEIVE_MORE_REFINEMENTS';
@@ -112,12 +111,10 @@ namespace Actions {
   export const RECEIVE_MORE_PRODUCTS = 'RECEIVE_MORE_PRODUCTS';
   export type ReceiveMoreProducts = Action<typeof RECEIVE_MORE_PRODUCTS, Store.ProductWithMetadata[]>;
   export const RECEIVE_AUTOCOMPLETE_SUGGESTIONS = 'RECEIVE_AUTOCOMPLETE_SUGGESTIONS';
-  // tslint:disable-next-line max-line-length
   export type ReceiveAutocompleteSuggestions = Action<typeof RECEIVE_AUTOCOMPLETE_SUGGESTIONS, Payload.Autocomplete.Suggestions>;
   export const RECEIVE_AUTOCOMPLETE_PRODUCTS = 'RECEIVE_AUTOCOMPLETE_PRODUCTS';
   export type ReceiveAutocompleteProducts = Action<typeof RECEIVE_AUTOCOMPLETE_PRODUCTS, Store.ProductWithMetadata[]>;
   export const RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS = 'RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS';
-  // tslint:disable-next-line max-line-length
   export type ReceiveAutocompleteProductRecords = Action<typeof RECEIVE_AUTOCOMPLETE_PRODUCT_RECORDS, Store.ProductWithMetadata[]>;
   export const RECEIVE_AUTOCOMPLETE_TEMPLATE = 'RECEIVE_AUTOCOMPLETE_TEMPLATE';
   export type ReceiveAutocompleteTemplate = Action<typeof RECEIVE_AUTOCOMPLETE_TEMPLATE, Store.Template>;
@@ -138,18 +135,42 @@ namespace Actions {
   export const RECEIVE_REDIRECT = 'RECEIVE_REDIRECT';
   export type ReceiveRedirect = Action<typeof RECEIVE_REDIRECT, string>;
   export const RECEIVE_RECOMMENDATIONS_PRODUCTS = 'RECEIVE_RECOMMENDATIONS_PRODUCTS';
-  // tslint:disable-next-line max-line-length
   export type ReceiveRecommendationsProducts = Action<typeof RECEIVE_RECOMMENDATIONS_PRODUCTS, Store.ProductWithMetadata[]>;
-  export const RECEIVE_PAST_PURCHASES = 'RECEIVE_PAST_PURCHASES';
-  export type ReceivePastPurchases = Action<typeof RECEIVE_PAST_PURCHASES, Store.Recommendations.PastPurchase[]>;
-  export const RECEIVE_ORDER_HISTORY = 'RECEIVE_ORDER_HISTORY';
-  export type ReceiveOrderHistory = Action<typeof RECEIVE_ORDER_HISTORY, Store.Recommendations.OrderHistoryProduct[]>;
-  export const RECEIVE_QUERY_PAST_PURCHASES = 'RECEIVE_QUERY_PAST_PURCHASES';
-  // tslint:disable-next-line max-line-length
-  export type ReceiveQueryPastPurchases = Action<typeof RECEIVE_QUERY_PAST_PURCHASES, Store.ProductWithMetadata[]>;
-  export const RECEIVE_NAVIGATION_SORT = 'RECEIVE_NAVIGATION_SORT';
-  // tslint:disable-next-line max-line-length
+  export const RECEIVE_PAST_PURCHASE_SKUS = 'RECEIVE_PAST_PURCHASE_SKUS';
+  export type ReceivePastPurchaseSkus = Action<typeof RECEIVE_PAST_PURCHASE_SKUS, Store.PastPurchases.PastPurchaseProduct[]>;
+  export const RECEIVE_SAYT_PAST_PURCHASES = 'RECEIVE_SAYT_PAST_PURCHASES';
+  export type ReceiveSaytPastPurchases = Action<typeof RECEIVE_SAYT_PAST_PURCHASES, Store.ProductWithMetadata[]>;
+  export const RECEIVE_PAST_PURCHASE_PRODUCTS = 'RECEIVE_PAST_PURCHASE_PRODUCTS';
+  export type ReceivePastPurchaseProducts = Action<typeof RECEIVE_PAST_PURCHASE_PRODUCTS, Store.ProductWithMetadata[]>;
+  export const RECEIVE_PAST_PURCHASE_REFINEMENTS = 'RECEIVE_PAST_PURCHASE_REFINEMENTS';
+  export type ReceivePastPurchaseRefinements = Action<typeof RECEIVE_PAST_PURCHASE_REFINEMENTS, Store.Navigation[]>;
+  export const RESET_PAST_PURCHASE_REFINEMENTS = 'RESET_PAST_PURCHASE_REFINEMENTS';
+  export type ResetPastPurchaseRefinements = Action<typeof RESET_PAST_PURCHASE_REFINEMENTS, boolean | string>;
+  export const SELECT_PAST_PURCHASE_REFINEMENT = 'SELECT_PAST_PURCHASE_REFINEMENT';
+  export type SelectPastPurchaseRefinement = Action<typeof SELECT_PAST_PURCHASE_REFINEMENT, Payload.Navigation.Refinement>;
+  export const DESELECT_PAST_PURCHASE_REFINEMENT = 'DESELECT_PAST_PURCHASE_REFINEMENT';
+  export type DeselectPastPurchaseRefinement = Action<typeof DESELECT_PAST_PURCHASE_REFINEMENT, Payload.Navigation.Refinement>;
+  export const RESET_PAST_PURCHASE_PAGE = 'RESET_PAST_PURCHASE_PAGE';
+  export type ResetPastPurchasePage = Action<typeof RESET_PAST_PURCHASE_PAGE, undefined>;
+  export const RECEIVE_PAST_PURCHASE_PAGE = 'RECEIVE_PAST_PURCHASE_PAGE';
+  export type ReceivePastPurchasePage = Action<typeof RECEIVE_PAST_PURCHASE_PAGE, Payload.Page>;
+
+  export type PastPurchaseReset = [Actions.ResetPastPurchasePage, Actions.ResetPastPurchaseRefinements];
+  export type PastPurchaseSelect = [Actions.ResetPastPurchasePage, Actions.SelectPastPurchaseRefinement];
+  export type PastPurchaseDeselect = [Actions.ResetPastPurchasePage, Actions.DeselectPastPurchaseRefinement];
   export type ReceiveNavigationSort = Action<typeof RECEIVE_NAVIGATION_SORT, Store.Recommendations.Navigation[]>;
+  export type PastPurchaseQuery = [Actions.ResetPastPurchasePage, Actions.ResetPastPurchaseRefinements, Actions.UpdatePastPurchaseQuery];
+  export type PastPurchaseSortActions = [Actions.ResetPastPurchasePage, Actions.SelectPastPurchaseSort];
+
+  export const UPDATE_PAST_PURCHASE_PAGE_SIZE = 'UPDATE_PAST_PURCHASE_PAGE_SIZE';
+  export type UpdatePastPurchasePageSize = Action<typeof UPDATE_PAST_PURCHASE_PAGE_SIZE, number>;
+  export const UPDATE_PAST_PURCHASE_CURRENT_PAGE = 'UPDATE_PAST_PURCHASE_CURRENT_PAGE';
+  export type UpdatePastPurchaseCurrentPage = Action<typeof UPDATE_PAST_PURCHASE_CURRENT_PAGE, number>;
+  export const UPDATE_PAST_PURCHASE_QUERY = 'UPDATE_PAST_PURCHASE_QUERY';
+  export type UpdatePastPurchaseQuery = Action<typeof UPDATE_PAST_PURCHASE_QUERY, string>;
+  export const SELECT_PAST_PURCHASE_SORT = 'SELECT_PAST_PURCHASE_SORT';
+  export type SelectPastPurchaseSort = Action<typeof SELECT_PAST_PURCHASE_SORT, number>;
+  export const RECEIVE_NAVIGATION_SORT = 'RECEIVE_NAVIGATION_SORT';
 
   // ui
   export const CREATE_COMPONENT_STATE = 'CREATE_COMPONENT_STATE';
@@ -170,6 +191,7 @@ namespace Actions {
   export type RefreshState = Action<typeof REFRESH_STATE, any>;
   // added automatically by middleware to interact with redux-undo
   export const SAVE_STATE = 'SAVE_STATE';
+  // tslint:enable max-line-length
 
   export namespace Payload {
     export namespace Personalization {

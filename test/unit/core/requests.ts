@@ -1,3 +1,4 @@
+import { Request } from 'groupby-api';
 import * as sinon from 'sinon';
 import ConfigAdapter from '../../../src/core/adapters/configuration';
 import RecommendationsAdapter from '../../../src/core/adapters/recommendations';
@@ -104,6 +105,54 @@ suite('requests', ({ expect, stub }) => {
 
       expect(request.a).to.eq('b');
       expect(request.c).to.eq('d1');
+    });
+  });
+
+  describe('pastPurchaseProducts', () => {
+    const searchRequest: Request = <any>{};
+    const pageSize = 5;
+    const page = 2;
+    const query = 'hat';
+    const refinements = ['a', 'b', 'c'];
+    const skip = pageSize * (page - 1);
+    const state: any = { a : 1 };
+
+    beforeEach(() => {
+      stub(Requests, 'search').returns(searchRequest);
+      stub(Selectors, 'pastPurchasePageSize').returns(pageSize);
+      stub(Selectors, 'pastPurchaseQuery').returns(query);
+      stub(Selectors, 'pastPurchaseSelectedRefinements').returns(refinements);
+      stub(Selectors, 'pastPurchasePage').returns(page);
+    });
+
+    it('should spread the search request', () => {
+      const req = Requests.pastPurchaseProducts(state);
+
+      expect(req).to.include(searchRequest);
+    });
+
+    it('should overwrite properties of the search', () => {
+      searchRequest.pageSize = -3;
+      searchRequest.query = 'shirt';
+      searchRequest.refinements = [{
+        navigationName: 'f',
+        type: 'Value',
+        value: 'j',
+      }, {
+        navigationName: 'i',
+        exclude: true,
+        type: 'Range',
+        low: 1,
+        high: 3,
+      }];
+      searchRequest.skip = -4;
+
+      const req = Requests.pastPurchaseProducts(state);
+
+      expect(req.pageSize).to.eql(pageSize);
+      expect(req.query).to.eql(query);
+      expect(req.refinements).to.eql(refinements);
+      expect(req.skip).to.eql(skip);
     });
   });
 

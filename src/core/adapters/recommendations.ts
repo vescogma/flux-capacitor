@@ -11,7 +11,7 @@ namespace Recommendations {
   export const buildUrl = (customerId: string, endpoint: string, mode: string) =>
     `https://${customerId}.groupbycloud.com/wisdom/v2/public/recommendations/${endpoint}/_get${mode}`;
 
-  export const buildBody = (body: RecommendationsBody | RecommendationsRequest) => ({
+  export const buildBody = (body: RecommendationsBody | RecommendationsRequest | PastPurchaseRequest) => ({
     method: 'POST',
     body: JSON.stringify(body)
   });
@@ -28,8 +28,8 @@ namespace Recommendations {
         if (index !== -1) {
           resultsAcc = [...resultsAcc.slice(0, index), {
             ...resultsAcc[index], refinements:
-            sortBasedOn(resultsAcc[index].refinements, navigation.values,
-              (unsorted: ValueRefinement, sorted) => unsorted.value.toLowerCase() === sorted.value.toLowerCase())
+              sortBasedOn(resultsAcc[index].refinements, navigation.values,
+                (unsorted: ValueRefinement, sorted) => unsorted.value.toLowerCase() === sorted.value.toLowerCase())
           }, ...resultsAcc.slice(index + 1)];
         }
         return resultsAcc;
@@ -74,28 +74,29 @@ namespace Recommendations {
         minSize: locationConfig.minSize,
         sequence: [
           {
-          ...request,
-          matchExact: {
-            ...(request.matchExact || {}),
-            and: [{
-              visit: {
-                generated: {
-                  geo: {
-                    location: {
-                      distance: locationConfig.distance,
-                      center: {
-                        lat: location.latitude,
-                        lon: location.longitude
+            ...request,
+            matchExact: {
+              ...(request.matchExact || {}),
+              and: [{
+                visit: {
+                  generated: {
+                    geo: {
+                      location: {
+                        distance: locationConfig.distance,
+                        center: {
+                          lat: location.latitude,
+                          lon: location.longitude
+                        }
                       }
                     }
                   }
                 }
-              }
-            }]
-          }
-        },
+              }]
+            }
+          },
           request,
-        ]};
+        ]
+      };
     } else {
       return request;
     }
@@ -108,10 +109,53 @@ namespace Recommendations {
       bringToTop: [],
       augmentBiases: true,
       influence: pastPurchases.biasInfluence,
-      biases: state.data.present.recommendations.pastPurchases.products
+      biases: Selectors.pastPurchases(state)
         .slice(0, pastPurchases.biasCount)
         .map((pastPurchase) => ({ name: idField, content: pastPurchase.sku, strength: pastPurchases.biasStrength }))
     };
+  };
+
+  // maps an array of products to an object with ids as keys and product data as value
+
+  export const pastPurchaseProducts = (products: Store.ProductWithMetadata[]) => {
+    return products.reduce((productMap, product) => {
+      productMap[product.data.id] = product;
+      return productMap;
+    }, {});
+  };
+
+  export const sortSkusMostPurchased = (skus: Store.PastPurchases.PastPurchaseProduct[]) => {
+    return [...skus].sort(({ quantity: lhs }, { quantity: rhs }) => rhs - lhs);
+  };
+
+  export const sortSkusMostRecent = (skus: Store.PastPurchases.PastPurchaseProduct[]) => {
+    return [...skus].sort(({ lastPurchased: lhs }, { lastPurchased: rhs }) => rhs - lhs);
+  };
+
+  export const pastPurchaseNavigations = (config: Configuration, navigations: Navigation[]) => {
+    const configNavigations = ConfigurationAdapter.extractPastPurchaseNavigations(config);
+
+    return navigations.reduce((acc, navigation) => {
+      return configNavigations[navigation.name] ?
+        acc.concat({
+          ...navigation,
+          refinements: configNavigations[navigation.name].length > 0 ?
+            navigation.refinements.reduce((refinementAcc, refinement: ValueRefinement) => {
+              if (refinement.value) {
+                const ref = configNavigations[navigation.name].find((nav) =>
+                  nav === refinement.value || nav['value'] === refinement.value
+                );
+                if (ref) {
+                  refinementAcc.push(ref['display'] ? {
+                    ...refinement,
+                    display: ref['display']
+                  } : refinement);
+                }
+              }
+              return refinementAcc;
+          }, []) : navigation.refinements
+        }) : acc;
+    }, []);
   };
 
   export interface RecommendationsRequest {
@@ -126,6 +170,11 @@ namespace Recommendations {
   export interface RecommendationsBody {
     minSize: number;
     sequence: RecommendationsRequest[];
+  }
+
+  export interface PastPurchaseRequest {
+    query?: string;
+    securedPayload: Configuration.Recommendations.SecuredPayload;
   }
 
   export interface Navigations {

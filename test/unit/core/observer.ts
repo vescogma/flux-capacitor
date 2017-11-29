@@ -2,6 +2,7 @@ import * as sinon from 'sinon';
 import Search from '../../../src/core/adapters/search';
 import Events from '../../../src/core/events';
 import Observer from '../../../src/core/observer';
+import * as utils from '../../../src/core/utils';
 import suite from '../_suite';
 
 suite('Observer', ({ expect, spy, stub }) => {
@@ -203,6 +204,15 @@ suite('Observer', ({ expect, spy, stub }) => {
       expect(present.sorts).to.be.a('function');
       expect(present.template).to.be.a('function');
       expect(present.personalization._persist.rehydrated).to.be.a('function');
+      expect(present.pastPurchases.skus).to.be.a('function');
+      expect(present.pastPurchases.products).to.be.a('function');
+      expect(present.pastPurchases.saytPastPurchases).to.be.a('function');
+      expect(present.pastPurchases.query).to.be.a('function');
+      expect(present.pastPurchases.page).to.be.a('function');
+      expect(present.pastPurchases.page.current).to.be.a('function');
+      expect(present.pastPurchases.page.sizes).to.be.a('function');
+      expect(present.pastPurchases.navigations).to.be.a('function');
+      expect(present.pastPurchases.sort).to.be.a('function');
     });
 
     describe('data', () => {
@@ -218,7 +228,7 @@ suite('Observer', ({ expect, spy, stub }) => {
 
       describe('autocomplete()', () => {
         it('should not emit update if state identical to old state', () => {
-          const state = 'state';
+          const state = { a: 'b' };
 
           observers.data.present.autocomplete(<any>state, <any>state, path);
 
@@ -425,6 +435,77 @@ suite('Observer', ({ expect, spy, stub }) => {
           expect(emit).to.be.calledWith(Events.RECOMMENDATIONS_PRODUCTS_UPDATED, testObject);
           expect(extractData).to.be.calledWithExactly(undefined);
           expect(extractData).to.be.calledWithExactly(testObject);
+        });
+
+        describe('pastPurchases', () => {
+          it('should emit PAST_PURCHASE_QUERY_UPDATED event and call saveState', () => {
+            observers.data.present.pastPurchases.query(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_QUERY_UPDATED, testObject);
+          });
+
+          it('should emit PAST_PURCHASE_PAGE_UPDATED event and call saveState', () => {
+            observers.data.present.pastPurchases.page(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_PAGE_UPDATED, testObject);
+          });
+
+          it('should emit PAST_PURCHASE_SKUS_UPDATED event', () => {
+            observers.data.present.pastPurchases.skus(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_SKUS_UPDATED, testObject);
+          });
+
+          it('should emit PAST_PURCHASE_PRODUCTS_UPDATED event', () => {
+            observers.data.present.pastPurchases.products(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_PRODUCTS_UPDATED, testObject);
+          });
+
+          it('should emit SAYT_PAST_PURCHASES_UPDATED event', () => {
+            observers.data.present.pastPurchases.saytPastPurchases(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.SAYT_PAST_PURCHASES_UPDATED, testObject);
+          });
+
+          it('should emit PAST_PURCHASE_REFINEMENTS_UPDATED event', () => {
+            const allIds = [1, 2, 3];
+            const newObj = { allIds };
+            observers.data.present.pastPurchases.navigations({}, newObj);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_REFINEMENTS_UPDATED, newObj);
+          });
+
+          it('should emit PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED event with refinement name', () => {
+            const oldObjAllIds = ['a'];
+            const oldObjById = { a: { selected: 2, refinements: [1, 2] } };
+            const oldObj = { allIds: oldObjAllIds, byId: oldObjById };
+            const newObjById = { a: { selected: 2, refinements: [1, 3] } };
+            const newObj = { allIds: oldObjAllIds, byId: newObjById };
+            observers.data.present.pastPurchases.navigations(oldObj, newObj);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED,
+              { selected: 2, refinements: [1, 3] });
+          });
+
+          it('should not emit PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED event', () => {
+            const oldObjAllIds = ['a'];
+            const refinements = [1, 2];
+            const oldObjById = { a: { selected: 2, refinements } };
+            const oldObj = { allIds: oldObjAllIds, byId: oldObjById };
+            const newObjById = { a: { selected: 2, refinements } };
+            const newObj = { allIds: oldObjAllIds, byId: newObjById };
+            observers.data.present.pastPurchases.navigations(oldObj, newObj);
+
+            expect(emit).to.not.be.called;
+          });
+
+          it('should emit PAST_PURCHASE_SORT_UPDATED event and call saveState', () => {
+            observers.data.present.pastPurchases.sort(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_SORT_UPDATED, testObject);
+          });
+
         });
       });
 

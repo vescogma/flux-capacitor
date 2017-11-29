@@ -6,7 +6,8 @@ export const { fetch } = fetchPonyfill();
 export const Routes = {
   SEARCH: 'search',
   DETAILS: 'details',
-  NAVIGATION: 'navigation'
+  NAVIGATION: 'navigation',
+  PAST_PURCHASE: 'pastpurchase',
 };
 
 export const rayify = <T>(arr: T | T[]): T[] => Array.isArray(arr) ? arr : [arr];

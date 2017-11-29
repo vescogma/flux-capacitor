@@ -1,13 +1,15 @@
+import { Biasing, Request, SelectedRefinement, Sort } from 'groupby-api';
 import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
+import ConfigAdapter from '../adapters/configuration';
 import Adapter from '../adapters/recommendations';
 import SearchAdapter from '../adapters/search';
 import Configuration from '../configuration';
 import Requests from '../requests';
 import Selectors from '../selectors';
 import Store from '../store';
-import { fetch } from '../utils';
+import * as utils from '../utils';
 
 export namespace Tasks {
   // tslint:disable-next-line max-line-length
@@ -28,7 +30,7 @@ export namespace Tasks {
           target: idField
         };
 
-        const recommendationsResponse = yield effects.call(fetch, recommendationsUrl, {
+        const recommendationsResponse = yield effects.call(utils.fetch, recommendationsUrl, {
           method: 'POST',
           body: JSON.stringify(Adapter.addLocationToRequest(recommendationsRequestBody, state))
         });
@@ -49,56 +51,102 @@ export namespace Tasks {
 
         yield effects.put(flux.actions.receiveRecommendationsProducts(SearchAdapter.augmentProducts(results)));
       }
-      return [];
     } catch (e) {
       yield effects.put(flux.actions.receiveRecommendationsProducts(e));
     }
   }
 
-  export function* fetchPastPurchases(flux: FluxCapacitor, { payload }: Actions.FetchPastPurchases) {
+  export function* fetchSkus(config: Configuration, endpoint: string, query?: string) {
+    const securedPayload = ConfigAdapter.extractSecuredPayload(config);
+    const url = `https://${config.customerId}.groupbycloud.com/orders/v1/public/skus/${endpoint}`;
+    const response = yield effects.call(utils.fetch, url, Adapter.buildBody({
+      securedPayload,
+      query
+    }));
+    return yield response.json();
+  }
+
+  // tslint:disable-next-line max-line-length
+  export function* fetchProductsFromSkus(flux: FluxCapacitor, skus: Store.PastPurchases.PastPurchaseProduct[], request: Request) {
+    const ids: string[] = skus.map(({ sku }) => sku);
+    return yield effects.call(
+      [flux.clients.bridge, flux.clients.bridge.search],
+      {
+        ...request,
+        biasing: <Biasing>{
+          restrictToIds: ids,
+        },
+        sort: <Sort[]>[{ type: 'ByIds', ids }],
+      });
+  }
+
+  export function* fetchPastPurchases(flux: FluxCapacitor, action: Actions.FetchPastPurchases) {
     try {
-      const config = yield effects.select(Selectors.config);
-      const productCount = config.recommendations.pastPurchases.productCount;
+      const config: Configuration = yield effects.select(Selectors.config);
+      const productCount = ConfigAdapter.extractProductCount(config);
       if (productCount > 0) {
-        const url = `http://${config.customerId}.groupbycloud.com/orders/public/skus/_search`;
-        // TODO: change to be the real/right request
-        const response = yield effects.call(fetch, url, Adapter.buildBody(<any>{
-          // slide 9 of Past Purchase Epic?
-          keyword: payload && undefined
-        }));
-        const result = yield response.json();
-        // TODO: modify data so it's in the right form?
-        yield effects.put(flux.actions.receivePastPurchases(result.result));
+        const { result } = yield effects.call(fetchSkus, config, 'popular');
+        yield effects.put(flux.actions.receivePastPurchaseSkus(result));
+      } else {
+        yield effects.put(flux.actions.receivePastPurchaseSkus([]));
       }
-      return [];
     } catch (e) {
-      return effects.put(flux.actions.receivePastPurchases(e));
+      return effects.put(flux.actions.receivePastPurchaseSkus(e));
     }
   }
 
-  export function* fetchOrderHistory(flux: FluxCapacitor, action: Actions.FetchOrderHistory) {
+  export function* fetchPastPurchaseProducts(flux: FluxCapacitor, action: Actions.FetchPastPurchaseProducts) {
     try {
-      const url = `http://${flux.config.customerId}.groupbycloud.com/orders/public/_search`;
-      const response = yield effects.call(fetch, url, Adapter.buildBody(<any>{
-        // slide 18 of Past Purchase Epic?
-        cartType: 'online',
-        // pagination stuff
-        skip: 0,
-        pageSize: 100,
-      }));
-      const result = yield response.json();
-      // TODO: modify data so it's in the right form?
-      yield effects.put(flux.actions.receiveOrderHistory(result.result[0].items));
-
-      return [];
+      const query = yield effects.select(Selectors.pastPurchaseQuery);
+      const config: Configuration = yield effects.select(Selectors.config);
+      const pastPurchaseSkus: Store.PastPurchases.PastPurchaseProduct[] = query ?
+        (yield effects.call(fetchSkus, config, '_search', query)).result :
+        yield effects.select(Selectors.pastPurchases);
+      if (pastPurchaseSkus.length > 0) {
+        const request = yield effects.select(Requests.pastPurchaseProducts);
+        const results = yield effects.call(fetchProductsFromSkus, flux, pastPurchaseSkus, request);
+        const navigations = SearchAdapter.combineNavigations({
+          ...results,
+          availableNavigation: Adapter.pastPurchaseNavigations(config, results.availableNavigation),
+          selectedNavigation: results.selectedNavigation.filter((navigation) => navigation.name !== 'id'),
+        });
+        yield effects.put(<any>[
+          flux.actions.receivePastPurchaseProducts(SearchAdapter.augmentProducts(results)),
+          flux.actions.receivePastPurchaseRefinements(navigations),
+          flux.actions.receivePastPurchasePage(SearchAdapter.extractPage(
+            flux.store.getState(),
+            SearchAdapter.extractRecordCount(results), {
+              pageSelector: Selectors.pastPurchasePage,
+              pageSizeSelector: Selectors.pastPurchasePageSize,
+            }))
+        ]);
+        flux.saveState(utils.Routes.PAST_PURCHASE);
+      }
     } catch (e) {
-      return effects.put(flux.actions.receiveOrderHistory(e));
+      return effects.put(flux.actions.receivePastPurchaseProducts(e));
+    }
+  }
+
+  export function* fetchSaytPastPurchases(flux: FluxCapacitor, { payload }: Actions.FetchSaytPastPurchases) {
+    try {
+      const config: Configuration = yield effects.select(Selectors.config);
+      const { result } = yield effects.call(fetchSkus, config, '_search', payload);
+      if (result.length > 0) {
+        const request = yield effects.select(Requests.autocompleteProducts);
+        const results = yield effects.call(fetchProductsFromSkus, flux, result, request);
+        yield effects.put(flux.actions.receiveSaytPastPurchases(SearchAdapter.augmentProducts(results)));
+      } else {
+        yield effects.put(flux.actions.receiveSaytPastPurchases([]));
+      }
+    } catch (e) {
+      return effects.put(flux.actions.receiveSaytPastPurchases(e));
     }
   }
 }
 
 export default (flux: FluxCapacitor) => function* recommendationsSaga() {
   yield effects.takeLatest(Actions.FETCH_RECOMMENDATIONS_PRODUCTS, Tasks.fetchProducts, flux);
-  // yield effects.takeLatest(Actions.FETCH_PAST_PURCHASES, Tasks.fetchPastPurchases, flux);
-  // yield effects.takeLatest(Actions.FETCH_ORDER_HISTORY, Tasks.fetchOrderHistory, flux);
+  yield effects.takeLatest(Actions.FETCH_PAST_PURCHASES, Tasks.fetchPastPurchases, flux);
+  yield effects.takeLatest(Actions.FETCH_PAST_PURCHASE_PRODUCTS, Tasks.fetchPastPurchaseProducts, flux);
+  yield effects.takeLatest(Actions.FETCH_SAYT_PAST_PURCHASES, Tasks.fetchSaytPastPurchases, flux);
 };
