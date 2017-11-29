@@ -244,6 +244,7 @@ namespace Store {
       skus: PastPurchases.PastPurchaseProduct[];
       saytPastPurchases: ProductWithMetadata[];
       products: ProductWithMetadata[];
+      recordCount: number;
       navigations: Indexed<Store.Navigation>;
       query: string;
       sort?: SelectableList<PastPurchases.PastPurchaseSort>;

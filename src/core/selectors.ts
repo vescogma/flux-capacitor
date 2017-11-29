@@ -337,6 +337,12 @@ namespace Selectors {
     state.data.present.pastPurchases.products;
 
   /**
+   * Returns the past purchase record count
+   */
+  export const pastPurchaseRecordCount = (state: Store.State) =>
+    state.data.present.pastPurchases.recordCount;
+
+  /**
    * Returns the past purchase query string
    */
   export const pastPurchaseQuery = (state: Store.State) =>

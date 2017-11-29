@@ -112,6 +112,7 @@ export namespace Tasks {
         });
         yield effects.put(<any>[
           flux.actions.receivePastPurchaseProducts(SearchAdapter.augmentProducts(results)),
+          flux.actions.receivePastPurchaseRecordCount(results.totalRecordCount),
           flux.actions.receivePastPurchaseRefinements(navigations),
           flux.actions.receivePastPurchasePage(SearchAdapter.extractPage(
             flux.store.getState(),

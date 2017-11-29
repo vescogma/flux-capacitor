@@ -12,7 +12,8 @@ export type Action = Actions.ReceivePastPurchaseSkus |
   Actions.SelectPastPurchaseSort | Actions.ResetPastPurchaseRefinements |
   Actions.SelectPastPurchaseRefinement | Actions.DeselectPastPurchaseRefinement |
   Actions.ResetPastPurchasePage | Actions.UpdatePastPurchasePageSize |
-  Actions.UpdatePastPurchaseCurrentPage | Actions.ReceivePastPurchasePage;
+  Actions.UpdatePastPurchaseCurrentPage | Actions.ReceivePastPurchasePage |
+  Actions.ReceivePastPurchaseRecordCount;
 export type State = Store.PastPurchase;
 
 export enum SORT_ENUMS {
@@ -24,6 +25,7 @@ export const DEFAULTS: State = <any>{
   skus: [],
   saytPastPurchases: [],
   products: [],
+  recordCount: 0,
   query: '',
   sort: {
     items: [{
@@ -57,6 +59,7 @@ export default function updatePastPurchases(state: State = DEFAULTS, action: Act
   switch (action.type) {
     case Actions.RECEIVE_PAST_PURCHASE_SKUS: return updatePastPurchaseSkus(state, action);
     case Actions.RECEIVE_PAST_PURCHASE_PRODUCTS: return updatePastPurchaseProducts(state, action);
+    case Actions.RECEIVE_PAST_PURCHASE_RECORD_COUNT: return updatePastPurchaseRecordCount(state, action);
     case Actions.RECEIVE_SAYT_PAST_PURCHASES: return updateSaytPastPurchases(state, action);
     case Actions.UPDATE_PAST_PURCHASE_QUERY : return updatePastPurchaseQuery(state, action);
     case Actions.SELECT_PAST_PURCHASE_SORT: return updatePastPurchaseSortSelected(state, action);
@@ -84,6 +87,12 @@ export const updatePastPurchaseProducts = (state: State, { payload }: Actions.Re
   ({
     ...state,
     products: payload,
+  });
+
+export const updatePastPurchaseRecordCount = (state: State, { payload }: Actions.ReceivePastPurchaseRecordCount) =>
+  ({
+    ...state,
+    recordCount: payload
   });
 
 export const updateSaytPastPurchases = (state: State, { payload }: Actions.ReceiveSaytPastPurchases) =>
