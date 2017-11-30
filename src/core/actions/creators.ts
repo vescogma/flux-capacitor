@@ -631,7 +631,7 @@ namespace ActionCreators {
   }
 
   // tslint:disable-next-line max-line-length
-  export function receivePastPurchaseRecordCount (count: number): Actions.ReceivePastPurchaseRecordCount {
+  export function receivePastPurchaseRecordCount(count: number): Actions.ReceivePastPurchaseRecordCount {
     return createAction(Actions.RECEIVE_PAST_PURCHASE_RECORD_COUNT, count);
   }
 

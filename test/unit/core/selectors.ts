@@ -298,10 +298,22 @@ suite('selectors', ({ expect, stub }) => {
       expect(productSelector).to.be.calledWith(state);
     });
 
+    it('should find past purchase product product with given id', () => {
+      const products = [{ id: '3' }, { id: '4' }, { id: '7' }, { id: '2' }];
+      const state: any = { data: { present: { products } } };
+      const recommendations = stub(Selectors, 'pastPurchaseProducts').returns(products);
+      stub(Selectors, 'autocompleteProducts').returns([{ id: 'asdfasdf' }]);
+      stub(Selectors, 'products').returns([{ id: 'fdfdf' }]);
+
+      expect(Selectors.findProduct(state, '7')).to.eql(products[2]);
+      expect(recommendations).to.be.calledWith(state);
+    });
+
     it('should find recommendations product with given id', () => {
       const products = [{ id: '3' }, { id: '4' }, { id: '7' }, { id: '2' }];
       const state: any = { data: { present: { products } } };
       const recommendations = stub(Selectors, 'recommendationsProducts').returns(products);
+      stub(Selectors, 'pastPurchaseProducts').returns([{ id: 'past' }]);
       stub(Selectors, 'autocompleteProducts').returns([{ id: 'asdfasdf' }]);
       stub(Selectors, 'products').returns([{ id: 'fdfdf' }]);
 
@@ -558,7 +570,8 @@ suite('selectors', ({ expect, stub }) => {
       selected: 1,
       items: ['a', 'b', 'c'],
     };
-    const products = [1, 2, 3];
+    const productData = [1,2,3];
+    const products = productData.map((data) => ({ data }));
     const pastPurchases = { skus, saytPastPurchases, products, query, navigations, page, sort };
     const state: any = { data: { present: { pastPurchases } } };
 
@@ -576,7 +589,7 @@ suite('selectors', ({ expect, stub }) => {
 
     describe('pastPurchaseProducts()', () => {
       it('should return pastPurchaseProducts', () => {
-        expect(Selectors.pastPurchaseProducts(state)).to.eql(products);
+        expect(Selectors.pastPurchaseProducts(state)).to.eql(productData);
       });
     });
 

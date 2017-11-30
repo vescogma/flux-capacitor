@@ -122,6 +122,7 @@ namespace Selectors {
     const match = ({ id }) => id === productId;
     return Selectors.autocompleteProducts(state).find(match) ||
       Selectors.products(state).find(match) ||
+      Selectors.pastPurchaseProducts(state).find(match) ||
       Selectors.recommendationsProducts(state).find(match);
   };
 
@@ -334,7 +335,7 @@ namespace Selectors {
    * Returns the past purchase product data
    */
   export const pastPurchaseProducts = (state: Store.State) =>
-    state.data.present.pastPurchases.products;
+    Search.extractData(state.data.present.pastPurchases.products);
 
   /**
    * Returns the past purchase record count
