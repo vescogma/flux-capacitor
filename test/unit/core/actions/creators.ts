@@ -653,6 +653,13 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         });
       });
     });
+    describe('updateSecuredPayload', () => {
+      it('should return an UPDATE_SECURED_PAYLOAD action', () => {
+        const payload: any = { a: 'b' };
+
+        expectAction(ActionCreators.updateSecuredPayload(payload), Actions.UPDATE_SECURED_PAYLOAD, payload);
+      });
+    });
   });
 
   describe('response action creators', () => {

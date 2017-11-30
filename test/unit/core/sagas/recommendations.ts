@@ -163,6 +163,40 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         expect(task.next({ json: () => jsonResult }).value).to.eql(jsonResult);
         expect(task.next(ret).value).to.eql(ret);
       });
+
+      it('should fetch skus using secured payload from cookie', () => {
+        const securedPayload = 'secured';
+        const body = 'asdf';
+        const customerId = 'id';
+        const endpoint = 'end';
+        const query = 'query';
+        const cookie = 'cookie';
+        const parser = spy(() => securedPayload);
+        const securedCookie = { parser, cookie };
+        const secure = stub(ConfigAdapter, 'extractSecuredPayload').returns(securedCookie);
+        const buildBody = stub(RecommendationsAdapter, 'buildBody').returns(body);
+        const fetch = stub(utils, 'fetch');
+
+        const task = Tasks.fetchSkus({ customerId }, endpoint, query);
+
+        // tslint:disable-next-line max-line-length
+        expect(task.next().value).to.eql(effects.call(fetch, `https://${customerId}.groupbycloud.com/orders/v1/public/skus/${endpoint}`, body));
+        expect(buildBody).to.be.calledWithExactly({ securedPayload, query });
+        task.next({ json: () => 'test' });
+        task.next();
+      });
+
+      it('should not fetch skus if no secured payload', () => {
+        const securedPayload = null;
+        const body = 'asdf';
+        const customerId = 'id';
+        const secure = stub(ConfigAdapter, 'extractSecuredPayload').returns(securedPayload);
+
+        const task = Tasks.fetchSkus({ customerId }, 'endpoint');
+
+        // tslint:disable-next-line max-line-length
+        expect(task.next().value).to.eql([]);
+      });
     });
 
     describe('fetchProductsFromSkus()', () => {
