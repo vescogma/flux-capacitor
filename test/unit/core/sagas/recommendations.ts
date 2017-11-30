@@ -272,11 +272,13 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const receivePastPurchaseProducts = spy(() => 1);
         const receivePastPurchaseRefinements = spy(() => 2);
         const receivePastPurchasePage = spy(() => 3);
+        const receivePastPurchaseRecordCount = spy(() => 4);
         const saveState = spy();
         const actions = {
           receivePastPurchasePage,
           receivePastPurchaseProducts,
           receivePastPurchaseRefinements,
+          receivePastPurchaseRecordCount,
         };
         const flux: any = { actions, saveState, store: { getState }};
         const query = 'past';
@@ -302,6 +304,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         expect(task.next(request).value).to.eql(effects.call(<any>Tasks.fetchProductsFromSkus, flux, results, request));
         expect(task.next(productData).value).to.eql(effects.put(<any>[
           receivePastPurchaseProducts(),
+          receivePastPurchaseRecordCount(),
           receivePastPurchaseRefinements(),
           receivePastPurchasePage()
         ]));
