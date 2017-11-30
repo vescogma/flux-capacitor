@@ -187,7 +187,22 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
       });
 
       it('should not fetch skus if no secured payload', () => {
-        const securedPayload = null;
+        const securedPayload = {
+          parser: () => null,
+          cookie: 'f'
+        };
+        const body = 'asdf';
+        const customerId = 'id';
+        const secure = stub(ConfigAdapter, 'extractSecuredPayload').returns(securedPayload);
+
+        const task = Tasks.fetchSkus({ customerId }, 'endpoint');
+
+        // tslint:disable-next-line max-line-length
+        expect(task.next().value).to.eql([]);
+      });
+
+      it('should not fetch skus if secured payload empty', () => {
+        const securedPayload = {};
         const body = 'asdf';
         const customerId = 'id';
         const secure = stub(ConfigAdapter, 'extractSecuredPayload').returns(securedPayload);
