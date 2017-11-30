@@ -2,28 +2,46 @@ import Actions from '../actions';
 import Configuration from '../configuration';
 import Store from '../store';
 
-export type Action = Actions.Action<string, any>;
+export type Action = Actions.UpdateLocation | Actions.UpdateSecuredPayload  |
+  Actions.Action<string, any>;
 export type State = Store.Session;
 
 // tslint:disable-next-line max-line-length
-export default function updateSession(state: State = {}, { type, payload, meta = <Actions.Metadata>{} }: Action): State {
-  switch (type) {
-    case Actions.UPDATE_LOCATION: return updateLocation(state, payload);
+export default function updateSession(state: State = {}, action: Action): State {
+  switch (action.type) {
+    case Actions.UPDATE_LOCATION: return updateLocation(state, action.payload);
+    case Actions.UPDATE_SECURED_PAYLOAD: return updateSecuredPayload(state, action.payload);
     default: {
-      if ('recallId' in meta) {
-        state = updateRecallId(state, meta);
+      if (action.meta) {
+        if ('recallId' in action.meta) {
+          state = updateRecallId(state, action.meta);
+        }
+        if ('searchId' in action.meta) {
+          state = updateSearchId(state, action.meta);
+        }
+        if ('tag' in action.meta) {
+          state = updateOrigin(state, action.meta);
+        }
       }
-      if ('searchId' in meta) {
-        state = updateSearchId(state, meta);
-      }
-      if ('tag' in meta) {
-        state = updateOrigin(state, meta);
-      }
-
       return state;
     }
   }
 }
+
+export const updateSecuredPayload = (state, securedPayload: Configuration.Recommendations.SecuredPayload) =>
+  ({
+    ...state,
+    config: {
+      ...state.config,
+      recommendations: {
+        ...state.config.recommendations,
+        pastPurchases: {
+          ...state.config.recommendations.pastPurchases,
+          securedPayload
+        }
+      }
+    }
+  });
 
 export const updateLocation = (state: State, location: Store.Geolocation) =>
   ({ ...state, location });

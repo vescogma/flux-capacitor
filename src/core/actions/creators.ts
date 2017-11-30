@@ -1,5 +1,6 @@
 import { Results } from 'groupby-api';
 import Actions from '.';
+import Configuration from '../configuration';
 import SearchAdapter from '../adapters/search';
 import Selectors from '../selectors';
 import Store from '../store';
@@ -410,6 +411,10 @@ namespace ActionCreators {
       }, {
         payload: validators.isValidBias
       });
+  }
+
+  export function updateSecuredPayload(payload: Configuration.Recommendations.SecuredPayload) {
+    return createAction(Actions.UPDATE_SECURED_PAYLOAD, payload);
   }
 
   // response action creators

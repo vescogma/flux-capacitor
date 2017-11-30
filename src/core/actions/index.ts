@@ -62,6 +62,8 @@ namespace Actions {
   export type AddRefinement = Action<typeof ADD_REFINEMENT, Actions.Payload.Navigation.AddRefinement>;
   export const UPDATE_BIASING = 'UPDATE_BIASING';
   export type UpdateBiasing = Action<typeof UPDATE_BIASING, Actions.Payload.Personalization.Biasing>;
+  export const UPDATE_SECURED_PAYLOAD = 'UPDATE_SECURED_PAYLOAD';
+  export type UpdateSecuredPayload = Action<typeof UPDATE_SECURED_PAYLOAD, Configuration.Recommendations.SecuredPayload>;
 
   // batch actions
   export type SwitchRefinement = [Actions.ResetPage, Actions.ResetPage, Actions.ResetRefinements, Actions.ResetPage, Actions.AddRefinement];
