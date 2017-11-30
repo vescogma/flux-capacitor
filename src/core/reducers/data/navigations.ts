@@ -81,6 +81,12 @@ export const selectRefinement = (state: State, { navigationId, index: refinement
 };
 
 // tslint:disable-next-line max-line-length
+// currently only used for pastPurchases hence not used in this reducer yet
+export const resetAndSelectRefinement = (state: State, payload: Actions.Payload.Navigation.Refinement) => {
+  return selectRefinement(resetRefinements(state, true), payload);
+};
+
+// tslint:disable-next-line max-line-length
 export const deselectRefinement = (state: State, { navigationId, index: refinementIndex }: Actions.Payload.Navigation.Refinement) => {
   if (navigationId && refinementIndex != null) {
     return {

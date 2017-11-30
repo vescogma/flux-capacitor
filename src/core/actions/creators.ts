@@ -677,6 +677,17 @@ namespace ActionCreators {
     ];
   }
 
+  // todo doc
+  // tslint:disable-next-line max-line-length
+  export function resetAndSelectPastPurchaseRefinement(navigationId: string, index: number): Actions.PastPurchaseResetAndSelect {
+    return [
+      ActionCreators.resetPastPurchasePage(),
+      createAction(Actions.RESET_AND_SELECT_PAST_PURCHASE_REFINEMENT, { navigationId, index }, {
+        payload: validators.isPastPurchaseRefinementDeselectedByIndex
+      })
+    ];
+  }
+
   /**
    * In the past purcahse page, removes a given refinement based on navigationId and index.
    * @param  {string}                                 navigationId - The navigationId for

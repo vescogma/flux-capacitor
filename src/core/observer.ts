@@ -157,21 +157,25 @@ namespace Observer {
             }),
             navigations: ((emitIndexUpdated: Observer) =>
               (oldState: Store.Indexed<Store.Navigation>,
-               newState: Store.Indexed<Store.Navigation>, path: string) => {
-                 if (oldState.allIds !== newState.allIds) {
-                   emitIndexUpdated(oldState, newState, path);
-                 } else {
-                   newState.allIds.forEach((id) => {
-                     const oldNavigation = oldState.byId[id];
-                     const newNavigation = newState.byId[id];
-                     if (oldNavigation.selected !== newNavigation.selected
-                         || oldNavigation.refinements !== newNavigation.refinements) {
-                       // tslint:disable-next-line max-line-length
-                       emit(Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED)(oldNavigation, newNavigation, `${path}.byId.${id}`);
-                     }
-                   });
-                 }
-               })(emit(Events.PAST_PURCHASE_REFINEMENTS_UPDATED)),
+                newState: Store.Indexed<Store.Navigation>, path: string) => {
+                if (oldState.allIds !== newState.allIds) {
+                  emitIndexUpdated(oldState, newState, path);
+                } else {
+                  // for loop instead of foreach to allow early break/return
+                  // we need to break to allow resetAndSelectRefinement
+                  for (let i = 0; i < newState.allIds.length; i++) {
+                    const id = newState.allIds[i];
+                    const oldNavigation = oldState.byId[id];
+                    const newNavigation = newState.byId[id];
+                    if (oldNavigation.selected !== newNavigation.selected
+                      || oldNavigation.refinements !== newNavigation.refinements) {
+                      // tslint:disable-next-line max-line-length
+                      emit(Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED)(oldNavigation, newNavigation, `${path}.byId.${id}`);
+                      return;
+                    }
+                  }
+                }
+              })(emit(Events.PAST_PURCHASE_REFINEMENTS_UPDATED)),
             sort: emit(Events.PAST_PURCHASE_SORT_UPDATED),
           },
 
