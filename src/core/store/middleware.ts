@@ -41,6 +41,16 @@ export const SEARCH_CHANGE_ACTIONS = [
   Actions.UPDATE_CURRENT_PAGE,
 ];
 
+export const PAST_PURCHASES_SEARCH_CHANGE_ACTIONS = [
+  Actions.RESET_PAST_PURCHASE_REFINEMENTS,
+  Actions.SELECT_PAST_PURCHASE_REFINEMENT,
+  Actions.RESET_AND_SELECT_PAST_PURCHASE_REFINEMENT,
+  Actions.DESELECT_PAST_PURCHASE_REFINEMENT,
+  Actions.SELECT_PAST_PURCHASE_SORT,
+  Actions.UPDATE_PAST_PURCHASE_CURRENT_PAGE,
+  Actions.UPDATE_PAST_PURCHASE_PAGE_SIZE,
+];
+
 export const PERSONALIZATION_CHANGE_ACTIONS = [
   Actions.SELECT_REFINEMENT,
   Actions.ADD_REFINEMENT,
@@ -81,7 +91,7 @@ export namespace Middleware {
         }
       }) : next(action);
   }
-  
+
   export function checkPastPurchaseSkus(flux: FluxCapacitor): ReduxMiddleware {
     return (store) => (next) => (action) => {
       if (!PAST_PURCHASE_SKU_ACTIONS.includes(action.type) ||
@@ -92,15 +102,24 @@ export namespace Middleware {
     };
   }
 
-  export function saveStateAnalyzer() {
+  export function insertAction(triggerActions: string[], extraAction: Actions.Action) {
     return (next) => (batchAction) => {
       const actions = utils.rayify(batchAction);
-      if (actions.some((action) => HISTORY_UPDATE_ACTIONS.includes(action.type))) {
-        return next([...actions, { type: Actions.SAVE_STATE }]);
+      if (actions.some((action) => triggerActions.includes(action.type))) {
+        return next([...actions, extraAction]);
       } else {
         return next(actions);
       }
     };
+  }
+
+  // TODO RENAMETHIS
+  export function fetchPastPurchaseProductsAnalyzer() {
+    return insertAction(PAST_PURCHASES_SEARCH_CHANGE_ACTIONS, ActionCreators.fetchPastPurchaseProducts());
+  }
+
+  export function saveStateAnalyzer() {
+    return insertAction(HISTORY_UPDATE_ACTIONS, { type: Actions.SAVE_STATE });
   }
 
   export function thunkEvaluator(store: Store<any>) {
@@ -153,7 +172,7 @@ export namespace Middleware {
     const composeEnhancers = global && global['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
 
     return composeEnhancers(
-      applyMiddleware(thunkEvaluator, saveStateAnalyzer),
+      applyMiddleware(thunkEvaluator, saveStateAnalyzer, fetchPastPurchaseProductsAnalyzer),
       reduxBatch,
       applyMiddleware(...middleware),
       reduxBatch,
