@@ -17,7 +17,8 @@ export const HISTORY_UPDATE_ACTIONS = [
   Actions.RECEIVE_RECOMMENDATIONS_PRODUCTS,
   Actions.RECEIVE_NAVIGATION_SORT,
   Actions.RECEIVE_COLLECTION_COUNT,
-  Actions.RECEIVE_MORE_REFINEMENTS
+  Actions.RECEIVE_MORE_REFINEMENTS,
+  Actions.RECEIVE_PAST_PURCHASE_PRODUCTS,
 ];
 
 export const RECALL_CHANGE_ACTIONS = [
@@ -98,7 +99,9 @@ export namespace Middleware {
           Selectors.pastPurchases(flux.store.getState()).length > 0) {
         return next(action);
       }
-      flux.once(Events.PAST_PURCHASE_SKUS_UPDATED, () => store.dispatch(action));
+      if (ConfigurationAdapter.extractSecuredPayload(Selectors.config(flux.store.getState()))) {
+        flux.once(Events.PAST_PURCHASE_SKUS_UPDATED, () => store.dispatch(action));
+      }
     };
   }
 
