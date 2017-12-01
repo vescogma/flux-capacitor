@@ -388,6 +388,14 @@ suite('Configuration Adapter', ({ expect, stub }) => {
       // tslint:disable-next-line max-line-length
       expect(Adapter.extractSecuredPayload(<any>{ recommendations: { pastPurchases: { securedPayload } } })).to.eql(securedPayload);
     });
+
+    it('should handle securedPayload being a function', () => {
+      const payload = { a: 1 };
+      const securedPayload = stub().returns(payload);
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.extractSecuredPayload(<any>{ recommendations: { pastPurchases: { securedPayload } } })).to.eql(payload);
+      expect(securedPayload).to.be.calledOnce;
+    });
   });
 
   describe('extractProductCount', () => {

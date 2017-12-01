@@ -157,8 +157,10 @@ namespace Adapter {
   export const extractLocation = (config: Configuration) =>
     config.recommendations.location;
 
-  export const extractSecuredPayload = (config: Configuration) =>
-    config.recommendations.pastPurchases.securedPayload;
+  export const extractSecuredPayload = (config: Configuration) => {
+    const payload = config.recommendations.pastPurchases.securedPayload;
+    return typeof payload === 'function' ? payload() : payload;
+  };
 
   export const extractProductCount = (config: Configuration) =>
     config.recommendations.pastPurchases.productCount;

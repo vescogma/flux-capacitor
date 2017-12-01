@@ -57,8 +57,7 @@ export namespace Tasks {
   }
 
   export function* fetchSkus(config: Configuration, endpoint: string, query?: string) {
-    const token = ConfigAdapter.extractSecuredPayload(config);
-    const securedPayload = token['parser'] && token['cookie'] ? token['parser'](token['cookie']) : token;
+    const securedPayload = ConfigAdapter.extractSecuredPayload(config);
     if (securedPayload && Object.keys(securedPayload).length !== 0) {
       const url = `https://${config.customerId}.groupbycloud.com/orders/v1/public/skus/${endpoint}`;
       const response = yield effects.call(utils.fetch, url, Adapter.buildBody({
