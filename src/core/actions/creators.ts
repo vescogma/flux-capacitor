@@ -426,6 +426,10 @@ namespace ActionCreators {
   export function receiveInfiniteScroll({ isFetchingForward, isFetchingBackward }): Actions.ReceiveInfiniteScroll {
     return createAction(Actions.RECEIVE_INFINITE_SCROLL, { isFetchingForward, isFetchingBackward });
   }
+  
+  export function infiniteScrollRequestState(fetchObj: Actions.Payload.InfiniteScroll): Actions.ReceiveInfiniteScroll {
+    return createAction(Actions.RECEIVE_INFINITE_SCROLL, fetchObj);
+  }
 
   // response action creators
   /**

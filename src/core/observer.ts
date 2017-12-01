@@ -168,6 +168,8 @@ namespace Observer {
             sort: emit(Events.PAST_PURCHASE_SORT_UPDATED),
           },
 
+          infiniteScroll: emit(Events.INFINITE_SCROLL_UPDATED),
+
           recordCount: emit(Events.RECORD_COUNT_UPDATED),
 
           redirect: emit(Events.REDIRECT),

@@ -187,7 +187,7 @@ namespace Actions {
   export type SelectPastPurchaseSort = Action<typeof SELECT_PAST_PURCHASE_SORT, number>;
   export const RECEIVE_NAVIGATION_SORT = 'RECEIVE_NAVIGATION_SORT';
   export const RECEIVE_INFINITE_SCROLL = 'RECEIVE_INFINITE_SCROLL';
-  export type ReceiveInfiniteScroll = Action<typeof RECEIVE_INFINITE_SCROLL, Store.InfiniteScroll>;
+  export type ReceiveInfiniteScroll = Action<typeof RECEIVE_INFINITE_SCROLL, Payload.InfiniteScroll>;
 
   // ui
   export const CREATE_COMPONENT_STATE = 'CREATE_COMPONENT_STATE';
@@ -293,6 +293,11 @@ namespace Actions {
       from: number;
       to: number;
       current?: number;
+    }
+
+    export interface InfiniteScroll {
+      isFetchingForward?: boolean;
+      isFetchingBackward?: boolean;
     }
   }
 }

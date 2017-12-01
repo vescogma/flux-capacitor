@@ -9,7 +9,7 @@ export const DEFAULTS: State = {
   isFetchingBackward: false,
 };
 
-export default function updateInfiniteScroll(state: State = null, action: Action): State {
+export default function updateInfiniteScroll(state: State = DEFAULTS, action: Action): State {
   switch (action.type) {
     case Actions.RECEIVE_INFINITE_SCROLL: return updateFetching(state, action.payload);
     default: return state;
