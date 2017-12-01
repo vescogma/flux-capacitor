@@ -173,7 +173,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const task = Tasks.fetchSkus({ customerId }, 'endpoint');
 
         // tslint:disable-next-line max-line-length
-        expect(task.next().value).to.eql([]);
+        expect(task.next().value).to.eql({ result: null });
       });
     });
 
@@ -237,6 +237,21 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         task.next();
         expect(receivePastPurchaseSkus).to.be.calledWith(resultArray);
         expect(extractProductCount).to.be.calledWith(config);
+      });
+
+      it('should not yield anything if fetchSkus returns nothing', () => {
+        const productCount = 5;
+        const data = { b: 2 };
+        const receivePastPurchaseSkus = spy(() => data);
+        const flux: any = { actions: { receivePastPurchaseSkus } };
+        const result = { result: null };
+        const extractProductCount = stub(ConfigAdapter, 'extractProductCount').returns(productCount);
+
+        const task = Tasks.fetchPastPurchases(flux, <any>{});
+
+        task.next();
+        task.next(config);
+        expect(task.next(result).value).to.be.undefined;
       });
 
       it('should handle request failure', () => {

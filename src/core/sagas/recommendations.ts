@@ -66,7 +66,7 @@ export namespace Tasks {
       }));
       return yield response.json();
     }
-    return [];
+    return { result: null };
   }
 
   // tslint:disable-next-line max-line-length
