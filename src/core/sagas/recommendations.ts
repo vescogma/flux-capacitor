@@ -89,7 +89,9 @@ export namespace Tasks {
       const productCount = ConfigAdapter.extractProductCount(config);
       if (productCount > 0) {
         const { result } = yield effects.call(fetchSkus, config, 'popular');
-        yield effects.put(flux.actions.receivePastPurchaseSkus(result));
+        if (result) {
+          yield effects.put(flux.actions.receivePastPurchaseSkus(result));
+        }
       } else {
         yield effects.put(flux.actions.receivePastPurchaseSkus([]));
       }
