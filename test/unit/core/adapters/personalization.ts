@@ -384,6 +384,24 @@ suite('Personalization Adapter', ({ expect, stub }) => {
       expect(ret).to.eql(newArr);
     });
 
+    it('shoud remove last element of a specific field if too many ', () => {
+      const newArr = [
+        { field: 'a', value: 1 },
+        { field: 'b', value: 2 },
+        { field: 'c', value: 3 },
+      ];
+
+      const ret = Adapter.pruneBiases(arr, 'b', 2, <any>{
+        attributeMaxBiases: 1,
+        attributes: {
+          b: {
+          }
+        }
+      });
+
+      expect(ret).to.eql(newArr);
+    });
+
     it('should remove last bias if too many total biases', () => {
       const newArr = [
         { field: 'a', value: 1 },
