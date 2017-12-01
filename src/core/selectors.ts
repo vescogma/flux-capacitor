@@ -71,6 +71,12 @@ namespace Selectors {
     state.data.present.page;
 
   /**
+   * Returns the current infinite scroll object.
+   */
+  export const infiniteScroll = (state: Store.State) =>
+    state.data.present.infiniteScroll;
+
+  /**
    * Returns the page sizes object.
    */
   export const pageSizes = (state: Store.State) =>
