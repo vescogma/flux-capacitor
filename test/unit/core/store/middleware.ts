@@ -193,19 +193,45 @@ suite('Middleware', ({ expect, spy, stub }) => {
     it('should call flux.on if past purchases not present', () => {
       const action = { type: PAST_PURCHASE_SKU_ACTIONS[0] };
       const state = { a: 'b' };
+      const conf = { c: 'd' };
+      const payload = { e: 'f' };
       const getState = stub().returns(state);
       const once = spy();
       const dispatch = spy();
       const pastPurchases = stub(Selectors, 'pastPurchases').returns([]);
+      const config = stub(Selectors, 'config').returns(conf);
+      const extract = stub(ConfigurationAdapter, 'extractSecuredPayload').returns(payload);
 
       Middleware.checkPastPurchaseSkus(<any>{ store: { getState }, once })(
           <any>{ dispatch })(next)(action);
       once.getCall(0).args[1]();
 
-      expect(getState).to.be.calledOnce;
+      expect(getState).to.be.calledTwice;
       expect(pastPurchases).to.be.calledWithExactly(state);
       expect(once).to.be.calledWith(Events.PAST_PURCHASE_SKUS_UPDATED);
       expect(dispatch).to.be.calledWithExactly(action);
+      expect(config).to.be.calledWithExactly(state);
+      expect(extract).to.be.calledWithExactly(conf);
+    });
+
+    it('should do nothing if past purchases not present and no secured payload', () => {
+      const action = { type: PAST_PURCHASE_SKU_ACTIONS[0] };
+      const state = { a: 'b' };
+      const conf = { c: 'd' };
+      const payload = null;
+      const getState = stub().returns(state);
+      const once = spy();
+      const pastPurchases = stub(Selectors, 'pastPurchases').returns([]);
+      const config = stub(Selectors, 'config').returns(conf);
+      const extract = stub(ConfigurationAdapter, 'extractSecuredPayload').returns(payload);
+
+      Middleware.checkPastPurchaseSkus(<any>{ store: { getState }, once })(
+          <any>{ })(next)(action);
+
+      expect(getState).to.be.calledTwice;
+      expect(once).to.not.be.called;
+      expect(config).to.be.calledWithExactly(state);
+      expect(extract).to.be.calledWithExactly(conf);
     });
   });
 

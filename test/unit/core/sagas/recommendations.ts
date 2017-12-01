@@ -175,18 +175,6 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         // tslint:disable-next-line max-line-length
         expect(task.next().value).to.eql([]);
       });
-
-      it('should not fetch skus if secured payload empty', () => {
-        const securedPayload = {};
-        const body = 'asdf';
-        const customerId = 'id';
-        const secure = stub(ConfigAdapter, 'extractSecuredPayload').returns(securedPayload);
-
-        const task = Tasks.fetchSkus({ customerId }, 'endpoint');
-
-        // tslint:disable-next-line max-line-length
-        expect(task.next().value).to.eql([]);
-      });
     });
 
     describe('fetchProductsFromSkus()', () => {
