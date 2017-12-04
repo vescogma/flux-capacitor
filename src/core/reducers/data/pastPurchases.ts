@@ -71,7 +71,6 @@ export default function updatePastPurchases(state: State = DEFAULTS, action: Act
     case Actions.RECEIVE_PAST_PURCHASE_REFINEMENTS: return applyNavigationReducer(state, action, navigations.receiveNavigations);
     case Actions.SELECT_PAST_PURCHASE_REFINEMENT: return applyNavigationReducer(state, action, navigations.selectRefinement);
     case Actions.DESELECT_PAST_PURCHASE_REFINEMENT: return applyNavigationReducer(state, action, navigations.deselectRefinement);
-    case Actions.RESET_AND_SELECT_PAST_PURCHASE_REFINEMENT: return applyNavigationReducer(state, action, navigations.resetAndSelectRefinement);
     case Actions.RESET_PAST_PURCHASE_REFINEMENTS: return applyNavigationReducer(state, action, navigations.resetRefinements);
     case Actions.RESET_PAST_PURCHASE_PAGE: return applyPageReducer(state, action, page.resetPage);
     case Actions.UPDATE_PAST_PURCHASE_CURRENT_PAGE: return applyPageReducer(state, action, page.updateCurrent);

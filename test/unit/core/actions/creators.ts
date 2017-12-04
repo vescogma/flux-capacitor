@@ -945,6 +945,16 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('receivePastPurchaseRecordCount()', () => {
+      it('should return an action', () => {
+        const recordCount = 6;
+
+        // tslint:disable-next-line max-line-length
+        expectAction(ActionCreators.receivePastPurchaseRecordCount(recordCount),
+                     Actions.RECEIVE_PAST_PURCHASE_RECORD_COUNT, recordCount);
+      });
+    });
+
     describe('receivePastPurchaseRefinements()', () => {
       it('should return an action', () => {
         const refinements: any[] = ['a', 'b', 'c'];
@@ -977,7 +987,6 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
     describe('selectPastPurchaseRefinement()', () => {
       const navigationId = 'color';
       const index = 2;
-      const obj: any = { navigationId, index };
 
       it('should return a batch action with RESET_PAST_PURCHASE_PAGE', () => {
         expectAction(ActionCreators.selectPastPurchaseRefinement(navigationId, index),
@@ -986,7 +995,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
 
       it('should return a batch action with SELECT_PAST_PURCHASE_REFINEMENT', () => {
         expectAction(ActionCreators.selectPastPurchaseRefinement(navigationId, index),
-          Actions.SELECT_PAST_PURCHASE_REFINEMENT, obj);
+          Actions.SELECT_PAST_PURCHASE_REFINEMENT, { navigationId, index });
       });
 
       it('should apply validators to SELECT_PAST_PURCHASE_REFINEMENT', () => {
@@ -994,6 +1003,28 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
           Actions.SELECT_PAST_PURCHASE_REFINEMENT, {
             payload: validators.isPastPurchaseRefinementDeselectedByIndex,
           });
+      });
+    });
+
+    describe('resetAndSelectPastPurchaseRefinement()', () => {
+      const navigationId = 'color';
+      const index = 3;
+
+      it('should return a batch action with RESET_PAST_PURCHASE_PAGE', () => {
+        expectAction(ActionCreators.resetAndSelectPastPurchaseRefinement(navigationId, index),
+                     Actions.RESET_PAST_PURCHASE_PAGE);
+      });
+
+      it('should return a batch action with RESET_AND_SELECT_PAST_PURCHASE_REFINEMENT', () => {
+        expectAction(ActionCreators.resetAndSelectPastPurchaseRefinement(navigationId, index),
+                     Actions.RESET_AND_SELECT_PAST_PURCHASE_REFINEMENT, { navigationId, index });
+      });
+
+      it('should apply validators to RESET_AND_SELECT_PAST_PURCHASE_REFINEMENT', () => {
+        expectValidators(ActionCreators.resetAndSelectPastPurchaseRefinement(navigationId, index),
+                         Actions.RESET_AND_SELECT_PAST_PURCHASE_REFINEMENT, {
+                           payload: validators.isPastPurchaseRefinementDeselectedByIndex,
+                         });
       });
     });
 

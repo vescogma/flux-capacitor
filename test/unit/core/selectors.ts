@@ -572,7 +572,9 @@ suite('selectors', ({ expect, stub }) => {
     };
     const productData = [1,2,3];
     const products = productData.map((data) => ({ data }));
-    const pastPurchases = { skus, saytPastPurchases, products, query, navigations, page, sort };
+    const recordCount = 3;
+    const pastPurchases = { skus, saytPastPurchases, products,
+                            query, navigations, page, sort, recordCount };
     const state: any = { data: { present: { pastPurchases } } };
 
     describe('pastPurchases()', () => {
@@ -590,6 +592,12 @@ suite('selectors', ({ expect, stub }) => {
     describe('pastPurchaseProducts()', () => {
       it('should return pastPurchaseProducts', () => {
         expect(Selectors.pastPurchaseProducts(state)).to.eql(productData);
+      });
+    });
+
+    describe('pastPurchaseRecordCount()', () => {
+      it('should return past purchase record count', () => {
+        expect(Selectors.pastPurchaseRecordCount(state)).to.eql(recordCount);
       });
     });
 

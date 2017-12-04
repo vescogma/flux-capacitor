@@ -45,7 +45,6 @@ export const SEARCH_CHANGE_ACTIONS = [
 export const PAST_PURCHASES_SEARCH_CHANGE_ACTIONS = [
   Actions.RESET_PAST_PURCHASE_REFINEMENTS,
   Actions.SELECT_PAST_PURCHASE_REFINEMENT,
-  Actions.RESET_AND_SELECT_PAST_PURCHASE_REFINEMENT,
   Actions.DESELECT_PAST_PURCHASE_REFINEMENT,
   Actions.SELECT_PAST_PURCHASE_SORT,
   Actions.UPDATE_PAST_PURCHASE_CURRENT_PAGE,
@@ -108,7 +107,8 @@ export namespace Middleware {
   export function insertAction(triggerActions: string[], extraAction: Actions.Action) {
     return (next) => (batchAction) => {
       const actions = utils.rayify(batchAction);
-      if (actions.some((action) => triggerActions.includes(action.type))) {
+      if (actions.some((action) => triggerActions.includes(action.type)) &&
+          !actions.some((action) => action.type === extraAction.type)) {
         return next([...actions, extraAction]);
       } else {
         return next(actions);

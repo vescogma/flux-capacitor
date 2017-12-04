@@ -694,11 +694,10 @@ namespace ActionCreators {
   // todo doc
   // tslint:disable-next-line max-line-length
   export function resetAndSelectPastPurchaseRefinement(navigationId: string, index: number): Actions.PastPurchaseResetAndSelect {
-    return [
+    return <Actions.PastPurchaseResetAndSelect>[
       ActionCreators.resetPastPurchasePage(),
-      createAction(Actions.RESET_AND_SELECT_PAST_PURCHASE_REFINEMENT, { navigationId, index }, {
-        payload: validators.isPastPurchaseRefinementDeselectedByIndex
-      })
+      ...ActionCreators.resetPastPurchaseRefinements(true),
+      ...ActionCreators.selectPastPurchaseRefinement(navigationId, index),
     ];
   }
 
