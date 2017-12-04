@@ -106,9 +106,7 @@ export namespace Tasks {
       console.log('asdklasdasdhlajsdhad', action, giraffe);
       const query = yield effects.select(Selectors.pastPurchaseQuery);
       const config: Configuration = yield effects.select(Selectors.config);
-      const pastPurchaseSkus: Store.PastPurchases.PastPurchaseProduct[] = !giraffe && query ?
-        (yield effects.call(fetchSkus, config, '_search', query)).result :
-        yield effects.select(Selectors.pastPurchases);
+      const pastPurchaseSkus: Store.PastPurchases.PastPurchaseProduct[] = yield effects.select(Selectors.pastPurchases);
       if (pastPurchaseSkus.length > 0) {
         const request = yield effects.select(Requests.pastPurchaseProducts, giraffe);
         const results = yield effects.call(fetchProductsFromSkus, flux, pastPurchaseSkus, request);
@@ -118,29 +116,25 @@ export namespace Tasks {
           selectedNavigation: results.selectedNavigation.filter((navigation) => navigation.name !== 'id'),
         });
         console.log('aaa',results);
-        let effectsArray = [
+        if (giraffe) {
+          yield effects.put(<any>[
+            flux.actions.receivePastPurchaseAllRecordCount(results.totalRecordCount),
+            flux.actions.receivePastPurchaseRefinements(navigations),
+          ]);
+        } else {
+          console.log('this should be called');
+          yield effects.put(<any>[
             flux.actions.receivePastPurchaseProducts(SearchAdapter.augmentProducts(results)),
             flux.actions.receivePastPurchasePage(SearchAdapter.extractPage(
               flux.store.getState(),
               SearchAdapter.extractRecordCount(results), {
                 pageSelector: Selectors.pastPurchasePage,
                 pageSizeSelector: Selectors.pastPurchasePageSize,
-              }))
-        ];
-        if (giraffe) {
-          effectsArray = effectsArray.concat(<any>[
-            flux.actions.receivePastPurchaseAllRecordCount(results.totalRecordCount),
-            flux.actions.receivePastPurchaseRefinements(navigations),
-          ]);
-        }
-        if (!giraffe && query && query !== '') {
-          console.log('this should be called');
-          effectsArray = effectsArray.concat(<any>[
+              })),
             flux.actions.receivePastPurchaseCurrentRecordCount(results.totalRecordCount),
             flux.actions.updatePastPurchaseDisplayQuery(query)
           ]);
         }
-        yield effects.put(<any>effectsArray);
         flux.saveState(utils.Routes.PAST_PURCHASE);
       }
     } catch (e) {
@@ -151,10 +145,13 @@ export namespace Tasks {
   export function* fetchSaytPastPurchases(flux: FluxCapacitor, { payload }: Actions.FetchSaytPastPurchases) {
     try {
       const config: Configuration = yield effects.select(Selectors.config);
-      const { result } = yield effects.call(fetchSkus, config, '_search', payload);
-      if (result.length > 0) {
+      const pastPurchaseSkus = yield effects.select(Selectors.pastPurchases);
+      if (pastPurchaseSkus.length > 0) {
         const request = yield effects.select(Requests.autocompleteProducts);
-        const results = yield effects.call(fetchProductsFromSkus, flux, result, request);
+        const results = yield effects.call(fetchProductsFromSkus, flux, pastPurchaseSkus, {
+          ...request,
+          query: payload
+        });
         yield effects.put(flux.actions.receiveSaytPastPurchases(SearchAdapter.augmentProducts(results)));
       } else {
         yield effects.put(flux.actions.receiveSaytPastPurchases([]));
