@@ -378,6 +378,8 @@ namespace Configuration {
       strength: BiasStrength;
       maxBiases: number;
     }
+  }
+  
   export interface Cart {
     loginId: string;
     sessionId: string;

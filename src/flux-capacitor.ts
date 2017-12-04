@@ -135,6 +135,10 @@ class FluxCapacitor extends EventEmitter {
       this.selectors.saytPastPurchases(this.store.getState())));
   }
 
+  createCart(sessionId: string, visitorId: string) {
+    this.store.dispatch(this.actions.createCart(sessionId, visitorId));
+  }
+
   
 
   /**
