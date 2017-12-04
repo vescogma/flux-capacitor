@@ -102,6 +102,8 @@ namespace Actions {
   export type FetchPastPurchases = Action<typeof FETCH_PAST_PURCHASES>;
   export const FETCH_PAST_PURCHASE_PRODUCTS = 'FETCH_PAST_PURCHASE_PRODUCTS';
   export type FetchPastPurchaseProducts = Action<typeof FETCH_PAST_PURCHASE_PRODUCTS, string | null>;
+  export const FETCH_PAST_PURCHASE_RENAME_THIS = 'FETCH_PAST_PURCHASE_RENAME_THIS';
+  export type FetchPastPurchaseRENAMETHIS = Action<typeof FETCH_PAST_PURCHASE_RENAME_THIS>;
   export const FETCH_SAYT_PAST_PURCHASES = 'FETCH_SAYT_PAST_PURCHASES';
   export type FetchSaytPastPurchases = Action<typeof FETCH_SAYT_PAST_PURCHASES, string>;
 
@@ -144,8 +146,10 @@ namespace Actions {
   export type ReceiveSaytPastPurchases = Action<typeof RECEIVE_SAYT_PAST_PURCHASES, Store.ProductWithMetadata[]>;
   export const RECEIVE_PAST_PURCHASE_PRODUCTS = 'RECEIVE_PAST_PURCHASE_PRODUCTS';
   export type ReceivePastPurchaseProducts = Action<typeof RECEIVE_PAST_PURCHASE_PRODUCTS, Store.ProductWithMetadata[]>;
-  export const RECEIVE_PAST_PURCHASE_RECORD_COUNT = 'RECEIVE_PAST_PURCHASE_RECORD_COUNT';
-  export type ReceivePastPurchaseRecordCount = Action<typeof RECEIVE_PAST_PURCHASE_RECORD_COUNT, number>;
+  export const RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT = 'RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT';
+  export type ReceivePastPurchaseCurrentRecordCount = Action<typeof RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT, number>;
+  export const RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT = 'RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT';
+  export type ReceivePastPurchaseAllRecordCount = Action<typeof RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT, number>;
   export const RECEIVE_PAST_PURCHASE_REFINEMENTS = 'RECEIVE_PAST_PURCHASE_REFINEMENTS';
   export type ReceivePastPurchaseRefinements = Action<typeof RECEIVE_PAST_PURCHASE_REFINEMENTS, Store.Navigation[]>;
   export const RESET_PAST_PURCHASE_REFINEMENTS = 'RESET_PAST_PURCHASE_REFINEMENTS';
@@ -175,6 +179,8 @@ namespace Actions {
   export type UpdatePastPurchaseCurrentPage = Action<typeof UPDATE_PAST_PURCHASE_CURRENT_PAGE, number>;
   export const UPDATE_PAST_PURCHASE_QUERY = 'UPDATE_PAST_PURCHASE_QUERY';
   export type UpdatePastPurchaseQuery = Action<typeof UPDATE_PAST_PURCHASE_QUERY, string>;
+  export const UPDATE_PAST_PURCHASE_DISPLAY_QUERY = 'UPDATE_PAST_PURCHASE_DISPLAY_QUERY';
+  export type UpdatePastPurchaseDisplayQuery = Action<typeof UPDATE_PAST_PURCHASE_DISPLAY_QUERY, string>;
   export const SELECT_PAST_PURCHASE_SORT = 'SELECT_PAST_PURCHASE_SORT';
   export type SelectPastPurchaseSort = Action<typeof SELECT_PAST_PURCHASE_SORT, number>;
   export const RECEIVE_NAVIGATION_SORT = 'RECEIVE_NAVIGATION_SORT';

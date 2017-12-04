@@ -151,6 +151,7 @@ namespace Observer {
             products: emit(Events.PAST_PURCHASE_PRODUCTS_UPDATED),
             saytPastPurchases: emit(Events.SAYT_PAST_PURCHASES_UPDATED),
             query: emit(Events.PAST_PURCHASE_QUERY_UPDATED),
+            displayQuery: emit(Events.PAST_PURCHASE_QUERY_UPDATED),
             page: Object.assign(emit(Events.PAST_PURCHASE_PAGE_UPDATED), {
               current: emit(Events.PAST_PURCHASE_CURRENT_PAGE_UPDATED),
               sizes: emit(Events.PAST_PURCHASE_PAGE_SIZE_UPDATED),
@@ -159,10 +160,12 @@ namespace Observer {
               (oldState: Store.Indexed<Store.Navigation>,
                 newState: Store.Indexed<Store.Navigation>, path: string) => {
                 if (oldState.allIds !== newState.allIds) {
+                  // todo don't repeat
                   emitIndexUpdated(oldState, newState, path);
                 } else {
                   // for loop instead of foreach to allow early break/return
                   // we need to break to allow resetAndSelectRefinement
+                  emitIndexUpdated(oldState, newState, path);
                   for (let i = 0; i < newState.allIds.length; i++) {
                     const id = newState.allIds[i];
                     const oldNavigation = oldState.byId[id];

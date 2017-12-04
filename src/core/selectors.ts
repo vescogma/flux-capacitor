@@ -340,14 +340,23 @@ namespace Selectors {
   /**
    * Returns the past purchase record count
    */
-  export const pastPurchaseRecordCount = (state: Store.State) =>
-    state.data.present.pastPurchases.recordCount;
+  export const pastPurchaseAllRecordCount = (state: Store.State) =>
+    state.data.present.pastPurchases.allRecordCount;
+
+  export const pastPurchaseCurrentRecordCount = (state: Store.State) =>
+    state.data.present.pastPurchases.currentRecordCount;
 
   /**
    * Returns the past purchase query string
    */
   export const pastPurchaseQuery = (state: Store.State) =>
     state.data.present.pastPurchases.query;
+
+  /**
+   * Returns the past purchase query string
+   */
+  export const pastPurchaseDisplayQuery = (state: Store.State) =>
+    state.data.present.pastPurchases.displayQuery;
 
   /**
    * Returns the past purchase navigation object for the given navigationId.

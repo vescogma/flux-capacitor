@@ -244,9 +244,11 @@ namespace Store {
       skus: PastPurchases.PastPurchaseProduct[];
       saytPastPurchases: ProductWithMetadata[];
       products: ProductWithMetadata[];
-      recordCount: number;
+      allRecordCount: number;
+      currentRecordCount: number;
       navigations: Indexed<Store.Navigation>;
       query: string;
+      displayQuery: string;
       sort?: SelectableList<PastPurchases.PastPurchaseSort>;
       page: Page;
     }

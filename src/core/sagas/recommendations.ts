@@ -91,6 +91,7 @@ export namespace Tasks {
         const { result } = yield effects.call(fetchSkus, config, 'popular');
         if (result) {
           yield effects.put(flux.actions.receivePastPurchaseSkus(result));
+          yield effects.put(flux.actions.fetchPastPurchaseRENAMETHIS());
         }
       } else {
         yield effects.put(flux.actions.receivePastPurchaseSkus([]));
@@ -100,32 +101,46 @@ export namespace Tasks {
     }
   }
 
-  export function* fetchPastPurchaseProducts(flux: FluxCapacitor, action: Actions.FetchPastPurchaseProducts) {
+  export function* fetchPastPurchaseProducts(flux: FluxCapacitor, action: Actions.FetchPastPurchaseProducts, giraffe: boolean = false) {
     try {
+      console.log('asdklasdasdhlajsdhad', action, giraffe);
       const query = yield effects.select(Selectors.pastPurchaseQuery);
       const config: Configuration = yield effects.select(Selectors.config);
-      const pastPurchaseSkus: Store.PastPurchases.PastPurchaseProduct[] = query ?
+      const pastPurchaseSkus: Store.PastPurchases.PastPurchaseProduct[] = !giraffe && query ?
         (yield effects.call(fetchSkus, config, '_search', query)).result :
         yield effects.select(Selectors.pastPurchases);
       if (pastPurchaseSkus.length > 0) {
-        const request = yield effects.select(Requests.pastPurchaseProducts);
+        const request = yield effects.select(Requests.pastPurchaseProducts, giraffe);
         const results = yield effects.call(fetchProductsFromSkus, flux, pastPurchaseSkus, request);
         const navigations = SearchAdapter.combineNavigations({
           ...results,
           availableNavigation: Adapter.pastPurchaseNavigations(config, results.availableNavigation),
           selectedNavigation: results.selectedNavigation.filter((navigation) => navigation.name !== 'id'),
         });
-        yield effects.put(<any>[
-          flux.actions.receivePastPurchaseProducts(SearchAdapter.augmentProducts(results)),
-          flux.actions.receivePastPurchaseRecordCount(results.totalRecordCount),
-          flux.actions.receivePastPurchaseRefinements(navigations),
-          flux.actions.receivePastPurchasePage(SearchAdapter.extractPage(
-            flux.store.getState(),
-            SearchAdapter.extractRecordCount(results), {
-              pageSelector: Selectors.pastPurchasePage,
-              pageSizeSelector: Selectors.pastPurchasePageSize,
-            }))
-        ]);
+        console.log('aaa',results);
+        let effectsArray = [
+            flux.actions.receivePastPurchaseProducts(SearchAdapter.augmentProducts(results)),
+            flux.actions.receivePastPurchasePage(SearchAdapter.extractPage(
+              flux.store.getState(),
+              SearchAdapter.extractRecordCount(results), {
+                pageSelector: Selectors.pastPurchasePage,
+                pageSizeSelector: Selectors.pastPurchasePageSize,
+              }))
+        ];
+        if (giraffe) {
+          effectsArray = effectsArray.concat(<any>[
+            flux.actions.receivePastPurchaseAllRecordCount(results.totalRecordCount),
+            flux.actions.receivePastPurchaseRefinements(navigations),
+          ]);
+        }
+        if (!giraffe && query && query !== '') {
+          console.log('this should be called');
+          effectsArray = effectsArray.concat(<any>[
+            flux.actions.receivePastPurchaseCurrentRecordCount(results.totalRecordCount),
+            flux.actions.updatePastPurchaseDisplayQuery(query)
+          ]);
+        }
+        yield effects.put(<any>effectsArray);
         flux.saveState(utils.Routes.PAST_PURCHASE);
       }
     } catch (e) {
@@ -154,5 +169,6 @@ export default (flux: FluxCapacitor) => function* recommendationsSaga() {
   yield effects.takeLatest(Actions.FETCH_RECOMMENDATIONS_PRODUCTS, Tasks.fetchProducts, flux);
   yield effects.takeLatest(Actions.FETCH_PAST_PURCHASES, Tasks.fetchPastPurchases, flux);
   yield effects.takeLatest(Actions.FETCH_PAST_PURCHASE_PRODUCTS, Tasks.fetchPastPurchaseProducts, flux);
+  yield effects.takeLatest(Actions.FETCH_PAST_PURCHASE_RENAME_THIS, Tasks.fetchPastPurchaseProducts, flux, null, true);
   yield effects.takeLatest(Actions.FETCH_SAYT_PAST_PURCHASES, Tasks.fetchSaytPastPurchases, flux);
 };

@@ -13,7 +13,8 @@ export type Action = Actions.ReceivePastPurchaseSkus |
   Actions.SelectPastPurchaseRefinement | Actions.DeselectPastPurchaseRefinement |
   Actions.ResetPastPurchasePage | Actions.UpdatePastPurchasePageSize |
   Actions.UpdatePastPurchaseCurrentPage | Actions.ReceivePastPurchasePage |
-  Actions.ReceivePastPurchaseRecordCount | Actions.ResetAndSelectPastPurchaseRefinement;
+  Actions.ReceivePastPurchaseAllRecordCount | Actions.ResetAndSelectPastPurchaseRefinement |
+  Actions.ReceivePastPurchaseCurrentRecordCount | Actions.UpdatePastPurchaseDisplayQuery;
 export type State = Store.PastPurchase;
 
 export enum SORT_ENUMS {
@@ -25,8 +26,10 @@ export const DEFAULTS: State = <any>{
   skus: [],
   saytPastPurchases: [],
   products: [],
-  recordCount: 0,
+  currentRecordCount: 0,
+  allRecordCount: 0,
   query: '',
+  displayQuery: '',
   sort: {
     items: [{
       field: 'Default',
@@ -59,9 +62,11 @@ export default function updatePastPurchases(state: State = DEFAULTS, action: Act
   switch (action.type) {
     case Actions.RECEIVE_PAST_PURCHASE_SKUS: return updatePastPurchaseSkus(state, action);
     case Actions.RECEIVE_PAST_PURCHASE_PRODUCTS: return updatePastPurchaseProducts(state, action);
-    case Actions.RECEIVE_PAST_PURCHASE_RECORD_COUNT: return updatePastPurchaseRecordCount(state, action);
+    case Actions.RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT: return updatePastPurchaseAllRecordCount(state, action);
+    case Actions.RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT: return updatePastPurchaseCurrentRecordCount(state, action);
     case Actions.RECEIVE_SAYT_PAST_PURCHASES: return updateSaytPastPurchases(state, action);
     case Actions.UPDATE_PAST_PURCHASE_QUERY : return updatePastPurchaseQuery(state, action);
+    case Actions.UPDATE_PAST_PURCHASE_DISPLAY_QUERY : return updatePastPurchaseDisplayQuery(state, action);
     case Actions.SELECT_PAST_PURCHASE_SORT: return updatePastPurchaseSortSelected(state, action);
     case Actions.RECEIVE_PAST_PURCHASE_REFINEMENTS: return applyNavigationReducer(state, action, navigations.receiveNavigations);
     case Actions.SELECT_PAST_PURCHASE_REFINEMENT: return applyNavigationReducer(state, action, navigations.selectRefinement);
@@ -77,6 +82,13 @@ export default function updatePastPurchases(state: State = DEFAULTS, action: Act
   // tslint:enable max-line-length
 }
 
+// tslint:disable-next-line max-line-length
+export const updatePastPurchaseQueryAndReset = (state: State, { payload }: Actions.UpdatePastPurchaseQuery) =>
+  ({
+    ...applyNavigationReducer(state, <any>{ payload: true }, navigations.resetRefinements),
+    query: payload
+  });
+
 export const updatePastPurchaseSkus = (state: State, { payload }: Actions.ReceivePastPurchaseSkus) =>
   ({
     ...state,
@@ -90,10 +102,16 @@ export const updatePastPurchaseProducts = (state: State, { payload }: Actions.Re
     products: payload,
   });
 
-export const updatePastPurchaseRecordCount = (state: State, { payload }: Actions.ReceivePastPurchaseRecordCount) =>
-  ({
+// tslint:disable-next-line max-line-length
+export const updatePastPurchaseCurrentRecordCount = (state: State, { payload }: Actions.ReceivePastPurchaseCurrentRecordCount) => ({
     ...state,
-    recordCount: payload
+    currentRecordCount: payload
+  });
+
+// tslint:disable-next-line max-line-length
+export const updatePastPurchaseAllRecordCount = (state: State, { payload }: Actions.ReceivePastPurchaseAllRecordCount) => ({
+    ...state,
+    allRecordCount: payload
   });
 
 export const updateSaytPastPurchases = (state: State, { payload }: Actions.ReceiveSaytPastPurchases) =>
@@ -121,6 +139,12 @@ export const updatePastPurchaseQuery = (state: State, { payload }: Actions.Updat
   ({
     ...state,
     query: payload
+  });
+
+export const updatePastPurchaseDisplayQuery = (state: State, { payload }: Actions.UpdatePastPurchaseDisplayQuery) =>
+  ({
+    ...state,
+    displayQuery: payload
   });
 
 export const updatePastPurchaseSortSelected = (state: State, { payload }: Actions.SelectPastPurchaseSort) => {
