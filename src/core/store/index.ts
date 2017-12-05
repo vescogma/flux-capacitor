@@ -302,6 +302,7 @@ namespace Store {
 
   export interface BaseRefinement {
     total: number; // post
+    display?: string;
   }
 
   export type Refinement = ValueRefinement | RangeRefinement;

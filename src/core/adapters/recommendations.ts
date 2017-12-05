@@ -132,17 +132,17 @@ namespace Recommendations {
     return [...skus].sort(({ lastPurchased: lhs }, { lastPurchased: rhs }) => rhs - lhs);
   };
 
-  export const pastPurchaseNavigations = (config: Configuration, navigations: Navigation[]) => {
+  export const pastPurchaseNavigations = (config: Configuration, navigations: Store.Navigation[]) => {
     const configNavigations = ConfigurationAdapter.extractPastPurchaseNavigations(config);
 
     return navigations.reduce((acc, navigation) => {
-      return configNavigations[navigation.name] ?
+      return configNavigations[navigation.field] ?
         acc.concat({
           ...navigation,
-          refinements: configNavigations[navigation.name].length > 0 ?
-            navigation.refinements.reduce((refinementAcc, refinement: ValueRefinement) => {
+          refinements: configNavigations[navigation.field].length > 0 ?
+            navigation.refinements.reduce((refinementAcc, refinement: Store.ValueRefinement) => {
               if (refinement.value) {
-                const ref = configNavigations[navigation.name].find((nav) =>
+                const ref = configNavigations[navigation.field].find((nav) =>
                   nav === refinement.value || nav['value'] === refinement.value
                 );
                 if (ref) {
