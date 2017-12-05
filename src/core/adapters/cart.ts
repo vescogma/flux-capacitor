@@ -15,27 +15,16 @@ namespace Cart {
     method: 'POST',
     body: JSON.stringify(body)
   });
-}
 
-export interface RecommendationsRequest {
-  size?: number;
-  window?: string;
-  matchPartial?: object;
-  matchExact?: object;
-  type?: string;
-  target?: string;
+  export const transformToBrowser = (state: Store.Cart): any => ({
+    cartId: state.cartId
+  });
 }
 
 export interface CartBody {
   loginId?: string;
   sessionId: string;
   visitorId: string;
-}
-
-export interface Navigations {
-  results: Navigation[];
-  navigations?: Store.Recommendations.Navigation[];
-  config?: Configuration;
 }
 
 export default Cart;

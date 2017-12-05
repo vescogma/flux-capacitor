@@ -273,6 +273,8 @@ namespace Store {
 
   export interface Cart {
     cartId: string;
+    // todo
+    items: any;
   }
 
   export interface Product {
