@@ -1679,9 +1679,9 @@ graceful-fs@^4.1.2, graceful-fs@^4.1.5, graceful-fs@^4.1.6:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-groupby-api@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/groupby-api/-/groupby-api-2.3.0.tgz#30e3a0830d6fed4677631681634ef27fe012d752"
+groupby-api@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/groupby-api/-/groupby-api-2.4.0.tgz#c7d0bf6e59edab8c86f80b3427edf47d34f455a0"
   dependencies:
     "@types/clone" "^0.1.30"
     "@types/deep-equal" "^0.0.30"
