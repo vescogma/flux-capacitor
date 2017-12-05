@@ -151,7 +151,6 @@ namespace Observer {
             products: emit(Events.PAST_PURCHASE_PRODUCTS_UPDATED),
             saytPastPurchases: emit(Events.SAYT_PAST_PURCHASES_UPDATED),
             query: emit(Events.PAST_PURCHASE_QUERY_UPDATED),
-            displayQuery: emit(Events.PAST_PURCHASE_QUERY_UPDATED),
             page: Object.assign(emit(Events.PAST_PURCHASE_PAGE_UPDATED), {
               current: emit(Events.PAST_PURCHASE_CURRENT_PAGE_UPDATED),
               sizes: emit(Events.PAST_PURCHASE_PAGE_SIZE_UPDATED),

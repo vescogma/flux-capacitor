@@ -702,10 +702,10 @@ namespace ActionCreators {
 
   // todo doc
   // tslint:disable-next-line max-line-length
-  export function resetAndUpdatePastPurchaseQuery(query: string): Actions.PastPurchaseResetAndQuery {
-    return <Actions.PastPurchaseResetAndQuery>[
-      ...ActionCreators.resetPastPurchaseRefinements(true),
-      ...ActionCreators.updatePastPurchaseQuery(query),
+  export function pastPurchaseResetQueryAndSelectReifnement(navigationId: string, index: number): Actions.PastPurchaseQueryAndSelect {
+    return <Actions.PastPurchaseQueryAndSelect>[
+      ...ActionCreators.updatePastPurchaseQuery(''),
+      ...ActionCreators.selectPastPurchaseRefinement(navigationId, index),
     ];
   }
 

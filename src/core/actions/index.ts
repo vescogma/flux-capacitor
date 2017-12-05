@@ -169,7 +169,7 @@ namespace Actions {
   export type PastPurchaseSelect = [Actions.ResetPastPurchasePage, Actions.SelectPastPurchaseRefinement];
   export type PastPurchaseDeselect = [Actions.ResetPastPurchasePage, Actions.DeselectPastPurchaseRefinement];
   export type PastPurchaseResetAndSelect = [Actions.ResetPastPurchasePage, Actions.ResetPastPurchaseRefinements, Actions.ResetPastPurchasePage, Actions.SelectPastPurchaseRefinement];
-  export type PastPurchaseResetAndQuery = [Actions.ResetPastPurchasePage, Actions.ResetPastPurchaseRefinements, Actions.ResetPastPurchasePage, Actions.UpdatePastPurchaseQuery];
+  export type PastPurchaseQueryAndSelect = [Actions.ResetPastPurchasePage, Actions.ResetPastPurchaseRefinements, Actions.UpdatePastPurchaseQuery, Actions.ResetPastPurchasePage, Actions.SelectPastPurchaseRefinement];
   export type ReceiveNavigationSort = Action<typeof RECEIVE_NAVIGATION_SORT, Store.Recommendations.Navigation[]>;
   export type PastPurchaseQuery = [Actions.ResetPastPurchasePage, Actions.ResetPastPurchaseRefinements, Actions.UpdatePastPurchaseQuery];
   export type PastPurchaseSortActions = [Actions.ResetPastPurchasePage, Actions.SelectPastPurchaseSort];
