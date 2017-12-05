@@ -179,8 +179,6 @@ namespace Actions {
   export type UpdatePastPurchaseCurrentPage = Action<typeof UPDATE_PAST_PURCHASE_CURRENT_PAGE, number>;
   export const UPDATE_PAST_PURCHASE_QUERY = 'UPDATE_PAST_PURCHASE_QUERY';
   export type UpdatePastPurchaseQuery = Action<typeof UPDATE_PAST_PURCHASE_QUERY, string>;
-  export const UPDATE_PAST_PURCHASE_DISPLAY_QUERY = 'UPDATE_PAST_PURCHASE_DISPLAY_QUERY';
-  export type UpdatePastPurchaseDisplayQuery = Action<typeof UPDATE_PAST_PURCHASE_DISPLAY_QUERY, string>;
   export const SELECT_PAST_PURCHASE_SORT = 'SELECT_PAST_PURCHASE_SORT';
   export type SelectPastPurchaseSort = Action<typeof SELECT_PAST_PURCHASE_SORT, number>;
   export const RECEIVE_NAVIGATION_SORT = 'RECEIVE_NAVIGATION_SORT';

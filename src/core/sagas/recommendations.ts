@@ -132,7 +132,6 @@ export namespace Tasks {
                 pageSizeSelector: Selectors.pastPurchasePageSize,
               })),
             flux.actions.receivePastPurchaseCurrentRecordCount(results.totalRecordCount),
-            flux.actions.updatePastPurchaseDisplayQuery(query)
           ]);
         }
         flux.saveState(utils.Routes.PAST_PURCHASE);

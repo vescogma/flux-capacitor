@@ -132,11 +132,11 @@ namespace Selectors {
    * @return {[type]}       - The field for the past purchase key
    */
   export const productsWithPastPurchase = (state: Store.State, idField: string) => {
-    const pastPurchases = Selectors.pastPurchaseProductsBySku(state);
+    const pastPurchaseData = Selectors.pastPurchaseProductsBySku(state);
     return Selectors.products(state).map((data) => {
       const meta: any = {};
 
-      if (data[idField] in pastPurchases) {
+      if (data[idField] in pastPurchaseData) {
         meta.pastPurchase = true;
       }
 
@@ -305,7 +305,10 @@ namespace Selectors {
    */
   export const pastPurchaseProductsBySku = (state: Store.State) =>
     state.data.present.pastPurchases.skus
-      .reduce((products, product) => Object.assign(products, { [product.sku]: product.quantity }), {});
+    .reduce((skuProducts, product) => Object.assign(skuProducts, { [product.sku]: {
+      quantity: product.quantity,
+      lastPurchased: product.lastPurchased,
+    }}), {});
 
   /**
    * Returns the entire byId object from biasing
@@ -334,8 +337,17 @@ namespace Selectors {
   /**
    * Returns the past purchase product data
    */
-  export const pastPurchaseProducts = (state: Store.State) =>
-    Search.extractData(state.data.present.pastPurchases.products);
+  export const pastPurchaseProducts = (state: Store.State) => {
+    const pastPurchaseData = Selectors.pastPurchaseProductsBySku(state);
+    return Search.extractData(state.data.present.pastPurchases.products).map(
+      (product) => ({
+        ...product,
+        meta: {
+          ...product.meta,
+          ...pastPurchaseData[product.id],
+        }
+      }));
+  };
 
   /**
    * Returns the past purchase record count
@@ -351,12 +363,6 @@ namespace Selectors {
    */
   export const pastPurchaseQuery = (state: Store.State) =>
     state.data.present.pastPurchases.query;
-
-  /**
-   * Returns the past purchase query string
-   */
-  export const pastPurchaseDisplayQuery = (state: Store.State) =>
-    state.data.present.pastPurchases.displayQuery;
 
   /**
    * Returns the past purchase navigation object for the given navigationId.

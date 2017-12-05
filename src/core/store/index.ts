@@ -248,7 +248,6 @@ namespace Store {
       currentRecordCount: number;
       navigations: Indexed<Store.Navigation>;
       query: string;
-      displayQuery: string;
       sort?: SelectableList<PastPurchases.PastPurchaseSort>;
       page: Page;
     }

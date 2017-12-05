@@ -14,7 +14,7 @@ export type Action = Actions.ReceivePastPurchaseSkus |
   Actions.ResetPastPurchasePage | Actions.UpdatePastPurchasePageSize |
   Actions.UpdatePastPurchaseCurrentPage | Actions.ReceivePastPurchasePage |
   Actions.ReceivePastPurchaseAllRecordCount | Actions.ResetAndSelectPastPurchaseRefinement |
-  Actions.ReceivePastPurchaseCurrentRecordCount | Actions.UpdatePastPurchaseDisplayQuery;
+  Actions.ReceivePastPurchaseCurrentRecordCount;
 export type State = Store.PastPurchase;
 
 export enum SORT_ENUMS {
@@ -29,7 +29,6 @@ export const DEFAULTS: State = <any>{
   currentRecordCount: 0,
   allRecordCount: 0,
   query: '',
-  displayQuery: '',
   sort: {
     items: [{
       field: 'Default',
@@ -66,7 +65,6 @@ export default function updatePastPurchases(state: State = DEFAULTS, action: Act
     case Actions.RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT: return updatePastPurchaseCurrentRecordCount(state, action);
     case Actions.RECEIVE_SAYT_PAST_PURCHASES: return updateSaytPastPurchases(state, action);
     case Actions.UPDATE_PAST_PURCHASE_QUERY : return updatePastPurchaseQuery(state, action);
-    case Actions.UPDATE_PAST_PURCHASE_DISPLAY_QUERY : return updatePastPurchaseDisplayQuery(state, action);
     case Actions.SELECT_PAST_PURCHASE_SORT: return updatePastPurchaseSortSelected(state, action);
     case Actions.RECEIVE_PAST_PURCHASE_REFINEMENTS: return applyNavigationReducer(state, action, navigations.receiveNavigations);
     case Actions.SELECT_PAST_PURCHASE_REFINEMENT: return applyNavigationReducer(state, action, navigations.selectRefinement);
@@ -138,12 +136,6 @@ export const updatePastPurchaseQuery = (state: State, { payload }: Actions.Updat
   ({
     ...state,
     query: payload
-  });
-
-export const updatePastPurchaseDisplayQuery = (state: State, { payload }: Actions.UpdatePastPurchaseDisplayQuery) =>
-  ({
-    ...state,
-    displayQuery: payload
   });
 
 export const updatePastPurchaseSortSelected = (state: State, { payload }: Actions.SelectPastPurchaseSort) => {

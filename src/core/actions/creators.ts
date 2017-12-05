@@ -745,10 +745,6 @@ namespace ActionCreators {
     ];
   }
 
-  export function updatePastPurchaseDisplayQuery(query: string): Actions.UpdatePastPurchaseDisplayQuery {
-    return createAction(Actions.UPDATE_PAST_PURCHASE_DISPLAY_QUERY, query);
-  }
-
   /**
    * Updates the past purchase page size to given size.
    * @param  {number}                 size - The size the page is updated to.
