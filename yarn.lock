@@ -1679,9 +1679,9 @@ graceful-fs@^4.1.2, graceful-fs@^4.1.5, graceful-fs@^4.1.6:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-groupby-api@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/groupby-api/-/groupby-api-2.3.0.tgz#30e3a0830d6fed4677631681634ef27fe012d752"
+groupby-api@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/groupby-api/-/groupby-api-2.4.0.tgz#c7d0bf6e59edab8c86f80b3427edf47d34f455a0"
   dependencies:
     "@types/clone" "^0.1.30"
     "@types/deep-equal" "^0.0.30"
@@ -3140,9 +3140,13 @@ redux-logger@^3.0.6:
   dependencies:
     deep-diff "^0.3.5"
 
-redux-saga@^0.15.4:
-  version "0.15.4"
-  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.15.4.tgz#27982a947280053b7ecbb5d3170c837a5fe6b261"
+redux-persist@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-5.1.0.tgz#38f43fe7a3e0dad7e3240c00f737ccd2682b6cd9"
+
+redux-saga@^0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.16.0.tgz#0a231db0a1489301dd980f6f2f88d8ced418f724"
 
 redux-undo@^0.6.1:
   version "0.6.1"

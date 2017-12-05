@@ -1,6 +1,7 @@
 import * as effects from 'redux-saga/effects';
 import { ActionCreators } from 'redux-undo';
 import Actions from '../../../../src/core/actions';
+import PersonalizationAdapter from '../../../../src/core/adapters/personalization';
 import RecommendationsAdapter from '../../../../src/core/adapters/recommendations';
 import Events from '../../../../src/core/events';
 import Requests from '../../../../src/core/requests';
@@ -31,6 +32,7 @@ suite('products saga', ({ expect, spy, stub }) => {
 
       // tslint:disable-next-line max-line-length
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PRODUCTS, Tasks.fetchProducts, flux));
+      expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PRODUCTS_WHEN_HYDRATED, Tasks.fetchProductsWhenHydrated, flux));
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_MORE_PRODUCTS, Tasks.fetchMoreProducts, flux));
       saga.next();
     });
@@ -413,6 +415,39 @@ suite('products saga', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('fetchProductsWhenHydrated()', () => {
+      const payload: any = { a: 1 };
+
+      it('should dispatch given action if data loaded from browser', () => {
+        const getState = spy();
+        const dispatch = spy();
+        const flux: any = { store: { getState, dispatch } };
+        stub(Selectors, 'realTimeBiasesHydrated').returns(true);
+
+        const task = Tasks.fetchProductsWhenHydrated(flux, <any>{ payload });
+        expect(task.next().value).to.eql(effects.put(payload));
+        task.next();
+
+        expect(getState).to.be.calledWith();
+      });
+
+      it('should wait on personalization biasing rehydrated if data not loaded from browser', () => {
+        const once = spy();
+        const dispatch = spy();
+        const getState = spy();
+        const flux: any = { store: { getState, dispatch }, once };
+        stub(Selectors, 'realTimeBiasesHydrated').returns(false);
+
+        const task = Tasks.fetchProductsWhenHydrated(flux, <any>{ payload });
+        task.next();
+
+        expect(dispatch).to.not.be.called;
+        expect(once).to.be.calledWith(Events.PERSONALIZATION_BIASING_REHYDRATED);
+        once.getCall(0).args[1]();
+        expect(dispatch).to.be.calledWith(payload);
+      });
+    });
+
     describe('fetchProductsRequest()', () => {
       it('should return products', () => {
         const id = '1459';
@@ -424,17 +459,71 @@ suite('products saga', ({ expect, spy, stub }) => {
         const payload = { a: 'b' };
         const action: any = { payload };
         const receiveProductsAction: any = { c: 'd' };
-        const request = { e: 'f' };
+        const biases = ['bias'];
+        const request = { e: 'f', biasing: { biases }};
+        const searchRequest = { e: 'f' };
         const response = { id, totalRecordCount: 3 };
         const receiveProducts = spy(() => receiveProductsAction);
         const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, };
 
         const task = Tasks.fetchProductsRequest(flux, action);
 
-        expect(task.next().value).to.eql(effects.select(Requests.search));
-        const ret = effects.call([bridge, search], request);
-        expect(task.next(request).value).to.eql(ret);
+        expect(task.next().value).to.eql(effects.select(PersonalizationAdapter.convertBiasToSearch));
+        expect(task.next(biases).value).to.eql(effects.select(Requests.search));
+        expect(task.next(searchRequest).value).to.eql(effects.call([bridge, search], request));
         expect(task.next(request).value).to.eql(request);
+      });
+
+      it('should return products and not overwrite biases of original request', () => {
+        const id = '1459';
+        const config: any = { e: 'f', search: { redirectSingleResult: false } };
+        const emit = spy();
+        const saveState = spy();
+        const search = () => null;
+        const bridge = { search };
+        const payload = { a: 'b' };
+        const action: any = { payload };
+        const receiveProductsAction: any = { c: 'd' };
+        const biases = ['morebiases'];
+        const originalBiases = ['origina', 'l'];
+        const request = { e: 'f', biasing: { biases: [...originalBiases, ...biases] }};
+        const searchRequest = { e: 'f', biasing: { biases: originalBiases }};
+        const response = { id, totalRecordCount: 3 };
+        const receiveProducts = spy(() => receiveProductsAction);
+        const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, };
+
+        const task = Tasks.fetchProductsRequest(flux, action);
+
+        task.next();
+        task.next(biases);
+        expect(task.next(searchRequest).value).to.eql(effects.call([bridge, search], request));
+        task.next();
+      });
+
+      it('should return products and not overwrite biasing key of original request', () => {
+        const id = '1459';
+        const config: any = { e: 'f', search: { redirectSingleResult: false } };
+        const emit = spy();
+        const saveState = spy();
+        const search = () => null;
+        const bridge = { search };
+        const payload = { a: 'b' };
+        const action: any = { payload };
+        const receiveProductsAction: any = { c: 'd' };
+        const biases = ['morebiases'];
+        const biasing = { someOtherStuff: 3 };
+        const request = { e: 'f', biasing: { ...biasing, biases } };
+        const searchRequest = { e: 'f', biasing };
+        const response = { id, totalRecordCount: 3 };
+        const receiveProducts = spy(() => receiveProductsAction);
+        const flux: any = { emit, saveState, clients: { bridge }, actions: { receiveProducts }, };
+
+        const task = Tasks.fetchProductsRequest(flux, action);
+
+        task.next();
+        task.next(biases);
+        expect(task.next(searchRequest).value).to.eql(effects.call([bridge, search], request));
+        task.next();
       });
 
       it('should handle request failure', () => {

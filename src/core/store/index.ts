@@ -1,5 +1,6 @@
 import { reduxBatch } from '@manaflair/redux-batch';
 import { applyMiddleware, compose, createStore, Store as ReduxStore } from 'redux';
+import { persistStore } from 'redux-persist';
 import createSagaMiddleware from 'redux-saga';
 import * as validatorMiddleware from 'redux-validator';
 import FluxCapacitor from '../../flux-capacitor';
@@ -24,6 +25,12 @@ namespace Store {
       <State>Adapter.initialState(flux.__config),
       middleware,
     );
+
+    // cannot stub persistStore
+    /* istanbul ignore next */
+    if (Adapter.isRealTimeBiasEnabled(flux.__config)) {
+      persistStore(store);
+    }
 
     createSagas(SAGA_CREATORS, flux).forEach(sagaMiddleware.run);
 
@@ -64,6 +71,8 @@ namespace Store {
     details: Details; // mixed
 
     recommendations: Recommendations; // mixed
+
+    personalization?: Personalization;
 
     recordCount: number; // post
 
@@ -338,6 +347,33 @@ namespace Store {
     latitude: number;
     longitude: number;
   }
+
+  export interface Personalization {
+    biasing: Personalization.Biasing;
+  }
+
+  export namespace Personalization {
+    export interface Biasing {
+      allIds: Personalization.BiasKey[];
+      byId: Personalization.BiasById;
+    }
+
+    export interface BiasById {
+      [field: string]: {
+        [value: string]: SingleBias;
+      };
+    }
+
+    export interface BiasKey {
+      field: string;
+      value: string;
+    }
+
+    export interface SingleBias {
+      lastUsed: number;
+    }
+  }
+
 }
 
 export default Store;

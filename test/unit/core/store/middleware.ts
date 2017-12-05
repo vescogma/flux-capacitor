@@ -1,13 +1,18 @@
 import { reduxBatch } from '@manaflair/redux-batch';
 import * as redux from 'redux';
 import reduxLogger from 'redux-logger';
-import { ActionCreators } from 'redux-undo';
+import { ActionCreators as ReduxActionCreators } from 'redux-undo';
 import * as sinon from 'sinon';
 import Actions from '../../../../src/core/actions';
+import ActionCreators from '../../../../src/core/actions/creators';
+import ConfigurationAdapter from '../../../../src/core/adapters/configuration';
+import PersonalizationAdapter from '../../../../src/core/adapters/personalization';
 import Events from '../../../../src/core/events';
+import Selectors from '../../../../src/core/selectors';
 import Middleware, {
+  PERSONALIZATION_CHANGE_ACTIONS,
   RECALL_CHANGE_ACTIONS,
-  SEARCH_CHANGE_ACTIONS
+  SEARCH_CHANGE_ACTIONS,
 } from '../../../../src/core/store/middleware';
 import suite from '../../_suite';
 
@@ -17,7 +22,18 @@ suite('Middleware', ({ expect, spy, stub }) => {
     const sagaMiddleware = { a: 'b' };
     const idGeneratorMiddleware = { g: 'h' };
     const errorHandlerMiddleware = { i: 'j' };
-    const validatorMiddleware = { m: 'n' };
+    const allMiddleware = () => [
+        Middleware.thunkEvaluator,
+        Middleware.injectStateIntoRehydrate,
+        Middleware.validator,
+        idGeneratorMiddleware,
+        idGeneratorMiddleware,
+        errorHandlerMiddleware,
+        sagaMiddleware,
+        Middleware.personalizationAnalyzer,
+        Middleware.thunkEvaluator,
+        Middleware.saveStateAnalyzer
+      ];
 
     afterEach(() => delete process.env.NODE_ENV);
 
@@ -31,9 +47,8 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const errorHandler = stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
       const compose = stub(redux, 'compose').returns(composed);
       const applyMiddleware = stub(redux, 'applyMiddleware');
-      stub(Middleware, 'validator').returns(validatorMiddleware);
       applyMiddleware.withArgs().returns(batchMiddleware);
-      applyMiddleware.withArgs(Middleware.thunkEvaluator).returns(thunkMiddleware);
+      applyMiddleware.withArgs(Middleware.thunkEvaluator, Middleware.validator).returns(thunkMiddleware);
       applyMiddleware.withArgs(Middleware.thunkEvaluator, Middleware.saveStateAnalyzer).returns(simpleMiddleware);
 
       const middleware = Middleware.create(sagaMiddleware, flux);
@@ -42,16 +57,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
         .and.calledWithExactly('recallId', RECALL_CHANGE_ACTIONS)
         .and.calledWithExactly('searchId', SEARCH_CHANGE_ACTIONS);
       expect(errorHandler).to.be.calledWithExactly(flux);
-      expect(applyMiddleware).to.be.calledWithExactly(
-        Middleware.thunkEvaluator,
-        validatorMiddleware,
-        idGeneratorMiddleware,
-        idGeneratorMiddleware,
-        errorHandlerMiddleware,
-        sagaMiddleware,
-        Middleware.thunkEvaluator,
-        Middleware.saveStateAnalyzer
-      );
+      expect(applyMiddleware).to.be.calledWithExactly(...allMiddleware());
       expect(compose).to.be.calledWithExactly(
         simpleMiddleware,
         reduxBatch,
@@ -68,23 +74,13 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const applyMiddleware = stub(redux, 'applyMiddleware');
       stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
       stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
-      stub(Middleware, 'validator').returns(validatorMiddleware);
+      stub(Middleware, 'validator').returns(Middleware.validator);
       stub(redux, 'compose');
       process.env.NODE_ENV = 'development';
 
       Middleware.create(sagaMiddleware, flux);
 
-      expect(applyMiddleware).to.be.calledWithExactly(
-        Middleware.thunkEvaluator,
-        validatorMiddleware,
-        idGeneratorMiddleware,
-        idGeneratorMiddleware,
-        errorHandlerMiddleware,
-        sagaMiddleware,
-        Middleware.thunkEvaluator,
-        Middleware.saveStateAnalyzer,
-        reduxLogger
-      );
+      expect(applyMiddleware).to.be.calledWithExactly(...allMiddleware(), reduxLogger);
     });
 
     it('should not include redux-logger when running in development and debug not set', () => {
@@ -92,22 +88,13 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const applyMiddleware = stub(redux, 'applyMiddleware');
       stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
       stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
-      stub(Middleware, 'validator').returns(validatorMiddleware);
+      stub(Middleware, 'validator').returns(Middleware.validator);
       stub(redux, 'compose');
       process.env.NODE_ENV = 'development';
 
       Middleware.create(sagaMiddleware, flux);
 
-      expect(applyMiddleware).to.be.calledWithExactly(
-        Middleware.thunkEvaluator,
-        validatorMiddleware,
-        idGeneratorMiddleware,
-        idGeneratorMiddleware,
-        errorHandlerMiddleware,
-        sagaMiddleware,
-        Middleware.thunkEvaluator,
-        Middleware.saveStateAnalyzer
-      );
+      expect(applyMiddleware).to.be.calledWithExactly(...allMiddleware());
     });
   });
 
@@ -167,11 +154,78 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const action = { type: Actions.RECEIVE_PRODUCTS, error: true };
       const undoAction = { a: 'b' };
       const next = spy();
-      stub(ActionCreators, 'undo').returns(undoAction);
+      stub(ReduxActionCreators, 'undo').returns(undoAction);
 
       Middleware.errorHandler(<any>{})(null)(next)(action);
 
       expect(next).to.be.calledWith(undoAction);
+    });
+  });
+
+  describe('saveStateAnalyzer()', () => {
+    it('should pass through other actions', () => {
+      const next = spy();
+      const action = {
+        type: 'NOT_AN_ACTION',
+        payload: {}
+      };
+
+      Middleware.injectStateIntoRehydrate(<any>{ getState: () => null })(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+    });
+
+    it('should pass through rehydrates without payload', () => {
+      const next = spy();
+      const getState = spy();
+      const action = {
+        type: 'persist/REHYDRATE',
+      };
+
+      Middleware.injectStateIntoRehydrate(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+    });
+
+    it('should pass through rehydrates without biasing', () => {
+      const next = spy();
+      const getState = spy();
+      const action = {
+        type: 'persist/REHYDRATE',
+        payload: {}
+      };
+
+      Middleware.injectStateIntoRehydrate(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+    });
+
+    it('should call transformFromBrowser if biasing present', () => {
+      const next = spy();
+      const state = 's';
+      const getState = stub().returns(state);
+      const biasing = 'bias';
+      const converted = 'conf';
+      const action = {
+        type: 'persist/REHYDRATE',
+        payload: {
+          biasing,
+          a: 3,
+          b: 6,
+        }
+      };
+      const transform = stub(PersonalizationAdapter, 'transformFromBrowser').returns(converted);
+
+      Middleware.injectStateIntoRehydrate(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly({
+        ...action,
+        payload: {
+          ...action.payload,
+          biasing: converted
+        }
+      });
+      expect(transform).to.be.calledWithExactly(biasing, state);
     });
   });
 
@@ -216,6 +270,74 @@ suite('Middleware', ({ expect, spy, stub }) => {
 
       expect(next).to.be.calledWithExactly(action);
       expect(thunk).to.be.calledWithExactly(state);
+    });
+  });
+
+  describe('personalizationAnalyzer()', () => {
+    const conf = { a: 1 };
+    const state = { b: 2 };
+
+    it('should pass the action forward unchanged if not in list of relevant actions', () => {
+      const action = { a: 'b', type: 'NOT_VALID_ACTION' };
+      const config = stub(Selectors, 'config').returns(conf);
+      const enabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(true);
+      const next = spy();
+      const getState = spy(() => state);
+
+      Middleware.personalizationAnalyzer(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+      expect(config).to.be.calledWithExactly(state);
+      expect(enabled).to.be.calledWithExactly(conf);
+      expect(getState).to.be.called;
+    });
+
+    it('should pass the action forward unchanged if real time biasing disabled', () => {
+      const action = { a: 'b', type: PERSONALIZATION_CHANGE_ACTIONS[0] };
+      const config = stub(Selectors, 'config').returns(conf);
+      const enabled = stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(false);
+      const next = spy();
+      const getState = spy(() => state);
+
+      Middleware.personalizationAnalyzer(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+    });
+
+    it('should pass the action forward if extractBias returns falsy', () => {
+      const action = { a: 'b', type: PERSONALIZATION_CHANGE_ACTIONS[0] };
+      const returnAction = 'return';
+      const extracted = 'extra';
+      const config = stub(Selectors, 'config').returns(conf);
+      const updateBiasing = stub(ActionCreators, 'updateBiasing').returns(returnAction);
+      const extract = stub(PersonalizationAdapter, 'extractBias').returns(null);
+      const next = spy();
+      const getState = spy(() => state);
+      stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(true);
+
+      Middleware.personalizationAnalyzer(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+      expect(extract).to.be.calledWithExactly(action, state);
+      expect(updateBiasing).to.not.be.called;
+    });
+
+    it('should make a batch action if action correct type', () => {
+      const action = { a: 'b', type: PERSONALIZATION_CHANGE_ACTIONS[0] };
+      const returnAction = 'return';
+      const extracted = 'extra';
+      const config = stub(Selectors, 'config').returns(conf);
+      const updateBiasing = stub(ActionCreators, 'updateBiasing').returns(returnAction);
+      const extract = stub(PersonalizationAdapter, 'extractBias').returns(extracted);
+      const next = spy();
+      const getState = spy(() => state);
+      stub(ConfigurationAdapter, 'isRealTimeBiasEnabled').returns(true);
+
+      Middleware.personalizationAnalyzer(<any>{ getState })(next)(action);
+
+      expect(next).to.be.calledWith([action, returnAction]);
+      expect(extract).to.be.calledWithExactly(action, state);
+      expect(updateBiasing).to.be.calledWithExactly(extracted);
     });
   });
 });

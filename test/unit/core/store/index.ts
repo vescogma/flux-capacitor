@@ -1,4 +1,5 @@
 import * as redux from 'redux';
+import * as persist from 'redux-persist';
 import * as reduxSaga from 'redux-saga';
 import * as sinon from 'sinon';
 import Adapter from '../../../../src/core/adapters/configuration';
@@ -12,8 +13,7 @@ suite('Store', ({ expect, spy, stub }) => {
   describe('create()', () => {
     it('should create a store using middleware and initialState', () => {
       // tslint:disable-next-line variable-name
-      const __config = { a: 'b' };
-      const flux: any = { __config };
+      const flux: any = { __config: { a: 'b' }};
       const state = { c: 'd' };
       const middleware = ['e', 'f', 'g'];
       const storeInstance = { h: 'i' };
@@ -24,18 +24,35 @@ suite('Store', ({ expect, spy, stub }) => {
       const createSagaMiddleware = stub(reduxSaga, 'default').returns(sagaMiddleware);
       const createMiddleware = stub(Middleware, 'create').returns(middleware);
       const createSagas = stub(sagas, 'default').returns(['m', 'n', 'o']);
+      const isRealTimeBiasEnabled = stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
 
       const store = Store.create(flux);
 
       expect(store).to.eq(storeInstance);
       expect(createMiddleware).to.be.calledWith(sagaMiddleware, flux);
-      expect(initialState).to.be.calledWith(__config);
+      expect(initialState).to.be.calledWith(flux.__config);
       expect(createStore).to.be.calledWithExactly(rootReducer, state, middleware);
       expect(createSagas).to.be.calledWith(sagas.SAGA_CREATORS, flux);
       expect(runSagaMiddleware).to.be.calledThrice
         .and.calledWith('m')
         .and.calledWith('n')
         .and.calledWith('o');
+    });
+
+    it('should not persist store if real time bias disabled', () => {
+      // tslint:disable-next-line variable-name
+      const flux: any = {};
+      const persistStore = stub(persist, 'persistStore');
+      stub(Adapter, 'initialState').returns({});
+      stub(redux, 'createStore').returns({});
+      stub(reduxSaga, 'default').returns({ run: spy() });
+      stub(Middleware, 'create').returns(['e', 'f', 'g']);
+      stub(sagas, 'default').returns([]);
+      stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
+
+      const store = Store.create(flux);
+
+      expect(persistStore).to.not.be.called;
     });
 
     it('should attach listener if provided', () => {
@@ -48,6 +65,7 @@ suite('Store', ({ expect, spy, stub }) => {
       stub(reduxSaga, 'default').returns({ run: () => null });
       stub(sagas, 'default').returns([]);
       stub(Middleware, 'create').returns([]);
+      stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
 
       Store.create(<any>{ config: {} }, listenerFactory);
 

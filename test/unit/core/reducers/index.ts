@@ -5,14 +5,25 @@ import suite from '../../_suite';
 
 suite('reducers', ({ expect, stub }) => {
   it('should handle REFRESH_STATE action', () => {
-    // tslint:disable-next-line max-line-length
-    const payload = { a: 'b', data: { past: [], present: { autocomplete: { c: 'd' }, details: { data: '3' } }, future: [] } };
+    const payload = {
+      a: 'b',
+      data: {
+        past: [],
+        present: {
+          personalization: { biasing: 'bias' },
+          autocomplete: { c: 'd' },
+          details: { data: '3' }
+        },
+        future: [],
+      }
+    };
+
     const newState = {
       a: 'b',
       session: undefined,
       data: {
-        past: [{ autocomplete: { c: 'd' }, details: { data: '3' } }],
-        present: { autocomplete: {}, details: { data: '3' } },
+        past: [{ personalization: { biasing: 'bias' }, autocomplete: { c: 'd' }, details: { data: '3' } }],
+        present: { personalization: { biasing: 'not' }, autocomplete: {}, details: { data: '3' } },
         future: []
       }
     };
@@ -20,7 +31,11 @@ suite('reducers', ({ expect, stub }) => {
     expect(reducer(<any>{
       data: {
         past: [],
-        present: { autocomplete: {}, details: {} },
+        present: {
+          personalization: { biasing: 'not' },
+          autocomplete: {},
+          details: {}
+        },
         future: []
       }
     }, { type: Actions.REFRESH_STATE, payload })).to.eql(newState);

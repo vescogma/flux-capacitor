@@ -47,6 +47,8 @@ interface Configuration {
    * network request configuration
    */
   network?: Configuration.Bridge;
+
+  personalization?: Configuration.Personalization;
 }
 
 namespace Configuration {
@@ -227,6 +229,10 @@ namespace Configuration {
     pastPurchases: Configuration.Recommendations.PastPurchases;
   }
 
+  export interface Personalization {
+    realTimeBiasing?: Personalization.RealTimeBiasing;
+  }
+
   export namespace Recommendations {
     export interface Location {
       minSize: number;
@@ -314,6 +320,23 @@ namespace Configuration {
 
     export interface Pinned {
       [id: string]: string[];
+    }
+  }
+
+  export namespace Personalization {
+    export interface RealTimeBiasing {
+      attributes?: {
+        [attribute: string]: RealTimeBiasingAttribute
+      };
+      strength: BiasStrength;
+      maxBiases: number;
+      attributeMaxBiases: number;
+      expiry: number;
+    }
+
+    export interface RealTimeBiasingAttribute {
+      strength: BiasStrength;
+      maxBiases: number;
     }
   }
 

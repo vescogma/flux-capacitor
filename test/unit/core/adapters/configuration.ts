@@ -59,7 +59,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
                 selected: 0,
                 items: [PageReducer.DEFAULT_PAGE_SIZE]
               }
-            }
+            },
           }
         },
         session: {
@@ -94,7 +94,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
           fields,
           pageSize,
           sort
-        },
+        }
       };
       const state = {
         data: {
@@ -374,6 +374,26 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     it('should return false if requesting zero biases', () => {
       // tslint:disable-next-line max-line-length
       expect(Adapter.shouldAddPastPurchaseBias(<any>{ recommendations: { pastPurchases: { biasCount: 0 } } })).to.be.false;
+    });
+  });
+
+  describe('isRealTimeBiasEnabled()', () => {
+    it('should return config.personalization.realTimeBiasing casted to Boolean (truthy)', () => {
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.isRealTimeBiasEnabled(<any>{ personalization: { realTimeBiasing: { attributes: {} } } })).to.be.true;
+    });
+
+    it('should return config.personalization.realTimeBiasing casted to Boolean (falsy)', () => {
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.isRealTimeBiasEnabled(<any>{ personalization: { realTimeBiasing: { attributes: null } } })).to.be.false;
+    });
+  });
+
+  describe('extractRealTimeBiasingExpiry()', () => {
+    it('should return the expiry time for real time biasing', () => {
+      const expiry = 3;
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.extractRealTimeBiasingExpiry(<any>{ personalization: { realTimeBiasing: { expiry } } })).to.eq(expiry);
     });
   });
 });

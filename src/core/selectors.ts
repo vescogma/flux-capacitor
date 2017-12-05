@@ -30,8 +30,8 @@ namespace Selectors {
    * Returns the corrected query if it exists, otherwise returns the original query.
    */
   export const currentQuery = (state: Store.State) => {
-    const query = state.data.present.query;
-    return query.corrected || query.original;
+    const { original, corrected } = state.data.present.query;
+    return corrected || original;
   };
 
   /**
@@ -118,8 +118,12 @@ namespace Selectors {
   /**
    * Returns the product with the given id
    */
-  export const findProduct = (state: Store.State, productId: string) =>
-    Selectors.products(state).find(({ id }) => id === productId);
+  export const findProduct = (state: Store.State, productId: string) => {
+    const match = ({ id }) => id === productId;
+    return Selectors.autocompleteProducts(state).find(match) ||
+      Selectors.products(state).find(match) ||
+      Selectors.recommendationsProducts(state).find(match);
+  };
 
   /**
    * Returns products with past purchases metadata.
@@ -279,6 +283,12 @@ namespace Selectors {
     Selectors.autocomplete(state).navigations;
 
   /**
+   * Returns the current autocomplete products.
+   */
+  export const autocompleteProducts = (state: Store.State) =>
+    Search.extractData(Selectors.autocomplete(state).products);
+
+  /**
    * Returns the current session location.
    */
   export const location = (state: Store.State) =>
@@ -301,7 +311,19 @@ namespace Selectors {
    */
   export const pastPurchaseProductsBySku = (state: Store.State) =>
     state.data.present.recommendations.pastPurchases.products
-      .reduce((products, product) => Object.assign(products, { [product.sku]: product.quantity }), {});
+      .reduce((allProducts, product) => Object.assign(allProducts, { [product.sku]: product.quantity }), {});
+
+  /**
+   * Returns the entire byId object from biasing
+   */
+  export const realTimeBiasesById = (state: Store.State) =>
+    state.data.present.personalization.biasing.byId;
+
+  /**
+   * Returns the entire allIds object from biasing
+   */
+  export const realTimeBiasesAllIds = (state: Store.State) =>
+    state.data.present.personalization.biasing.allIds;
 
   export const pastPurchases = (state: Store.State) =>
     state.data.present.recommendations.pastPurchases.products;
@@ -311,6 +333,14 @@ namespace Selectors {
 
   export const orderHistory = (state: Store.State) =>
     state.data.present.recommendations.orderHistory;
+
+  /**
+   * Returns whether or not biasing has been rehydrated from localstorage
+   */
+  export const realTimeBiasesHydrated = (state: Store.State) =>
+    !Configuration.isRealTimeBiasEnabled(Selectors.config(state)) ||
+    state.data.present.personalization['_persist'].rehydrated;
+
   /**
    * Returns the ui state for the all of the tags with the given tagName.
    */

@@ -69,6 +69,12 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('fetchProductsWhenHydrated()', () => {
+      it('should return an action', () => {
+        expectAction(ActionCreators.fetchProductsWhenHydrated(), Actions.FETCH_PRODUCTS_WHEN_HYDRATED, ACTION);
+      });
+    });
+
     describe('fetchMoreProducts()', () => {
       it('should return an action', () => {
         const amount = 15;
@@ -593,6 +599,31 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       it('should apply validators to UPDATE_AUTOCOMPLETE_QUERY', () => {
         expectValidators(ActionCreators.updateAutocompleteQuery(query), Actions.UPDATE_AUTOCOMPLETE_QUERY, {
           payload: validators.isDifferentAutocompleteQuery
+        });
+      });
+    });
+
+    describe('updateBiasing()', () => {
+      it('should return an UPDATE_AUTOCOMPLETE_QUERY thunk action with config injected in', () => {
+        const payload: any = {
+          a: 'b',
+          c: 'd'
+        };
+        const state: any = 'a';
+        const config = {
+          personalization: {
+            realTimeBiasing: 'real'
+          }
+        };
+        const selector = stub(Selectors, 'config').returns(config);
+
+        expectAction(ActionCreators.updateBiasing(payload)(state), Actions.UPDATE_BIASING, {
+          ...payload,
+          config: config.personalization.realTimeBiasing
+        });
+
+        expectValidators(ActionCreators.updateBiasing(payload)(state), Actions.UPDATE_BIASING, {
+          payload: validators.isValidBias
         });
       });
     });
