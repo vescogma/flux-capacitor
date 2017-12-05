@@ -1,6 +1,7 @@
 import { ForkEffect } from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import autocomplete from './autocomplete';
+import cart from './cart';
 import collection from './collection';
 import productDetails from './product-details';
 import products from './products';
@@ -11,6 +12,7 @@ export type SagaCreator = (flux: FluxCapacitor) => () => IterableIterator<ForkEf
 
 export const SAGA_CREATORS = [
   autocomplete,
+  cart,
   collection,
   productDetails,
   products,

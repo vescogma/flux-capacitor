@@ -210,7 +210,9 @@ namespace Actions {
   // create
   export const CREATE_CART = 'CREATE_CART';
   export type CreateCart = Action<typeof CREATE_CART, Payload.Cart.CreateCart>;
-
+  export const CART_CREATED = 'CART_CREATED';
+  export type CartCreated = Action<typeof CART_CREATED, Payload.Cart.CartConfirmation>;
+  
   export namespace Payload {
     export namespace Personalization {
       export interface Biasing {
@@ -306,9 +308,13 @@ namespace Actions {
 
     export namespace Cart {
       export interface CreateCart {
-        loginId: string;
+        loginId?: string;
         sessionId: string;
         visitorId: string;
+      }
+
+      export interface CartConfirmation {
+        cartId: string;
       }
     }
   }
