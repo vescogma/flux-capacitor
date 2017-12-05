@@ -13,8 +13,7 @@ export type Action = Actions.ReceivePastPurchaseSkus |
   Actions.SelectPastPurchaseRefinement | Actions.DeselectPastPurchaseRefinement |
   Actions.ResetPastPurchasePage | Actions.UpdatePastPurchasePageSize |
   Actions.UpdatePastPurchaseCurrentPage | Actions.ReceivePastPurchasePage |
-  Actions.ReceivePastPurchaseAllRecordCount | Actions.ResetAndSelectPastPurchaseRefinement |
-  Actions.ReceivePastPurchaseCurrentRecordCount;
+  Actions.ReceivePastPurchaseAllRecordCount | Actions.ReceivePastPurchaseCurrentRecordCount;
 export type State = Store.PastPurchase;
 
 export enum SORT_ENUMS {
@@ -78,13 +77,6 @@ export default function updatePastPurchases(state: State = DEFAULTS, action: Act
   }
   // tslint:enable max-line-length
 }
-
-// tslint:disable-next-line max-line-length
-export const updatePastPurchaseQueryAndReset = (state: State, { payload }: Actions.UpdatePastPurchaseQuery) =>
-  ({
-    ...applyNavigationReducer(state, <any>{ payload: true }, navigations.resetRefinements),
-    query: payload
-  });
 
 export const updatePastPurchaseSkus = (state: State, { payload }: Actions.ReceivePastPurchaseSkus) =>
   ({
