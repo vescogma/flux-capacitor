@@ -91,7 +91,7 @@ export namespace Tasks {
         const { result } = yield effects.call(fetchSkus, config, 'popular');
         if (result) {
           yield effects.put(flux.actions.receivePastPurchaseSkus(result));
-          yield effects.put(flux.actions.fetchPastPurchaseRENAMETHIS());
+          yield effects.put(flux.actions.fetchPastPurchaseNavigations());
         }
       } else {
         yield effects.put(flux.actions.receivePastPurchaseSkus([]));
@@ -101,6 +101,7 @@ export namespace Tasks {
     }
   }
 
+  // tslint:disable-next-line max-line-length
   export function* fetchPastPurchaseProducts(flux: FluxCapacitor, action: Actions.FetchPastPurchaseProducts, getNavigations: boolean = false) {
     try {
       const query = yield effects.select(Selectors.pastPurchaseQuery);
@@ -162,6 +163,6 @@ export default (flux: FluxCapacitor) => function* recommendationsSaga() {
   yield effects.takeLatest(Actions.FETCH_RECOMMENDATIONS_PRODUCTS, Tasks.fetchProducts, flux);
   yield effects.takeLatest(Actions.FETCH_PAST_PURCHASES, Tasks.fetchPastPurchases, flux);
   yield effects.takeLatest(Actions.FETCH_PAST_PURCHASE_PRODUCTS, Tasks.fetchPastPurchaseProducts, flux);
-  yield effects.takeLatest(Actions.FETCH_PAST_PURCHASE_RENAME_THIS, Tasks.fetchPastPurchaseProducts, flux, null, true);
+  yield effects.takeLatest(Actions.FETCH_PAST_PURCHASE_NAVIGATIONS, Tasks.fetchPastPurchaseProducts, flux, null, true);
   yield effects.takeLatest(Actions.FETCH_SAYT_PAST_PURCHASES, Tasks.fetchSaytPastPurchases, flux);
 };

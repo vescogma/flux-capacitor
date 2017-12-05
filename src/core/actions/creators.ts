@@ -1,7 +1,7 @@
 import { Results } from 'groupby-api';
 import Actions from '.';
-import Configuration from '../configuration';
 import SearchAdapter from '../adapters/search';
+import Configuration from '../configuration';
 import Selectors from '../selectors';
 import Store from '../store';
 import { createAction, handleError, refinementPayload, shouldResetRefinements } from './utils';
@@ -118,8 +118,8 @@ namespace ActionCreators {
     return createAction(Actions.FETCH_PAST_PURCHASE_PRODUCTS, query);
   }
 
-  export function fetchPastPurchaseRENAMETHIS(): Actions.FetchPastPurchaseRENAMETHIS {
-    return createAction(Actions.FETCH_PAST_PURCHASE_RENAME_THIS, null);
+  export function fetchPastPurchaseNavigations(): Actions.FetchPastPurchaseNavigations {
+    return createAction(Actions.FETCH_PAST_PURCHASE_NAVIGATIONS, null);
   }
 
   export function fetchSaytPastPurchases(query: string): Actions.FetchSaytPastPurchases {
@@ -129,26 +129,26 @@ namespace ActionCreators {
   // request action creators
   /**
    * Updates the search with given parameters.
-   * @param  {Actions.Payload.Search} search                - Search object for requested search.
+   * @param  {Actions.Payload.Search} newSearch                - Search object for requested search.
    * @return {Actions.UpdateSearch}                         - Actions with relevant data.
    */
-  export function updateSearch(search: Actions.Payload.Search) {
+  export function updateSearch(newSearch: Actions.Payload.Search) {
     return (state: Store.State): Actions.UpdateSearch => {
       const searchActions: Actions.UpdateSearch = [ActionCreators.resetPage()];
 
-      if ('query' in search) {
-        searchActions.push(...ActionCreators.updateQuery(search.query));
+      if ('query' in newSearch) {
+        searchActions.push(...ActionCreators.updateQuery(newSearch.query));
       }
-      if ('clear' in search && shouldResetRefinements(search, state)) {
-        searchActions.push(...ActionCreators.resetRefinements(search.clear));
+      if ('clear' in newSearch && shouldResetRefinements(newSearch, state)) {
+        searchActions.push(...ActionCreators.resetRefinements(newSearch.clear));
       }
-      if ('navigationId' in search) {
-        if ('index' in search) {
-          searchActions.push(...ActionCreators.selectRefinement(search.navigationId, search.index));
-        } else if (search.range) {
-          searchActions.push(...ActionCreators.addRefinement(search.navigationId, search.low, search.high));
-        } else if ('value' in search) {
-          searchActions.push(...ActionCreators.addRefinement(search.navigationId, search.value));
+      if ('navigationId' in newSearch) {
+        if ('index' in newSearch) {
+          searchActions.push(...ActionCreators.selectRefinement(newSearch.navigationId, newSearch.index));
+        } else if (newSearch.range) {
+          searchActions.push(...ActionCreators.addRefinement(newSearch.navigationId, newSearch.low, newSearch.high));
+        } else if ('value' in newSearch) {
+          searchActions.push(...ActionCreators.addRefinement(newSearch.navigationId, newSearch.value));
         }
       }
 

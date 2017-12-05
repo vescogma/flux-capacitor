@@ -102,8 +102,8 @@ namespace Actions {
   export type FetchPastPurchases = Action<typeof FETCH_PAST_PURCHASES>;
   export const FETCH_PAST_PURCHASE_PRODUCTS = 'FETCH_PAST_PURCHASE_PRODUCTS';
   export type FetchPastPurchaseProducts = Action<typeof FETCH_PAST_PURCHASE_PRODUCTS, string | null>;
-  export const FETCH_PAST_PURCHASE_RENAME_THIS = 'FETCH_PAST_PURCHASE_RENAME_THIS';
-  export type FetchPastPurchaseRENAMETHIS = Action<typeof FETCH_PAST_PURCHASE_RENAME_THIS>;
+  export const FETCH_PAST_PURCHASE_NAVIGATIONS = 'FETCH_PAST_PURCHASE_NAVIGATIONS';
+  export type FetchPastPurchaseNavigations = Action<typeof FETCH_PAST_PURCHASE_NAVIGATIONS>;
   export const FETCH_SAYT_PAST_PURCHASES = 'FETCH_SAYT_PAST_PURCHASES';
   export type FetchSaytPastPurchases = Action<typeof FETCH_SAYT_PAST_PURCHASES, string>;
 
