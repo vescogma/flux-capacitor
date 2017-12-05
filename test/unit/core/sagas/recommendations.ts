@@ -22,6 +22,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_RECOMMENDATIONS_PRODUCTS, Tasks.fetchProducts, flux));
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PAST_PURCHASES, Tasks.fetchPastPurchases, flux));
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PAST_PURCHASE_PRODUCTS, Tasks.fetchPastPurchaseProducts, flux));
+      expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PAST_PURCHASE_NAVIGATIONS, Tasks.fetchPastPurchaseProducts, flux, null, true));
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_SAYT_PAST_PURCHASES, Tasks.fetchSaytPastPurchases, flux));
       saga.next();
       // tslint:enable max-line-length
@@ -326,7 +327,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
         expect(task.next().value).to.eql(effects.select(Selectors.pastPurchaseQuery));
         expect(task.next(query).value).to.eql(effects.select(Selectors.config));
-        expect(task.next(config).value).to.eql(effects.call(<any>Tasks.fetchSkus, config, '_search', query));
+        expect(task.next(config).value).to.eql(effects.select(Selectors.pastPurchases));
         expect(task.next(data).value).to.eql(effects.select(Requests.pastPurchaseProducts));
         expect(task.next(request).value).to.eql(effects.call(<any>Tasks.fetchProductsFromSkus, flux, results, request));
         expect(task.next(productData).value).to.eql(effects.put(<any>[
@@ -353,45 +354,42 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
     });
 
     describe('fetchSaytPastPurchases()', () => {
-      it('should return if results.length is 0', () => {
+      it('should return if data.length is 0', () => {
         const receiveSaytPastPurchases = spy(() => 1);
         const flux: any = { actions: { receiveSaytPastPurchases } };
         const payload = { a: 1 };
         const action: any = { payload };
         const config = { b: 2 };
-        const data = { result: [] };
+        const data = [];
 
         const task = Tasks.fetchSaytPastPurchases(flux, action);
 
         expect(task.next().value).to.eql(effects.select(Selectors.config));
-        expect(task.next(config).value).to.eql(effects.call(<any>Tasks.fetchSkus, config, '_search', payload));
+        expect(task.next(config).value).to.eql(effects.select(Selectors.pastPurchases));
         expect(task.next(data).value).to.eql(effects.put(receiveSaytPastPurchases()));
         expect(task.next().value).to.be.undefined;
-
         expect(receiveSaytPastPurchases).to.be.calledWith([]);
       });
 
       it('should call fetchSaytPastPurchases', () => {
         const receiveSaytPastPurchases = spy(() => 1);
         const flux: any = { actions: { receiveSaytPastPurchases } };
-        const payload = { a: 1 };
+        const payload = 'q';
         const action: any = { payload };
         const config = { b: 2 };
         const result = [1, 2, 3];
-        const data = { result };
         const productData = { c: 3 };
-        const request = { d: 4 };
+        const request = { d: 4, query: payload };
         const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(productData);
 
         const task = Tasks.fetchSaytPastPurchases(flux, action);
 
         expect(task.next().value).to.eql(effects.select(Selectors.config));
-        expect(task.next(config).value).to.eql(effects.call(<any>Tasks.fetchSkus, config, '_search', payload));
-        expect(task.next(data).value).to.eql(effects.select(Requests.autocompleteProducts));
+        expect(task.next(config).value).to.eql(effects.select(Selectors.pastPurchases));
+        expect(task.next(result).value).to.eql(effects.select(Requests.autocompleteProducts));
         expect(task.next(request).value).to.eql(effects.call(<any>Tasks.fetchProductsFromSkus, flux, result, request));
         expect(task.next(productData).value).to.eql(effects.put(receiveSaytPastPurchases()));
         expect(task.next().value).to.be.undefined;
-
         expect(receiveSaytPastPurchases).to.be.calledWithExactly(productData);
         expect(augmentProducts).to.be.calledWithExactly(productData);
       });

@@ -493,11 +493,9 @@ suite('Observer', ({ expect, spy, stub }) => {
             const refinements = [1, 2];
             const oldObjById = { a: { selected: 2, refinements } };
             const oldObj = { allIds: oldObjAllIds, byId: oldObjById };
-            const newObjById = { a: { selected: 2, refinements } };
-            const newObj = { allIds: oldObjAllIds, byId: newObjById };
-            observers.data.present.pastPurchases.navigations(oldObj, newObj);
+            observers.data.present.pastPurchases.navigations(oldObj, oldObj);
 
-            expect(emit).to.not.be.called;
+            expect(emit).to.not.be.calledWith(Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED);
           });
 
           it('should emit PAST_PURCHASE_SORT_UPDATED event and call saveState', () => {
