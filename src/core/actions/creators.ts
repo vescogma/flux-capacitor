@@ -695,9 +695,17 @@ namespace ActionCreators {
   // tslint:disable-next-line max-line-length
   export function resetAndSelectPastPurchaseRefinement(navigationId: string, index: number): Actions.PastPurchaseResetAndSelect {
     return <Actions.PastPurchaseResetAndSelect>[
-      ActionCreators.resetPastPurchasePage(),
       ...ActionCreators.resetPastPurchaseRefinements(true),
       ...ActionCreators.selectPastPurchaseRefinement(navigationId, index),
+    ];
+  }
+
+  // todo doc
+  // tslint:disable-next-line max-line-length
+  export function resetAndUpdatePastPurchaseQuery(query: string): Actions.PastPurchaseResetAndQuery {
+    return <Actions.PastPurchaseResetAndQuery>[
+      ...ActionCreators.resetPastPurchaseRefinements(true),
+      ...ActionCreators.updatePastPurchaseQuery(query),
     ];
   }
 

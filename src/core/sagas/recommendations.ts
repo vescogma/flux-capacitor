@@ -101,28 +101,25 @@ export namespace Tasks {
     }
   }
 
-  export function* fetchPastPurchaseProducts(flux: FluxCapacitor, action: Actions.FetchPastPurchaseProducts, giraffe: boolean = false) {
+  export function* fetchPastPurchaseProducts(flux: FluxCapacitor, action: Actions.FetchPastPurchaseProducts, getNavigations: boolean = false) {
     try {
-      console.log('asdklasdasdhlajsdhad', action, giraffe);
       const query = yield effects.select(Selectors.pastPurchaseQuery);
       const config: Configuration = yield effects.select(Selectors.config);
       const pastPurchaseSkus: Store.PastPurchases.PastPurchaseProduct[] = yield effects.select(Selectors.pastPurchases);
       if (pastPurchaseSkus.length > 0) {
-        const request = yield effects.select(Requests.pastPurchaseProducts, giraffe);
+        const request = yield effects.select(Requests.pastPurchaseProducts, getNavigations);
         const results = yield effects.call(fetchProductsFromSkus, flux, pastPurchaseSkus, request);
         const navigations = SearchAdapter.combineNavigations({
           ...results,
           availableNavigation: Adapter.pastPurchaseNavigations(config, results.availableNavigation),
           selectedNavigation: results.selectedNavigation.filter((navigation) => navigation.name !== 'id'),
         });
-        console.log('aaa',results);
-        if (giraffe) {
+        if (getNavigations) {
           yield effects.put(<any>[
             flux.actions.receivePastPurchaseAllRecordCount(results.totalRecordCount),
             flux.actions.receivePastPurchaseRefinements(navigations),
           ]);
         } else {
-          console.log('this should be called');
           yield effects.put(<any>[
             flux.actions.receivePastPurchaseProducts(SearchAdapter.augmentProducts(results)),
             flux.actions.receivePastPurchasePage(SearchAdapter.extractPage(
@@ -133,8 +130,8 @@ export namespace Tasks {
               })),
             flux.actions.receivePastPurchaseCurrentRecordCount(results.totalRecordCount),
           ]);
+          flux.saveState(utils.Routes.PAST_PURCHASE);
         }
-        flux.saveState(utils.Routes.PAST_PURCHASE);
       }
     } catch (e) {
       return effects.put(flux.actions.receivePastPurchaseProducts(e));
