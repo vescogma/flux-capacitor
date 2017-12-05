@@ -300,29 +300,29 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
         cat6: ['j', { value: 'e', display: 'oh' }, 'f'],
       };
       const prefiltered: any = [{
-        name: 'cat1',
+        field: 'cat1',
         a: 1,
         b: 2,
         c: 2,
         refinements: [1,2,3],
       }, {
-        name: 'cat2',
+        field: 'cat2',
         a: 1,
         refinements: [2],
       }, {
-        name: 'cat3',
+        field: 'cat3',
         c: 5,
         refinements: [{ value: 'a' }, { value: 'b' }, { value: 'c' }, { high: 1, low: 4 }],
       }, {
-        name: 'cat4',
+        field: 'cat4',
         j: 0,
         refinements: [{ value: 'a' }, { value: 'j' }, { value: 'no' }, { value: 'h' }]
       }, {
-        name: 'cat5',
+        field: 'cat5',
         i: 1,
         refinements: [3,4,5,6,]
       }, {
-        name: 'another',
+        field: 'another',
         p: 6,
         refinements: [4,5,6,7]
       }];

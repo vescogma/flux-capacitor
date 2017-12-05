@@ -298,58 +298,84 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
       it('should generate a request', () => {
         const getState = spy(() => ({ a: 1 }));
         const receivePastPurchaseProducts = spy(() => 1);
-        const receivePastPurchaseRefinements = spy(() => 2);
         const receivePastPurchasePage = spy(() => 3);
-        const receivePastPurchaseRecordCount = spy(() => 4);
+        const receivePastPurchaseCurrentRecordCount = spy(() => 4);
         const saveState = spy();
         const actions = {
           receivePastPurchasePage,
           receivePastPurchaseProducts,
-          receivePastPurchaseRefinements,
-          receivePastPurchaseRecordCount,
+          receivePastPurchaseCurrentRecordCount,
         };
         const flux: any = { actions, saveState, store: { getState }};
         const query = 'past';
         const config = { b: 2 };
         const result = [1, 2, 3];
-        const data = { result };
         const request = { c: 3 };
-        const results = result;
         const transformedNav = ['f'];
         const productData = { selectedNavigation: [2,3,5], };
         const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(productData);
-        const combineNavigations = stub(SearchAdapter, 'combineNavigations').returns(productData);
         const extractPage = stub(SearchAdapter, 'extractPage').returns(productData);
         const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(productData);
-        const navigations = stub(RecommendationsAdapter, 'pastPurchaseNavigations').returns(transformedNav);
 
         const task = Tasks.fetchPastPurchaseProducts(flux, <any>{});
 
         expect(task.next().value).to.eql(effects.select(Selectors.pastPurchaseQuery));
         expect(task.next(query).value).to.eql(effects.select(Selectors.config));
         expect(task.next(config).value).to.eql(effects.select(Selectors.pastPurchases));
-        expect(task.next(data).value).to.eql(effects.select(Requests.pastPurchaseProducts));
-        expect(task.next(request).value).to.eql(effects.call(<any>Tasks.fetchProductsFromSkus, flux, results, request));
+        expect(task.next(result).value).to.eql(effects.select(Requests.pastPurchaseProducts, false));
+        expect(task.next(request).value).to.eql(effects.call(<any>Tasks.fetchProductsFromSkus, flux, result, request));
         expect(task.next(productData).value).to.eql(effects.put(<any>[
+          receivePastPurchasePage(),
+          receivePastPurchaseCurrentRecordCount(),
           receivePastPurchaseProducts(),
-          receivePastPurchaseRecordCount(),
-          receivePastPurchaseRefinements(),
-          receivePastPurchasePage()
         ]));
         expect(task.next([]).value).to.be.undefined;
 
         expect(augmentProducts).to.be.calledWithExactly(productData);
-        expect(combineNavigations).to.be.calledWithExactly({
-          ...productData,
-          availableNavigation: transformedNav,
-        });
         expect(extractRecordCount).to.be.calledWithExactly(productData);
         expect(extractPage).to.be.calledWithExactly(getState(), productData, {
           pageSelector: Selectors.pastPurchasePage,
           pageSizeSelector: Selectors.pastPurchasePageSize,
         });
         expect(saveState).to.be.calledWithExactly(utils.Routes.PAST_PURCHASE);
-        expect(navigations).to.be.calledWithExactly(config, undefined);
+      });
+
+      it('should generate a request when getNavigations is true', () => {
+        const getState = spy(() => ({ a: 1 }));
+        const receivePastPurchaseAllRecordCount = spy(() => 1);
+        const receivePastPurchaseRefinements = spy(() => 2);
+        const saveState = spy();
+        const actions = {
+          receivePastPurchaseAllRecordCount,
+          receivePastPurchaseRefinements,
+        };
+        const flux: any = { actions, saveState, store: { getState }};
+        const query = 'past';
+        const config = { b: 2 };
+        const result = [1, 2, 3];
+        const request = { c: 3 };
+        const transformedNav = ['f'];
+        const productData = { selectedNavigation: [2,3,5], };
+        const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(productData);
+        const combineNavigations = stub(SearchAdapter, 'combineNavigations').returns(productData);
+        const navigations = stub(RecommendationsAdapter, 'pastPurchaseNavigations').returns(transformedNav);
+
+        const task = Tasks.fetchPastPurchaseProducts(flux, <any>{}, true);
+
+        task.next();
+        task.next(query);
+        task.next(config);
+        expect(task.next(result).value).to.eql(effects.select(Requests.pastPurchaseProducts, true));
+        task.next(request);
+        expect(task.next(productData).value).to.eql(effects.put(<any>[
+          receivePastPurchaseAllRecordCount(),
+          receivePastPurchaseRefinements(),
+        ]));
+        expect(task.next([]).value).to.be.undefined;
+
+        expect(combineNavigations).to.be.calledWithExactly(productData);
+        expect(saveState).to.not.be.called;
+        expect(navigations).to.be.calledWithExactly(config, productData);
       });
     });
 
