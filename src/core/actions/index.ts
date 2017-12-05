@@ -208,11 +208,13 @@ namespace Actions {
   // tslint:enable max-line-length
 
   // create
+  export const GET_TRACKER_INFO = 'GET_TRACKER_INFO';
+  export type GetTrackerInfo = Action<typeof GET_TRACKER_INFO, Payload.Cart.CreateCart>;
   export const CREATE_CART = 'CREATE_CART';
   export type CreateCart = Action<typeof CREATE_CART, Payload.Cart.CreateCart>;
   export const CART_CREATED = 'CART_CREATED';
   export type CartCreated = Action<typeof CART_CREATED, Payload.Cart.CartConfirmation>;
-  
+
   export namespace Payload {
     export namespace Personalization {
       export interface Biasing {
@@ -307,6 +309,7 @@ namespace Actions {
     }
 
     export namespace Cart {
+      // todo: change name
       export interface CreateCart {
         loginId?: string;
         sessionId: string;

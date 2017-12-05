@@ -413,8 +413,8 @@ namespace ActionCreators {
         ...payload,
         config: Selectors.config(state).personalization.realTimeBiasing,
       }, {
-        payload: validators.isValidBias
-      });
+          payload: validators.isValidBias
+        });
   }
 
   export function updateSecuredPayload(payload: Configuration.Recommendations.SecuredPayload) {
@@ -789,13 +789,17 @@ namespace ActionCreators {
   }
 
   // TODO; wip shopping cart (change type)
-  export function createCart (visitorId: string, sessionId: string) {
+  export function getTrackerInfo(visitorId: string, sessionId: string) {
+    console.log('getting it', visitorId)
+    return createAction(Actions.GET_TRACKER_INFO, { visitorId, sessionId });
+  }
+
+  export function createCart(visitorId: string, sessionId: string) {
     return createAction(Actions.CREATE_CART, { visitorId, sessionId });
   }
 
-  export function cartCreated (cartId: string) {
-    console.log('cart created in creator')
-    return createAction(Actions.CART_CREATED, { cartId })
+  export function cartCreated(cartId: string) {
+    return createAction(Actions.CART_CREATED, { cartId });
   }
 
   // ui action creators
