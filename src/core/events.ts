@@ -95,9 +95,14 @@ namespace Events {
   // cart evets
   /**
    * Triggered when user adds the first item into cart.
-   * Returns cart id.
+   * 
    */
   export const CREATE_CART = 'create_cart';
+    /**
+   * Triggered when cart created.
+   * Returns cart id.
+   */
+  export const CART_CREATED = 'cart_created';
   /**
    * Triggered when user adds item into cart.
    *

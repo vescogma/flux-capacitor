@@ -789,9 +789,15 @@ namespace ActionCreators {
   }
 
   // TODO; wip shopping cart (change type)
-  export function createCart (essionId: string, visitorId: string) {
-    return createAction(Actions.CREATE_CART);
+  export function createCart (visitorId: string, sessionId: string) {
+    return createAction(Actions.CREATE_CART, { visitorId, sessionId });
   }
+
+  export function cartCreated (cartId: string) {
+    console.log('cart created in creator')
+    return createAction(Actions.CART_CREATED, { cartId })
+  }
+
   // ui action creators
   /**
    * Adds state for a given tag to the store.

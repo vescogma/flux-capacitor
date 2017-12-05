@@ -27,7 +27,7 @@ export interface RecommendationsRequest {
 }
 
 export interface CartBody {
-  loginId: string;
+  loginId?: string;
   sessionId: string;
   visitorId: string;
 }
