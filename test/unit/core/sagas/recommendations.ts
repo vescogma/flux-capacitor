@@ -223,8 +223,8 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
       it('should call fetchPastPurchases', () => {
         const productCount = 5;
-        const data = { b: 2 };
-        const navigations = [1,2,3];
+        const data: any = { b: 2 };
+        const navigations: any = [1,2,3];
         const receivePastPurchaseSkus = spy(() => data);
         const fetchPastPurchaseNavigations = spy(() => navigations);
         const flux: any = { actions: { receivePastPurchaseSkus, fetchPastPurchaseNavigations } };
@@ -236,10 +236,8 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
         expect(task.next().value).to.eql(effects.select(Selectors.config));
         expect(task.next(config).value).to.eql(effects.call(<any>Tasks.fetchSkus, config, 'popular'));
-        expect(task.next(result).value).to.eql(effects.put(<any>[
-          data,
-          navigations,
-        ]));
+        expect(task.next(result).value).to.eql(effects.put(data));
+        expect(task.next(result).value).to.eql(effects.put(navigations));
         expect(task.next().value).to.be.undefined;
         expect(receivePastPurchaseSkus).to.be.calledWith(resultArray);
         expect(extractProductCount).to.be.calledWith(config);

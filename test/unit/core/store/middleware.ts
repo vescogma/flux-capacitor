@@ -241,7 +241,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const ret = 'middleware';
       const insert = stub(Middleware, 'insertAction').returns(ret);
 
-      expect(Middleware.pastPurchaseProductAnalyzer(Middleware)).to.eql(ret);
+      expect(Middleware.pastPurchaseProductAnalyzer()).to.eql(ret);
 
       expect(insert).to.be.calledWithExactly(PAST_PURCHASES_SEARCH_CHANGE_ACTIONS,
                                              ActionCreators.fetchPastPurchaseProducts());

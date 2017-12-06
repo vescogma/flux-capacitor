@@ -1034,6 +1034,27 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
           res,
           sel
         ]);
+
+        expect(reset).to.be.calledWithExactly(true);
+        expect(select).to.be.calledWithExactly(navigationId, index);
+      });
+    });
+
+    describe('resetPastPurchaseQueryAndSelectRefinement()', () => {
+      it('should return a batch action and call updatePastPurchaseQuery and selectPastPurchaseRefinement', () => {
+        const navigationId = 'color';
+        const index = 3;
+        const query: any = { type: 'asdf' };
+        const sel: any = { type: 'fsef' };
+        const update = stub(ActionCreators, 'updatePastPurchaseQuery').returns([query]);
+        const select = stub(ActionCreators, 'selectPastPurchaseRefinement').returns([sel]);
+        expect(ActionCreators.resetPastPurchaseQueryAndSelectRefinement(navigationId, index)).to.eql([
+          query,
+          sel
+        ]);
+
+        expect(update).to.be.calledWithExactly('');
+        expect(select).to.be.calledWithExactly(navigationId, index);
       });
     });
 

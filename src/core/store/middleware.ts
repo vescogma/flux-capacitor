@@ -118,11 +118,11 @@ export namespace Middleware {
   }
 
   export function pastPurchaseProductAnalyzer() {
-    return this.insertAction(PAST_PURCHASES_SEARCH_CHANGE_ACTIONS, ActionCreators.fetchPastPurchaseProducts());
+    return Middleware.insertAction(PAST_PURCHASES_SEARCH_CHANGE_ACTIONS, ActionCreators.fetchPastPurchaseProducts());
   }
 
   export function saveStateAnalyzer() {
-    return this.insertAction(HISTORY_UPDATE_ACTIONS, { type: Actions.SAVE_STATE });
+    return Middleware.insertAction(HISTORY_UPDATE_ACTIONS, { type: Actions.SAVE_STATE });
   }
 
   export function thunkEvaluator(store: Store<any>) {

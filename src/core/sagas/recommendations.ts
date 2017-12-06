@@ -90,10 +90,8 @@ export namespace Tasks {
       if (productCount > 0) {
         const { result } = yield effects.call(fetchSkus, config, 'popular');
         if (result) {
-          yield effects.put(<any>[
-            flux.actions.receivePastPurchaseSkus(result),
-            flux.actions.fetchPastPurchaseNavigations(),
-          ]);
+          yield effects.put(flux.actions.receivePastPurchaseSkus(result));
+          yield effects.put(flux.actions.fetchPastPurchaseNavigations());
         }
       } else {
         yield effects.put(flux.actions.receivePastPurchaseSkus([]));
