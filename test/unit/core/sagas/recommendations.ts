@@ -280,9 +280,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchPastPurchaseProducts(flux, action);
 
-        expect(task.next().value).to.eql(effects.select(Selectors.pastPurchaseQuery));
-        expect(task.next('').value).to.eql(effects.select(Selectors.config));
-        expect(task.next(config).value).to.eql(effects.select(Selectors.pastPurchases));
+        expect(task.next().value).to.eql(effects.select(Selectors.pastPurchases));
         expect(task.next([]).value).to.be.undefined;
       });
 
@@ -323,9 +321,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchPastPurchaseProducts(flux, <any>{});
 
-        expect(task.next().value).to.eql(effects.select(Selectors.pastPurchaseQuery));
-        expect(task.next(query).value).to.eql(effects.select(Selectors.config));
-        expect(task.next(config).value).to.eql(effects.select(Selectors.pastPurchases));
+        expect(task.next().value).to.eql(effects.select(Selectors.pastPurchases));
         expect(task.next(result).value).to.eql(effects.select(Requests.pastPurchaseProducts, false));
         expect(task.next(request).value).to.eql(effects.call(<any>Tasks.fetchProductsFromSkus, flux, result, request));
         expect(task.next(productData).value).to.eql(effects.put(<any>[
@@ -367,11 +363,10 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const task = Tasks.fetchPastPurchaseProducts(flux, <any>{}, true);
 
         task.next();
-        task.next(query);
-        task.next(config);
         expect(task.next(result).value).to.eql(effects.select(Requests.pastPurchaseProducts, true));
         task.next(request);
-        expect(task.next(productData).value).to.eql(effects.put(<any>[
+        expect(task.next(productData).value).to.eql(effects.select(Selectors.config));
+        expect(task.next(config).value).to.eql(effects.put(<any>[
           receivePastPurchaseAllRecordCount(),
           receivePastPurchaseRefinements(),
         ]));

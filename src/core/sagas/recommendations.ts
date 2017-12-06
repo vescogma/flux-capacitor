@@ -104,14 +104,13 @@ export namespace Tasks {
   // tslint:disable-next-line max-line-length
   export function* fetchPastPurchaseProducts(flux: FluxCapacitor, action: Actions.FetchPastPurchaseProducts, getNavigations: boolean = false) {
     try {
-      const query = yield effects.select(Selectors.pastPurchaseQuery);
-      const config: Configuration = yield effects.select(Selectors.config);
       const pastPurchaseSkus: Store.PastPurchases.PastPurchaseProduct[] = yield effects.select(Selectors.pastPurchases);
       if (pastPurchaseSkus.length > 0) {
         const request = yield effects.select(Requests.pastPurchaseProducts, getNavigations);
         const results = yield effects.call(fetchProductsFromSkus, flux, pastPurchaseSkus, request);
         if (getNavigations) {
-          const navigations = Adapter.pastPurchaseNavigations(config, SearchAdapter.combineNavigations(results));
+          const navigations = Adapter.pastPurchaseNavigations(yield effects.select(Selectors.config),
+                                                              SearchAdapter.combineNavigations(results));
           yield effects.put(<any>[
             flux.actions.receivePastPurchaseAllRecordCount(results.totalRecordCount),
             flux.actions.receivePastPurchaseRefinements(navigations),
