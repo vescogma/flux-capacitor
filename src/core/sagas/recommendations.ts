@@ -1,4 +1,4 @@
-import { Biasing, Request, SelectedRefinement, Sort } from 'groupby-api';
+import { Biasing, Request, Sort } from 'groupby-api';
 import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
@@ -86,7 +86,7 @@ export namespace Tasks {
   export function* fetchPastPurchases(flux: FluxCapacitor, action: Actions.FetchPastPurchases) {
     try {
       const config: Configuration = yield effects.select(Selectors.config);
-      const productCount = ConfigAdapter.extractProductCount(config);
+      const productCount = ConfigAdapter.extractPastPurchaseProductCount(config);
       if (productCount > 0) {
         const { result } = yield effects.call(fetchSkus, config, 'popular');
         if (result) {

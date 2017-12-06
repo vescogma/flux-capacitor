@@ -473,7 +473,7 @@ suite('Observer', ({ expect, spy, stub }) => {
             const newObj = { allIds };
             observers.data.present.pastPurchases.navigations({}, newObj);
 
-            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_REFINEMENTS_UPDATED, newObj);
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_NAVIGATIONS_UPDATED, newObj);
           });
 
           it('should emit PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED event with refinement name', () => {

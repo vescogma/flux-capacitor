@@ -402,7 +402,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     it('should return product count', () => {
       const productCount = 3;
       // tslint:disable-next-line max-line-length
-      expect(Adapter.extractProductCount(<any>{ recommendations: { pastPurchases: { productCount } } })).to.eql(productCount);
+      expect(Adapter.extractPastPurchaseProductCount(<any>{ recommendations: { pastPurchases: { productCount } } })).to.eql(productCount);
     });
   });
 

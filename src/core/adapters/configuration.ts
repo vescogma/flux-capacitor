@@ -162,7 +162,7 @@ namespace Adapter {
     return typeof payload === 'function' ? payload() : payload;
   };
 
-  export const extractProductCount = (config: Configuration) =>
+  export const extractPastPurchaseProductCount = (config: Configuration) =>
     config.recommendations.pastPurchases.productCount;
 
   export const extractPastPurchaseNavigations = (config: Configuration) =>

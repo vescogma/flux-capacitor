@@ -163,22 +163,58 @@ namespace Events {
    */
   export const PAST_PURCHASES_UPDATED = 'past_purchases_updated';
 
+  /**
+   * Triggered when the product ids of the past purchase products are updated
+   * Returns the new array of past purchase skus
+   */
   export const PAST_PURCHASE_SKUS_UPDATED = 'past_purchase_skus_updated';
 
+  /**
+   * Triggered when the current past purchase products to show in the sayt menu are updated
+   * Returns the new product array
+   */
   export const SAYT_PAST_PURCHASES_UPDATED = 'sayt_past_purchases_updated';
 
+  /**
+   * Triggered when the past purchase products are updated
+   * Returns an array of the new past purchase products
+   */
   export const PAST_PURCHASE_PRODUCTS_UPDATED = 'past_purchase_products_updated';
 
-  export const PAST_PURCHASE_REFINEMENTS_UPDATED = 'past_purchase_refinements_updated';
+  /**
+   * Triggered when the past purchase navigations are updated
+   * Returns the new navigations
+   */
+  export const PAST_PURCHASE_NAVIGATIONS_UPDATED = 'past_purchase_navigations_updated';
 
+  /**
+   * Triggered when the past purchase query is updated
+   * Returns the new query
+   */
   export const PAST_PURCHASE_QUERY_UPDATED = 'past_purchase_query_updated';
 
+  /**
+   * Triggered when the past purchase page object is updated
+   * Returns the new page object
+   */
   export const PAST_PURCHASE_PAGE_UPDATED = 'past_purchase_page_updated';
 
+  /**
+   * Triggered when the past purchase current page number is udpated
+   * Returns the new page number
+   */
   export const PAST_PURCHASE_CURRENT_PAGE_UPDATED = 'past_purchase_current_page_updated';
 
+  /**
+   * Triggered when the past purchse page size is updated
+   * Returns the new page size
+   */
   export const PAST_PURCHASE_PAGE_SIZE_UPDATED = 'past_purchase_page_size_updated';
 
+  /**
+   * Triggered when the past purchase sort object is updated
+   * Returns the new sort object
+   */
   export const PAST_PURCHASE_SORT_UPDATED = 'past_purchase_sort_updated';
 
   /**

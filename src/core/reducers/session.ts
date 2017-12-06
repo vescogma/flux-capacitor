@@ -6,7 +6,6 @@ export type Action = Actions.UpdateLocation | Actions.UpdateSecuredPayload  |
   Actions.Action<string, any>;
 export type State = Store.Session;
 
-// tslint:disable-next-line max-line-length
 export default function updateSession(state: State = {}, action: Action): State {
   switch (action.type) {
     case Actions.UPDATE_LOCATION: return updateLocation(state, action.payload);

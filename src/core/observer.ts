@@ -177,7 +177,7 @@ namespace Observer {
                     }
                   }
                 }
-              })(emit(Events.PAST_PURCHASE_REFINEMENTS_UPDATED)),
+              })(emit(Events.PAST_PURCHASE_NAVIGATIONS_UPDATED)),
             sort: emit(Events.PAST_PURCHASE_SORT_UPDATED),
           },
 
