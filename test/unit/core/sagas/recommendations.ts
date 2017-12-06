@@ -211,6 +211,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const productCount = 0;
         const receivePastPurchaseSkus = spy(() => 1);
         const flux: any = { actions: { receivePastPurchaseSkus } };
+        // tslint:disable-next-line max-line-length
         const extractPastPurchaseProductCount = stub(ConfigAdapter, 'extractPastPurchaseProductCount').returns(productCount);
 
         const task = Tasks.fetchPastPurchases(flux, <any>{});
@@ -230,6 +231,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const flux: any = { actions: { receivePastPurchaseSkus, fetchPastPurchaseNavigations } };
         const resultArray = [1, 2, 3];
         const result = { result: resultArray };
+        // tslint:disable-next-line max-line-length
         const extractPastPurchaseProductCount = stub(ConfigAdapter, 'extractPastPurchaseProductCount').returns(productCount);
 
         const task = Tasks.fetchPastPurchases(flux, <any>{});
@@ -250,6 +252,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const receivePastPurchaseSkus = spy(() => data);
         const flux: any = { actions: { receivePastPurchaseSkus } };
         const result = { result: null };
+        // tslint:disable-next-line max-line-length
         const extractPastPurchaseProductCount = stub(ConfigAdapter, 'extractPastPurchaseProductCount').returns(productCount);
 
         const task = Tasks.fetchPastPurchases(flux, <any>{});
