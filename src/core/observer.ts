@@ -53,6 +53,25 @@ namespace Observer {
         .forEach((key) => Observer.terminal(oldState[key], newState[key], emit, `${path}.${key}`));
   }
 
+  export function navigations(emit: Function, navigationsEvent: string, selectedRefinementsEvent: string){
+    return ((emitIndexUpdated: Observer) =>
+            (oldState: Store.Indexed<Store.Navigation>, newState: Store.Indexed<Store.Navigation>, path: string) => {
+              if (oldState.allIds !== newState.allIds) {
+                emitIndexUpdated(oldState, newState, path);
+              } else {
+                newState.allIds.forEach((id) => {
+                  const oldNavigation = oldState.byId[id];
+                  const newNavigation = newState.byId[id];
+                  if (oldNavigation.selected !== newNavigation.selected
+                    || oldNavigation.refinements !== newNavigation.refinements) {
+                    // tslint:disable-next-line max-line-length
+                    emit(`${selectedRefinementsEvent}:${id}`)(oldNavigation, newNavigation, `${path}.byId.${id}`);
+                  }
+                });
+              }
+            })(emit(navigationsEvent));
+  }
+
   export function create(flux: FluxCapacitor) {
     const emit = (event: string) => (_, value: any, path: string) => {
       flux.emit(event, value);
@@ -98,22 +117,7 @@ namespace Observer {
             data: emit(Events.DETAILS_UPDATED),
           },
 
-          navigations: ((emitIndexUpdated: Observer) =>
-            (oldState: Store.Indexed<Store.Navigation>, newState: Store.Indexed<Store.Navigation>, path: string) => {
-              if (oldState.allIds !== newState.allIds) {
-                emitIndexUpdated(oldState, newState, path);
-              } else {
-                newState.allIds.forEach((id) => {
-                  const oldNavigation = oldState.byId[id];
-                  const newNavigation = newState.byId[id];
-                  if (oldNavigation.selected !== newNavigation.selected
-                    || oldNavigation.refinements !== newNavigation.refinements) {
-                    // tslint:disable-next-line max-line-length
-                    emit(`${Events.SELECTED_REFINEMENTS_UPDATED}:${id}`)(oldNavigation, newNavigation, `${path}.byId.${id}`);
-                  }
-                });
-              }
-            })(emit(Events.NAVIGATIONS_UPDATED)),
+          navigations: Observer.navigations(emit, Events.NAVIGATIONS_UPDATED, Events.SELECTED_REFINEMENTS_UPDATED),
 
           page: Object.assign(emit(Events.PAGE_UPDATED), {
             current: emit(Events.CURRENT_PAGE_UPDATED),
@@ -155,29 +159,8 @@ namespace Observer {
               current: emit(Events.PAST_PURCHASE_CURRENT_PAGE_UPDATED),
               sizes: emit(Events.PAST_PURCHASE_PAGE_SIZE_UPDATED),
             }),
-            navigations: ((emitIndexUpdated: Observer) =>
-              (oldState: Store.Indexed<Store.Navigation>,
-                newState: Store.Indexed<Store.Navigation>, path: string) => {
-                if (oldState.allIds !== newState.allIds) {
-                  // todo don't repeat
-                  emitIndexUpdated(oldState, newState, path);
-                } else {
-                  // for loop instead of foreach to allow early break/return
-                  // we need to break to allow resetAndSelectRefinement
-                  emitIndexUpdated(oldState, newState, path);
-                  for (let i = 0; i < newState.allIds.length; i++) {
-                    const id = newState.allIds[i];
-                    const oldNavigation = oldState.byId[id];
-                    const newNavigation = newState.byId[id];
-                    if (oldNavigation.selected !== newNavigation.selected
-                      || oldNavigation.refinements !== newNavigation.refinements) {
-                      // tslint:disable-next-line max-line-length
-                      emit(Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED)(oldNavigation, newNavigation, `${path}.byId.${id}`);
-                      return;
-                    }
-                  }
-                }
-              })(emit(Events.PAST_PURCHASE_NAVIGATIONS_UPDATED)),
+            navigations: Observer.navigations(emit, Events.PAST_PURCHASE_NAVIGATIONS_UPDATED,
+                                              Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED),
             sort: emit(Events.PAST_PURCHASE_SORT_UPDATED),
           },
 
