@@ -154,6 +154,18 @@ suite('requests', ({ expect, stub }) => {
       expect(req.refinements).to.eql(refinements);
       expect(req.skip).to.eql(skip);
     });
+
+    it('should not add query and refinements if getNavigations is false', () => {
+      searchRequest.pageSize = -3;
+      searchRequest.skip = -4;
+
+      const req = Requests.pastPurchaseProducts(state, true);
+
+      expect(req.pageSize).to.eql(pageSize);
+      expect(req.query).to.eql('');
+      expect(req.refinements).to.eql([]);
+      expect(req.skip).to.eql(skip);
+    });
   });
 
   describe('autocompleteSuggestions()', () => {
