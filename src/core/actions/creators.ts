@@ -790,7 +790,6 @@ namespace ActionCreators {
 
   // TODO; wip shopping cart (change type)
   export function getTrackerInfo(visitorId: string, sessionId: string) {
-    console.log('getting it', visitorId)
     return createAction(Actions.GET_TRACKER_INFO, { visitorId, sessionId });
   }
 
@@ -800,6 +799,10 @@ namespace ActionCreators {
 
   export function cartCreated(cartId: string) {
     return createAction(Actions.CART_CREATED, { cartId });
+  }
+
+  export function addToCart(product: any) {
+    return createAction(Actions.ADD_TO_CART, product);
   }
 
   // ui action creators

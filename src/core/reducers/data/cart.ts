@@ -17,21 +17,21 @@ export const DEFAULTS: State = {
 };
 
 function updateCart(state: State = DEFAULTS, action: any): State {
-  console.log('in reducer',action.type)
   switch (action.type) {
     case Actions.GET_TRACKER_INFO:
-      return createCart(state, action.payload);
+      return getTrackerInfo(state, action.payload);
     case Actions.CREATE_CART:
       return createCart(state, action.payload);
     case Actions.CART_CREATED:
       return cartCreated(state, action.payload);
+    case Actions.ADD_TO_CART:
+      return addToCart(state, action.payload);
     default:
       return state;
   }
 }
 
-export const createCart = (state: State, { visitorId, sessionId }: Actions.Payload.Cart.CreateCart) => {
-  console.log('here', visitorId);
+export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.Payload.Cart.CreateCart) => {
   return {
     ...state,
     visitorId,
@@ -39,9 +39,20 @@ export const createCart = (state: State, { visitorId, sessionId }: Actions.Paylo
   };
 };
 
+export const createCart = (state: State, { visitorId, sessionId }: Actions.Payload.Cart.CreateCart) => {
+  return {
+    ...state
+  };
+};
+
 export const cartCreated = (state: State, { cartId }: Actions.Payload.Cart.CartConfirmation) => ({
   ...state,
   cartId
+});
+
+export const addToCart = (state: State, item: any) => ({
+  ...state,
+  items: [...state.items, item]
 });
 
 const cartTransform = createTransform(Adapter.transformToBrowser);

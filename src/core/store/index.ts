@@ -25,10 +25,11 @@ namespace Store {
       <State>Adapter.initialState(flux.__config),
       middleware,
     );
-
+    persistStore(store);
     // cannot stub persistStore
     /* istanbul ignore next */
     if (Adapter.isRealTimeBiasEnabled(flux.__config)) {
+      console.log('is enabled')
       persistStore(store);
     }
 

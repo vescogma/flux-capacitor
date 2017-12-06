@@ -214,6 +214,8 @@ namespace Actions {
   export type CreateCart = Action<typeof CREATE_CART, Payload.Cart.CreateCart>;
   export const CART_CREATED = 'CART_CREATED';
   export type CartCreated = Action<typeof CART_CREATED, Payload.Cart.CartConfirmation>;
+  export const ADD_TO_CART = 'ADD_TO_CART';
+  export type AddToCart = Action<typeof ADD_TO_CART, any>;
 
   export namespace Payload {
     export namespace Personalization {
