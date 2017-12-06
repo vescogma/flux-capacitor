@@ -170,11 +170,6 @@ namespace Adapter {
 
   export const requestSort = ({ field, descending }: Store.Sort) =>
     ({ field, order: descending ? 'Descending' : undefined });
-
-  export interface PageSelectors {
-    pageSelector: (state: Store.State) => number;
-    pageSizeSelector: (state: Store.State) => number;
-  }
 }
 
 export default Adapter;
