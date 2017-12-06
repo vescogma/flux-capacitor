@@ -12,9 +12,9 @@ import Store from '../store';
 import * as utils from '../utils';
 
 export class MissingPayload extends Error {
-  /* istanbul ignore next */
   constructor (err: string = 'No Secured Payload') {
     super(err);
+    Object.setPrototypeOf(this, MissingPayload.prototype);
   }
 }
 

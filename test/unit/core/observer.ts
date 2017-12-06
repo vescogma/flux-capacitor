@@ -468,34 +468,14 @@ suite('Observer', ({ expect, spy, stub }) => {
             expect(emit).to.be.calledWith(Events.SAYT_PAST_PURCHASES_UPDATED, testObject);
           });
 
-          it('should emit PAST_PURCHASE_REFINEMENTS_UPDATED event', () => {
-            const allIds = [1, 2, 3];
-            const newObj = { allIds };
-            observers.data.present.pastPurchases.navigations({}, newObj);
-
-            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_NAVIGATIONS_UPDATED, newObj);
-          });
-
-          it('should emit PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED event with refinement name', () => {
-            const oldObjAllIds = ['a'];
-            const oldObjById = { a: { selected: 2, refinements: [1, 2] } };
-            const oldObj = { allIds: oldObjAllIds, byId: oldObjById };
-            const newObjById = { a: { selected: 2, refinements: [1, 3] } };
-            const newObj = { allIds: oldObjAllIds, byId: newObjById };
-            observers.data.present.pastPurchases.navigations(oldObj, newObj);
-
-            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED,
-              { selected: 2, refinements: [1, 3] });
-          });
-
-          it('should not emit PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED event', () => {
-            const oldObjAllIds = ['a'];
-            const refinements = [1, 2];
-            const oldObjById = { a: { selected: 2, refinements } };
-            const oldObj = { allIds: oldObjAllIds, byId: oldObjById };
-            observers.data.present.pastPurchases.navigations(oldObj, oldObj);
-
-            expect(emit).to.not.be.calledWith(Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED);
+          it('should call navigations() for past purchase navigations', () => {
+            const nav = 'nav';
+            const navigations = stub(Observer, 'navigations').returns(nav);
+            const stubbed = Observer.create(<any>{ emit });
+            expect(stubbed.data.present.pastPurchases.navigations).to.eql(nav);
+            expect(navigations).to.be.calledWith(Events.NAVIGATIONS_UPDATED, Events.SELECTED_REFINEMENTS_UPDATED)
+              .and.be.calledWith(Events.PAST_PURCHASE_NAVIGATIONS_UPDATED,
+              Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED);
           });
 
           it('should emit PAST_PURCHASE_SORT_UPDATED event and call saveState', () => {

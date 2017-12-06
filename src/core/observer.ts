@@ -53,7 +53,7 @@ namespace Observer {
         .forEach((key) => Observer.terminal(oldState[key], newState[key], emit, `${path}.${key}`));
   }
 
-  export function navigations(emit: Function, navigationsEvent: string, selectedRefinementsEvent: string){
+  export function navigations(navigationsEvent: string, selectedRefinementsEvent: string, emit: Function) {
     return ((emitIndexUpdated: Observer) =>
             (oldState: Store.Indexed<Store.Navigation>, newState: Store.Indexed<Store.Navigation>, path: string) => {
               if (oldState.allIds !== newState.allIds) {
@@ -117,8 +117,7 @@ namespace Observer {
             data: emit(Events.DETAILS_UPDATED),
           },
 
-          navigations: Observer.navigations(emit, Events.NAVIGATIONS_UPDATED, Events.SELECTED_REFINEMENTS_UPDATED),
-
+          navigations: Observer.navigations(Events.NAVIGATIONS_UPDATED, Events.SELECTED_REFINEMENTS_UPDATED, emit),
           page: Object.assign(emit(Events.PAGE_UPDATED), {
             current: emit(Events.CURRENT_PAGE_UPDATED),
             sizes: emit(Events.PAGE_SIZE_UPDATED)
@@ -159,8 +158,8 @@ namespace Observer {
               current: emit(Events.PAST_PURCHASE_CURRENT_PAGE_UPDATED),
               sizes: emit(Events.PAST_PURCHASE_PAGE_SIZE_UPDATED),
             }),
-            navigations: Observer.navigations(emit, Events.PAST_PURCHASE_NAVIGATIONS_UPDATED,
-                                              Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED),
+            navigations: Observer.navigations(Events.PAST_PURCHASE_NAVIGATIONS_UPDATED,
+                                              Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED, emit),
             sort: emit(Events.PAST_PURCHASE_SORT_UPDATED),
           },
 

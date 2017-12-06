@@ -5,7 +5,7 @@ import RecommendationsAdapter from '../../../../src/core/adapters/recommendation
 import SearchAdapter from '../../../../src/core/adapters/search';
 import { receivePage } from '../../../../src/core/reducers/data/page';
 import Requests from '../../../../src/core/requests';
-import sagaCreator, { Tasks } from '../../../../src/core/sagas/recommendations';
+import sagaCreator, { Tasks, MissingPayload } from '../../../../src/core/sagas/recommendations';
 import Selectors from '../../../../src/core/selectors';
 import * as utils from '../../../../src/core/utils';
 import suite from '../../_suite';
@@ -165,7 +165,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         expect(task.next(ret).value).to.eql(ret);
       });
 
-      it('should not fetch skus if no secured payload', () => {
+      it('should throw error if no secured payload', () => {
         const securedPayload = null;
         const body = 'asdf';
         const customerId = 'id';
@@ -173,8 +173,13 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
         const task = Tasks.fetchSkus({ customerId }, 'endpoint');
 
-        // tslint:disable-next-line max-line-length
-        expect(task.next().value).to.eql({ result: null });
+        try {
+          task.next();
+          expect.fail();
+        } catch (e) {
+          expect(e).to.be.an.instanceof(MissingPayload);
+          expect(e.message).to.eql('No Secured Payload');
+        }
       });
     });
 
