@@ -117,13 +117,12 @@ export namespace Middleware {
     };
   }
 
-  // TODO RENAMETHIS
-  export function fetchPastPurchaseProductsAnalyzer() {
-    return insertAction(PAST_PURCHASES_SEARCH_CHANGE_ACTIONS, ActionCreators.fetchPastPurchaseProducts());
+  export function pastPurchaseProductAnalyzer() {
+    return this.insertAction(PAST_PURCHASES_SEARCH_CHANGE_ACTIONS, ActionCreators.fetchPastPurchaseProducts());
   }
 
   export function saveStateAnalyzer() {
-    return insertAction(HISTORY_UPDATE_ACTIONS, { type: Actions.SAVE_STATE });
+    return this.insertAction(HISTORY_UPDATE_ACTIONS, { type: Actions.SAVE_STATE });
   }
 
   export function thunkEvaluator(store: Store<any>) {
@@ -176,7 +175,7 @@ export namespace Middleware {
     const composeEnhancers = global && global['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
 
     return composeEnhancers(
-      applyMiddleware(thunkEvaluator, saveStateAnalyzer, fetchPastPurchaseProductsAnalyzer),
+      applyMiddleware(thunkEvaluator, saveStateAnalyzer, pastPurchaseProductAnalyzer),
       reduxBatch,
       applyMiddleware(...middleware),
       reduxBatch,

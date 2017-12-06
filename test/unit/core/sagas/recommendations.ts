@@ -240,6 +240,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
           data,
           navigations,
         ]));
+        expect(task.next().value).to.be.undefined;
         expect(receivePastPurchaseSkus).to.be.calledWith(resultArray);
         expect(extractProductCount).to.be.calledWith(config);
         expect(fetchPastPurchaseNavigations).to.be.calledOnce;

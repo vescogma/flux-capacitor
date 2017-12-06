@@ -14,6 +14,7 @@ import Middleware, {
   PAST_PURCHASE_SKU_ACTIONS,
   RECALL_CHANGE_ACTIONS,
   SEARCH_CHANGE_ACTIONS,
+  PAST_PURCHASES_SEARCH_CHANGE_ACTIONS,
 } from '../../../../src/core/store/middleware';
 import suite from '../../_suite';
 
@@ -232,6 +233,18 @@ suite('Middleware', ({ expect, spy, stub }) => {
       expect(once).to.not.be.called;
       expect(config).to.be.calledWithExactly(state);
       expect(extract).to.be.calledWithExactly(conf);
+    });
+  });
+
+  describe('pastPurchaseProductAnalyzer()', () => {
+    it('should call insertAction', () => {
+      const ret = 'middleware';
+      const insert = stub(Middleware, 'insertAction').returns(ret);
+
+      expect(Middleware.pastPurchaseProductAnalyzer(Middleware)).to.eql(ret);
+
+      expect(insert).to.be.calledWithExactly(PAST_PURCHASES_SEARCH_CHANGE_ACTIONS,
+                                             ActionCreators.fetchPastPurchaseProducts());
     });
   });
 

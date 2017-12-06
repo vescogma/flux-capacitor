@@ -107,6 +107,12 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('fetchPastPurchaseNavigations()', () => {
+      it('should return an action', () => {
+        expectAction(ActionCreators.fetchPastPurchaseNavigations(), Actions.FETCH_PAST_PURCHASE_NAVIGATIONS, null);
+      });
+    });
+
     describe('fetchSaytPastPurchases()', () => {
       it('should return an action', () => {
         const query = 'hat';
