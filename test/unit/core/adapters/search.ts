@@ -389,10 +389,7 @@ suite('Search Adapter', ({ expect, stub }) => {
       const nextPage = stub(PageAdapter, 'nextPage').returns(next);
       const previousPage = stub(PageAdapter, 'previousPage').returns(previous);
 
-      const pageInfo = Adapter.extractPage(state, total, {
-        pageSelector: pastPurchasePage,
-        pageSizeSelector: pastPurchasePageSize,
-      });
+      const pageInfo = Adapter.extractPage(state, total, pastPurchasePage, pastPurchasePageSize);
 
       expect(pageInfo).to.eql({
         from,

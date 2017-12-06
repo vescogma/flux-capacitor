@@ -139,9 +139,9 @@ namespace Adapter {
     Math.min(results.totalRecordCount, MAX_RECORDS);
 
   // tslint:disable-next-line max-line-length
-  export const extractPage = (state: Store.State, totalRecords: number, selectors?: PageSelectors): Actions.Payload.Page => {
-    const pageSize = selectors ? selectors.pageSizeSelector(state) : Selectors.pageSize(state);
-    const currentPage = selectors ? selectors.pageSelector(state) : Selectors.page(state);
+  export const extractPage = (state: Store.State, totalRecords: number, pageSelector: Function = Selectors.page, pageSizeSelector: Function = Selectors.pageSize): Actions.Payload.Page => {
+    const pageSize = pageSizeSelector(state);
+    const currentPage = pageSelector(state);
     const last = Page.finalPage(pageSize, totalRecords);
     const from = Page.fromResult(currentPage, pageSize);
     const to = Page.toResult(currentPage, pageSize, totalRecords);
