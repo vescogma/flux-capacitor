@@ -278,6 +278,17 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         expect(task.throw(error).value).to.eql(effects.put(receivePastPurchaseSkus(error)));
         task.next();
       });
+
+      it('should ignore missing payload errors', () => {
+        const error = new MissingPayload();
+        const receivePastPurchaseSkus = spy(() => error);
+        const flux: any = { actions: { receivePastPurchaseSkus } };
+
+        const task = Tasks.fetchPastPurchases(flux, <any>{});
+
+        task.next();
+        expect(task.throw(error).value).to.eql(undefined);
+      });
     });
 
     describe('fetchPastPurchaseProducts()', () => {
