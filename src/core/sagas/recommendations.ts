@@ -117,8 +117,8 @@ export namespace Tasks {
         const request = yield effects.select(Requests.pastPurchaseProducts, getNavigations);
         const results = yield effects.call(fetchProductsFromSkus, flux, pastPurchaseSkus, request);
         if (getNavigations) {
-          const navigations = Adapter.pastPurchaseNavigations(yield effects.select(Selectors.config),
-                                                              SearchAdapter.combineNavigations(results));
+          const navigations = Adapter.pastPurchaseNavigations(
+            yield effects.select(Selectors.config), SearchAdapter.combineNavigations(results));
           yield effects.put(<any>[
             flux.actions.receivePastPurchaseAllRecordCount(results.totalRecordCount),
             flux.actions.receivePastPurchaseRefinements(navigations),
