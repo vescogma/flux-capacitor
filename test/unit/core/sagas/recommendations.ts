@@ -251,22 +251,6 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         expect(fetchPastPurchaseNavigations).to.be.calledOnce;
       });
 
-      it('should not yield anything if fetchSkus returns nothing', () => {
-        const productCount = 5;
-        const data = { b: 2 };
-        const receivePastPurchaseSkus = spy(() => data);
-        const flux: any = { actions: { receivePastPurchaseSkus } };
-        const result = { result: null };
-        // tslint:disable-next-line max-line-length
-        const extractPastPurchaseProductCount = stub(ConfigAdapter, 'extractPastPurchaseProductCount').returns(productCount);
-
-        const task = Tasks.fetchPastPurchases(flux, <any>{});
-
-        task.next();
-        task.next(config);
-        expect(task.next(result).value).to.be.undefined;
-      });
-
       it('should handle request failure', () => {
         const error = new Error();
         const receivePastPurchaseSkus = spy(() => error);
