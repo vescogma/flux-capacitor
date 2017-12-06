@@ -50,9 +50,7 @@ export const DEFAULTS: State = <any>{
     byId: {},
     allIds: [],
   },
-  page: {
-    ...page.DEFAULTS,
-  }
+  page: page.DEFAULTS,
 };
 
 export default function updatePastPurchases(state: State = DEFAULTS, action: Action): State {

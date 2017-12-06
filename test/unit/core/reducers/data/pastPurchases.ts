@@ -28,6 +28,8 @@ suite('recommendations', ({ expect, stub }) => {
         ],
         selected: 0
       },
+      currentRecordCount: 4,
+      allRecordCount: 5,
       navigations: {
         byId: {},
         allIds: []
@@ -88,6 +90,28 @@ suite('recommendations', ({ expect, stub }) => {
       expect(reducer).to.eql({
         ...state,
         query: payload
+      });
+    });
+
+    it('should overwrite query on RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT', () => {
+      const payload: any = 3;
+
+      const reducer = pastPurchases(state, { type: Actions.RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT, payload });
+
+      expect(reducer).to.eql({
+        ...state,
+        allRecordCount: payload
+      });
+    });
+
+    it('should overwrite query on RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT', () => {
+      const payload: any = 3;
+
+      const reducer = pastPurchases(state, { type: Actions.RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT, payload });
+
+      expect(reducer).to.eql({
+        ...state,
+        currentRecordCount: payload
       });
     });
 

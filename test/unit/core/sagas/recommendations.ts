@@ -224,8 +224,10 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
       it('should call fetchPastPurchases', () => {
         const productCount = 5;
         const data = { b: 2 };
+        const navigations = [1,2,3];
         const receivePastPurchaseSkus = spy(() => data);
-        const flux: any = { actions: { receivePastPurchaseSkus } };
+        const fetchPastPurchaseNavigations = spy(() => navigations);
+        const flux: any = { actions: { receivePastPurchaseSkus, fetchPastPurchaseNavigations } };
         const resultArray = [1, 2, 3];
         const result = { result: resultArray };
         const extractProductCount = stub(ConfigAdapter, 'extractProductCount').returns(productCount);
@@ -234,10 +236,13 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
         expect(task.next().value).to.eql(effects.select(Selectors.config));
         expect(task.next(config).value).to.eql(effects.call(<any>Tasks.fetchSkus, config, 'popular'));
-        expect(task.next(result).value).to.eql(effects.put(receivePastPurchaseSkus()));
-        task.next();
+        expect(task.next(result).value).to.eql(effects.put(<any>[
+          data,
+          navigations,
+        ]));
         expect(receivePastPurchaseSkus).to.be.calledWith(resultArray);
         expect(extractProductCount).to.be.calledWith(config);
+        expect(fetchPastPurchaseNavigations).to.be.calledOnce;
       });
 
       it('should not yield anything if fetchSkus returns nothing', () => {
