@@ -5,7 +5,7 @@ import RecommendationsAdapter from '../../../../src/core/adapters/recommendation
 import SearchAdapter from '../../../../src/core/adapters/search';
 import { receivePage } from '../../../../src/core/reducers/data/page';
 import Requests from '../../../../src/core/requests';
-import sagaCreator, { Tasks, MissingPayload } from '../../../../src/core/sagas/recommendations';
+import sagaCreator, { MissingPayload, Tasks } from '../../../../src/core/sagas/recommendations';
 import Selectors from '../../../../src/core/selectors';
 import * as utils from '../../../../src/core/utils';
 import suite from '../../_suite';
