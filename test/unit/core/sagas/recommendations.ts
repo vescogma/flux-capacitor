@@ -211,14 +211,14 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const productCount = 0;
         const receivePastPurchaseSkus = spy(() => 1);
         const flux: any = { actions: { receivePastPurchaseSkus } };
-        const extractProductCount = stub(ConfigAdapter, 'extractProductCount').returns(productCount);
+        const extractPastPurchaseProductCount = stub(ConfigAdapter, 'extractPastPurchaseProductCount').returns(productCount);
 
         const task = Tasks.fetchPastPurchases(flux, <any>{});
 
         expect(task.next().value).to.eql(effects.select(Selectors.config));
         expect(task.next(config).value).to.eql(effects.put(receivePastPurchaseSkus([])));
         expect(task.next().value).to.be.undefined;
-        expect(extractProductCount).to.be.calledWith(config);
+        expect(extractPastPurchaseProductCount).to.be.calledWith(config);
       });
 
       it('should call fetchPastPurchases', () => {
@@ -230,7 +230,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const flux: any = { actions: { receivePastPurchaseSkus, fetchPastPurchaseNavigations } };
         const resultArray = [1, 2, 3];
         const result = { result: resultArray };
-        const extractProductCount = stub(ConfigAdapter, 'extractProductCount').returns(productCount);
+        const extractPastPurchaseProductCount = stub(ConfigAdapter, 'extractPastPurchaseProductCount').returns(productCount);
 
         const task = Tasks.fetchPastPurchases(flux, <any>{});
 
@@ -240,7 +240,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         expect(task.next(result).value).to.eql(effects.put(navigations));
         expect(task.next().value).to.be.undefined;
         expect(receivePastPurchaseSkus).to.be.calledWith(resultArray);
-        expect(extractProductCount).to.be.calledWith(config);
+        expect(extractPastPurchaseProductCount).to.be.calledWith(config);
         expect(fetchPastPurchaseNavigations).to.be.calledOnce;
       });
 
@@ -250,7 +250,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const receivePastPurchaseSkus = spy(() => data);
         const flux: any = { actions: { receivePastPurchaseSkus } };
         const result = { result: null };
-        const extractProductCount = stub(ConfigAdapter, 'extractProductCount').returns(productCount);
+        const extractPastPurchaseProductCount = stub(ConfigAdapter, 'extractPastPurchaseProductCount').returns(productCount);
 
         const task = Tasks.fetchPastPurchases(flux, <any>{});
 
