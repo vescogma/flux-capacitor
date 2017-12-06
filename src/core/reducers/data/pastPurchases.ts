@@ -133,10 +133,10 @@ export const updatePastPurchaseSortSelected = (state: State, { payload }: Action
 
   switch (state.sort.items[payload].type) {
     case SORT_ENUMS.MOST_PURCHASED:
-      skus = RecommendationsAdapters.sortSkusMostPurchased(skus);
+      skus = RecommendationsAdapters.sortSkus(skus, 'quantity');
       break;
     case SORT_ENUMS.MOST_RECENT:
-      skus = RecommendationsAdapters.sortSkusMostRecent(skus);
+      skus = RecommendationsAdapters.sortSkus(skus, 'lastPurchased');
       break;
   }
 

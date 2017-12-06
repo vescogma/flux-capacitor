@@ -275,17 +275,15 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
     const product3 = { quantity: 2, lastPurchased: 30 };
     const oldArr: any = [product1, product2, product3];
 
-    describe('sortSkusMostPurchased', () => {
-      it('should sort by quantity', () => {
+    describe('sortSkus', () => {
+      it('should sort by the given field - quantity', () => {
         const newArr = [product2, product3, product1];
 
-        expect(RecommendationsAdapter.sortSkusMostPurchased(oldArr)).to.eql(newArr);
+        expect(RecommendationsAdapter.sortSkus(oldArr, 'quantity')).to.eql(newArr);
       });
-    });
 
-    describe('sortSkusMostRecent', () => {
-      it('should sort by lastPurchased', () => {
-        expect(RecommendationsAdapter.sortSkusMostRecent(oldArr)).to.eql([product3, product1, product2]);
+      it('should sort by the given field - lastPurchased', () => {
+        expect(RecommendationsAdapter.sortSkus(oldArr, 'lastPurchased')).to.eql([product3, product1, product2]);
       });
     });
   });

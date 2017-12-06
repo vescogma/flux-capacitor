@@ -124,12 +124,8 @@ namespace Recommendations {
     }, {});
   };
 
-  export const sortSkusMostPurchased = (skus: Store.PastPurchases.PastPurchaseProduct[]) => {
-    return [...skus].sort(({ quantity: lhs }, { quantity: rhs }) => rhs - lhs);
-  };
-
-  export const sortSkusMostRecent = (skus: Store.PastPurchases.PastPurchaseProduct[]) => {
-    return [...skus].sort(({ lastPurchased: lhs }, { lastPurchased: rhs }) => rhs - lhs);
+  export const sortSkus = (skus: Store.PastPurchases.PastPurchaseProduct[], field: string) => {
+    return [...skus].sort(({ [field]: lhs }, { [field]: rhs }) => rhs - lhs);
   };
 
   export const pastPurchaseNavigations = (config: Configuration, navigations: Store.Navigation[]) => {

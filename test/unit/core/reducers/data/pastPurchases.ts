@@ -115,11 +115,10 @@ suite('recommendations', ({ expect, stub }) => {
       });
     });
 
-    it('should handle updating sort on SELECT_PAST_PURCHASE_SORT and call mostPurchases if MOST_PURCHASED', () => {
+    it('should handle updating sort on SELECT_PAST_PURCHASE_SORT and call sortSkus if MOST_PURCHASED', () => {
       const payload = 2;
       const skus = 'f';
-      const purchased = stub(Adapter, 'sortSkusMostPurchased').returns(skus);
-      const recent = stub(Adapter, 'sortSkusMostRecent').returnsArg(0);
+      const sorter = stub(Adapter, 'sortSkus').returns(skus);
 
       const reducer = pastPurchases(state, { type: Actions.SELECT_PAST_PURCHASE_SORT, payload });
 
@@ -131,15 +130,13 @@ suite('recommendations', ({ expect, stub }) => {
           selected: payload
         }
       });
-      expect(purchased).to.be.calledWithExactly(state.skus);
-      expect(recent).to.not.be.called;
+      expect(sorter).to.be.calledWithExactly(state.skus, 'quantity');
     });
 
-    it('should handle updating sort on SELECT_PAST_PURCHASE_SORT and call mostRecent if MOST_RECENT', () => {
+    it('should handle updating sort on SELECT_PAST_PURCHASE_SORT and call sortSkus if MOST_RECENT', () => {
       const payload = 1;
       const skus = 'e';
-      const purchased = stub(Adapter, 'sortSkusMostPurchased').returnsArg(0);
-      const recent = stub(Adapter, 'sortSkusMostRecent').returns(skus);
+      const sorter = stub(Adapter, 'sortSkus').returns(skus);
 
       const reducer = pastPurchases(state, { type: Actions.SELECT_PAST_PURCHASE_SORT, payload });
 
@@ -151,14 +148,12 @@ suite('recommendations', ({ expect, stub }) => {
           selected: payload
         }
       });
-      expect(recent).to.be.calledWithExactly(state.skus);
-      expect(purchased).to.not.be.called;
+      expect(sorter).to.be.calledWithExactly(state.skus, 'lastPurchased');
     });
 
-    it('should handle updating sort on SELECT_PAST_PURCHASE_SORT and call mostPurchases if MOST_PURCHASED', () => {
+    it('should handle updating sort on SELECT_PAST_PURCHASE_SORT and not call sortSkus if default', () => {
       const payload = 0;
-      const purchased = stub(Adapter, 'sortSkusMostPurchased').returns('bad data');
-      const recent = stub(Adapter, 'sortSkusMostRecent').returns('bad data');
+      const sorter = stub(Adapter, 'sortSkus').returns('bad data');
 
       const reducer = pastPurchases(state, { type: Actions.SELECT_PAST_PURCHASE_SORT, payload });
 
@@ -169,8 +164,7 @@ suite('recommendations', ({ expect, stub }) => {
           selected: payload
         }
       });
-      expect(purchased).to.not.be.called;
-      expect(recent).to.not.be.called;
+      expect(sorter).to.not.be.called;
     });
 
     describe('reducer chain functions', () => {
