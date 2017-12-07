@@ -6,6 +6,7 @@ import * as validatorMiddleware from 'redux-validator';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import ActionCreators from '../actions/creators';
+import CartAdapter from '../adapters/cart';
 import ConfigurationAdapter from '../adapters/configuration';
 import PersonalizationAdapter from '../adapters/personalization';
 import Events from '../events';
@@ -84,14 +85,35 @@ export namespace Middleware {
   }
 
   export function injectStateIntoRehydrate(store: Store<any>) {
-    return (next) => (action) =>
-      action.type === 'persist/REHYDRATE' && action.payload && action.payload.biasing ? next({
-        ...action,
-        payload: {
-          ...action.payload,
-          biasing: PersonalizationAdapter.transformFromBrowser(action.payload.biasing, store.getState())
-        }
-      }) : next(action);
+    return (next) => (action) => {
+      // tslint:disable-next-line:max-line-length
+      if (action.type === 'persist/REHYDRATE' && action.payload && action.payload.biasing) {
+        console.log('rehydrating biasing')
+
+        return next({
+          ...action,
+          payload: {
+            ...action.payload,
+            biasing: PersonalizationAdapter.transformFromBrowser(action.payload.biasing, store.getState())
+          }
+        });
+      }
+
+      if (action.type === 'persist/REHYDRATE' && action.payload && action.payload.content) {
+        console.log('rehydrating cart')
+
+        return next({
+          ...action,
+          payload: {
+            ...action.payload,
+            content: CartAdapter.transformFromBrowser(action.payload.content)
+          }
+        });
+      } else {
+        return next(action);
+      }
+    };
+
   }
 
   export function checkPastPurchaseSkus(flux: FluxCapacitor): ReduxMiddleware {
@@ -140,7 +162,7 @@ export namespace Middleware {
     return (next) => (action) => {
       const state = store.getState();
       if (ConfigurationAdapter.isRealTimeBiasEnabled(Selectors.config(state)) &&
-          PERSONALIZATION_CHANGE_ACTIONS.includes(action.type)) {
+        PERSONALIZATION_CHANGE_ACTIONS.includes(action.type)) {
         const biasing = PersonalizationAdapter.extractBias(action, state);
         if (biasing) {
           return next([
@@ -156,7 +178,7 @@ export namespace Middleware {
   export function create(sagaMiddleware: any, flux: FluxCapacitor): any {
     const middleware = [
       thunkEvaluator,
-      Middleware.injectStateIntoRehydrate,
+      // Middleware.injectStateIntoRehydrate,
       Middleware.validator,
       Middleware.idGenerator('recallId', RECALL_CHANGE_ACTIONS),
       Middleware.idGenerator('searchId', SEARCH_CHANGE_ACTIONS),

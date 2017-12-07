@@ -383,7 +383,7 @@ namespace Configuration {
       maxBiases: number;
     }
   }
-  
+
   export interface Cart {
     loginId: string;
     sessionId: string;

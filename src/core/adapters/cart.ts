@@ -16,15 +16,19 @@ namespace Cart {
     body: JSON.stringify(body)
   });
 
-  export const transformToBrowser = (state: Store.Cart): any => ({
-    cartId: state.cartId
-  });
-}
+  export const transformToBrowser = (state: Store.Cart): any => state;
 
-export interface CartBody {
-  loginId?: string;
-  sessionId: string;
-  visitorId: string;
+  // tslint:disable-next-line:max-line-length
+  export const transformFromBrowser = (incomingState: Store.Cart): Store.Cart => {
+    return incomingState;
+  };
+
+  export interface CartBody {
+    loginId?: string;
+    sessionId: string;
+    visitorId: string;
+  }
+
 }
 
 export default Cart;

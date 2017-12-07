@@ -10,10 +10,15 @@ export type Action = Actions.GetTrackerInfo
 export type State = Store.Cart;
 
 export const STORAGE_KEY = 'gb-cart';
+export const STORAGE_WHITELIST = ['content'];
 
 export const DEFAULTS: State = {
-  cartId: '',
-  items: []
+  content: {
+    cartId: '',
+    items: [],
+    visitorId: '',
+    sessionId: ''
+  }
 };
 
 function updateCart(state: State = DEFAULTS, action: any): State {
@@ -34,8 +39,7 @@ function updateCart(state: State = DEFAULTS, action: any): State {
 export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.Payload.Cart.CreateCart) => {
   return {
     ...state,
-    visitorId,
-    sessionId
+    content: { ...state.content, visitorId, sessionId }
   };
 };
 
@@ -45,19 +49,19 @@ export const createCart = (state: State, { visitorId, sessionId }: Actions.Paylo
   };
 };
 
-export const cartCreated = (state: State, { cartId }: Actions.Payload.Cart.CartConfirmation) => ({
-  ...state,
-  cartId
-});
+export const cartCreated = (state: State, { cartId }: Actions.Payload.Cart.CartConfirmation) => {
+  return ({
+    ...state, content: { ...state.content, cartId }
+  });
+};
 
 export const addToCart = (state: State, item: any) => ({
-  ...state,
-  items: [...state.items, item]
+  ...state, content: { ...state.content, items: [...state.content.items, item] }
 });
 
 const cartTransform = createTransform(Adapter.transformToBrowser);
 
 export default persistReducer({
-  transforms: [cartTransform], key: STORAGE_KEY, storage,
+  transforms: [cartTransform], key: STORAGE_KEY, storage, whitelist: STORAGE_WHITELIST
 },
   updateCart);

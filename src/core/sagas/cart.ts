@@ -23,7 +23,7 @@ export namespace Tasks {
       //   Adapter.buildCreateCartBody({ sessionId, visitorId }));
 
       const cartId = 'bd23d1cce50542b3bf52dd0554203b12';
-      yield effects.put(flux.actions.cartCreated(cartId));
+      yield effects.put(flux.store.dispatch(flux.actions.cartCreated(cartId)));
     } catch (e) {
       console.log(e);
     }
