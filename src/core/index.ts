@@ -9,7 +9,7 @@ import { DEFAULT_AREA } from './reducers/data/area';
 import { DEFAULT_COLLECTION } from './reducers/data/collections';
 import Selectors from './selectors';
 import Store, { ReduxStore } from './store';
-import { Routes } from './utils';
+import { Routes, StoreSections } from './utils';
 
 export {
   DEFAULT_AREA,
@@ -23,6 +23,7 @@ export {
   Routes,
   Selectors,
   Store,
+  StoreSections,
   Observer,
   reducer
 };
