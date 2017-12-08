@@ -5,8 +5,8 @@ import Adapter from '../../adapters/cart';
 import Store from '../../store';
 
 export type Action = Actions.GetTrackerInfo
-  | Actions.CreateCart
-  | Actions.CartCreated;
+  | Actions.CartCreated
+  | Actions.AddToCart;
 export type State = Store.Cart;
 
 export const STORAGE_KEY = 'gb-cart';
@@ -21,43 +21,33 @@ export const DEFAULTS: State = {
   }
 };
 
-function updateCart(state: State = DEFAULTS, action: any): State {
+function updateCart(state: State = DEFAULTS, action: Action): State {
   switch (action.type) {
     case Actions.GET_TRACKER_INFO:
       return getTrackerInfo(state, action.payload);
-    case Actions.CREATE_CART:
-      return createCart(state, action.payload);
-    case Actions.CART_CREATED:
-      return cartCreated(state, action.payload);
     case Actions.ADD_TO_CART:
       return addToCart(state, action.payload);
+    case Actions.CART_CREATED:
+      return cartCreated(state, action.payload);
     default:
       return state;
   }
 }
 
-export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.Payload.Cart.CreateCart) => {
-  return {
+export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.Payload.Cart.TrackerInfo) =>
+  ({
     ...state,
     content: { ...state.content, visitorId, sessionId }
-  };
-};
-
-export const createCart = (state: State, { visitorId, sessionId }: Actions.Payload.Cart.CreateCart) => {
-  return {
-    ...state
-  };
-};
-
-export const cartCreated = (state: State, { cartId }: Actions.Payload.Cart.CartConfirmation) => {
-  return ({
-    ...state, content: { ...state.content, cartId }
   });
-};
 
 export const addToCart = (state: State, item: any) => ({
   ...state, content: { ...state.content, items: [...state.content.items, item] }
 });
+
+export const cartCreated = (state: State, cartId: string) =>
+  ({
+    ...state, content: { ...state.content, cartId }
+  });
 
 const cartTransform = createTransform((state: State, key: string) => state, (state: State, key: string) => state);
 

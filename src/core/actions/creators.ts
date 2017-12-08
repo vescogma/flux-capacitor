@@ -788,21 +788,17 @@ namespace ActionCreators {
     ];
   }
 
-  // TODO; wip shopping cart (change type)
-  export function getTrackerInfo(visitorId: string, sessionId: string) {
+  // todo: generate docs
+  export function getTrackerInfo(visitorId: string, sessionId: string): Actions.GetTrackerInfo {
     return createAction(Actions.GET_TRACKER_INFO, { visitorId, sessionId });
-  }
-
-  export function createCart(visitorId: string, sessionId: string) {
-    return createAction(Actions.CREATE_CART, { visitorId, sessionId });
-  }
-
-  export function cartCreated(cartId: string) {
-    return createAction(Actions.CART_CREATED, { cartId });
   }
 
   export function addToCart(product: any) {
     return createAction(Actions.ADD_TO_CART, product);
+  }
+
+  export function cartCreated(cartId: string): Actions.CartCreated {
+    return createAction(Actions.CART_CREATED, cartId);
   }
 
   // ui action creators
