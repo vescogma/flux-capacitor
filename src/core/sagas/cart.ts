@@ -10,8 +10,11 @@ import Store from '../store';
 import { fetch } from '../utils';
 
 export namespace Tasks {
-  export function* createCart(flux: FluxCapacitor, { payload: { sessionId, visitorId } }: Actions.CreateCart) {
+  export function* addToCart(flux: FluxCapacitor, { payload: { sessionId, visitorId } }: Actions.CreateCart) {
     try {
+      const state = yield effects.select();
+      const cartExists = !!state.cart.content.cartId;
+      // todo: cartExists
       const config = yield effects.select(Selectors.config);
       const customerId = config.customerId;
       const url = Adapter.buildUrl(customerId);
@@ -32,5 +35,5 @@ export namespace Tasks {
 
 export default (flux: FluxCapacitor) => function* cartSaga() {
   // takeLatest or takeEvery
-  yield effects.takeLatest(Actions.CREATE_CART, Tasks.createCart, flux);
+  yield effects.takeLatest(Actions.ADD_TO_CART, Tasks.addToCart, flux);
 };

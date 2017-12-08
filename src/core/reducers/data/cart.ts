@@ -59,7 +59,7 @@ export const addToCart = (state: State, item: any) => ({
   ...state, content: { ...state.content, items: [...state.content.items, item] }
 });
 
-const cartTransform = createTransform(Adapter.transformToBrowser);
+const cartTransform = createTransform((state: State, key: string) => state, (state: State, key: string) => state);
 
 export default persistReducer({
   transforms: [cartTransform], key: STORAGE_KEY, storage, whitelist: STORAGE_WHITELIST
