@@ -16,7 +16,7 @@ namespace Cart {
     body: JSON.stringify(body)
   });
 
-  export const transformToBrowser = (state: Store.Cart): any => state;
+  export const transformToBrowser = (state: Store.Cart, reducerKey: string): any => state;
 
   // tslint:disable-next-line:max-line-length
   export const transformFromBrowser = (incomingState: Store.Cart): Store.Cart => {

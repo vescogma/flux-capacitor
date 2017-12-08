@@ -97,21 +97,23 @@ export namespace Middleware {
             biasing: PersonalizationAdapter.transformFromBrowser(action.payload.biasing, store.getState())
           }
         });
-      }
-
-      if (action.type === 'persist/REHYDRATE' && action.payload && action.payload.content) {
-        console.log('rehydrating cart')
-
-        return next({
-          ...action,
-          payload: {
-            ...action.payload,
-            content: CartAdapter.transformFromBrowser(action.payload.content)
-          }
-        });
       } else {
-        return next(action);
+       return next(action);
       }
+
+      // if (action.type === 'persist/REHYDRATE' && action.payload && action.payload.content) {
+      //   console.log('rehydrating cart')
+
+      //   return next({
+      //     ...action,
+      //     payload: {
+      //       ...action.payload,
+      //       content: CartAdapter.transformFromBrowser(action.payload.content)
+      //     }
+      //   });
+      // } else {
+      //   return next(action);
+      // }
     };
 
   }
