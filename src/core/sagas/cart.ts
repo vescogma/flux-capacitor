@@ -10,30 +10,45 @@ import Store from '../store';
 import { fetch } from '../utils';
 
 export namespace Tasks {
-  export function* addToCart(flux: FluxCapacitor, { payload: { sessionId, visitorId } }: Actions.CreateCart) {
+  export function* addToCart(flux: FluxCapacitor, { payload: item }: any) {
     try {
-      const state = yield effects.select();
-      const cartExists = !!state.cart.content.cartId;
-      // todo: cartExists
-      const config = yield effects.select(Selectors.config);
-      const customerId = config.customerId;
-      const url = Adapter.buildUrl(customerId);
-      
-      // todo: make API call
-      // const res = yield effects.call(
-      //   fetch,
-      //   url,
-      //   Adapter.buildCreateCartBody({ sessionId, visitorId }));
-
-      const cartId = 'bd23d1cce50542b3bf52dd0554203b12';
-      yield effects.put(flux.store.dispatch(flux.actions.cartCreated(cartId)));
+      const cartState = yield effects.select(Selectors.cart);
+      const cartExists = !!cartState.content.cartId;
+      const res = cartExists ? yield addToCartCall(flux) : yield createCartAndAdd(flux);
+      // todo: needs to compare res with the current state and update state if there is descrapency
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
+  }
+
+  export function* createCartAndAdd(flux: FluxCapacitor) {
+    // todo: make API call
+    const config = yield effects.select(Selectors.config);
+    const { visitorId, sessionId } = yield effects.select(Selectors.cart);
+    const customerId = config.customerId;
+    const url = Adapter.buildUrl(customerId);
+
+    // const res = yield effects.call(
+    //   fetch,
+    //   url,
+    //   /Adapter.buildCreateCartBody({ sessionId, visitorId }));
+
+    // todo: calls are faked and not written out, response is faked
+    const res = yield effects.call(() => ({ results: { id: '663c0a60009c48b49f42eadc325f483b' } }));
+    yield effects.put(flux.actions.cartCreated(res.results.id));
+    return yield addToCartCall(flux);
+  }
+
+  export function* addToCartCall(flux: FluxCapacitor) {
+    return yield effects.call(() => ({
+      id: '663c0a60009c48b49f42eadc325f483b',
+      totalPrice: 2517.72,
+      generatedTotalPrice: 3017.72,
+      items: []
+    }));
   }
 }
 
 export default (flux: FluxCapacitor) => function* cartSaga() {
-  // takeLatest or takeEvery
-  yield effects.takeLatest(Actions.ADD_TO_CART, Tasks.addToCart, flux);
+  yield effects.takeEvery(Actions.ADD_TO_CART, Tasks.addToCart, flux);
 };

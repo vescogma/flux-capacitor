@@ -41,6 +41,10 @@ export const updateState = (state: Store.State, { payload }: Actions.RefreshStat
           ...payload.data.present.personalization,
           biasing: state.data.present.personalization.biasing,
         },
+        cart: {
+          ...payload.data.present.cart,
+          content: state.data.present.cart.content
+        },
         autocomplete: state.data.present.autocomplete,
       },
       future: []
