@@ -207,15 +207,13 @@ namespace Actions {
   export const SAVE_STATE = 'SAVE_STATE';
   // tslint:enable max-line-length
 
-  // create
+  // cart
   export const GET_TRACKER_INFO = 'GET_TRACKER_INFO';
-  export type GetTrackerInfo = Action<typeof GET_TRACKER_INFO, Payload.Cart.CreateCart>;
-  export const CREATE_CART = 'CREATE_CART';
-  export type CreateCart = Action<typeof CREATE_CART, Payload.Cart.CreateCart>;
+  export type GetTrackerInfo = Action<typeof GET_TRACKER_INFO, Payload.Cart.TrackerInfo>;
   export const CART_CREATED = 'CART_CREATED';
-  export type CartCreated = Action<typeof CART_CREATED, Payload.Cart.CartConfirmation>;
+  export type CartCreated = Action<typeof CART_CREATED, string>;
   export const ADD_TO_CART = 'ADD_TO_CART';
-  export type AddToCart = Action<typeof ADD_TO_CART, any>;
+  export type AddToCart = Action<typeof ADD_TO_CART, Store.Product>;
 
   export namespace Payload {
     export namespace Personalization {
@@ -311,15 +309,10 @@ namespace Actions {
     }
 
     export namespace Cart {
-      // todo: change name
-      export interface CreateCart {
+      export interface TrackerInfo {
         loginId?: string;
         sessionId: string;
         visitorId: string;
-      }
-
-      export interface CartConfirmation {
-        cartId: string;
       }
     }
   }

@@ -278,7 +278,7 @@ namespace Store {
       cartId: string;
       visitorId: string;
       sessionId: string;
-      items: any;
+      items: any[];
     };
   }
 
