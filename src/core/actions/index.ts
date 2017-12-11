@@ -1,4 +1,5 @@
 import { Results } from 'groupby-api';
+import Payloads from './payloads';
 import Configuration from '../configuration';
 import Store from '../store';
 
@@ -32,6 +33,8 @@ namespace Actions {
     (...args: any[]): Action | Action[] | Thunk<any>;
   }
 
+  export import Payload = Payloads;
+
   // tslint:disable max-line-length
   // update actions
   export const UPDATE_AUTOCOMPLETE_QUERY = 'UPDATE_AUTOCOMPLETE_QUERY';
@@ -59,9 +62,9 @@ namespace Actions {
   export const RESET_PAGE = 'RESET_PAGE';
   export type ResetPage = Action<typeof RESET_PAGE, undefined>;
   export const ADD_REFINEMENT = 'ADD_REFINEMENT';
-  export type AddRefinement = Action<typeof ADD_REFINEMENT, Actions.Payload.Navigation.AddRefinement>;
+  export type AddRefinement = Action<typeof ADD_REFINEMENT, Payload.Navigation.AddRefinement>;
   export const UPDATE_BIASING = 'UPDATE_BIASING';
-  export type UpdateBiasing = Action<typeof UPDATE_BIASING, Actions.Payload.Personalization.Biasing>;
+  export type UpdateBiasing = Action<typeof UPDATE_BIASING, Payload.Personalization.Biasing>;
   export const UPDATE_SECURED_PAYLOAD = 'UPDATE_SECURED_PAYLOAD';
   export type UpdateSecuredPayload = Action<typeof UPDATE_SECURED_PAYLOAD, Configuration.Recommendations.SecuredPayload>;
 
@@ -84,14 +87,13 @@ namespace Actions {
   export const FETCH_PRODUCTS = 'FETCH_PRODUCTS';
   export type FetchProducts = Action<typeof FETCH_PRODUCTS>;
   export const FETCH_PRODUCTS_WHEN_HYDRATED = 'FETCH_PRODUCTS_WHEN_HYDRATED';
-  // tslint:disable-next-line max-line-length
   export type fetchProductsWhenHydrated = Action<typeof FETCH_PRODUCTS_WHEN_HYDRATED, Actions.FetchProducts>;
   export const FETCH_MORE_PRODUCTS = 'FETCH_MORE_PRODUCTS';
   export type FetchMoreProducts = Action<typeof FETCH_MORE_PRODUCTS, number>;
   export const FETCH_AUTOCOMPLETE_SUGGESTIONS = 'FETCH_AUTOCOMPLETE_SUGGESTIONS';
   export type FetchAutocompleteSuggestions = Action<typeof FETCH_AUTOCOMPLETE_SUGGESTIONS, string>;
   export const FETCH_AUTOCOMPLETE_PRODUCTS = 'FETCH_AUTOCOMPLETE_PRODUCTS';
-  export type FetchAutocompleteProducts = Action<typeof FETCH_AUTOCOMPLETE_PRODUCTS, { query: string, refinements: Actions.Payload.Autocomplete.Refinement[] }>;
+  export type FetchAutocompleteProducts = Action<typeof FETCH_AUTOCOMPLETE_PRODUCTS, { query: string, refinements: Payload.Autocomplete.Refinement[] }>;
   export const FETCH_COLLECTION_COUNT = 'FETCH_COLLECTION_COUNT';
   export type FetchCollectionCount = Action<typeof FETCH_COLLECTION_COUNT, string>;
   export const FETCH_PRODUCT_DETAILS = 'FETCH_PRODUCT_DETAILS';
@@ -204,101 +206,6 @@ namespace Actions {
   // added automatically by middleware to interact with redux-undo
   export const SAVE_STATE = 'SAVE_STATE';
   // tslint:enable max-line-length
-
-  export namespace Payload {
-    export namespace Personalization {
-      export interface Biasing {
-        field: string;
-        value: string;
-        bias: Store.Personalization.SingleBias;
-        config?: Configuration.Personalization.RealTimeBiasing;
-      }
-    }
-
-    export namespace Component {
-      export interface Identifier {
-        tagName: string;
-        id: string;
-      }
-
-      export interface State extends Identifier {
-        state: object;
-      }
-    }
-
-    export namespace Collection {
-      export interface Count {
-        collection: string;
-        count: number;
-      }
-    }
-
-    export interface Query {
-      corrected?: string;
-      related: string[];
-      didYouMean: string[];
-      rewrites: string[];
-    }
-
-    // NOTE: Isn't getting the right type in generated doc for some reason
-    export interface Search extends Partial<Navigation.Refinement>, Partial<Navigation.AddRefinement> {
-      query?: string;
-
-      /**
-       * only for refinements
-       * if true, replace refinements with the provided ones
-       * if false, add the provided refinements
-       */
-      clear?: boolean | string;
-    }
-
-    export namespace Autocomplete {
-      export interface Suggestions {
-        suggestions: Store.Autocomplete.Suggestion[];
-        categoryValues: string[];
-        navigations: Store.Autocomplete.Navigation[];
-      }
-
-      export interface Refinement {
-        field: string;
-        value: string;
-      }
-    }
-
-    export namespace Navigation {
-      export interface Refinement {
-        navigationId: string;
-        index: number;
-      }
-
-      export interface AddRefinement {
-        navigationId: string;
-        range?: boolean;
-
-        // used to add new value refinement
-        value?: string;
-
-        // used to add new range refinement
-        low?: number;
-        high?: number;
-      }
-
-      export interface MoreRefinements {
-        navigationId: string;
-        refinements: Store.Refinement[];
-        selected: number[];
-      }
-    }
-
-    export interface Page {
-      previous: number;
-      next: number;
-      last: number;
-      from: number;
-      to: number;
-    }
-  }
-
 }
 
 export default Actions;
