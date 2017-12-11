@@ -72,7 +72,11 @@ export namespace Tasks {
         securedPayload,
         query
       }));
-      return yield response.json();
+      const { result } = yield response.json();
+      if (!result) {
+        throw new MissingPayload();
+      }
+      return result;
     }
     throw new MissingPayload();
   }
@@ -96,7 +100,7 @@ export namespace Tasks {
       const config: Configuration = yield effects.select(Selectors.config);
       const productCount = ConfigAdapter.extractPastPurchaseProductCount(config);
       if (productCount > 0) {
-        const { result } = yield effects.call(fetchSkus, config, 'popular');
+        const result = yield effects.call(fetchSkus, config, 'popular');
         yield effects.put(flux.actions.receivePastPurchaseSkus(result));
         yield effects.put(flux.actions.fetchPastPurchaseNavigations());
       } else {
