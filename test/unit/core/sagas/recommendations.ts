@@ -151,7 +151,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const endpoint = 'end';
         const query = 'query';
         const jsonResult = 'json';
-        const ret = 'returned';
+        const ret = { result: 'returned' };
         const secure = stub(ConfigAdapter, 'extractSecuredPayload').returns(securedPayload);
         const buildBody = stub(RecommendationsAdapter, 'buildBody').returns(body);
         const fetch = stub(utils, 'fetch');
@@ -162,7 +162,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         expect(task.next().value).to.eql(effects.call(fetch, `https://${customerId}.groupbycloud.com/orders/v1/public/skus/${endpoint}`, body));
         expect(buildBody).to.be.calledWithExactly({ securedPayload, query });
         expect(task.next({ json: () => jsonResult }).value).to.eql(jsonResult);
-        expect(task.next(ret).value).to.eql(ret);
+        expect(task.next(ret).value).to.eql(ret.result);
       });
 
       it('should throw error if no secured payload', () => {
@@ -175,6 +175,27 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
         try {
           task.next();
+          expect.fail();
+        } catch (e) {
+          expect(e).to.be.an.instanceof(MissingPayload);
+          expect(e.message).to.eql('No Secured Payload');
+        }
+      });
+
+      it('should throw error if falsy result', () => {
+        const securedPayload = 'secured';
+        const body = 'asdf';
+        const ret = 'returned';
+        const secure = stub(ConfigAdapter, 'extractSecuredPayload').returns(securedPayload);
+        const buildBody = stub(RecommendationsAdapter, 'buildBody').returns(body);
+        const fetch = stub(utils, 'fetch');
+
+        const task = Tasks.fetchSkus({ customerId: 'id' }, 'endpoint', 'query');
+
+        try {
+          task.next();
+          task.next({ json: () => null });
+          task.next({});
           expect.fail();
         } catch (e) {
           expect(e).to.be.an.instanceof(MissingPayload);
@@ -235,7 +256,6 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const fetchPastPurchaseNavigations = spy(() => navigations);
         const flux: any = { actions: { receivePastPurchaseSkus, fetchPastPurchaseNavigations } };
         const resultArray = [1, 2, 3];
-        const result = { result: resultArray };
         // tslint:disable-next-line max-line-length
         const extractPastPurchaseProductCount = stub(ConfigAdapter, 'extractPastPurchaseProductCount').returns(productCount);
 
@@ -243,8 +263,8 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
         expect(task.next().value).to.eql(effects.select(Selectors.config));
         expect(task.next(config).value).to.eql(effects.call(<any>Tasks.fetchSkus, config, 'popular'));
-        expect(task.next(result).value).to.eql(effects.put(data));
-        expect(task.next(result).value).to.eql(effects.put(navigations));
+        expect(task.next(resultArray).value).to.eql(effects.put(data));
+        expect(task.next(resultArray).value).to.eql(effects.put(navigations));
         expect(task.next().value).to.be.undefined;
         expect(receivePastPurchaseSkus).to.be.calledWith(resultArray);
         expect(extractPastPurchaseProductCount).to.be.calledWith(config);
