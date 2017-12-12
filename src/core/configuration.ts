@@ -108,6 +108,11 @@ namespace Configuration {
      * redirect to the details page of product if there is only 1 product result for a search
      */
     redirectSingleResult: boolean;
+
+    /**
+     * maximum number of refinements to show in a single section
+     */
+    maxRefinements: number;
     /**
      * default request values
      */

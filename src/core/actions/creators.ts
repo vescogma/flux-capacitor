@@ -434,7 +434,8 @@ namespace ActionCreators {
           receiveProductsAction,
           ActionCreators.receiveQuery(SearchAdapter.extractQuery(res)),
           ActionCreators.receiveProductRecords(SearchAdapter.augmentProducts(res)),
-          ActionCreators.receiveNavigations(SearchAdapter.combineNavigations(res)),
+          ActionCreators.receiveNavigations(
+            SearchAdapter.pruneRefinements(SearchAdapter.combineNavigations(res), state)),
           ActionCreators.receiveRecordCount(recordCount),
           ActionCreators.receiveCollectionCount({
             collection: Selectors.collection(state),

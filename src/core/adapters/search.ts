@@ -12,6 +12,7 @@ import {
 import Actions from '../actions';
 import Selectors from '../selectors';
 import Store from '../store';
+import ConfigAdapter from './configuration';
 import Page from './page';
 
 export const MAX_RECORDS = 10000;
@@ -75,6 +76,15 @@ namespace Adapter {
         available.selected.push(newIndex);
       }
     });
+  };
+
+  export const pruneRefinements = (navigations: Store.Navigation[], state: Store.State): Store.Navigation[] => {
+    const max = ConfigAdapter.extractMaxRefinements(Selectors.config(state));
+    return max ? navigations.map((navigation) => ({
+      ...navigation,
+      more: navigation.refinements.length > max || navigation.more,
+      refinements: navigation.refinements.splice(0,max),
+    })) : navigations;
   };
 
   // tslint:disable-next-line max-line-length

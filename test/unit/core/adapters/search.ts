@@ -1,3 +1,4 @@
+import ConfigAdapter from '../../../../src/core/adapters/configuration';
 import PageAdapter from '../../../../src/core/adapters/page';
 import Adapter, { MAX_RECORDS } from '../../../../src/core/adapters/search';
 import Selectors from '../../../../src/core/selectors';
@@ -192,6 +193,42 @@ suite('Search Adapter', ({ expect, stub }) => {
         { low: 7, high: 9, total: 13 }
       ]);
       expect(available.selected).to.eql([4, 5]);
+    });
+  });
+
+  describe('pruneRefinements()', () => {
+    it('should limit refinements to provided amount', () => {
+      const state: any = {};
+      const conf = {};
+      const max = stub(ConfigAdapter, 'extractMaxRefinements').returns(2);
+      const config = stub(Selectors, 'config').returns(conf);
+      const navigations: any = [
+        { name: 'A', refinements: [4], more: false },
+        { name: 'B', refinements: [6, 7, 4, 5, 6, 7] },
+        { name: 'C', refinements: [8, 9], more: true }
+      ];
+
+      expect(Adapter.pruneRefinements(navigations, state)).to.eql([
+        { name: 'A', refinements: [4], more: false },
+        { name: 'B', refinements: [6, 7], more: true },
+        { name: 'C', refinements: [8, 9], more: true }
+      ]);
+      expect(max).to.be.calledWithExactly(conf);
+      expect(config).to.be.calledWithExactly(state);
+    });
+
+    it('should do nothing if max not truthy', () => {
+      const state: any = {};
+      const conf = {};
+      const navigations: any = [
+        { name: 'A', refinements: [4] },
+        { name: 'B', refinements: [6, 7, 4, 5, 6, 7] },
+        { name: 'C', refinements: [8, 9], more: true }
+      ];
+      stub(ConfigAdapter, 'extractMaxRefinements');
+      stub(Selectors, 'config').returns(conf);
+
+      expect(Adapter.pruneRefinements(navigations, state)).to.eql(navigations);
     });
   });
 

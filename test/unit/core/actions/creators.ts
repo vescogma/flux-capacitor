@@ -644,6 +644,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const query: any = { e: 'f' };
         const state: any = { g: 'h' };
         const navigations: any[] = ['k', 'l'];
+        const prunedNavigations: any[] = ['l'];
         const page: any = { m: 'n' };
         const template: any = { o: 'p' };
         const recordCount = 24;
@@ -655,6 +656,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const receiveRecordCount = stub(ActionCreators, 'receiveRecordCount').returns(receiveRecordCountAction);
         const receiveTemplate = stub(ActionCreators, 'receiveTemplate').returns(receiveTemplateAction);
         const combineNavigations = stub(SearchAdapter, 'combineNavigations').returns(navigations);
+        const pruneRefinements = stub(SearchAdapter, 'pruneRefinements').returns(prunedNavigations);
         const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(recordCount);
         const receiveQuery = stub(ActionCreators, 'receiveQuery').returns(receiveQueryAction);
         const receivePage = stub(ActionCreators, 'receivePage').returns(receivePageAction);
@@ -669,7 +671,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         expect(createAction).to.be.calledWith(Actions.RECEIVE_PRODUCTS, results);
         expect(receiveQuery).to.be.calledWith(query);
         expect(receiveProductRecords).to.be.calledWith(['x', 'x']);
-        expect(receiveNavigations).to.be.calledWith(navigations);
+        expect(receiveNavigations).to.be.calledWith(prunedNavigations);
         expect(receiveRecordCount).to.be.calledWith(recordCount);
         expect(receiveTemplate).to.be.calledWith(template);
         expect(receiveCollectionCount).to.be.calledWith({ collection, count: recordCount });
@@ -678,6 +680,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         expect(extractQuery).to.be.calledWith(results);
         expect(augmentProducts).to.be.calledWith(results);
         expect(combineNavigations).to.be.calledWith(results);
+        expect(pruneRefinements).to.be.calledWith(navigations);
         expect(selectCollection).to.be.calledWith(state);
         expect(extractPage).to.be.calledWith(state);
         expect(extractTemplate).to.be.calledWith(results.template);

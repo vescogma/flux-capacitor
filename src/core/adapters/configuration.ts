@@ -138,6 +138,9 @@ namespace Adapter {
     return config.autocomplete.navigations;
   };
 
+  export const extractMaxRefinements = (config: Configuration) =>
+    config.search.maxRefinements;
+
   export const extractINav = (config: Configuration) =>
     config.recommendations.iNav;
 

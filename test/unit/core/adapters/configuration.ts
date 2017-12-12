@@ -365,6 +365,14 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     });
   });
 
+    describe('extractAutocompleteNavigationLabels()', () => {
+    it('should return the configured autocomplete navigation labels', () => {
+      const maxRefinements = 3;
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.extractMaxRefinements(<any>{ search: { maxRefinements }})).to.eql(maxRefinements);
+    });
+  });
+
   describe('shouldAddPastPurchaseBias()', () => {
     it('should return true if requesting positive number of biases', () => {
       // tslint:disable-next-line max-line-length
