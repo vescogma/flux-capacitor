@@ -15,6 +15,7 @@ export const STORAGE_WHITELIST = ['content'];
 export const DEFAULTS: State = {
   content: {
     cartId: '',
+    quantity: 0,
     items: [],
     visitorId: '',
     sessionId: ''
@@ -40,9 +41,12 @@ export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.P
     content: { ...state.content, visitorId, sessionId }
   });
 
-export const addToCart = (state: State, item: any) => ({
-  ...state, content: { ...state.content, items: [...state.content.items, item] }
-});
+export const addToCart = (state: State, { product, quantity }) => {
+  const items = [...state.content.items, { item: product, quantity }];
+  return {
+    ...state, content: { ...state.content, quantity: Adapter.calculateQuantity(items), items }
+  };
+};
 
 export const cartCreated = (state: State, cartId: string) =>
   ({

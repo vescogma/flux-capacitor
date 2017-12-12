@@ -23,6 +23,11 @@ namespace Cart {
     return incomingState;
   };
 
+  export const calculateQuantity = (items: any[]) =>
+    items.reduce((acc, item) => {
+      return acc + item['quantity'];
+    }, 0);
+
   export interface CartBody {
     loginId?: string;
     sessionId: string;
