@@ -107,7 +107,7 @@ namespace Events {
    * Triggered when user adds item into cart.
    *
    */
-  export const CART_UPDATED = 'cart_updated';
+  export const CART_QUANTITY_UPDATED = 'cart_updated';
 
   // template events
   /**

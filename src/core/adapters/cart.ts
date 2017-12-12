@@ -23,7 +23,7 @@ namespace Cart {
     return incomingState;
   };
 
-  export const calculateQuantity = (items: any[]) =>
+  export const calculateTotalQuantity = (items: any[]) =>
     items.reduce((acc, item) => {
       return acc + item['quantity'];
     }, 0);

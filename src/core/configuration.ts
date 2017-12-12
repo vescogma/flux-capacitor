@@ -226,7 +226,7 @@ namespace Configuration {
     location?: Configuration.Recommendations.Location;
 
     /**
-     * Product ID field as used in recommendations.`
+     * Product ID field as used in recommendations.
      */
     idField: string;
     productSuggestions: Configuration.Recommendations.ProductSuggestions;
