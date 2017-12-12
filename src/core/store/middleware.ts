@@ -85,36 +85,14 @@ export namespace Middleware {
   }
 
   export function injectStateIntoRehydrate(store: Store<any>) {
-    return (next) => (action) => {
-      // tslint:disable-next-line:max-line-length
-      if (action.type === 'persist/REHYDRATE' && action.payload && action.payload.biasing) {
-        return next({
-          ...action,
-          payload: {
-            ...action.payload,
-            biasing: PersonalizationAdapter.transformFromBrowser(action.payload.biasing, store.getState())
-          }
-        });
-      } else {
-        return next(action);
-      }
-
-      // if (action.type === 'persist/REHYDRATE' && action.payload && action.payload.content) {
-      //   console.log('rehydrating cart')
-
-      //   return next({
-      //     ...action,
-      //     payload: {
-      //       ...action.payload,
-      //       content: CartAdapter.transformFromBrowser(action.payload.content)
-      //     }
-      //   });
-      // } else {
-      //   console.log('action type', action)
-      //   return next(action);
-      // }
-    };
-
+    return (next) => (action) =>
+      action.type === 'persist/REHYDRATE' && action.payload && action.payload.biasing ? next({
+        ...action,
+        payload: {
+          ...action.payload,
+          biasing: PersonalizationAdapter.transformFromBrowser(action.payload.biasing, store.getState())
+        }
+      }) : next(action);
   }
 
   export function checkPastPurchaseSkus(flux: FluxCapacitor): ReduxMiddleware {

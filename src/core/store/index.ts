@@ -25,11 +25,13 @@ namespace Store {
       <State>Adapter.initialState(flux.__config),
       middleware,
     );
+
+    // todo: put in a flag to switch persist on and off for cart
     persistStore(store);
+
     // cannot stub persistStore
     /* istanbul ignore next */
     if (Adapter.isRealTimeBiasEnabled(flux.__config)) {
-      console.log('is enabled')
       persistStore(store);
     }
 
