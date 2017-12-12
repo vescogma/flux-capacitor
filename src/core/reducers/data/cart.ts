@@ -44,7 +44,7 @@ export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.P
 export const addToCart = (state: State, { product, quantity }) => {
   const items = [...state.content.items, { item: product, quantity }];
   return {
-    ...state, content: { ...state.content, quantity: Adapter.calculateQuantity(items), items }
+    ...state, content: { ...state.content, quantity: Adapter.calculateTotalQuantity(items), items }
   };
 };
 
