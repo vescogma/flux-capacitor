@@ -10,7 +10,7 @@ import Store from '../store';
 import { fetch } from '../utils';
 
 export namespace Tasks {
-  export function* addToCart(flux: FluxCapacitor, { payload: item }: any) {
+  export function* addToCart(flux: FluxCapacitor, { payload: { product, quantity } }: any) {
     try {
       const cartState = yield effects.select(Selectors.cart);
       const cartExists = !!cartState.content.cartId;

@@ -275,6 +275,7 @@ namespace Store {
   export interface Cart {
     content: {
       cartId: string;
+      quantity: 0;
       visitorId: string;
       sessionId: string;
       items: any[];

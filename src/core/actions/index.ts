@@ -213,7 +213,8 @@ namespace Actions {
   export const CART_CREATED = 'CART_CREATED';
   export type CartCreated = Action<typeof CART_CREATED, string>;
   export const ADD_TO_CART = 'ADD_TO_CART';
-  export type AddToCart = Action<typeof ADD_TO_CART, Store.Product>;
+  // todo: change type
+  export type AddToCart = Action<typeof ADD_TO_CART, any>;
 
   export namespace Payload {
     export namespace Personalization {
