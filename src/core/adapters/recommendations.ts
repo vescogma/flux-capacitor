@@ -130,28 +130,25 @@ namespace Recommendations {
 
   export const pastPurchaseNavigations = (config: Configuration, navigations: Store.Navigation[]) => {
     const configNavigations = ConfigurationAdapter.extractPastPurchaseNavigations(config);
-
-    return navigations.reduce((acc, navigation) => {
-      return configNavigations[navigation.field] ?
-        acc.concat({
-          ...navigation,
-          refinements: configNavigations[navigation.field].length > 0 ?
-            navigation.refinements.reduce((refinementAcc, refinement: Store.ValueRefinement) => {
-              if (refinement.value) {
-                const ref = configNavigations[navigation.field].find((nav) =>
-                  nav === refinement.value || nav['value'] === refinement.value
-                );
-                if (ref) {
-                  refinementAcc.push(ref['display'] ? {
-                    ...refinement,
-                    display: ref['display']
-                  } : refinement);
-                }
+    return navigations.filter((navigation) => configNavigations[navigation.field])
+      .map((navigation) => ({
+        ...navigation,
+        refinements: configNavigations[navigation.field].length > 0 ?
+          navigation.refinements.reduce((refinementAcc, refinement: Store.ValueRefinement) => {
+            if (refinement.value) {
+              const ref = configNavigations[navigation.field].find((nav) =>
+                nav === refinement.value || nav['value'] === refinement.value
+              );
+              if (ref) {
+                refinementAcc.push(ref['display'] ? {
+                  ...refinement,
+                  display: ref['display']
+                } : refinement);
               }
-              return refinementAcc;
-          }, []) : navigation.refinements
-        }) : acc;
-    }, []);
+            }
+            return refinementAcc;
+        }, []) : navigation.refinements
+      }));
   };
 
   export interface RecommendationsRequest {

@@ -11,11 +11,11 @@ import Selectors from '../selectors';
 import Store from '../store';
 import * as utils from '../utils';
 
-export class MissingPayload extends Error {
+export class MissingPayloadError extends Error {
   /* istanbul ignore next */
   constructor (err: string = 'No Secured Payload') {
     super(err);
-    Object.setPrototypeOf(this, MissingPayload.prototype);
+    Object.setPrototypeOf(this, MissingPayloadError.prototype);
   }
 }
 
@@ -74,11 +74,11 @@ export namespace Tasks {
       }));
       const { result } = yield response.json();
       if (!result) {
-        throw new MissingPayload();
+        throw new MissingPayloadError();
       }
       return result;
     }
-    throw new MissingPayload();
+    throw new MissingPayloadError();
   }
 
   // tslint:disable-next-line max-line-length
@@ -107,7 +107,7 @@ export namespace Tasks {
         yield effects.put(flux.actions.receivePastPurchaseSkus([]));
       }
     } catch (e) {
-      if (!(e instanceof MissingPayload)) { // pass through misisng payloads
+      if (!(e instanceof MissingPayloadError)) { // pass through misisng payloads
         return effects.put(flux.actions.receivePastPurchaseSkus(e));
       }
     }

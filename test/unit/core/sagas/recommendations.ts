@@ -5,7 +5,7 @@ import RecommendationsAdapter from '../../../../src/core/adapters/recommendation
 import SearchAdapter from '../../../../src/core/adapters/search';
 import { receivePage } from '../../../../src/core/reducers/data/page';
 import Requests from '../../../../src/core/requests';
-import sagaCreator, { MissingPayload, Tasks } from '../../../../src/core/sagas/recommendations';
+import sagaCreator, { MissingPayloadError, Tasks } from '../../../../src/core/sagas/recommendations';
 import Selectors from '../../../../src/core/selectors';
 import * as utils from '../../../../src/core/utils';
 import suite from '../../_suite';
@@ -177,7 +177,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
           task.next();
           expect.fail();
         } catch (e) {
-          expect(e).to.be.an.instanceof(MissingPayload);
+          expect(e).to.be.an.instanceof(MissingPayloadError);
           expect(e.message).to.eql('No Secured Payload');
         }
       });
@@ -198,7 +198,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
           task.next({});
           expect.fail();
         } catch (e) {
-          expect(e).to.be.an.instanceof(MissingPayload);
+          expect(e).to.be.an.instanceof(MissingPayloadError);
           expect(e.message).to.eql('No Secured Payload');
         }
       });
@@ -284,7 +284,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
       });
 
       it('should ignore missing payload errors', () => {
-        const error = new MissingPayload();
+        const error = new MissingPayloadError();
         const receivePastPurchaseSkus = spy(() => error);
         const flux: any = { actions: { receivePastPurchaseSkus } };
 
