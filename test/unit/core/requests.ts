@@ -1,7 +1,7 @@
 import { Request } from 'groupby-api';
 import * as sinon from 'sinon';
 import ConfigAdapter from '../../../src/core/adapters/configuration';
-import RecommendationsAdapter from '../../../src/core/adapters/recommendations';
+import PastPurchaseAdapter from '../../../src/core/adapters/pastPurchases';
 import SearchAdapter, { MAX_RECORDS } from '../../../src/core/adapters/search';
 import Requests from '../../../src/core/requests';
 import Selectors from '../../../src/core/selectors';
@@ -64,7 +64,7 @@ suite('requests', ({ expect, stub }) => {
       const biasing = { c: 'd' };
       const state: any = { e: 'f' };
       const config: any = { search: {} };
-      const pastPurchaseBiasing = stub(RecommendationsAdapter, 'pastPurchaseBiasing').returns(biasing);
+      const pastPurchaseBiasing = stub(PastPurchaseAdapter, 'pastPurchaseBiasing').returns(biasing);
       pastPurchaseBiasingAdapter.returns(true);
       stub(Selectors,'config').returns(config);
 

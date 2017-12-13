@@ -1,6 +1,7 @@
 import * as effects from 'redux-saga/effects';
 import Actions from '../../../../src/core/actions';
 import ConfigAdapter from '../../../../src/core/adapters/configuration';
+import PastPurchaseAdapter from '../../../../src/core/adapters/pastPurchases';
 import RecommendationsAdapter from '../../../../src/core/adapters/recommendations';
 import SearchAdapter from '../../../../src/core/adapters/search';
 import { receivePage } from '../../../../src/core/reducers/data/page';
@@ -379,7 +380,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const productData = { selectedNavigation: [2,3,5], };
         const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(productData);
         const combineNavigations = stub(SearchAdapter, 'combineNavigations').returns(productData);
-        const navigations = stub(RecommendationsAdapter, 'pastPurchaseNavigations').returns(transformedNav);
+        const navigations = stub(PastPurchaseAdapter, 'pastPurchaseNavigations').returns(transformedNav);
 
         const task = Tasks.fetchPastPurchaseProducts(flux, <any>{}, true);
 

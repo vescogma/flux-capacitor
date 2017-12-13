@@ -1,5 +1,5 @@
 import { Actions, Store } from '../../../../../src/core';
-import Adapter from '../../../../../src/core/adapters/recommendations';
+import Adapter from '../../../../../src/core/adapters/pastPurchases';
 import * as navigations from '../../../../../src/core/reducers/data/navigations';
 import * as page from '../../../../../src/core/reducers/data/page';
 import pastPurchases, * as past from '../../../../../src/core/reducers/data/pastPurchases';
