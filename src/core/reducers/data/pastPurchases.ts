@@ -1,5 +1,5 @@
 import Actions from '../../actions';
-import RecommendationsAdapters from '../../adapters/recommendations';
+import Adapter from '../../adapters/pastPurchases';
 import Store from '../../store';
 import * as navigations from './navigations';
 import * as page from './page';
@@ -133,10 +133,10 @@ export const updatePastPurchaseSortSelected = (state: State, { payload }: Action
 
   switch (state.sort.items[payload].type) {
     case SORT_ENUMS.MOST_PURCHASED:
-      skus = RecommendationsAdapters.sortSkus(skus, 'quantity');
+      skus = Adapter.sortSkus(skus, 'quantity');
       break;
     case SORT_ENUMS.MOST_RECENT:
-      skus = RecommendationsAdapters.sortSkus(skus, 'lastPurchased');
+      skus = Adapter.sortSkus(skus, 'lastPurchased');
       break;
   }
 

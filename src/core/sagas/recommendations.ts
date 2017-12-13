@@ -4,6 +4,7 @@ import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import ConfigAdapter from '../adapters/configuration';
 import Adapter from '../adapters/recommendations';
+import PastPurchaseAdapter from '../adapters/pastPurchases';
 import SearchAdapter from '../adapters/search';
 import Configuration from '../configuration';
 import Requests from '../requests';
@@ -121,7 +122,7 @@ export namespace Tasks {
         const request = yield effects.select(Requests.pastPurchaseProducts, getNavigations);
         const results = yield effects.call(fetchProductsFromSkus, flux, pastPurchaseSkus, request);
         if (getNavigations) {
-          const navigations = Adapter.pastPurchaseNavigations(
+          const navigations = PastPurchaseAdapter.pastPurchaseNavigations(
             yield effects.select(Selectors.config), SearchAdapter.combineNavigations(results));
           yield effects.put(<any>[
             flux.actions.receivePastPurchaseAllRecordCount(results.totalRecordCount),
