@@ -112,7 +112,7 @@ namespace Configuration {
     /**
      * maximum number of refinements to show in a single section
      */
-    maxRefinements: number;
+    maxRefinements?: number;
     /**
      * default request values
      */
