@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Biasing | @storefront/flux-capacitor</title>
+	<title>MoreRefinements | @storefront/flux-capacitor</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,19 +56,16 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/actions.html">Actions</a>
+					<a href="../modules/payload.html">Payload</a>
 				</li>
 				<li>
-					<a href="../modules/actions.payload.html">Payload</a>
+					<a href="../modules/payload.navigation.html">Navigation</a>
 				</li>
 				<li>
-					<a href="../modules/actions.payload.personalization.html">Personalization</a>
-				</li>
-				<li>
-					<a href="actions.payload.personalization.biasing.html">Biasing</a>
+					<a href="payload.navigation.morerefinements.html">MoreRefinements</a>
 				</li>
 			</ul>
-			<h1>Interface Biasing</h1>
+			<h1>Interface MoreRefinements</h1>
 		</div>
 	</div>
 </header>
@@ -79,7 +76,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Biasing</span>
+						<span class="target">MoreRefinements</span>
 					</li>
 				</ul>
 			</section>
@@ -90,10 +87,9 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="actions.payload.personalization.biasing.html#bias" class="tsd-kind-icon">bias</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="actions.payload.personalization.biasing.html#config" class="tsd-kind-icon">config</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="actions.payload.personalization.biasing.html#field" class="tsd-kind-icon">field</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="actions.payload.personalization.biasing.html#value" class="tsd-kind-icon">value</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="payload.navigation.morerefinements.html#navigationid" class="tsd-kind-icon">navigation<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="payload.navigation.morerefinements.html#refinements" class="tsd-kind-icon">refinements</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="payload.navigation.morerefinements.html#selected" class="tsd-kind-icon">selected</a></li>
 							</ul>
 						</section>
 					</div>
@@ -102,42 +98,32 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="bias" class="tsd-anchor"></a>
-					<h3>bias</h3>
-					<div class="tsd-signature tsd-kind-icon">bias<span class="tsd-signature-symbol">:</span> <a href="store.personalization.singlebias.html" class="tsd-signature-type">SingleBias</a></div>
+					<a name="navigationid" class="tsd-anchor"></a>
+					<h3>navigation<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">navigation<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/db974b0/src/core/actions/index.ts#L179">core/actions/index.ts:179</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/actions/payloads.ts#L83">core/actions/payloads.ts:83</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="config" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> config</h3>
-					<div class="tsd-signature tsd-kind-icon">config<span class="tsd-signature-symbol">:</span> <a href="configuration.personalization.realtimebiasing.html" class="tsd-signature-type">RealTimeBiasing</a></div>
+					<a name="refinements" class="tsd-anchor"></a>
+					<h3>refinements</h3>
+					<div class="tsd-signature tsd-kind-icon">refinements<span class="tsd-signature-symbol">:</span> <a href="../modules/store.html#refinement" class="tsd-signature-type">Refinement</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/db974b0/src/core/actions/index.ts#L180">core/actions/index.ts:180</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/actions/payloads.ts#L84">core/actions/payloads.ts:84</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="field" class="tsd-anchor"></a>
-					<h3>field</h3>
-					<div class="tsd-signature tsd-kind-icon">field<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="selected" class="tsd-anchor"></a>
+					<h3>selected</h3>
+					<div class="tsd-signature tsd-kind-icon">selected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/db974b0/src/core/actions/index.ts#L177">core/actions/index.ts:177</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="value" class="tsd-anchor"></a>
-					<h3>value</h3>
-					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/db974b0/src/core/actions/index.ts#L178">core/actions/index.ts:178</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/actions/payloads.ts#L85">core/actions/payloads.ts:85</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -150,30 +136,22 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module tsd-is-external">
-						<a href="../modules/actions.html">Actions</a>
+						<a href="../modules/payload.html">Payload</a>
 						<ul>
 							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-								<a href="../modules/actions.metadata.html">Metadata</a>
+								<a href="../modules/payload.autocomplete.html">Autocomplete</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/payload.collection.html">Collection</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/payload.component.html">Component</a>
 							</li>
 							<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-external">
-								<a href="../modules/actions.payload.html">Payload</a>
-								<ul>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-										<a href="../modules/actions.payload.autocomplete.html">Autocomplete</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-										<a href="../modules/actions.payload.collection.html">Collection</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-										<a href="../modules/actions.payload.component.html">Component</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-										<a href="../modules/actions.payload.navigation.html">Navigation</a>
-									</li>
-									<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-external">
-										<a href="../modules/actions.payload.personalization.html">Personalization</a>
-									</li>
-								</ul>
+								<a href="../modules/payload.navigation.html">Navigation</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/payload.personalization.html">Personalization</a>
 							</li>
 						</ul>
 					</li>
@@ -181,27 +159,30 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="payload.navigation.addrefinement.html" class="tsd-kind-icon">Add<wbr>Refinement</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="actions.payload.personalization.biasing.html" class="tsd-kind-icon">Biasing</a>
+						<a href="payload.navigation.morerefinements.html" class="tsd-kind-icon">More<wbr>Refinements</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="actions.payload.personalization.biasing.html#bias" class="tsd-kind-icon">bias</a>
+								<a href="payload.navigation.morerefinements.html#navigationid" class="tsd-kind-icon">navigation<wbr>Id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="actions.payload.personalization.biasing.html#config" class="tsd-kind-icon">config</a>
+								<a href="payload.navigation.morerefinements.html#refinements" class="tsd-kind-icon">refinements</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="actions.payload.personalization.biasing.html#field" class="tsd-kind-icon">field</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="actions.payload.personalization.biasing.html#value" class="tsd-kind-icon">value</a>
+								<a href="payload.navigation.morerefinements.html#selected" class="tsd-kind-icon">selected</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="payload.navigation.refinement.html" class="tsd-kind-icon">Refinement</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

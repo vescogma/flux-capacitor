@@ -65,7 +65,7 @@
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
 				<h1 id="fluxcapacitor">FluxCapacitor</h1>
-				<p>State management for StoreFront</p>
+				<p>State Management for StoreFront</p>
 				<p><a href="https://www.npmjs.com/package/@storefront/flux-capacitor"><img src="https://img.shields.io/npm/v/@storefront/flux-capacitor.svg?style=flat-square" alt="npm (scoped with tag)"></a>
 					<a href="https://circleci.com/gh/groupby/flux-capacitor/tree/master"><img src="https://img.shields.io/circleci/project/github/groupby/flux-capacitor/master.svg?style=flat-square" alt="CircleCI branch"></a>
 					<a href="https://codecov.io/gh/groupby/flux-capacitor"><img src="https://img.shields.io/codecov/c/github/groupby/flux-capacitor/master.svg?style=flat-square" alt="Codecov branch"></a>
@@ -102,6 +102,9 @@
 					<li class=" tsd-kind-module">
 						<a href="modules/selectors.html">Selectors</a>
 					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/storesections.html">Store<wbr>Sections</a>
+					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
@@ -124,6 +127,12 @@
 						<a href="modules/page.html">Page</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/pastpurchases.html">Past<wbr>Purchases</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/payload.html">Payload</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/personalization.html">Personalization</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
@@ -139,8 +148,14 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-is-external">
+						<a href="enums/sort_enums.html" class="tsd-kind-icon">SORT_<wbr>ENUMS</a>
+					</li>
 					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/fluxcapacitor.html" class="tsd-kind-icon">Flux<wbr>Capacitor</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/missingpayloaderror.html" class="tsd-kind-icon">Missing<wbr>Payload<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/recommendationsresponse.html" class="tsd-kind-icon">Recommendations<wbr>Response</a>
@@ -173,6 +188,12 @@
 						<a href="globals.html#max_records" class="tsd-kind-icon">MAX_<wbr>RECORDS</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#past_purchases_search_change_actions" class="tsd-kind-icon">PAST_<wbr>PURCHASES_<wbr>SEARCH_<wbr>CHANGE_<wbr>ACTIONS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#past_purchase_sku_actions" class="tsd-kind-icon">PAST_<wbr>PURCHASE_<wbr>SKU_<wbr>ACTIONS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#personalization_change_actions" class="tsd-kind-icon">PERSONALIZATION_<wbr>CHANGE_<wbr>ACTIONS</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
@@ -201,6 +222,12 @@
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#addrefinement" class="tsd-kind-icon">add<wbr>Refinement</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#applynavigationreducer" class="tsd-kind-icon">apply<wbr>Navigation<wbr>Reducer</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#applypagereducer" class="tsd-kind-icon">apply<wbr>Page<wbr>Reducer</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#clearcomponentstate" class="tsd-kind-icon">clear<wbr>Component<wbr>State</a>
@@ -308,9 +335,6 @@
 						<a href="globals.html#updatenavigations" class="tsd-kind-icon">update<wbr>Navigations</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#updateorderhistory" class="tsd-kind-icon">update<wbr>Order<wbr>History</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#updateorigin" class="tsd-kind-icon">update<wbr>Origin</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
@@ -318,6 +342,24 @@
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#updatepage" class="tsd-kind-icon">update<wbr>Page</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#updatepastpurchaseallrecordcount" class="tsd-kind-icon">update<wbr>Past<wbr>Purchase<wbr>All<wbr>Record<wbr>Count</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#updatepastpurchasecurrentrecordcount" class="tsd-kind-icon">update<wbr>Past<wbr>Purchase<wbr>Current<wbr>Record<wbr>Count</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#updatepastpurchaseproducts" class="tsd-kind-icon">update<wbr>Past<wbr>Purchase<wbr>Products</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#updatepastpurchasequery" class="tsd-kind-icon">update<wbr>Past<wbr>Purchase<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#updatepastpurchaseskus" class="tsd-kind-icon">update<wbr>Past<wbr>Purchase<wbr>Skus</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#updatepastpurchasesortselected" class="tsd-kind-icon">update<wbr>Past<wbr>Purchase<wbr>Sort<wbr>Selected</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#updatepastpurchases" class="tsd-kind-icon">update<wbr>Past<wbr>Purchases</a>
@@ -332,13 +374,13 @@
 						<a href="globals.html#updatequery" class="tsd-kind-icon">update<wbr>Query</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#updatequerypastpurchases" class="tsd-kind-icon">update<wbr>Query<wbr>Past<wbr>Purchases</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#updaterecallid" class="tsd-kind-icon">update<wbr>Recall<wbr>Id</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#updaterecommendations" class="tsd-kind-icon">update<wbr>Recommendations</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#updaterecommendationsproducts" class="tsd-kind-icon">update<wbr>Recommendations<wbr>Products</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#updaterecordcount" class="tsd-kind-icon">update<wbr>Record<wbr>Count</a>
@@ -347,7 +389,13 @@
 						<a href="globals.html#updateredirect" class="tsd-kind-icon">update<wbr>Redirect</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#updatesaytpastpurchases" class="tsd-kind-icon">update<wbr>Sayt<wbr>Past<wbr>Purchases</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#updatesearchid" class="tsd-kind-icon">update<wbr>Search<wbr>Id</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#updatesecuredpayload" class="tsd-kind-icon">update<wbr>Secured<wbr>Payload</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#updateselected" class="tsd-kind-icon">update<wbr>Selected</a>
@@ -380,6 +428,12 @@
 						<a href="globals.html#routes" class="tsd-kind-icon">Routes</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#hasselectedpastpurchaserefinements" class="tsd-kind-icon">has<wbr>Selected<wbr>Past<wbr>Purchase<wbr>Refinements</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#hasselectedpastpurchaserefinementsbyfield" class="tsd-kind-icon">has<wbr>Selected<wbr>Past<wbr>Purchase<wbr>Refinements<wbr>ByField</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
 						<a href="globals.html#hasselectedrefinements" class="tsd-kind-icon">has<wbr>Selected<wbr>Refinements</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
@@ -395,6 +449,9 @@
 						<a href="globals.html#isdifferentpagesize" class="tsd-kind-icon">is<wbr>Different<wbr>Page<wbr>Size</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#isdifferentpastpurchasepagesize" class="tsd-kind-icon">is<wbr>Different<wbr>Past<wbr>Purchase<wbr>Page<wbr>Size</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
 						<a href="globals.html#isdifferentquery" class="tsd-kind-icon">is<wbr>Different<wbr>Query</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
@@ -402,6 +459,18 @@
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
 						<a href="globals.html#isondifferentpage" class="tsd-kind-icon">is<wbr>OnDifferent<wbr>Page</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#isondifferentpastpurchasepage" class="tsd-kind-icon">is<wbr>OnDifferent<wbr>Past<wbr>Purchase<wbr>Page</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#ispastpurchaserefinementdeselectedbyindex" class="tsd-kind-icon">is<wbr>Past<wbr>Purchase<wbr>Refinement<wbr>Deselected<wbr>ByIndex</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#ispastpurchaserefinementselectedbyindex" class="tsd-kind-icon">is<wbr>Past<wbr>Purchase<wbr>Refinement<wbr>Selected<wbr>ByIndex</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#ispastpurchasessortdeselected" class="tsd-kind-icon">is<wbr>Past<wbr>Purchases<wbr>Sort<wbr>Deselected</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
 						<a href="globals.html#israngerefinement" class="tsd-kind-icon">is<wbr>Range<wbr>Refinement</a>
@@ -431,6 +500,9 @@
 						<a href="globals.html#isvalidpage" class="tsd-kind-icon">is<wbr>Valid<wbr>Page</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#isvalidpastpurchasepage" class="tsd-kind-icon">is<wbr>Valid<wbr>Past<wbr>Purchase<wbr>Page</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
 						<a href="globals.html#isvalidquery" class="tsd-kind-icon">is<wbr>Valid<wbr>Query</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
@@ -441,6 +513,9 @@
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
 						<a href="globals.html#notonfirstpage" class="tsd-kind-icon">not<wbr>OnFirst<wbr>Page</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#notonfirstpastpurchasepage" class="tsd-kind-icon">not<wbr>OnFirst<wbr>Past<wbr>Purchase<wbr>Page</a>
 					</li>
 				</ul>
 			</nav>

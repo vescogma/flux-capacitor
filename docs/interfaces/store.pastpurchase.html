@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Sort | @storefront/flux-capacitor</title>
+	<title>PastPurchase | @storefront/flux-capacitor</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -59,10 +59,10 @@
 					<a href="../modules/store.html">Store</a>
 				</li>
 				<li>
-					<a href="store.sort.html">Sort</a>
+					<a href="store.pastpurchase.html">PastPurchase</a>
 				</li>
 			</ul>
-			<h1>Interface Sort</h1>
+			<h1>Interface PastPurchase</h1>
 		</div>
 	</div>
 </header>
@@ -73,12 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Sort</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<a href="store.pastpurchases.pastpurchasesort.html" class="tsd-signature-type">PastPurchaseSort</a>
-							</li>
-						</ul>
+						<span class="target">PastPurchase</span>
 					</li>
 				</ul>
 			</section>
@@ -89,8 +84,16 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.sort.html#descending" class="tsd-kind-icon">descending</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.sort.html#field" class="tsd-kind-icon">field</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.pastpurchase.html#allrecordcount" class="tsd-kind-icon">all<wbr>Record<wbr>Count</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.pastpurchase.html#currentrecordcount" class="tsd-kind-icon">current<wbr>Record<wbr>Count</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.pastpurchase.html#defaultskus" class="tsd-kind-icon">default<wbr>Skus</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.pastpurchase.html#navigations" class="tsd-kind-icon">navigations</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.pastpurchase.html#page" class="tsd-kind-icon">page</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.pastpurchase.html#products" class="tsd-kind-icon">products</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.pastpurchase.html#query" class="tsd-kind-icon">query</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.pastpurchase.html#saytpastpurchases" class="tsd-kind-icon">sayt<wbr>Past<wbr>Purchases</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.pastpurchase.html#skus" class="tsd-kind-icon">skus</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.pastpurchase.html#sort" class="tsd-kind-icon">sort</a></li>
 							</ul>
 						</section>
 					</div>
@@ -99,22 +102,102 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="descending" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> descending</h3>
-					<div class="tsd-signature tsd-kind-icon">descending<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<a name="allrecordcount" class="tsd-anchor"></a>
+					<h3>all<wbr>Record<wbr>Count</h3>
+					<div class="tsd-signature tsd-kind-icon">all<wbr>Record<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L114">core/store/index.ts:114</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L247">core/store/index.ts:247</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="field" class="tsd-anchor"></a>
-					<h3>field</h3>
-					<div class="tsd-signature tsd-kind-icon">field<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="currentrecordcount" class="tsd-anchor"></a>
+					<h3>current<wbr>Record<wbr>Count</h3>
+					<div class="tsd-signature tsd-kind-icon">current<wbr>Record<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L113">core/store/index.ts:113</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L248">core/store/index.ts:248</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="defaultskus" class="tsd-anchor"></a>
+					<h3>default<wbr>Skus</h3>
+					<div class="tsd-signature tsd-kind-icon">default<wbr>Skus<span class="tsd-signature-symbol">:</span> <a href="store.pastpurchases.pastpurchaseproduct.html" class="tsd-signature-type">PastPurchaseProduct</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L243">core/store/index.ts:243</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="navigations" class="tsd-anchor"></a>
+					<h3>navigations</h3>
+					<div class="tsd-signature tsd-kind-icon">navigations<span class="tsd-signature-symbol">:</span> <a href="../modules/store.indexed.html" class="tsd-signature-type">Indexed</a><span class="tsd-signature-symbol">&lt;</span><a href="store.navigation.html" class="tsd-signature-type">Navigation</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L249">core/store/index.ts:249</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="page" class="tsd-anchor"></a>
+					<h3>page</h3>
+					<div class="tsd-signature tsd-kind-icon">page<span class="tsd-signature-symbol">:</span> <a href="store.page.html" class="tsd-signature-type">Page</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L252">core/store/index.ts:252</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="products" class="tsd-anchor"></a>
+					<h3>products</h3>
+					<div class="tsd-signature tsd-kind-icon">products<span class="tsd-signature-symbol">:</span> <a href="store.productwithmetadata.html" class="tsd-signature-type">ProductWithMetadata</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L246">core/store/index.ts:246</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="query" class="tsd-anchor"></a>
+					<h3>query</h3>
+					<div class="tsd-signature tsd-kind-icon">query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L250">core/store/index.ts:250</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="saytpastpurchases" class="tsd-anchor"></a>
+					<h3>sayt<wbr>Past<wbr>Purchases</h3>
+					<div class="tsd-signature tsd-kind-icon">sayt<wbr>Past<wbr>Purchases<span class="tsd-signature-symbol">:</span> <a href="store.productwithmetadata.html" class="tsd-signature-type">ProductWithMetadata</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L245">core/store/index.ts:245</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="skus" class="tsd-anchor"></a>
+					<h3>skus</h3>
+					<div class="tsd-signature tsd-kind-icon">skus<span class="tsd-signature-symbol">:</span> <a href="store.pastpurchases.pastpurchaseproduct.html" class="tsd-signature-type">PastPurchaseProduct</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L244">core/store/index.ts:244</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="sort" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> sort</h3>
+					<div class="tsd-signature tsd-kind-icon">sort<span class="tsd-signature-symbol">:</span> <a href="store.selectablelist.html" class="tsd-signature-type">SelectableList</a><span class="tsd-signature-symbol">&lt;</span><a href="store.pastpurchases.pastpurchasesort.html" class="tsd-signature-type">PastPurchaseSort</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/store/index.ts#L251">core/store/index.ts:251</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -183,9 +266,45 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="store.page.html" class="tsd-kind-icon">Page</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="store.pastpurchase.html" class="tsd-kind-icon">Past<wbr>Purchase</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="store.pastpurchase.html#allrecordcount" class="tsd-kind-icon">all<wbr>Record<wbr>Count</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="store.pastpurchase.html#currentrecordcount" class="tsd-kind-icon">current<wbr>Record<wbr>Count</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="store.pastpurchase.html#defaultskus" class="tsd-kind-icon">default<wbr>Skus</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="store.pastpurchase.html#navigations" class="tsd-kind-icon">navigations</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="store.pastpurchase.html#page" class="tsd-kind-icon">page</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="store.pastpurchase.html#products" class="tsd-kind-icon">products</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="store.pastpurchase.html#query" class="tsd-kind-icon">query</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="store.pastpurchase.html#saytpastpurchases" class="tsd-kind-icon">sayt<wbr>Past<wbr>Purchases</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="store.pastpurchase.html#skus" class="tsd-kind-icon">skus</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="store.pastpurchase.html#sort" class="tsd-kind-icon">sort</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="store.product.html" class="tsd-kind-icon">Product</a>
 					</li>
@@ -210,21 +329,9 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="store.session.html" class="tsd-kind-icon">Session</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="store.sort.html" class="tsd-kind-icon">Sort</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="store.sort.html#descending" class="tsd-kind-icon">descending</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="store.sort.html#field" class="tsd-kind-icon">field</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="store.state.html" class="tsd-kind-icon">State</a>
 					</li>
