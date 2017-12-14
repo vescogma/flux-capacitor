@@ -27,14 +27,19 @@ namespace Cart {
     }, 0);
 
   export const combineLikeItems = (items: any[], item: any, key: string) => {
-    // console.log(items, item);
-    // // todo: handle diffenret structure
-    // const likeItemIndex = items.indexOf((el: any) => el.data[key] === item.data[key]);
-    // console.log('index', likeItemIndex);
-    // // tslint:disable-next-line:max-line-length
-    // const combinedItems = likeItemIndex > -1 ? [...itemscalculateTotalQuantity([...items[likeItemIndex], item]) : [...items, item];
-    // console.log('combined', combinedItems);
-    // return likeItemIndex ? items.splice(likeItemIndex, 1, combinedItems) : items;
+    console.log(items, item.item.data[key]);
+    // todo: handle diffenret structure
+    const likeItem = items.find((el: any) => el.item.data[key] === item.item.data[key]);
+    if (likeItem) {
+      items.forEach((el: any) => {
+        if (el.item.data[key] === item.item.data[key]) {
+          el.quantity += item.quantity;
+        }
+      });
+      return items;
+    } else {
+      return [...items, item];
+    }
   };
 
   export interface CartBody {
