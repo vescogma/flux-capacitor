@@ -53,7 +53,7 @@
     "@types/chai": "^4.0.0",
     "@types/mocha": "^2.2.41",
     "@types/node": "^8.0.14",
-    "@types/sinon": "^2.3.2",
+    "@types/sinon": "^4.1.1",
     "@types/sinon-chai": "^2.7.28",
     "chai": "^4.0.0",
     "condition-circle": "^2.0.0",

@@ -83,7 +83,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     let actions: typeof FluxCapacitor.prototype.actions;
     let store: any;
 
-    function expectDispatch(action: () => void, creatorName: string, ...params: any[]) {
+    function expectDispatch(action: () => void, creatorName: any, ...params: any[]) {
       const fakeAction = { type: 'FAKE_ACTION' };
       const dispatch = store.dispatch = spy();
       const actionCreator = stub(ActionCreators, creatorName).returns(action);
