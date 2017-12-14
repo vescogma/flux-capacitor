@@ -298,10 +298,22 @@ suite('selectors', ({ expect, stub }) => {
       expect(productSelector).to.be.calledWith(state);
     });
 
+    it('should find past purchase product product with given id', () => {
+      const products = [{ id: '3' }, { id: '4' }, { id: '7' }, { id: '2' }];
+      const state: any = { data: { present: { products } } };
+      const recommendations = stub(Selectors, 'pastPurchaseProducts').returns(products);
+      stub(Selectors, 'autocompleteProducts').returns([{ id: 'asdfasdf' }]);
+      stub(Selectors, 'products').returns([{ id: 'fdfdf' }]);
+
+      expect(Selectors.findProduct(state, '7')).to.eql(products[2]);
+      expect(recommendations).to.be.calledWith(state);
+    });
+
     it('should find recommendations product with given id', () => {
       const products = [{ id: '3' }, { id: '4' }, { id: '7' }, { id: '2' }];
       const state: any = { data: { present: { products } } };
       const recommendations = stub(Selectors, 'recommendationsProducts').returns(products);
+      stub(Selectors, 'pastPurchaseProducts').returns([{ id: 'past' }]);
       stub(Selectors, 'autocompleteProducts').returns([{ id: 'asdfasdf' }]);
       stub(Selectors, 'products').returns([{ id: 'fdfdf' }]);
 
@@ -524,47 +536,245 @@ suite('selectors', ({ expect, stub }) => {
       const state: any = {
         data: {
           present: {
-            recommendations: {
-              pastPurchases: {
-                products: [
-                  { sku: 'a', quantity: 4 },
-                  { sku: 'b', quantity: 5 },
-                  { sku: 'c', quantity: 8 }
-                ]
-              }
+            pastPurchases: {
+              skus: [
+                { sku: 'a', quantity: 4, lastPurchased: 5 },
+                { sku: 'b', quantity: 5, lastPurchased: 0 },
+                { sku: 'c', quantity: 8, lastPurchased: 1 }
+              ]
             }
           }
         }
       };
 
-      expect(Selectors.pastPurchaseProductsBySku(state)).to.eql({ a: 4, b: 5, c: 8, });
+      expect(Selectors.pastPurchaseProductsBySku(state)).to.eql({
+        a: { quantity: 4, lastPurchased: 5 },
+        b: { quantity: 5, lastPurchased: 0 },
+        c: { quantity: 8, lastPurchased: 1 }
+      });
     });
   });
+  describe('recommendations.pastPurchases', () => {
+    const skus = [{ a: 1 }];
+    const saytPastPurchases = [{ a: 1 }];
+    const query = 'hat';
+    const byId = { a: 1, b : 2, c: 3 };
+    const allIds = ['a', 'b', 'c'];
+    const navigations = { byId, allIds };
+    const sizes = {
+      selected: 1,
+      items: [10, 20, 30],
+    };
+    const page = {
+      current: 2,
+      last: 4,
+      sizes,
+    };
+    const sort = {
+      selected: 1,
+      items: ['a', 'b', 'c'],
+    };
+    const productData = [{ id: 1 }, { id: 2 }, { id: 3 }];
+    const products = productData.map((data) => ({ data }));
+    const currentRecordCount = 3;
+    const allRecordCount = 5;
+    const pastPurchases = { skus, saytPastPurchases, products,
+                            query, navigations, page, sort, allRecordCount, currentRecordCount };
+    const state: any = { data: { present: { pastPurchases } } };
 
-  describe('pastPurchases()', () => {
-    it('should return pastPurchases', () => {
-      const pastPurchases = { products: [{ a: 1 }] };
-      const state = { data: { present: { recommendations: { pastPurchases } } } };
-
-      expect(Selectors.pastPurchases(<any>state)).to.eql([{ a: 1 }]);
+    describe('pastPurchases()', () => {
+      it('should return skus', () => {
+        expect(Selectors.pastPurchases(state)).to.eql(skus);
+      });
     });
-  });
 
-  describe('orderHistory()', () => {
-    it('should return orderHistory', () => {
-      const orderHistory = [{ a: 1 }];
-      const state = { data: { present: { recommendations: { orderHistory } } } };
-
-      expect(Selectors.orderHistory(<any>state)).to.eql([{ a: 1 }]);
+    describe('saytPastPurchases()', () => {
+      it('should return saytPastPurchases', () => {
+        expect(Selectors.saytPastPurchases(state)).to.eql(saytPastPurchases);
+      });
     });
-  });
 
-  describe('QueryPastPurchases()', () => {
-    it('should return QueryPastPurchases', () => {
-      const queryPastPurchases = [{ a: 1 }];
-      const state = { data: { present: { recommendations: { queryPastPurchases } } } };
+    describe('pastPurchaseProducts()', () => {
+      it('should return pastPurchaseProducts', () => {
+        const skuSelector = stub(Selectors, 'pastPurchaseProductsBySku').returns({});
+        expect(Selectors.pastPurchaseProducts(state)).to.eql(productData.map((product) => ({
+          ...product,
+          meta: {}
+        })));
+        expect(skuSelector).to.be.calledWith(state);
+      });
 
-      expect(Selectors.queryPastPurchases(<any>state)).to.eql([{ a: 1 }]);
+      it('should return pastPurchaseProducts with purchase data', () => {
+        const skuData = {
+          1: {
+            c: 'd'
+          },
+          2: {
+            e: 'f',
+          },
+          3: {
+            j: '1',
+          },
+          4: {
+            w: '1',
+          }
+        };
+        stub(Selectors, 'pastPurchaseProductsBySku').returns(skuData);
+        expect(Selectors.pastPurchaseProducts(state)).to.eql(productData.map((product) => ({
+          ...product,
+          meta: skuData[product.id],
+        })));
+      });
+    });
+
+    describe('pastPurchaseCurrentRecordCount()', () => {
+      it('should return past purchase record count', () => {
+        expect(Selectors.pastPurchaseCurrentRecordCount(state)).to.eql(currentRecordCount);
+      });
+    });
+
+    describe('pastPurchaseAllRecordCount()', () => {
+      it('should return past purchase record count', () => {
+        expect(Selectors.pastPurchaseAllRecordCount(state)).to.eql(allRecordCount);
+      });
+    });
+
+    describe('pastPurchaseQuery()', () => {
+      it('should return query', () => {
+        expect(Selectors.pastPurchaseQuery(state)).to.eql(query);
+      });
+    });
+
+    describe('pastPurchaseNavigation()', () => {
+      it('should return navigation object for given navigationId', () => {
+        expect(Selectors.pastPurchaseNavigation(state, 'b')).to.eql(2);
+      });
+    });
+
+    describe('pastPurchaseNavigations()', () => {
+      it('should return all navigations', () => {
+        stub(Selectors,'pastPurchaseNavigation').returnsArg(1);
+
+        expect(Selectors.pastPurchaseNavigations(state)).to.eql(allIds);
+      });
+    });
+
+    describe('pastPurchaseSelectedRefinements()', () => {
+      it('should call getSelected with allIds and return the result', () => {
+        const getSelected = stub(Selectors, 'getSelected').returns(query);
+        stub(Selectors,'pastPurchaseNavigation').returnsArg(1);
+
+        const returned = Selectors.pastPurchaseSelectedRefinements(state);
+
+        expect(getSelected).to.be.calledWithExactly(allIds);
+        expect(returned).to.eq(query);
+      });
+    });
+
+    describe('isPastPurchaseRefinementDeselected()', () => {
+      it('should call Selectors.pastPurchaseNavigation with state and id', () => {
+        const navigationId = 'color';
+        const pastPurchaseNavigation = stub(Selectors, 'pastPurchaseNavigation');
+
+        Selectors.isPastPurchaseRefinementDeselected(state, navigationId, 1);
+
+        expect(pastPurchaseNavigation).to.be.calledWithExactly(state, navigationId);
+      });
+
+      it('should return false if nav is defined and index is selected', () => {
+        const navigationId = 'color';
+        stub(Selectors, 'pastPurchaseNavigation').returns({ selected: [1, 2, 3] });
+
+        expect(Selectors.isPastPurchaseRefinementDeselected(state, navigationId, 3)).to.be.false;
+      });
+
+      it('should return true if nav is defined and index is deselected', () => {
+        const navigationId = 'color';
+        stub(Selectors, 'pastPurchaseNavigation').returns({ selected: [1, 2, 3] });
+
+        expect(Selectors.isPastPurchaseRefinementDeselected(state, navigationId, 4)).to.be.true;
+      });
+
+      it('should return false if nav is undefined', () => {
+        const navigationId = 'color';
+        stub(Selectors, 'pastPurchaseNavigation');
+
+        expect(Selectors.isPastPurchaseRefinementDeselected(state, navigationId, 1)).to.be.false;
+      });
+    });
+
+    describe('isPastPurchaseRefinementSelected()', () => {
+      it('should call Selectors.pastPurchaseNavigation with state and id', () => {
+        const navigationId = 'color';
+        const pastPurchaseNavigation = stub(Selectors, 'pastPurchaseNavigation');
+
+        Selectors.isPastPurchaseRefinementSelected(state, navigationId, 1);
+
+        expect(pastPurchaseNavigation).to.be.calledWithExactly(state, navigationId);
+      });
+
+      it('should return true if nav is defined and index is selected', () => {
+        const navigationId = 'color';
+        stub(Selectors, 'pastPurchaseNavigation').returns({ selected: [1, 2, 3] });
+
+        expect(Selectors.isPastPurchaseRefinementSelected(state, navigationId, 3)).to.be.true;
+      });
+
+      it('should return false if nav is defined and index is not selected', () => {
+        const navigationId = 'color';
+        stub(Selectors, 'pastPurchaseNavigation').returns({ selected: [1, 2, 3] });
+
+        expect(Selectors.isPastPurchaseRefinementSelected(state, navigationId, 4)).to.be.false;
+      });
+
+      it('should return false if nav is undefined', () => {
+        const navigationId = 'color';
+        stub(Selectors, 'pastPurchaseNavigation');
+
+        expect(Selectors.isPastPurchaseRefinementSelected(state, navigationId, 1)).to.be.false;
+      });
+    });
+
+    describe('pastPurchasePage()', () => {
+      it('should return the current page', () => {
+        expect(Selectors.pastPurchasePage(state)).to.eql(2);
+      });
+    });
+
+    describe('pastPurchaseTotalPages()', () => {
+      it('should return total pages', () => {
+        expect(Selectors.pastPurchaseTotalPages(state)).to.eql(4);
+      });
+    });
+
+    describe('pastPurchasePageSizes()', () => {
+      it('should return sizes object', () => {
+        expect(Selectors.pastPurchasePageSizes(state)).to.eql(sizes);
+      });
+    });
+
+    describe('pastPurchasePageSize()', () => {
+      it('should return current selected page size', () => {
+        expect(Selectors.pastPurchasePageSize(state)).to.eql(20);
+      });
+    });
+
+    describe('pastPurchasePageSizeIndex()', () => {
+      it('should return current selected page size index', () => {
+        expect(Selectors.pastPurchasePageSizeIndex(state)).to.eql(1);
+      });
+    });
+
+    describe('pastPurchaseSort()', () => {
+      it('should return sort object', () => {
+        expect(Selectors.pastPurchaseSort(state)).to.eql(sort);
+      });
+    });
+
+    describe('pastPurchaseSortSelected()', () => {
+      it('should return selected sort object', () => {
+        expect(Selectors.pastPurchaseSortSelected(state)).to.eql('b');
+      });
     });
   });
 

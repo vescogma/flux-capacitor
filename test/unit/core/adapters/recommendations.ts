@@ -12,6 +12,17 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
     });
   });
 
+  describe('buildBody()', () => {
+    it('should build the body', () => {
+      const body: any = { a: 1 };
+
+      expect(RecommendationsAdapter.buildBody(body)).to.eql({
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+    });
+  });
+
   describe('pinNavigations() ', () => {
     it('should pin navigations', () => {
       const results: any = [{ name: 'a' }, { name: 'b' }, { name: 'c' }];
@@ -128,64 +139,7 @@ suite('Recommendations Adapter', ({ expect, stub }) => {
     });
   });
 
-  describe('pastPurchaseBiasing()', () => {
-    const idField = 'productId';
-    const biasInfluence = 8;
-    const biasStrength = 2;
-    const state: any = {
-      data: {
-        present: {
-          recommendations: {
-            pastPurchases: {
-              products: [{ sku: 'a' }, { sku: 'b' }, { sku: 'c' }]
-            }
-          }
-        }
-      }
-    };
-
-    it('should generate biases from past purchase product SKUs', () => {
-      const config: any = {
-        recommendations: {
-          idField,
-          pastPurchases: { biasStrength, biasInfluence, biasCount: 10 }
-        }
-      };
-      stub(Selectors, 'config').returns(config);
-
-      const biasing = RecommendationsAdapter.pastPurchaseBiasing(state);
-
-      expect(biasing).to.eql({
-        bringToTop: [],
-        augmentBiases: true,
-        influence: biasInfluence,
-        biases: [
-          { name: idField, content: 'a', strength: biasStrength },
-          { name: idField, content: 'b', strength: biasStrength },
-          { name: idField, content: 'c', strength: biasStrength },
-        ]
-      });
-    });
-
-    it('should limit generated biases by biasCount', () => {
-      const config: any = {
-        recommendations: {
-          idField,
-          pastPurchases: { biasStrength, biasInfluence, biasCount: 2 }
-        }
-      };
-      stub(Selectors, 'config').returns(config);
-
-      const biasing = RecommendationsAdapter.pastPurchaseBiasing(state);
-
-      expect(biasing.biases).to.eql([
-        { name: idField, content: 'a', strength: biasStrength },
-        { name: idField, content: 'b', strength: biasStrength }
-      ]);
-    });
-  });
-
-  describe('addLocationToRequest()', () => {
+    describe('addLocationToRequest()', () => {
     it('should add matchExact if location enabled and a location is present', () => {
       const config = { minSize: 10, distance: '1km' };
       const configAdapter = stub(ConfigurationAdapter, 'extractLocation').returns(config);

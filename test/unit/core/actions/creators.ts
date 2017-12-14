@@ -83,6 +83,44 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('fetchPastPurchases()', () => {
+      it('should return an action with null', () => {
+        expectAction(ActionCreators.fetchPastPurchases(), Actions.FETCH_PAST_PURCHASES, null);
+      });
+
+      it('should return an action with query', () => {
+        const query = 'hat';
+
+        expectAction(ActionCreators.fetchPastPurchases(query), Actions.FETCH_PAST_PURCHASES, query);
+      });
+    });
+
+    describe('fetchPastPurchaseProducts()', () => {
+      it('should return an action with null', () => {
+        expectAction(ActionCreators.fetchPastPurchaseProducts(), Actions.FETCH_PAST_PURCHASE_PRODUCTS, null);
+      });
+
+      it('should return an action with query', () => {
+        const query = 'hat';
+
+        expectAction(ActionCreators.fetchPastPurchaseProducts(query), Actions.FETCH_PAST_PURCHASE_PRODUCTS, query);
+      });
+    });
+
+    describe('fetchPastPurchaseNavigations()', () => {
+      it('should return an action', () => {
+        expectAction(ActionCreators.fetchPastPurchaseNavigations(), Actions.FETCH_PAST_PURCHASE_NAVIGATIONS, null);
+      });
+    });
+
+    describe('fetchSaytPastPurchases()', () => {
+      it('should return an action', () => {
+        const query = 'hat';
+
+        expectAction(ActionCreators.fetchSaytPastPurchases(query), Actions.FETCH_SAYT_PAST_PURCHASES, query);
+      });
+    });
+
     describe('fetchAutocompleteSuggestions()', () => {
       it('should return an action', () => {
         const query = 'barbie';
@@ -151,12 +189,6 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
 
       it('should return an action when query is null', () => {
         expectAction(ActionCreators.fetchPastPurchases(), Actions.FETCH_PAST_PURCHASES, null);
-      });
-    });
-
-    describe('fetchOrderHistory()', () => {
-      it('should return an action', () => {
-        expectAction(ActionCreators.fetchOrderHistory(), Actions.FETCH_ORDER_HISTORY, null);
       });
     });
   });
@@ -627,6 +659,13 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         });
       });
     });
+    describe('updateSecuredPayload', () => {
+      it('should return an UPDATE_SECURED_PAYLOAD action', () => {
+        const payload: any = { a: 'b' };
+
+        expectAction(ActionCreators.updateSecuredPayload(payload), Actions.UPDATE_SECURED_PAYLOAD, payload);
+      });
+    });
   });
 
   describe('response action creators', () => {
@@ -876,37 +915,267 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       });
     });
 
-    describe('receivePastPurchases()', () => {
-      it('should return an action', () => {
-        const products = [{ sku: '59384', quantity: 3 }, { sku: '239', quantity: 1 }];
-
-        expectAction(ActionCreators.receivePastPurchases(products), Actions.RECEIVE_PAST_PURCHASES, products);
-      });
-    });
-
-    describe('receiveOrderHistory()', () => {
-      it('should return an action', () => {
-        const products = [{ sku: '59384', quantity: 3 }, { sku: '239', quantity: 1 }];
-
-        expectAction(ActionCreators.receiveOrderHistory(<any>products), Actions.RECEIVE_ORDER_HISTORY, products);
-      });
-    });
-
-    describe('receiveQueryPastPurchases()', () => {
-      it('should return an action', () => {
-        const products = [{ sku: '59384', quantity: 3 }, { sku: '239', quantity: 1 }];
-
-        // tslint:disable-next-line max-line-length
-        expectAction(ActionCreators.receiveQueryPastPurchases(products), Actions.RECEIVE_QUERY_PAST_PURCHASES, products);
-      });
-    });
-
     describe('receiveNavigationSort()', () => {
       it('should return an action', () => {
         const navigations: any[] = ['a', 'b', 'c'];
 
         // tslint:disable-next-line max-line-length
         expectAction(ActionCreators.receiveNavigationSort(navigations), Actions.RECEIVE_NAVIGATION_SORT, navigations);
+      });
+    });
+
+    describe('receivePastPurchaseSkus()', () => {
+      it('should return an action', () => {
+        const products: any[] = ['a', 'b', 'c'];
+
+        // tslint:disable-next-line max-line-length
+        expectAction(ActionCreators.receivePastPurchaseSkus(products), Actions.RECEIVE_PAST_PURCHASE_SKUS, products);
+      });
+    });
+
+    describe('receiveSaytPastPurchases()', () => {
+      it('should return an action', () => {
+        const products: any[] = ['a', 'b', 'c'];
+
+        // tslint:disable-next-line max-line-length
+        expectAction(ActionCreators.receiveSaytPastPurchases(products), Actions.RECEIVE_SAYT_PAST_PURCHASES, products);
+      });
+    });
+
+    describe('receivePastPurchaseProducts()', () => {
+      it('should return an action', () => {
+        const products: any[] = ['a', 'b', 'c'];
+
+        // tslint:disable-next-line max-line-length
+        expectAction(ActionCreators.receivePastPurchaseProducts(products), Actions.RECEIVE_PAST_PURCHASE_PRODUCTS, products);
+      });
+    });
+
+    describe('receivePastPurchaseCurrentRecordCount()', () => {
+      it('should return an action', () => {
+        const recordCount = 6;
+
+        // tslint:disable-next-line max-line-length
+        expectAction(ActionCreators.receivePastPurchaseCurrentRecordCount(recordCount),
+                     Actions.RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT, recordCount);
+      });
+    });
+
+    describe('receivePastPurchaseAllRecordCount()', () => {
+      it('should return an action', () => {
+        const recordCount = 6;
+
+        // tslint:disable-next-line max-line-length
+        expectAction(ActionCreators.receivePastPurchaseAllRecordCount(recordCount),
+                     Actions.RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT, recordCount);
+      });
+    });
+
+    describe('receivePastPurchaseRefinements()', () => {
+      it('should return an action', () => {
+        const refinements: any[] = ['a', 'b', 'c'];
+
+        // tslint:disable-next-line max-line-length
+        expectAction(ActionCreators.receivePastPurchaseRefinements(refinements), Actions.RECEIVE_PAST_PURCHASE_REFINEMENTS, refinements);
+      });
+    });
+
+    describe('resetPastPurchasePage()', () => {
+      it('should return an action', () => {
+        expectAction(ActionCreators.resetPastPurchasePage(), Actions.RESET_PAST_PURCHASE_PAGE, undefined);
+      });
+
+      it('should return an action with validators', () => {
+        expectValidators(ActionCreators.resetPastPurchasePage(), Actions.RESET_PAST_PURCHASE_PAGE, {
+          payload: validators.notOnFirstPastPurchasePage
+        });
+      });
+    });
+
+    describe('receivePastPurchasePage()', () => {
+      it('should return an action', () => {
+        const page: any = 1;
+
+        expectAction(ActionCreators.receivePastPurchasePage(page), Actions.RECEIVE_PAST_PURCHASE_PAGE, page);
+      });
+    });
+
+    describe('selectPastPurchaseRefinement()', () => {
+      const navigationId = 'color';
+      const index = 2;
+
+      it('should return a batch action with RESET_PAST_PURCHASE_PAGE', () => {
+        expectAction(ActionCreators.selectPastPurchaseRefinement(navigationId, index),
+          Actions.RESET_PAST_PURCHASE_PAGE);
+      });
+
+      it('should return a batch action with SELECT_PAST_PURCHASE_REFINEMENT', () => {
+        expectAction(ActionCreators.selectPastPurchaseRefinement(navigationId, index),
+          Actions.SELECT_PAST_PURCHASE_REFINEMENT, { navigationId, index });
+      });
+
+      it('should apply validators to SELECT_PAST_PURCHASE_REFINEMENT', () => {
+        expectValidators(ActionCreators.selectPastPurchaseRefinement(navigationId, index),
+          Actions.SELECT_PAST_PURCHASE_REFINEMENT, {
+            payload: validators.isPastPurchaseRefinementDeselectedByIndex,
+          });
+      });
+    });
+
+    describe('resetAndSelectPastPurchaseRefinement()', () => {
+      it('should return a batch action and call resetPastPurchaseRefinements and selectPastPurchaseRefinement', () => {
+        const navigationId = 'color';
+        const index = 3;
+        const res: any = { type: 'asdf' };
+        const sel: any = { type: 'fsef' };
+        const reset = stub(ActionCreators, 'resetPastPurchaseRefinements').returns([res]);
+        const select = stub(ActionCreators, 'selectPastPurchaseRefinement').returns([sel]);
+        expect(ActionCreators.resetAndSelectPastPurchaseRefinement(navigationId, index)).to.eql([
+          res,
+          sel
+        ]);
+
+        expect(reset).to.be.calledWithExactly(true);
+        expect(select).to.be.calledWithExactly(navigationId, index);
+      });
+    });
+
+    describe('resetPastPurchaseQueryAndSelectRefinement()', () => {
+      it('should return a batch action and call updatePastPurchaseQuery and selectPastPurchaseRefinement', () => {
+        const navigationId = 'color';
+        const index = 3;
+        const query: any = { type: 'asdf' };
+        const sel: any = { type: 'fsef' };
+        const update = stub(ActionCreators, 'updatePastPurchaseQuery').returns([query]);
+        const select = stub(ActionCreators, 'selectPastPurchaseRefinement').returns([sel]);
+        expect(ActionCreators.resetPastPurchaseQueryAndSelectRefinement(navigationId, index)).to.eql([
+          query,
+          sel
+        ]);
+
+        expect(update).to.be.calledWithExactly('');
+        expect(select).to.be.calledWithExactly(navigationId, index);
+      });
+    });
+
+    describe('deselectPastPurchaseRefinement()', () => {
+      const navigationId = 'color';
+      const index = 2;
+      const obj: any = { navigationId, index };
+
+      it('should return a batch action with RESET_PAST_PURCHASE_PAGE', () => {
+        expectAction(ActionCreators.deselectPastPurchaseRefinement(navigationId, index),
+          Actions.RESET_PAST_PURCHASE_PAGE);
+      });
+
+      it('should return a batch action with DESELECT_PAST_PURCHASE_REFINEMENT', () => {
+        expectAction(ActionCreators.deselectPastPurchaseRefinement(navigationId, index),
+          Actions.DESELECT_PAST_PURCHASE_REFINEMENT, obj);
+      });
+
+      it('should apply validators to SELECT_PAST_PURCHASE_REFINEMENT', () => {
+        expectValidators(ActionCreators.deselectPastPurchaseRefinement(navigationId, index),
+          Actions.DESELECT_PAST_PURCHASE_REFINEMENT, {
+            payload: validators.isPastPurchaseRefinementSelectedByIndex,
+          });
+      });
+    });
+
+    describe('resetPastPurchaseRefinements()', () => {
+      const field = 'color';
+
+      it('should return a batch action with RESET_PAST_PURCHASE_PAGE', () => {
+        expectAction(ActionCreators.resetPastPurchaseRefinements(field), Actions.RESET_PAST_PURCHASE_PAGE);
+      });
+
+      it('should return a batch action with RESET_PAST_PURCHASE_REFINEMENTS', () => {
+        expectAction(ActionCreators.resetPastPurchaseRefinements(field),
+          Actions.RESET_PAST_PURCHASE_REFINEMENTS, field);
+      });
+
+      it('should apply validators to RESET_PAST_PURCHASE_REFINEMENTS', () => {
+        expectValidators(ActionCreators.resetPastPurchaseRefinements(field),
+          Actions.RESET_PAST_PURCHASE_REFINEMENTS, {
+            payload: [
+              validators.isValidClearField,
+              validators.hasSelectedPastPurchaseRefinements,
+              validators.hasSelectedPastPurchaseRefinementsByField,
+            ]
+          });
+      });
+    });
+
+    describe('updatePastPurchaseQuery()', () => {
+      const query = 'hat';
+
+      it('should return a batch action with resetPastPurchaseRefinements spreaded', () => {
+        const array = [1,2,3];
+        const resetPastPurchaseRefinements = stub(ActionCreators, 'resetPastPurchaseRefinements').returns(array);
+
+        const action = ActionCreators.updatePastPurchaseQuery(query);
+
+        expect(action).to.eql([...array, ACTION]);
+        expect(resetPastPurchaseRefinements).to.be.calledWithExactly(true);
+      });
+
+      it('should return a batch action with UPDATE_PAST_PURCHASE_QUERY', () => {
+        expectAction(<any>ActionCreators.updatePastPurchaseQuery(query),
+          Actions.UPDATE_PAST_PURCHASE_QUERY, query);
+      });
+    });
+
+    describe('updatePastPurchasePageSize()', () => {
+      const size = 6;
+
+      it('should return a batch action with UPDATE_PAST_PURCHASE_PAGE_SIZE', () => {
+        expectAction(ActionCreators.updatePastPurchasePageSize(size),
+          Actions.UPDATE_PAST_PURCHASE_PAGE_SIZE, size);
+      });
+
+      it('should apply validators to UPDATE_PAST_PURCHASE_PAGE_SIZE', () => {
+        expectValidators(ActionCreators.updatePastPurchasePageSize(size),
+          Actions.UPDATE_PAST_PURCHASE_PAGE_SIZE, {
+            payload: validators.isDifferentPastPurchasePageSize,
+          });
+      });
+    });
+
+    describe('updatePastPurchaseCurrentPage()', () => {
+      const page = 2;
+
+      it('should return a batch action with UPDATE_PAST_PURCHASE_CURRENT_PAGE', () => {
+        expectAction(ActionCreators.updatePastPurchaseCurrentPage(page),
+          Actions.UPDATE_PAST_PURCHASE_CURRENT_PAGE, page);
+      });
+
+      it('should apply validators to UPDATE_PAST_PURCHASE_CURRENT_PAGE', () => {
+        expectValidators(ActionCreators.updatePastPurchaseCurrentPage(page),
+          Actions.UPDATE_PAST_PURCHASE_CURRENT_PAGE, {
+            payload: [
+              validators.isValidPastPurchasePage,
+              validators.isOnDifferentPastPurchasePage,
+            ],
+          });
+      });
+    });
+
+    describe('selectPastPurchasesSort()', () => {
+      const index = 4;
+
+      it('should return a batch action with RESET_PAST_PURCHASE_PAGE', () => {
+        expectAction(ActionCreators.selectPastPurchasesSort(index), Actions.RESET_PAST_PURCHASE_PAGE);
+      });
+
+      it('should return a batch action with SELECT_PAST_PURCHASE_SORT', () => {
+        expectAction(ActionCreators.selectPastPurchasesSort(index),
+          Actions.SELECT_PAST_PURCHASE_SORT, index);
+      });
+
+      it('should apply validators to SELECT_PAST_PURCHASE_SORT', () => {
+        expectValidators(ActionCreators.selectPastPurchasesSort(index),
+          Actions.SELECT_PAST_PURCHASE_SORT, {
+            payload: validators.isPastPurchasesSortDeselected,
+          });
       });
     });
   });

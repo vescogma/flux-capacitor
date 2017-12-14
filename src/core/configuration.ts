@@ -275,6 +275,40 @@ namespace Configuration {
        * Strength of applied biases.
        */
       biasStrength: BiasStrength;
+
+      /**
+       * A security token or a function to retrieve a token
+       */
+      securedPayload: Recommendations.SecuredPayload | (() => Recommendations.SecuredPayload);
+
+      /**
+       * Enable past purchases or not
+       */
+      enabled: boolean;
+
+      /**
+       * Display settings for refinements under each navigation
+       */
+      navigations: PastPurchaseNavigation;
+    }
+
+    export interface PastPurchaseNavigation {
+      [field: string]: Array<string | {
+        /**
+         * String value of the refinement coming from the backend
+         */
+        value: string;
+        /**
+         * String to display that refinement as
+         */
+        display: string;
+      }>;
+    }
+
+    export interface SecuredPayload {
+      cipherText?: string;
+      initialValue?: string;
+      messageAuthenticationCode?: string;
     }
 
     // tslint:disable-next-line interface-name

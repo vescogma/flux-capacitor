@@ -3,6 +3,7 @@ import FluxCapacitor from '../flux-capacitor';
 import SearchAdapter from './adapters/search';
 import Events from './events';
 import Store from './store';
+import * as utils from './utils';
 
 type Observer = (oldState: any, newState: any, path: string) => void;
 
@@ -52,6 +53,25 @@ namespace Observer {
         .forEach((key) => Observer.terminal(oldState[key], newState[key], emit, `${path}.${key}`));
   }
 
+  export function navigations(navigationsEvent: string, selectedRefinementsEvent: string, emit: Function) {
+    return ((emitIndexUpdated: Observer) =>
+            (oldState: Store.Indexed<Store.Navigation>, newState: Store.Indexed<Store.Navigation>, path: string) => {
+              if (oldState.allIds !== newState.allIds) {
+                emitIndexUpdated(oldState, newState, path);
+              } else {
+                newState.allIds.forEach((id) => {
+                  const oldNavigation = oldState.byId[id];
+                  const newNavigation = newState.byId[id];
+                  if (oldNavigation.selected !== newNavigation.selected
+                    || oldNavigation.refinements !== newNavigation.refinements) {
+                    // tslint:disable-next-line max-line-length
+                    emit(`${selectedRefinementsEvent}:${id}`)(oldNavigation, newNavigation, `${path}.byId.${id}`);
+                  }
+                });
+              }
+            })(emit(navigationsEvent));
+  }
+
   export function create(flux: FluxCapacitor) {
     const emit = (event: string) => (_, value: any, path: string) => {
       flux.emit(event, value);
@@ -97,23 +117,7 @@ namespace Observer {
             data: emit(Events.DETAILS_UPDATED),
           },
 
-          navigations: ((emitIndexUpdated: Observer) =>
-            (oldState: Store.Indexed<Store.Navigation>, newState: Store.Indexed<Store.Navigation>, path: string) => {
-              if (oldState.allIds !== newState.allIds) {
-                emitIndexUpdated(oldState, newState, path);
-              } else {
-                newState.allIds.forEach((id) => {
-                  const oldNavigation = oldState.byId[id];
-                  const newNavigation = newState.byId[id];
-                  if (oldNavigation.selected !== newNavigation.selected
-                    || oldNavigation.refinements !== newNavigation.refinements) {
-                    // tslint:disable-next-line max-line-length
-                    emit(`${Events.SELECTED_REFINEMENTS_UPDATED}:${id}`)(oldNavigation, newNavigation, `${path}.byId.${id}`);
-                  }
-                });
-              }
-            })(emit(Events.NAVIGATIONS_UPDATED)),
-
+          navigations: Observer.navigations(Events.NAVIGATIONS_UPDATED, Events.SELECTED_REFINEMENTS_UPDATED, emit),
           page: Object.assign(emit(Events.PAGE_UPDATED), {
             current: emit(Events.CURRENT_PAGE_UPDATED),
             sizes: emit(Events.PAGE_SIZE_UPDATED)
@@ -143,8 +147,20 @@ namespace Observer {
                 // tslint:disable-next-line max-line-length
                 emit(Events.RECOMMENDATIONS_PRODUCTS_UPDATED)(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path)
             },
-            pastPurchases: emit(Events.PAST_PURCHASES_UPDATED),
-            orderHistory: emit(Events.ORDER_HISTORY_UPDATED)
+          },
+
+          pastPurchases: {
+            skus: emit(Events.PAST_PURCHASE_SKUS_UPDATED),
+            products: emit(Events.PAST_PURCHASE_PRODUCTS_UPDATED),
+            saytPastPurchases: emit(Events.SAYT_PAST_PURCHASES_UPDATED),
+            query: emit(Events.PAST_PURCHASE_QUERY_UPDATED),
+            page: Object.assign(emit(Events.PAST_PURCHASE_PAGE_UPDATED), {
+              current: emit(Events.PAST_PURCHASE_CURRENT_PAGE_UPDATED),
+              sizes: emit(Events.PAST_PURCHASE_PAGE_SIZE_UPDATED),
+            }),
+            navigations: Observer.navigations(Events.PAST_PURCHASE_NAVIGATIONS_UPDATED,
+                                              Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED, emit),
+            sort: emit(Events.PAST_PURCHASE_SORT_UPDATED),
           },
 
           recordCount: emit(Events.RECORD_COUNT_UPDATED),

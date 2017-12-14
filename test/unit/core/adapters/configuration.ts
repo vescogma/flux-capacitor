@@ -3,6 +3,7 @@ import SearchAdapter from '../../../../src/core/adapters/search';
 import { DEFAULT_AREA } from '../../../../src/core/reducers/data/area';
 import { DEFAULT_COLLECTION } from '../../../../src/core/reducers/data/collections';
 import * as PageReducer from '../../../../src/core/reducers/data/page';
+import * as PastPurchaseReducer from '../../../../src/core/reducers/data/pastPurchases';
 import suite from '../../_suite';
 
 suite('Configuration Adapter', ({ expect, stub }) => {
@@ -43,12 +44,6 @@ suite('Configuration Adapter', ({ expect, stub }) => {
                 }
               }
             },
-            recommendations: {
-              suggested: { products: [] },
-              pastPurchases: { products: [] },
-              queryPastPurchases: [],
-              orderHistory: [],
-            },
             sorts: {
               selected: 0,
               items: [sort]
@@ -60,6 +55,16 @@ suite('Configuration Adapter', ({ expect, stub }) => {
                 items: [PageReducer.DEFAULT_PAGE_SIZE]
               }
             },
+            pastPurchases: {
+              ...PastPurchaseReducer.DEFAULTS,
+              page: {
+                ...PastPurchaseReducer.DEFAULTS.page,
+                sizes: {
+                  selected: 0,
+                  items: [PastPurchaseReducer.DEFAULT_PAGE_SIZE]
+              }
+              }
+            }
           }
         },
         session: {
@@ -110,12 +115,6 @@ suite('Configuration Adapter', ({ expect, stub }) => {
               }
             },
             fields,
-            recommendations: {
-              suggested: { products: [] },
-              pastPurchases: { products: [] },
-              queryPastPurchases: [],
-              orderHistory: [],
-            },
             collections: {
               selected: collection.default,
               allIds: collection.options,
@@ -137,6 +136,16 @@ suite('Configuration Adapter', ({ expect, stub }) => {
               sizes: {
                 selected: 2,
                 items: pageSize.options
+              }
+            },
+            pastPurchases: {
+              ...PastPurchaseReducer.DEFAULTS,
+              page: {
+                ...PastPurchaseReducer.DEFAULTS.page,
+                sizes: {
+                  selected: 2,
+                  items: pageSize.options
+                }
               }
             }
           }
@@ -365,11 +374,43 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     });
   });
 
-    describe('extractAutocompleteNavigationLabels()', () => {
+  describe('extractAutocompleteNavigationLabels()', () => {
     it('should return the configured autocomplete navigation labels', () => {
       const maxRefinements = 3;
       // tslint:disable-next-line max-line-length
       expect(Adapter.extractMaxRefinements(<any>{ search: { maxRefinements }})).to.eql(maxRefinements);
+    });
+  });
+
+  describe('extractSecuredPayload', () => {
+    it('should return securedPayload', () => {
+      const securedPayload = { a: 1 };
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.extractSecuredPayload(<any>{ recommendations: { pastPurchases: { securedPayload } } })).to.eql(securedPayload);
+    });
+
+    it('should handle securedPayload being a function', () => {
+      const payload = { a: 1 };
+      const securedPayload = stub().returns(payload);
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.extractSecuredPayload(<any>{ recommendations: { pastPurchases: { securedPayload } } })).to.eql(payload);
+      expect(securedPayload).to.be.calledOnce;
+    });
+  });
+
+  describe('extractProductCount', () => {
+    it('should return product count', () => {
+      const productCount = 3;
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.extractPastPurchaseProductCount(<any>{ recommendations: { pastPurchases: { productCount } } })).to.eql(productCount);
+    });
+  });
+
+  describe('extractPastPurchaseNavigations', () => {
+    it('should return past purchase navigations from config', () => {
+      const navigations = { a: 1 };
+      // tslint:disable-next-line max-line-length
+      expect(Adapter.extractPastPurchaseNavigations(<any>{ recommendations: { pastPurchases: { navigations } } })).to.eql(navigations);
     });
   });
 

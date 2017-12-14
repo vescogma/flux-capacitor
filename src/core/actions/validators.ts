@@ -85,6 +85,52 @@ export const isRefinementSelectedByIndex: Validator<Actions.Payload.Navigation.R
   msg: 'navigation does not exist or refinement is not selected'
 };
 
+export const isPastPurchaseRefinementDeselectedByIndex: Validator<Actions.Payload.Navigation.Refinement> = {
+  func: ({ navigationId, index }, state) => Selectors.isPastPurchaseRefinementDeselected(state, navigationId, index),
+  msg: 'navigation does not exist or refinement is already selected'
+};
+
+export const isPastPurchaseRefinementSelectedByIndex: Validator<Actions.Payload.Navigation.Refinement> = {
+  func: ({ navigationId, index }, state) => Selectors.isPastPurchaseRefinementSelected(state, navigationId, index),
+  msg: 'navigation does not exist or refinement is not selected'
+};
+
+export const isPastPurchasesSortDeselected: Validator<number> = {
+  func: (index, state) => Selectors.pastPurchaseSort(state).selected !== index,
+  msg: 'past purchases sort is already selected'
+};
+
+export const notOnFirstPastPurchasePage: Validator = {
+  func: (_, state) => Selectors.pastPurchasePage(state) !== 1,
+  msg: 'page must not be on first page'
+};
+
+export const isDifferentPastPurchasePageSize: Validator<number> = {
+  func: (size, state) => Selectors.pastPurchasePageSize(state) !== size,
+  msg: 'page size is already selected'
+};
+
+export const isOnDifferentPastPurchasePage: Validator<number> = {
+  func: (page, state) => Selectors.pastPurchasePage(state) !== page,
+  msg: 'page is already selected'
+};
+
+export const isValidPastPurchasePage: Validator<number> = {
+  func: (page, state) => typeof page === 'number' && page <= Selectors.pastPurchaseTotalPages(state) && page >= 1,
+  msg: 'page is invalid'
+};
+
+export const hasSelectedPastPurchaseRefinements: Validator = {
+  func: (_, state) => Selectors.pastPurchaseSelectedRefinements(state).length !== 0,
+  msg: 'no refinements to clear'
+};
+
+export const hasSelectedPastPurchaseRefinementsByField: Validator<string> = {
+  // tslint:disable-next-line max-line-length
+  func: (field, state) => typeof field === 'boolean' || Selectors.pastPurchaseNavigation(state, field).selected.length !== 0,
+  msg: 'no refinements to clear for field'
+};
+
 export const isCollectionDeselected: Validator<string> = {
   func: (id, state) => Selectors.collection(state) !== id,
   msg: 'collection is already selected'

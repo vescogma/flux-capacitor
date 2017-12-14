@@ -6,6 +6,7 @@ import collections from './collections';
 import details from './details';
 import navigations from './navigations';
 import page from './page';
+import pastPurchases from './pastPurchases';
 import personalization from './personalization';
 import products from './products';
 import query from './query';
@@ -27,6 +28,7 @@ export default redux.combineReducers({
   products,
   query,
   recommendations,
+  pastPurchases,
   recordCount,
   redirect,
   sorts,

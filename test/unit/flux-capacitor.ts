@@ -27,7 +27,7 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     });
 
     it('should have a config getter', () => {
-      const state = 'state';
+      const state = { a: 'b' };
       const getState = spy(() => state);
       stub(FluxCapacitor, 'createClients');
       stub(Observer, 'listen');
@@ -252,32 +252,27 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
     });
 
     describe('saytPastPurchases()', () => {
-      it('should call fetchPastPurchases() action', () => {
+      it('should call fetchSaytPastPurchases() action', () => {
         const query = 'hat';
 
-        expectDispatch(() => flux.saytPastPurchases(query), 'fetchPastPurchases', query);
+        expectDispatch(() => flux.saytPastPurchases(query), 'fetchSaytPastPurchases', query);
       });
     });
 
     describe('pastPurchaseProducts()', () => {
+      it('should call fetchPastPurchaseProducts() action', () => {
+        expectDispatch(() => flux.pastPurchaseProducts(), 'fetchPastPurchaseProducts');
+      });
+    });
+
+    describe('displaySaytPastPurchases()', () => {
       it('should call receiveAutocompleteProductRecords() action', () => {
-        const pastPurchases = [1,2,3];
-        const state = 's';
-        const action = 'ac';
-        const queryPastPurchases = spy(() => pastPurchases);
-        const getState = spy(() => state);
-        const dispatch = spy();
-        const receiveAutocompleteProductRecords = spy(() => action);
+        const pastPurchases = [1, 2, 3];
+        const state = { a: 1 };
+        store.getState = () => state;
+        stub(Selectors, 'saytPastPurchases').returns(pastPurchases);
 
-        flux.store = <any>{ getState, dispatch };
-        flux.actions = <any> { receiveAutocompleteProductRecords };
-        flux.selectors = <any>{ queryPastPurchases };
-
-        flux.pastPurchaseProducts();
-        expect(getState).to.be.calledWithExactly();
-        expect(queryPastPurchases).to.be.calledWithExactly(state);
-        expect(receiveAutocompleteProductRecords).to.be.calledWithExactly(pastPurchases);
-        expect(dispatch).to.be.calledWithExactly(action);
+        expectDispatch(() => flux.displaySaytPastPurchases(), 'receiveAutocompleteProductRecords', pastPurchases);
       });
     });
   });
