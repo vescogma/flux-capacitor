@@ -35,7 +35,7 @@ namespace Adapter {
               sizes: Adapter.extractPageSizes(config, PastPurchaseReducer.DEFAULT_PAGE_SIZE)
             }
           }
-        }
+        },
       },
       session: { config }
     });
