@@ -42,9 +42,10 @@ export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.P
   });
 
 export const addToCart = (state: State, { product, quantity }) => {
-  const items = [...state.content.items, { item: product, quantity }];
+  const combinedItems = Adapter.combineLikeItems(state.content.items, { item: product, quantity }, 'id');
   return {
-    ...state, content: { ...state.content, quantity: Adapter.calculateTotalQuantity(items), items }
+    // tslint:disable-next-line:max-line-length
+    ...state, content: { ...state.content, quantity: Adapter.calculateTotalQuantity(combinedItems), items: combinedItems }
   };
 };
 
