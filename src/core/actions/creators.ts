@@ -801,6 +801,10 @@ namespace ActionCreators {
     return createAction(Actions.CART_CREATED, cartId);
   }
 
+  export function cartServerUpdated(cart: any): any {
+    return createAction(Actions.CART_SERVER_UPDATED, cart);
+  }
+
   // ui action creators
   /**
    * Adds state for a given tag to the store.

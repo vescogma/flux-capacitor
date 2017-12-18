@@ -278,10 +278,12 @@ namespace Store {
   export interface Cart {
     content: {
       cartId: string;
-      quantity: 0;
+      totalQuantity: number;
       visitorId: string;
       sessionId: string;
       items: any[];
+      generatedTotalPrice: number;
+      lastModified: number;
     };
   }
 
