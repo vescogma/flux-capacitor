@@ -9,12 +9,24 @@ import ConfigurationAdapter from './configuration';
 namespace Cart {
 
   export const buildUrl = (customerId: string) =>
-    `https://${customerId}.groupbycloud.com/v0/carts`;
+    `https://qa2.groupbycloud.com/api/v0/carts/`;
 
   export const buildCreateCartBody = (body: CartBody) => ({
     method: 'POST',
     body: JSON.stringify(body)
   });
+
+  export const productTransform = (product: any, quantity: number, config: any) => {
+    // should take in structure
+    return [{
+      // ad-hoc: using is for skuId
+      sku: product.data.id,
+      productId: product.data.id,
+      collection: config.collection,
+      price: product.data.price,
+      quantity,
+    }];
+  };
 
   export const transformToBrowser = (state: Store.Cart, reducerKey: string): Store.Cart => state;
 
@@ -27,12 +39,12 @@ namespace Cart {
     }, 0);
 
   export const combineLikeItems = (items: any[], item: any, key: string) => {
-    console.log(items, item.item.data[key]);
     // todo: handle diffenret structure
-    const likeItem = items.find((el: any) => el.item.data[key] === item.item.data[key]);
+    const likeItem = items.find((el: any) => el[key] === item[key]);
+    console.log('items', items, 'likeItem', likeItem);
     if (likeItem) {
       items.forEach((el: any) => {
-        if (el.item.data[key] === item.item.data[key]) {
+        if (el[key] === item[key]) {
           el.quantity += item.quantity;
         }
       });
@@ -42,10 +54,23 @@ namespace Cart {
     }
   };
 
+  export const mergeServerItemsWithState = (stateItems: any, serverItems: any) => {
+    const mergedItems = serverItems.map((item: any) => {
+      const stateItem = stateItems.find((el: any) => el.sku === item.sku);
+      item.quantity = Number(item.quantity);
+      
+      console.log('m', stateItem, item);
+      return { ...stateItem, ...item };
+    });
+    return mergedItems;
+
+  };
+
   export interface CartBody {
     loginId?: string;
     sessionId: string;
     visitorId: string;
+    cartType: string;
   }
 
 }

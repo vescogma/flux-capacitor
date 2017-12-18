@@ -6,19 +6,22 @@ import Store from '../../store';
 
 export type Action = Actions.GetTrackerInfo
   | Actions.CartCreated
-  | Actions.AddToCart;
+  | Actions.AddToCart
+  | Actions.CartServerUpdated;
 export type State = Store.Cart;
 
 export const STORAGE_KEY = 'gb-cart';
 export const STORAGE_WHITELIST = ['content'];
 
-export const DEFAULTS: State = {
+export const DEFAULTS: any = {
   content: {
     cartId: '',
-    quantity: 0,
+    totalQuantity: 0,
     items: [],
     visitorId: '',
-    sessionId: ''
+    sessionId: '',
+    generatedTotalPrice: 0,
+    lastModified: null,
   }
 };
 
@@ -30,6 +33,8 @@ function updateCart(state: State = DEFAULTS, action: Action): State {
       return addToCart(state, action.payload);
     case Actions.CART_CREATED:
       return cartCreated(state, action.payload);
+    case Actions.CART_SERVER_UPDATED:
+      return updateWithServerData(state, action.payload);
     default:
       return state;
   }
@@ -42,11 +47,11 @@ export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.P
   });
 
 export const addToCart = (state: State, { product, quantity }) => {
+  console.log('product');
   const combinedItems = Adapter.combineLikeItems(state.content.items, { item: product, quantity }, 'id');
-  const items = [...state.content.items, { item: product, quantity }];
   return {
     // tslint:disable-next-line:max-line-length
-    ...state, content: { ...state.content, quantity: Adapter.calculateTotalQuantity(combinedItems), items: combinedItems }
+    ...state, content: { ...state.content, totalQuantity: Adapter.calculateTotalQuantity(combinedItems), items: combinedItems }
   };
 };
 
@@ -54,6 +59,17 @@ export const cartCreated = (state: State, cartId: string) =>
   ({
     ...state, content: { ...state.content, cartId }
   });
+
+// tslint:disable-next-line:max-line-length
+export const updateWithServerData = (state: State, { generatedTotalPrice, totalQuantity, items, lastModified }: any) => ({
+  ...state, content: {
+    ...state.content,
+    totalQuantity,
+    items: Adapter.mergeServerItemsWithState(state.content.items, items),
+    generatedTotalPrice,
+    lastModified
+  }
+});
 
 const cartTransform = createTransform((state: State, key: string) => state, (state: State, key: string) => state);
 

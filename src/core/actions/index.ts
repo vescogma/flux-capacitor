@@ -215,6 +215,8 @@ namespace Actions {
   export const ADD_TO_CART = 'ADD_TO_CART';
   // todo: change type
   export type AddToCart = Action<typeof ADD_TO_CART, any>;
+  export const CART_SERVER_UPDATED = 'CART_SERVER_UPDATED';
+  export type CartServerUpdated = Action<typeof CART_SERVER_UPDATED, any>;
 
   export namespace Payload {
     export namespace Personalization {
