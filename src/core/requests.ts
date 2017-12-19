@@ -2,7 +2,7 @@ import { Request } from 'groupby-api';
 import { QueryTimeAutocompleteConfig, QueryTimeProductSearchConfig } from 'sayt';
 import Autocomplete from './adapters/autocomplete';
 import Configuration from './adapters/configuration';
-import RecommendationsAdapter from './adapters/recommendations';
+import PastPurchaseAdapter from './adapters/pastPurchases';
 import SearchAdapter, { MAX_RECORDS } from './adapters/search';
 import AppConfig from './configuration';
 import Selectors from './selectors';
@@ -33,10 +33,24 @@ namespace Requests {
       request.sort = <any>SearchAdapter.requestSort(sort);
     }
     if (Configuration.shouldAddPastPurchaseBias(config)) {
-      request.biasing = RecommendationsAdapter.pastPurchaseBiasing(state);
+      request.biasing = PastPurchaseAdapter.pastPurchaseBiasing(state);
     }
 
     return <Request>Requests.chain(config.search.defaults, request, config.search.overrides);
+  };
+
+  export const pastPurchaseProducts = (state: Store.State, getNavigations: boolean = false): Request => {
+    const request: Partial<Request> = {
+      ...search(state),
+      pageSize: Selectors.pastPurchasePageSize(state),
+      query: getNavigations ? '' : Selectors.pastPurchaseQuery(state),
+      refinements: getNavigations ? [] : Selectors.pastPurchaseSelectedRefinements(state),
+      skip: Selectors.pastPurchasePageSize(state) * (Selectors.pastPurchasePage(state) - 1),
+      // no sort needed, saves backend from processing this
+      sort: undefined,
+    };
+
+    return <Request>request;
   };
 
   export const autocompleteSuggestions = (config: AppConfig): QueryTimeAutocompleteConfig =>

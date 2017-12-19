@@ -2,6 +2,7 @@ import * as sinon from 'sinon';
 import Search from '../../../src/core/adapters/search';
 import Events from '../../../src/core/events';
 import Observer from '../../../src/core/observer';
+import * as utils from '../../../src/core/utils';
 import suite from '../_suite';
 
 suite('Observer', ({ expect, spy, stub }) => {
@@ -203,6 +204,15 @@ suite('Observer', ({ expect, spy, stub }) => {
       expect(present.sorts).to.be.a('function');
       expect(present.template).to.be.a('function');
       expect(present.personalization._persist.rehydrated).to.be.a('function');
+      expect(present.pastPurchases.skus).to.be.a('function');
+      expect(present.pastPurchases.products).to.be.a('function');
+      expect(present.pastPurchases.saytPastPurchases).to.be.a('function');
+      expect(present.pastPurchases.query).to.be.a('function');
+      expect(present.pastPurchases.page).to.be.a('function');
+      expect(present.pastPurchases.page.current).to.be.a('function');
+      expect(present.pastPurchases.page.sizes).to.be.a('function');
+      expect(present.pastPurchases.navigations).to.be.a('function');
+      expect(present.pastPurchases.sort).to.be.a('function');
     });
 
     describe('data', () => {
@@ -218,7 +228,7 @@ suite('Observer', ({ expect, spy, stub }) => {
 
       describe('autocomplete()', () => {
         it('should not emit update if state identical to old state', () => {
-          const state = 'state';
+          const state = { a: 'b' };
 
           observers.data.present.autocomplete(<any>state, <any>state, path);
 
@@ -425,6 +435,55 @@ suite('Observer', ({ expect, spy, stub }) => {
           expect(emit).to.be.calledWith(Events.RECOMMENDATIONS_PRODUCTS_UPDATED, testObject);
           expect(extractData).to.be.calledWithExactly(undefined);
           expect(extractData).to.be.calledWithExactly(testObject);
+        });
+
+        describe('pastPurchases', () => {
+          it('should emit PAST_PURCHASE_QUERY_UPDATED event and call saveState', () => {
+            observers.data.present.pastPurchases.query(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_QUERY_UPDATED, testObject);
+          });
+
+          it('should emit PAST_PURCHASE_PAGE_UPDATED event and call saveState', () => {
+            observers.data.present.pastPurchases.page(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_PAGE_UPDATED, testObject);
+          });
+
+          it('should emit PAST_PURCHASE_SKUS_UPDATED event', () => {
+            observers.data.present.pastPurchases.skus(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_SKUS_UPDATED, testObject);
+          });
+
+          it('should emit PAST_PURCHASE_PRODUCTS_UPDATED event', () => {
+            observers.data.present.pastPurchases.products(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_PRODUCTS_UPDATED, testObject);
+          });
+
+          it('should emit SAYT_PAST_PURCHASES_UPDATED event', () => {
+            observers.data.present.pastPurchases.saytPastPurchases(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.SAYT_PAST_PURCHASES_UPDATED, testObject);
+          });
+
+          it('should call navigations() for past purchase navigations', () => {
+            const nav = 'nav';
+            const navigations = stub(Observer, 'navigations').returns(nav);
+            const stubbed = Observer.create(<any>{ emit });
+            expect(stubbed.data.present.pastPurchases.navigations).to.eql(nav);
+            expect(navigations).to.be.calledWith(Events.NAVIGATIONS_UPDATED, Events.SELECTED_REFINEMENTS_UPDATED)
+              .and.be.calledWith(Events.PAST_PURCHASE_NAVIGATIONS_UPDATED,
+              Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED);
+          });
+
+          it('should emit PAST_PURCHASE_SORT_UPDATED event and call saveState', () => {
+            observers.data.present.pastPurchases.sort(undefined, testObject);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_SORT_UPDATED, testObject);
+          });
+
         });
       });
 

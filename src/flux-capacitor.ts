@@ -123,12 +123,16 @@ class FluxCapacitor extends EventEmitter {
   }
 
   saytPastPurchases(query: string) {
-    this.store.dispatch(this.actions.fetchPastPurchases(query));
+    this.store.dispatch(this.actions.fetchSaytPastPurchases(query));
   }
 
   pastPurchaseProducts() {
+    this.store.dispatch(this.actions.fetchPastPurchaseProducts());
+  }
+
+  displaySaytPastPurchases() {
     this.store.dispatch(this.actions.receiveAutocompleteProductRecords(
-      this.selectors.queryPastPurchases(this.store.getState())));
+      this.selectors.saytPastPurchases(this.store.getState())));
   }
 
   /**

@@ -208,7 +208,7 @@ suite('validators', ({ expect, spy, stub }) => {
       expect(isRefinementDeselected).to.be.calledWithExactly(state, navigationId, index);
     });
 
-    it('should be invalid if refinement is selected', () => {
+    it('should be valid if refinement is selected', () => {
       stub(Selectors, 'isRefinementDeselected').returns(true);
 
       expect(validators.isRefinementDeselectedByIndex.func({ navigationId, index })).to.be.true;
@@ -228,12 +228,179 @@ suite('validators', ({ expect, spy, stub }) => {
     });
 
     it('should be invalid if refinement is deselected', () => {
-      stub(Selectors, 'isRefinementSelected').returns(true);
+      stub(Selectors, 'isRefinementSelected').returns(false);
 
-      expect(validators.isRefinementSelectedByIndex.func({ navigationId, index })).to.be.true;
+      expect(validators.isRefinementSelectedByIndex.func({ navigationId, index })).to.be.false;
     });
   });
 
+  describe('isPastPurchaseRefinementDeselectedByIndex', () => {
+    const navigationId = 'colour';
+    const index = 8;
+
+    it('should be valid if refinement is deselected', () => {
+      const state: any = { a: 'b' };
+      const deselect = stub(Selectors, 'isPastPurchaseRefinementDeselected').returns(true);
+
+      expect(validators.isPastPurchaseRefinementDeselectedByIndex.func({ navigationId, index }, state)).to.be.true;
+      expect(deselect).to.be.calledWithExactly(state, navigationId, index);
+    });
+
+    it('should be invalid if refinement selected', () => {
+      stub(Selectors, 'isPastPurchaseRefinementDeselected').returns(false);
+
+      expect(validators.isPastPurchaseRefinementDeselectedByIndex.func({ navigationId, index })).to.be.false;
+    });
+  });
+
+  describe('isPastPurchaseRefinementSelectedByIndex', () => {
+    const navigationId = 'colour';
+    const index = 8;
+
+    it('should be valid if refinement is selected', () => {
+      const state: any = { a: 'b' };
+      const select = stub(Selectors, 'isPastPurchaseRefinementSelected').returns(true);
+
+      expect(validators.isPastPurchaseRefinementSelectedByIndex.func({ navigationId, index }, state)).to.be.true;
+      expect(select).to.be.calledWithExactly(state, navigationId, index);
+    });
+
+    it('should be invalid if refinement is selected', () => {
+      stub(Selectors, 'isPastPurchaseRefinementSelected').returns(false);
+
+      expect(validators.isPastPurchaseRefinementSelectedByIndex.func({ navigationId, index })).to.be.false;
+    });
+  });
+
+  describe('notOnFirstPastPurchasePage', () => {
+    const state: any = { a: 'b' };
+
+    it('should be valid if page is not equal to 1', () => {
+      const pastPurchasePage = stub(Selectors, 'pastPurchasePage').returns(2);
+
+      expect(validators.notOnFirstPastPurchasePage.func(<any>{}, state)).to.be.true;
+      expect(pastPurchasePage).to.be.calledWithExactly(state);
+    });
+
+    it('should be invalid if page is equal to 1', () => {
+      stub(Selectors, 'pastPurchasePage').returns(1);
+
+      expect(validators.notOnFirstPastPurchasePage.func(<any>{}, state)).to.be.false;
+    });
+  });
+
+  describe('isDifferentPastPurchasePageSize', () => {
+    const state: any = { a: 'b' };
+
+    it('should be valid if page sizes are different', () => {
+      const pastPurchasePageSize = stub(Selectors, 'pastPurchasePageSize').returns(5);
+
+      expect(validators.isDifferentPastPurchasePageSize.func(6, state)).to.be.true;
+      expect(pastPurchasePageSize).to.be.calledWithExactly(state);
+    });
+
+    it('should be invalid if page sizes are equal', () => {
+      stub(Selectors, 'pastPurchasePageSize').returns(5);
+
+      expect(validators.isDifferentPastPurchasePageSize.func(5, state)).to.be.false;
+    });
+  });
+
+  describe('isOnDifferentPastPurchasePage', () => {
+    const state: any = { a: 'b' };
+
+    it('should be valid if page sizes are different', () => {
+      const pastPurchasePage = stub(Selectors, 'pastPurchasePage').returns(5);
+
+      expect(validators.isOnDifferentPastPurchasePage.func(6, state)).to.be.true;
+      expect(pastPurchasePage).to.be.calledWithExactly(state);
+    });
+
+    it('should be invalid if page sizes are equal', () => {
+      stub(Selectors, 'pastPurchasePage').returns(5);
+
+      expect(validators.isOnDifferentPastPurchasePage.func(5, state)).to.be.false;
+    });
+  });
+
+  describe('isValidPastPurchasePage', () => {
+    const state: any = { a: 'b' };
+
+    it('should be valid if page is within range', () => {
+      const pastPurchaseTotalPages = stub(Selectors, 'pastPurchaseTotalPages').returns(5);
+
+      expect(validators.isValidPastPurchasePage.func(3, state)).to.be.true;
+      expect(pastPurchaseTotalPages).to.be.calledWithExactly(state);
+    });
+
+    it('should be invalid if page is not within range', () => {
+      stub(Selectors, 'pastPurchaseTotalPages').returns(5);
+
+      expect(validators.isValidPastPurchasePage.func(500, state)).to.be.false;
+    });
+  });
+
+  describe('hasSelectedPastPurchaseRefinements', () => {
+    const state: any = { a: 'b' };
+
+    it('should be valid if number selected is not 0', () => {
+      const pastPurchaseSelectedRefinements =
+        stub(Selectors, 'pastPurchaseSelectedRefinements').returns({ length: 1 });
+
+      expect(validators.hasSelectedPastPurchaseRefinements.func(<any>{}, state)).to.be.true;
+      expect(pastPurchaseSelectedRefinements).to.be.calledWithExactly(state);
+    });
+
+    it('should be invalid if number selected is 0', () => {
+      stub(Selectors, 'pastPurchaseSelectedRefinements').returns({ length: 0 });
+
+      expect(validators.hasSelectedPastPurchaseRefinements.func(<any>{}, state)).to.be.false;
+    });
+  });
+
+  describe('hasSelectedPastPurchaseRefinementsByField', () => {
+    const state: any = { a: 'b' };
+    const field = 'hat';
+
+    it('should be valid if number selected is not 0', () => {
+      const pastPurchaseNavigation =
+        stub(Selectors, 'pastPurchaseNavigation').returns({ selected: { length: 1 } });
+
+      expect(validators.hasSelectedPastPurchaseRefinementsByField.func(field, state)).to.be.true;
+      expect(pastPurchaseNavigation).to.be.calledWithExactly(state, field);
+    });
+
+    it('should be invalid if number selected is 0', () => {
+      stub(Selectors, 'pastPurchaseNavigation').returns({ selected: { length: 0 } });
+
+      expect(validators.hasSelectedPastPurchaseRefinementsByField.func(field, state)).to.be.false;
+    });
+
+    it('should be valid if field is a boolean', () => {
+      stub(Selectors, 'pastPurchaseNavigation').returns({ selected: { length: 0 } });
+
+      expect(validators.hasSelectedPastPurchaseRefinementsByField.func(<any>true, state)).to.be.true;
+    });
+
+  });
+
+  describe('isPastPurchasesSortDeselected', () => {
+    const state: any = { a: 'b' };
+
+    it('should be not valid if index selected are equal', () => {
+      const pastPurchaseSort =
+        stub(Selectors, 'pastPurchaseSort').returns({ selected: 1 });
+
+      expect(validators.isPastPurchasesSortDeselected.func(1, state)).to.be.false;
+      expect(pastPurchaseSort).to.be.calledWithExactly(state);
+    });
+
+    it('should be valid if index selected are not equal', () => {
+      stub(Selectors, 'pastPurchaseSort').returns({ selected: 1 });
+
+      expect(validators.isPastPurchasesSortDeselected.func(2, state)).to.be.true;
+    });
+  });
   describe('isCollectionDeselected', () => {
     const collection = 'alternative';
 

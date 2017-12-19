@@ -1,9 +1,8 @@
 import { Navigation, ValueRefinement } from 'groupby-api';
-import * as effects from 'redux-saga/effects';
 import Configuration from '../configuration';
 import Selectors from '../selectors';
 import Store from '../store';
-import { fetch, sortBasedOn } from '../utils';
+import { sortBasedOn } from '../utils';
 import ConfigurationAdapter from './configuration';
 
 namespace Recommendations {
@@ -11,7 +10,7 @@ namespace Recommendations {
   export const buildUrl = (customerId: string, endpoint: string, mode: string) =>
     `https://${customerId}.groupbycloud.com/wisdom/v2/public/recommendations/${endpoint}/_get${mode}`;
 
-  export const buildBody = (body: RecommendationsBody | RecommendationsRequest) => ({
+  export const buildBody = (body: RecommendationsBody | RecommendationsRequest | PastPurchaseRequest) => ({
     method: 'POST',
     body: JSON.stringify(body)
   });
@@ -28,8 +27,8 @@ namespace Recommendations {
         if (index !== -1) {
           resultsAcc = [...resultsAcc.slice(0, index), {
             ...resultsAcc[index], refinements:
-            sortBasedOn(resultsAcc[index].refinements, navigation.values,
-              (unsorted: ValueRefinement, sorted) => unsorted.value.toLowerCase() === sorted.value.toLowerCase())
+              sortBasedOn(resultsAcc[index].refinements, navigation.values,
+                (unsorted: ValueRefinement, sorted) => unsorted.value.toLowerCase() === sorted.value.toLowerCase())
           }, ...resultsAcc.slice(index + 1)];
         }
         return resultsAcc;
@@ -74,44 +73,32 @@ namespace Recommendations {
         minSize: locationConfig.minSize,
         sequence: [
           {
-          ...request,
-          matchExact: {
-            ...(request.matchExact || {}),
-            and: [{
-              visit: {
-                generated: {
-                  geo: {
-                    location: {
-                      distance: locationConfig.distance,
-                      center: {
-                        lat: location.latitude,
-                        lon: location.longitude
+            ...request,
+            matchExact: {
+              ...(request.matchExact || {}),
+              and: [{
+                visit: {
+                  generated: {
+                    geo: {
+                      location: {
+                        distance: locationConfig.distance,
+                        center: {
+                          lat: location.latitude,
+                          lon: location.longitude
+                        }
                       }
                     }
                   }
                 }
-              }
-            }]
-          }
-        },
+              }]
+            }
+          },
           request,
-        ]};
+        ]
+      };
     } else {
       return request;
     }
-  };
-
-  // tslint:disable-next-line max-line-length
-  export const pastPurchaseBiasing = (state: Store.State) => {
-    const { recommendations: { idField, pastPurchases } } = Selectors.config(state);
-    return {
-      bringToTop: [],
-      augmentBiases: true,
-      influence: pastPurchases.biasInfluence,
-      biases: state.data.present.recommendations.pastPurchases.products
-        .slice(0, pastPurchases.biasCount)
-        .map((pastPurchase) => ({ name: idField, content: pastPurchase.sku, strength: pastPurchases.biasStrength }))
-    };
   };
 
   export interface RecommendationsRequest {
@@ -126,6 +113,11 @@ namespace Recommendations {
   export interface RecommendationsBody {
     minSize: number;
     sequence: RecommendationsRequest[];
+  }
+
+  export interface PastPurchaseRequest {
+    query?: string;
+    securedPayload: Configuration.Recommendations.SecuredPayload;
   }
 
   export interface Navigations {

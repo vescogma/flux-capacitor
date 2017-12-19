@@ -11,29 +11,37 @@ import Events from '../../../../src/core/events';
 import Selectors from '../../../../src/core/selectors';
 import Middleware, {
   PERSONALIZATION_CHANGE_ACTIONS,
+  PAST_PURCHASE_SKU_ACTIONS,
   RECALL_CHANGE_ACTIONS,
   SEARCH_CHANGE_ACTIONS,
+  PAST_PURCHASES_SEARCH_CHANGE_ACTIONS,
 } from '../../../../src/core/store/middleware';
 import suite from '../../_suite';
 
 suite('Middleware', ({ expect, spy, stub }) => {
+  let next: sinon.SinonSpy;
+
+  beforeEach(() => next = spy());
 
   describe('create()', () => {
     const sagaMiddleware = { a: 'b' };
     const idGeneratorMiddleware = { g: 'h' };
     const errorHandlerMiddleware = { i: 'j' };
+    const checkPastPurchaseSkusMiddleware = { m: 'n' };
+    const validatorMiddleware = { m: 'n' };
     const allMiddleware = () => [
-        Middleware.thunkEvaluator,
-        Middleware.injectStateIntoRehydrate,
-        Middleware.validator,
-        idGeneratorMiddleware,
-        idGeneratorMiddleware,
-        errorHandlerMiddleware,
-        sagaMiddleware,
-        Middleware.personalizationAnalyzer,
-        Middleware.thunkEvaluator,
-        Middleware.saveStateAnalyzer
-      ];
+      Middleware.thunkEvaluator,
+      Middleware.injectStateIntoRehydrate,
+      Middleware.validator,
+      idGeneratorMiddleware,
+      idGeneratorMiddleware,
+      errorHandlerMiddleware,
+      checkPastPurchaseSkusMiddleware,
+      sagaMiddleware,
+      Middleware.personalizationAnalyzer,
+      Middleware.thunkEvaluator,
+      Middleware.saveStateAnalyzer
+    ];
 
     afterEach(() => delete process.env.NODE_ENV);
 
@@ -45,6 +53,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       const thunkMiddleware = ['k', 'l'];
       const idGenerator = stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
       const errorHandler = stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
+      const checkPastPurchaseSkus = stub(Middleware, 'checkPastPurchaseSkus').returns(checkPastPurchaseSkusMiddleware);
       const compose = stub(redux, 'compose').returns(composed);
       const applyMiddleware = stub(redux, 'applyMiddleware');
       applyMiddleware.withArgs().returns(batchMiddleware);
@@ -75,6 +84,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
       stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
       stub(Middleware, 'validator').returns(Middleware.validator);
+      stub(Middleware, 'checkPastPurchaseSkus').returns(checkPastPurchaseSkusMiddleware);
       stub(redux, 'compose');
       process.env.NODE_ENV = 'development';
 
@@ -89,6 +99,7 @@ suite('Middleware', ({ expect, spy, stub }) => {
       stub(Middleware, 'idGenerator').returns(idGeneratorMiddleware);
       stub(Middleware, 'errorHandler').returns(errorHandlerMiddleware);
       stub(Middleware, 'validator').returns(Middleware.validator);
+      stub(Middleware, 'checkPastPurchaseSkus').returns(checkPastPurchaseSkusMiddleware);
       stub(redux, 'compose');
       process.env.NODE_ENV = 'development';
 
@@ -101,7 +112,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
   describe('idGenerator()', () => {
     it('should add id if action type is in whitelist', () => {
       const idKey = 'myId';
-      const next = spy();
       const whitelist = ['a', 'b', 'c'];
 
       Middleware.idGenerator(idKey, whitelist)(null)(next)({ type: 'b', c: 'd' });
@@ -112,7 +122,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
     it('should augment existing meta', () => {
       const idKey = 'myId';
       const meta = { d: 'e' };
-      const next = spy();
 
       Middleware.idGenerator(idKey, ['a', 'b', 'c'])(null)(next)({ type: 'b', c: 'd', meta });
 
@@ -122,7 +131,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
     it('should not modify action if type not in whitelist', () => {
       const idKey = 'myId';
       const originalAction = { a: 'b', type: 'c' };
-      const next = spy();
 
       Middleware.idGenerator(idKey, ['e', 'f', 'g'])(null)(next)(originalAction);
 
@@ -143,7 +151,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
 
     it('should allow valid actions through', () => {
       const action: any = { a: 'b' };
-      const next = spy();
 
       Middleware.errorHandler(<any>{})(null)(next)(action);
 
@@ -159,6 +166,85 @@ suite('Middleware', ({ expect, spy, stub }) => {
       Middleware.errorHandler(<any>{})(null)(next)(action);
 
       expect(next).to.be.calledWith(undoAction);
+    });
+  });
+
+  describe('checkPastPurchaseSkus()', () => {
+    it('should pass action through if not in PAST_PURCHASE_SKU_ACTIONS', () => {
+      const action = { type: 'NOT_ACTUALLY_AN_ACTION' };
+
+      Middleware.checkPastPurchaseSkus(<any>{})(null)(next)(action);
+
+      expect(next).to.be.calledWith(action);
+    });
+
+    it('should pass action through if past purchases present', () => {
+      const action = { type: PAST_PURCHASE_SKU_ACTIONS[0] };
+      const state = { a: 'b' };
+      const getState = stub().returns(state);
+      const pastPurchases = stub(Selectors, 'pastPurchases').returns([1]);
+
+      Middleware.checkPastPurchaseSkus(<any>{ store: { getState }})(null)(next)(action);
+
+      expect(next).to.be.calledWithExactly(action);
+      expect(getState).to.be.calledOnce;
+      expect(pastPurchases).to.be.calledWithExactly(state);
+    });
+
+    it('should call flux.on if past purchases not present', () => {
+      const action = { type: PAST_PURCHASE_SKU_ACTIONS[0] };
+      const state = { a: 'b' };
+      const conf = { c: 'd' };
+      const payload = { e: 'f' };
+      const getState = stub().returns(state);
+      const once = spy();
+      const dispatch = spy();
+      const pastPurchases = stub(Selectors, 'pastPurchases').returns([]);
+      const config = stub(Selectors, 'config').returns(conf);
+      const extract = stub(ConfigurationAdapter, 'extractSecuredPayload').returns(payload);
+
+      Middleware.checkPastPurchaseSkus(<any>{ store: { getState }, once })(
+          <any>{ dispatch })(next)(action);
+      once.getCall(0).args[1]();
+
+      expect(getState).to.be.calledTwice;
+      expect(pastPurchases).to.be.calledWithExactly(state);
+      expect(once).to.be.calledWith(Events.PAST_PURCHASE_SKUS_UPDATED);
+      expect(dispatch).to.be.calledWithExactly(action);
+      expect(config).to.be.calledWithExactly(state);
+      expect(extract).to.be.calledWithExactly(conf);
+    });
+
+    it('should do nothing if past purchases not present and no secured payload', () => {
+      const action = { type: PAST_PURCHASE_SKU_ACTIONS[0] };
+      const state = { a: 'b' };
+      const conf = { c: 'd' };
+      const payload = null;
+      const getState = stub().returns(state);
+      const once = spy();
+      const pastPurchases = stub(Selectors, 'pastPurchases').returns([]);
+      const config = stub(Selectors, 'config').returns(conf);
+      const extract = stub(ConfigurationAdapter, 'extractSecuredPayload').returns(payload);
+
+      Middleware.checkPastPurchaseSkus(<any>{ store: { getState }, once })(
+          <any>{ })(next)(action);
+
+      expect(getState).to.be.calledTwice;
+      expect(once).to.not.be.called;
+      expect(config).to.be.calledWithExactly(state);
+      expect(extract).to.be.calledWithExactly(conf);
+    });
+  });
+
+  describe('pastPurchaseProductAnalyzer()', () => {
+    it('should call insertAction', () => {
+      const ret = 'middleware';
+      const insert = stub(Middleware, 'insertAction').returns(ret);
+
+      expect(Middleware.pastPurchaseProductAnalyzer()).to.eql(ret);
+
+      expect(insert).to.be.calledWithExactly(PAST_PURCHASES_SEARCH_CHANGE_ACTIONS,
+                                             ActionCreators.fetchPastPurchaseProducts());
     });
   });
 
@@ -232,7 +318,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
   describe('saveStateAnalyzer()', () => {
     it('should add SAVE_STATE action if match found', () => {
       const batchAction = [{ type: 'a' }, { type: Actions.RECEIVE_PRODUCTS }];
-      const next = spy();
 
       Middleware.saveStateAnalyzer()(next)(batchAction);
 
@@ -241,7 +326,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
 
     it('should not add SAVE_STATE action if no match found', () => {
       const batchAction = [{ type: 'a' }, { type: 'b' }];
-      const next = spy();
 
       Middleware.saveStateAnalyzer()(next)(batchAction);
 
@@ -252,7 +336,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
   describe('thunkEvaluator()', () => {
     it('should pass forward a plain object action', () => {
       const action = { a: 'b' };
-      const next = spy();
 
       Middleware.thunkEvaluator(null)(next)(action);
 
@@ -262,7 +345,6 @@ suite('Middleware', ({ expect, spy, stub }) => {
     it('should evaluate and pass forward a synchonous thunk action', () => {
       const action = { a: 'b' };
       const state = { c: 'd' };
-      const next = spy();
       const thunk = spy(() => action);
       const getState = () => state;
 

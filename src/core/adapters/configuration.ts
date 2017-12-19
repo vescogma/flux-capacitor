@@ -1,7 +1,9 @@
 import Configuration from '../configuration';
 import * as AreaReducer from '../reducers/data/area';
+import * as AutocompleteReducer from '../reducers/data/autocomplete';
 import * as CollectionsReducer from '../reducers/data/collections';
 import * as PageReducer from '../reducers/data/page';
+import * as PastPurchaseReducer from '../reducers/data/pastPurchases';
 import * as PersonalizationAdapter from '../reducers/data/personalization';
 import Store from '../store';
 
@@ -13,19 +15,11 @@ namespace Adapter {
         present: {
           area: Adapter.extractArea(config, AreaReducer.DEFAULT_AREA),
           autocomplete: {
-            suggestions: [],
-            navigations: [],
-            products: [],
+            ...AutocompleteReducer.DEFAULTS,
             category: {
+              ...AutocompleteReducer.DEFAULTS.category,
               field: Adapter.extractSaytCategoryField(config),
-              values: []
             },
-          },
-          recommendations: {
-            suggested: { products: [] },
-            pastPurchases: { products: []},
-            queryPastPurchases: [],
-            orderHistory: []
           },
           fields: Adapter.extractFields(config),
           collections: Adapter.extractCollections(config, CollectionsReducer.DEFAULT_COLLECTION),
@@ -34,6 +28,13 @@ namespace Adapter {
             ...PageReducer.DEFAULTS,
             sizes: Adapter.extractPageSizes(config, PageReducer.DEFAULT_PAGE_SIZE)
           },
+          pastPurchases: {
+            ...PastPurchaseReducer.DEFAULTS,
+            page: {
+              ...PastPurchaseReducer.DEFAULTS.page,
+              sizes: Adapter.extractPageSizes(config, PastPurchaseReducer.DEFAULT_PAGE_SIZE)
+            }
+          }
         }
       },
       session: { config }
@@ -155,6 +156,17 @@ namespace Adapter {
 
   export const extractLocation = (config: Configuration) =>
     config.recommendations.location;
+
+  export const extractSecuredPayload = (config: Configuration) => {
+    const payload = config.recommendations.pastPurchases.securedPayload;
+    return typeof payload === 'function' ? payload() : payload;
+  };
+
+  export const extractPastPurchaseProductCount = (config: Configuration) =>
+    config.recommendations.pastPurchases.productCount;
+
+  export const extractPastPurchaseNavigations = (config: Configuration) =>
+    config.recommendations.pastPurchases.navigations;
 
   export const shouldAddPastPurchaseBias = (config: Configuration) =>
     config.recommendations.pastPurchases.biasCount > 0;

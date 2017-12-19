@@ -15,11 +15,11 @@ import * as utils from '../utils';
 export const HISTORY_UPDATE_ACTIONS = [
   Actions.RECEIVE_PRODUCTS,
   Actions.RECEIVE_RECOMMENDATIONS_PRODUCTS,
-  Actions.RECEIVE_PAST_PURCHASES,
-  Actions.RECEIVE_ORDER_HISTORY,
   Actions.RECEIVE_NAVIGATION_SORT,
   Actions.RECEIVE_COLLECTION_COUNT,
-  Actions.RECEIVE_MORE_REFINEMENTS
+  Actions.RECEIVE_MORE_REFINEMENTS,
+  Actions.RECEIVE_PAST_PURCHASE_PRODUCTS,
+  Actions.RECEIVE_PAST_PURCHASE_REFINEMENTS,
 ];
 
 export const RECALL_CHANGE_ACTIONS = [
@@ -30,12 +30,27 @@ export const RECALL_CHANGE_ACTIONS = [
   Actions.DESELECT_REFINEMENT,
 ];
 
+export const PAST_PURCHASE_SKU_ACTIONS = [
+  Actions.FETCH_PAST_PURCHASE_PRODUCTS,
+  Actions.FETCH_SAYT_PAST_PURCHASES,
+];
+
 export const SEARCH_CHANGE_ACTIONS = [
   ...RECALL_CHANGE_ACTIONS,
   Actions.SELECT_COLLECTION,
   Actions.SELECT_SORT,
   Actions.UPDATE_PAGE_SIZE,
   Actions.UPDATE_CURRENT_PAGE,
+];
+
+export const PAST_PURCHASES_SEARCH_CHANGE_ACTIONS = [
+  Actions.UPDATE_PAST_PURCHASE_QUERY,
+  Actions.RESET_PAST_PURCHASE_REFINEMENTS,
+  Actions.SELECT_PAST_PURCHASE_REFINEMENT,
+  Actions.DESELECT_PAST_PURCHASE_REFINEMENT,
+  Actions.SELECT_PAST_PURCHASE_SORT,
+  Actions.UPDATE_PAST_PURCHASE_CURRENT_PAGE,
+  Actions.UPDATE_PAST_PURCHASE_PAGE_SIZE,
 ];
 
 export const PERSONALIZATION_CHANGE_ACTIONS = [
@@ -79,15 +94,36 @@ export namespace Middleware {
       }) : next(action);
   }
 
-  export function saveStateAnalyzer() {
+  export function checkPastPurchaseSkus(flux: FluxCapacitor): ReduxMiddleware {
+    return (store) => (next) => (action) => {
+      if (!PAST_PURCHASE_SKU_ACTIONS.includes(action.type) ||
+          Selectors.pastPurchases(flux.store.getState()).length > 0) {
+        return next(action);
+      }
+      if (ConfigurationAdapter.extractSecuredPayload(Selectors.config(flux.store.getState()))) {
+        flux.once(Events.PAST_PURCHASE_SKUS_UPDATED, () => store.dispatch(action));
+      }
+    };
+  }
+
+  export function insertAction(triggerActions: string[], extraAction: Actions.Action) {
     return (next) => (batchAction) => {
       const actions = utils.rayify(batchAction);
-      if (actions.some((action) => HISTORY_UPDATE_ACTIONS.includes(action.type))) {
-        return next([...actions, { type: Actions.SAVE_STATE }]);
+      if (actions.some((action) => triggerActions.includes(action.type)) &&
+          !actions.some((action) => action.type === extraAction.type)) {
+        return next([...actions, extraAction]);
       } else {
         return next(actions);
       }
     };
+  }
+
+  export function pastPurchaseProductAnalyzer() {
+    return Middleware.insertAction(PAST_PURCHASES_SEARCH_CHANGE_ACTIONS, ActionCreators.fetchPastPurchaseProducts());
+  }
+
+  export function saveStateAnalyzer() {
+    return Middleware.insertAction(HISTORY_UPDATE_ACTIONS, { type: Actions.SAVE_STATE });
   }
 
   export function thunkEvaluator(store: Store<any>) {
@@ -125,6 +161,7 @@ export namespace Middleware {
       Middleware.idGenerator('recallId', RECALL_CHANGE_ACTIONS),
       Middleware.idGenerator('searchId', SEARCH_CHANGE_ACTIONS),
       Middleware.errorHandler(flux),
+      Middleware.checkPastPurchaseSkus(flux),
       sagaMiddleware,
       personalizationAnalyzer,
       thunkEvaluator,
@@ -139,7 +176,7 @@ export namespace Middleware {
     const composeEnhancers = global && global['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
 
     return composeEnhancers(
-      applyMiddleware(thunkEvaluator, saveStateAnalyzer),
+      applyMiddleware(thunkEvaluator, saveStateAnalyzer, pastPurchaseProductAnalyzer),
       reduxBatch,
       applyMiddleware(...middleware),
       reduxBatch,

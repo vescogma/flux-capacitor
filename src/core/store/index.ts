@@ -74,6 +74,8 @@ namespace Store {
 
     personalization?: Personalization;
 
+    pastPurchases: PastPurchase;
+
     recordCount: number; // post
 
     redirect?: string; // post
@@ -217,11 +219,6 @@ namespace Store {
     suggested: {
       products: ProductWithMetadata[];
     };
-    pastPurchases: {
-      products: Recommendations.PastPurchase[];
-    };
-    queryPastPurchases: ProductWithMetadata[];
-    orderHistory: any[];
   }
 
   export type AvailableNavigations = Indexed<Navigation> & {
@@ -240,18 +237,36 @@ namespace Store {
       value: string;
       count: number;
     }
+  }
 
-    export interface PastPurchase {
-      sku: string;
-      quantity: number;
+  export interface PastPurchase {
+      defaultSkus: PastPurchases.PastPurchaseProduct[];
+      skus: PastPurchases.PastPurchaseProduct[];
+      saytPastPurchases: ProductWithMetadata[];
+      products: ProductWithMetadata[];
+      allRecordCount: number;
+      currentRecordCount: number;
+      navigations: Indexed<Store.Navigation>;
+      query: string;
+      sort?: SelectableList<PastPurchases.PastPurchaseSort>;
+      page: Page;
     }
 
-    // slide 18 of epic
-    export interface OrderHistoryProduct {
+  export namespace PastPurchases {
+    export interface PastPurchaseSort extends Sort {
+      type: number;
+    }
+
+    export interface PastPurchaseProduct {
       sku: string;
       quantity: number;
-      collection: string;
-      metadata: object;
+      lastPurchased: number;
+    }
+
+    export interface PastPurchaseRefinement {
+      field: string;
+      value: string;
+      count: number;
     }
   }
 
@@ -287,6 +302,7 @@ namespace Store {
 
   export interface BaseRefinement {
     total: number; // post
+    display?: string;
   }
 
   export type Refinement = ValueRefinement | RangeRefinement;

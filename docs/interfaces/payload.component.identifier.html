@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Page | @storefront/flux-capacitor</title>
+	<title>Identifier | @storefront/flux-capacitor</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,16 +56,16 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/actions.html">Actions</a>
+					<a href="../modules/payload.html">Payload</a>
 				</li>
 				<li>
-					<a href="../modules/actions.payload.html">Payload</a>
+					<a href="../modules/payload.component.html">Component</a>
 				</li>
 				<li>
-					<a href="actions.payload.page.html">Page</a>
+					<a href="payload.component.identifier.html">Identifier</a>
 				</li>
 			</ul>
-			<h1>Interface Page</h1>
+			<h1>Interface Identifier</h1>
 		</div>
 	</div>
 </header>
@@ -76,7 +76,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Page</span>
+						<span class="target">Identifier</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="payload.component.state.html" class="tsd-signature-type">State</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -87,11 +92,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="actions.payload.page.html#from" class="tsd-kind-icon">from</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="actions.payload.page.html#last" class="tsd-kind-icon">last</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="actions.payload.page.html#next" class="tsd-kind-icon">next</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="actions.payload.page.html#previous" class="tsd-kind-icon">previous</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="actions.payload.page.html#to" class="tsd-kind-icon">to</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="payload.component.identifier.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="payload.component.identifier.html#tagname" class="tsd-kind-icon">tag<wbr>Name</a></li>
 							</ul>
 						</section>
 					</div>
@@ -100,52 +102,22 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="from" class="tsd-anchor"></a>
-					<h3>from</h3>
-					<div class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="id" class="tsd-anchor"></a>
+					<h3>id</h3>
+					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/db974b0/src/core/actions/index.ts#L263">core/actions/index.ts:263</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/actions/payloads.ts#L17">core/actions/payloads.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="last" class="tsd-anchor"></a>
-					<h3>last</h3>
-					<div class="tsd-signature tsd-kind-icon">last<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="tagname" class="tsd-anchor"></a>
+					<h3>tag<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">tag<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/db974b0/src/core/actions/index.ts#L262">core/actions/index.ts:262</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="next" class="tsd-anchor"></a>
-					<h3>next</h3>
-					<div class="tsd-signature tsd-kind-icon">next<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/db974b0/src/core/actions/index.ts#L261">core/actions/index.ts:261</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="previous" class="tsd-anchor"></a>
-					<h3>previous</h3>
-					<div class="tsd-signature tsd-kind-icon">previous<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/db974b0/src/core/actions/index.ts#L260">core/actions/index.ts:260</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="to" class="tsd-anchor"></a>
-					<h3>to</h3>
-					<div class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/db974b0/src/core/actions/index.ts#L264">core/actions/index.ts:264</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/actions/payloads.ts#L16">core/actions/payloads.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -157,81 +129,25 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Internals</span>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/configuration.html">Configuration</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/events.html">Events</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/observer.html">Observer</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/requests.html">Requests</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/selectors.html">Selectors</a>
-					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external tsd-is-not-exported">
-						<a href="../modules/_redux_.html">"redux"</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="../modules/actioncreators.html">Action<wbr>Creators</a>
-					</li>
 					<li class="current tsd-kind-module tsd-is-external">
-						<a href="../modules/actions.html">Actions</a>
+						<a href="../modules/payload.html">Payload</a>
 						<ul>
 							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-								<a href="../modules/actions.metadata.html">Metadata</a>
+								<a href="../modules/payload.autocomplete.html">Autocomplete</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/payload.collection.html">Collection</a>
 							</li>
 							<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-external">
-								<a href="../modules/actions.payload.html">Payload</a>
-								<ul>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-										<a href="../modules/actions.payload.autocomplete.html">Autocomplete</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-										<a href="../modules/actions.payload.collection.html">Collection</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-										<a href="../modules/actions.payload.component.html">Component</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-										<a href="../modules/actions.payload.navigation.html">Navigation</a>
-									</li>
-									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-										<a href="../modules/actions.payload.personalization.html">Personalization</a>
-									</li>
-								</ul>
+								<a href="../modules/payload.component.html">Component</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/payload.navigation.html">Navigation</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/payload.personalization.html">Personalization</a>
 							</li>
 						</ul>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="../modules/adapter.html">Adapter</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="../modules/middleware.html">Middleware</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="../modules/page.html">Page</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="../modules/personalization.html">Personalization</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="../modules/recommendations.html">Recommendations</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="../modules/store.html">Store</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="../modules/tasks.html">Tasks</a>
 					</li>
 				</ul>
 			</nav>
@@ -240,32 +156,20 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="actions.payload.page.html" class="tsd-kind-icon">Page</a>
+						<a href="payload.component.identifier.html" class="tsd-kind-icon">Identifier</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="actions.payload.page.html#from" class="tsd-kind-icon">from</a>
+								<a href="payload.component.identifier.html#id" class="tsd-kind-icon">id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="actions.payload.page.html#last" class="tsd-kind-icon">last</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="actions.payload.page.html#next" class="tsd-kind-icon">next</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="actions.payload.page.html#previous" class="tsd-kind-icon">previous</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="actions.payload.page.html#to" class="tsd-kind-icon">to</a>
+								<a href="payload.component.identifier.html#tagname" class="tsd-kind-icon">tag<wbr>Name</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="actions.payload.query.html" class="tsd-kind-icon">Query</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="actions.payload.search.html" class="tsd-kind-icon">Search</a>
+						<a href="payload.component.state.html" class="tsd-kind-icon">State</a>
 					</li>
 				</ul>
 			</nav>

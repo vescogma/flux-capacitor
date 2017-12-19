@@ -370,6 +370,42 @@ suite('Search Adapter', ({ expect, stub }) => {
       expect(nextPage).to.be.calledWith(current, last);
       expect(previousPage).to.be.calledWith(current);
     });
+
+    it('should build page information when pastPurchase is true', () => {
+      const current = 4;
+      const previous = 7;
+      const next = 2;
+      const last = 80;
+      const from = 17;
+      const to = 30;
+      const size = 21;
+      const total = 999;
+      const state: any = { a: 'b' };
+      const pastPurchasePageSize = stub(Selectors, 'pastPurchasePageSize').returns(size);
+      const pastPurchasePage = stub(Selectors, 'pastPurchasePage').returns(current);
+      const finalPage = stub(PageAdapter, 'finalPage').returns(last);
+      const fromResult = stub(PageAdapter, 'fromResult').returns(from);
+      const toResult = stub(PageAdapter, 'toResult').returns(to);
+      const nextPage = stub(PageAdapter, 'nextPage').returns(next);
+      const previousPage = stub(PageAdapter, 'previousPage').returns(previous);
+
+      const pageInfo = Adapter.extractPage(state, total, pastPurchasePage, pastPurchasePageSize);
+
+      expect(pageInfo).to.eql({
+        from,
+        to,
+        last,
+        next,
+        previous
+      });
+      expect(pastPurchasePageSize).to.be.calledWith(state);
+      expect(pastPurchasePage).to.be.calledWith(state);
+      expect(finalPage).to.be.calledWith(size, total);
+      expect(fromResult).to.be.calledWith(current, size);
+      expect(toResult).to.be.calledWith(current, size, total);
+      expect(nextPage).to.be.calledWith(current, last);
+      expect(previousPage).to.be.calledWith(current);
+    });
   });
 
   describe('extractData()', () => {

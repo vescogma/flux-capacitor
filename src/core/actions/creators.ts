@@ -1,6 +1,7 @@
 import { Results } from 'groupby-api';
 import Actions from '.';
 import SearchAdapter from '../adapters/search';
+import Configuration from '../configuration';
 import Selectors from '../selectors';
 import Store from '../store';
 import { createAction, handleError, refinementPayload, shouldResetRefinements } from './utils';
@@ -72,7 +73,7 @@ namespace ActionCreators {
    * @return {Actions.FetchAutocompleteProducts}                          - Action with
    * query and refinements.
    */
-   // tslint:disable-next-line max-line-length
+  // tslint:disable-next-line max-line-length
   export function fetchAutocompleteProducts(query: string, refinements: Actions.Payload.Autocomplete.Refinement[] = []): Actions.FetchAutocompleteProducts {
     return createAction(Actions.FETCH_AUTOCOMPLETE_PRODUCTS, { query, refinements }, {
       query: validators.isValidQuery,
@@ -113,33 +114,41 @@ namespace ActionCreators {
     return createAction(Actions.FETCH_PAST_PURCHASES, query);
   }
 
-  export function fetchOrderHistory() {
-    return createAction(Actions.FETCH_ORDER_HISTORY, null);
+  export function fetchPastPurchaseProducts(query: string = null): Actions.FetchPastPurchaseProducts {
+    return createAction(Actions.FETCH_PAST_PURCHASE_PRODUCTS, query);
+  }
+
+  export function fetchPastPurchaseNavigations(): Actions.FetchPastPurchaseNavigations {
+    return createAction(Actions.FETCH_PAST_PURCHASE_NAVIGATIONS, null);
+  }
+
+  export function fetchSaytPastPurchases(query: string): Actions.FetchSaytPastPurchases {
+    return createAction(Actions.FETCH_SAYT_PAST_PURCHASES, query);
   }
 
   // request action creators
   /**
    * Updates the search with given parameters.
-   * @param  {Actions.Payload.Search} search                - Search object for requested search.
+   * @param  {Actions.Payload.Search} newSearch                - Search object for requested search.
    * @return {Actions.UpdateSearch}                         - Actions with relevant data.
    */
-  export function updateSearch(search: Actions.Payload.Search) {
+  export function updateSearch(newSearch: Actions.Payload.Search) {
     return (state: Store.State): Actions.UpdateSearch => {
       const searchActions: Actions.UpdateSearch = [ActionCreators.resetPage()];
 
-      if ('query' in search) {
-        searchActions.push(...ActionCreators.updateQuery(search.query));
+      if ('query' in newSearch) {
+        searchActions.push(...ActionCreators.updateQuery(newSearch.query));
       }
-      if ('clear' in search && shouldResetRefinements(search, state)) {
-        searchActions.push(...ActionCreators.resetRefinements(search.clear));
+      if ('clear' in newSearch && shouldResetRefinements(newSearch, state)) {
+        searchActions.push(...ActionCreators.resetRefinements(newSearch.clear));
       }
-      if ('navigationId' in search) {
-        if ('index' in search) {
-          searchActions.push(...ActionCreators.selectRefinement(search.navigationId, search.index));
-        } else if (search.range) {
-          searchActions.push(...ActionCreators.addRefinement(search.navigationId, search.low, search.high));
-        } else if ('value' in search) {
-          searchActions.push(...ActionCreators.addRefinement(search.navigationId, search.value));
+      if ('navigationId' in newSearch) {
+        if ('index' in newSearch) {
+          searchActions.push(...ActionCreators.selectRefinement(newSearch.navigationId, newSearch.index));
+        } else if (newSearch.range) {
+          searchActions.push(...ActionCreators.addRefinement(newSearch.navigationId, newSearch.low, newSearch.high));
+        } else if ('value' in newSearch) {
+          searchActions.push(...ActionCreators.addRefinement(newSearch.navigationId, newSearch.value));
         }
       }
 
@@ -408,6 +417,10 @@ namespace ActionCreators {
       });
   }
 
+  export function updateSecuredPayload(payload: Configuration.Recommendations.SecuredPayload) {
+    return createAction(Actions.UPDATE_SECURED_PAYLOAD, payload);
+  }
+
   // response action creators
   /**
    * The query object to receive and update state with.
@@ -602,15 +615,6 @@ namespace ActionCreators {
   }
 
   /**
-   * The past purchases to receive and update state with.
-   * @param  {Store.Recommendations.PastPurchase[]} products - The products to add to the past purchase state.
-   * @return {Actions.ReceivePastPurchases}                  - Action with products.
-   */
-  export function receivePastPurchases(products: Store.Recommendations.PastPurchase[]): Actions.ReceivePastPurchases {
-    return createAction(Actions.RECEIVE_PAST_PURCHASES, products);
-  }
-
-  /**
    * The navigation sort to receive and update navigation sort state with.
    * @param  {Store.Recommendations.Navigation[]} navigations - The navigations to be sorted and order of sort.
    * @return {Actions.ReceiveNavigationSort}                  - Action with navigations.
@@ -620,14 +624,170 @@ namespace ActionCreators {
     return createAction(Actions.RECEIVE_NAVIGATION_SORT, navigations);
   }
 
-  // wip fix types
-  export function receiveQueryPastPurchases(products: any[]) {
-    return createAction(Actions.RECEIVE_QUERY_PAST_PURCHASES, products);
+  // tslint:disable-next-line max-line-length
+  export function receivePastPurchaseSkus(products: Store.PastPurchases.PastPurchaseProduct[]): Actions.ReceivePastPurchaseSkus {
+    return createAction(Actions.RECEIVE_PAST_PURCHASE_SKUS, products);
   }
 
-  export function receiveOrderHistory (products: Store.Recommendations.OrderHistoryProduct[]) {
-    return createAction(Actions.RECEIVE_ORDER_HISTORY, products);
+  // tslint:disable-next-line max-line-length
+  export function receiveSaytPastPurchases(products: Store.ProductWithMetadata[]): Actions.ReceiveSaytPastPurchases {
+    return createAction(Actions.RECEIVE_SAYT_PAST_PURCHASES, products);
   }
+
+  // tslint:disable-next-line max-line-length
+  export function receivePastPurchaseProducts(products: Store.ProductWithMetadata[]): Actions.ReceivePastPurchaseProducts {
+    return createAction(Actions.RECEIVE_PAST_PURCHASE_PRODUCTS, products);
+  }
+
+  // tslint:disable-next-line max-line-length
+  export function receivePastPurchaseAllRecordCount(count: number): Actions.ReceivePastPurchaseAllRecordCount {
+    return createAction(Actions.RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT, count);
+  }
+
+  // tslint:disable-next-line max-line-length
+  export function receivePastPurchaseCurrentRecordCount(count: number): Actions.ReceivePastPurchaseCurrentRecordCount {
+    return createAction(Actions.RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT, count);
+  }
+
+  // tslint:disable-next-line max-line-length
+  export function receivePastPurchaseRefinements(refinements: Store.Navigation[]): Actions.ReceivePastPurchaseRefinements {
+    return createAction(Actions.RECEIVE_PAST_PURCHASE_REFINEMENTS, refinements);
+  }
+
+  /**
+   * In the past purchase section, sets the current page in the store to page 1, but does not update the search.
+   * @return {Actions.ResetPastPurchasePage} - Action with undefined.
+   */
+  export function resetPastPurchasePage(): Actions.ResetPastPurchasePage {
+    return createAction(Actions.RESET_PAST_PURCHASE_PAGE, undefined, {
+      payload: validators.notOnFirstPastPurchasePage
+    });
+  }
+
+  /**
+   * The page to receive and update state with.
+   * @param  {Actions.Payload.Page} page - The page object state will update to.
+   * @return {Actions.ReceivePage}       - Action with page.
+   */
+  export function receivePastPurchasePage(page: Actions.Payload.Page): Actions.ReceivePastPurchasePage {
+    return createAction(Actions.RECEIVE_PAST_PURCHASE_PAGE, page);
+  }
+
+  /**
+   * In the past purchase section, selects a given refinement based on navigationId and index.
+   * @param  {string}                               navigationId - The navigationId for
+   * the navigation to fetch more refinements against.
+   * @param  {number}                               index        - The index of the refinement
+   * intended to be selected.
+   * @return {Actions.PastPurchaseSelect}              - Actions with relevant data.
+   */
+  // tslint:disable-next-line max-line-length
+  export function selectPastPurchaseRefinement(navigationId: string, index: number): Actions.PastPurchaseSelect {
+    return [
+      ActionCreators.resetPastPurchasePage(),
+      createAction(Actions.SELECT_PAST_PURCHASE_REFINEMENT, { navigationId, index }, {
+        payload: validators.isPastPurchaseRefinementDeselectedByIndex
+      })
+    ];
+  }
+
+  // todo doc
+  // tslint:disable-next-line max-line-length
+  export function resetAndSelectPastPurchaseRefinement(navigationId: string, index: number): Actions.PastPurchaseResetAndSelect {
+    return <Actions.PastPurchaseResetAndSelect>[
+      ...ActionCreators.resetPastPurchaseRefinements(true),
+      ...ActionCreators.selectPastPurchaseRefinement(navigationId, index),
+    ];
+  }
+
+  // todo doc
+  // tslint:disable-next-line max-line-length
+  export function resetPastPurchaseQueryAndSelectRefinement(navigationId: string, index: number): Actions.PastPurchaseQueryAndSelect {
+    return <Actions.PastPurchaseQueryAndSelect>[
+      ...ActionCreators.updatePastPurchaseQuery(''),
+      ...ActionCreators.selectPastPurchaseRefinement(navigationId, index),
+    ];
+  }
+
+  /**
+   * In the past purcahse page, removes a given refinement based on navigationId and index.
+   * @param  {string}                                 navigationId - The navigationId for
+   * the navigation to fetch more refinements against.
+   * @param  {number}                                 index        - The index of the refinement
+   * intended to be selected.
+   * @return {Actions.ResetPageAndDeselectRefinement}              - Actions with relevant data.
+   */
+  // tslint:disable-next-line max-line-length
+  export function deselectPastPurchaseRefinement(navigationId: string, index: number): Actions.PastPurchaseDeselect {
+    return [
+      ActionCreators.resetPastPurchasePage(),
+      createAction(Actions.DESELECT_PAST_PURCHASE_REFINEMENT, { navigationId, index }, {
+        payload: validators.isPastPurchaseRefinementSelectedByIndex
+      })
+    ];
+  }
+
+  /**
+   * In the past purchase page, removes the selected refinements from the search.
+   * @param  {boolean|string}                   field - true to reset all refinements,
+   * or navigationId to reset all refinements on a specific navigation.
+   * @return {Actions.PastPurchaseReset}   - Actions with relevant data.
+   */
+  export function resetPastPurchaseRefinements(field?: boolean | string): Actions.PastPurchaseReset {
+    return [
+      ActionCreators.resetPastPurchasePage(),
+      createAction(Actions.RESET_PAST_PURCHASE_REFINEMENTS, field, {
+        payload: [
+          validators.isValidClearField,
+          validators.hasSelectedPastPurchaseRefinements,
+          validators.hasSelectedPastPurchaseRefinementsByField
+        ]
+      })
+    ];
+  }
+
+  export function updatePastPurchaseQuery(query: string): Actions.PastPurchaseQuery {
+    return <Actions.PastPurchaseQuery>[
+      ...ActionCreators.resetPastPurchaseRefinements(true),
+      createAction(Actions.UPDATE_PAST_PURCHASE_QUERY, query),
+    ];
+  }
+
+  /**
+   * Updates the past purchase page size to given size.
+   * @param  {number}                 size - The size the page is updated to.
+   * Must correspond to a size in the pageSize in the store.
+   * @return {Actions.UpdatePastPurchasePageSize}      - Action with size.
+   */
+  export function updatePastPurchasePageSize(size: number): Actions.UpdatePastPurchasePageSize {
+    return createAction(Actions.UPDATE_PAST_PURCHASE_PAGE_SIZE, size, {
+      payload: validators.isDifferentPastPurchasePageSize
+    });
+  }
+
+  /**
+   * Updates the current page to the given page.
+   * @param  {number}                    page - The page to switch to.
+   * @return {Actions.UpdatePastPurchaseCurrentPage}      - Action with page.
+   */
+  export function updatePastPurchaseCurrentPage(page: number): Actions.UpdatePastPurchaseCurrentPage {
+    return createAction(Actions.UPDATE_PAST_PURCHASE_CURRENT_PAGE, page, {
+      payload: [
+        validators.isValidPastPurchasePage,
+        validators.isOnDifferentPastPurchasePage
+      ]
+    });
+  }
+
+  export function selectPastPurchasesSort(index: number): Actions.PastPurchaseSortActions {
+    return [
+      ActionCreators.resetPastPurchasePage(),
+      createAction(Actions.SELECT_PAST_PURCHASE_SORT, index, {
+        payload: validators.isPastPurchasesSortDeselected
+      })
+    ];
+  }
+
   // ui action creators
   /**
    * Adds state for a given tag to the store.

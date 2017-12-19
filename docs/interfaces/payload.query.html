@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>PastPurchase | @storefront/flux-capacitor</title>
+	<title>Query | @storefront/flux-capacitor</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,16 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/store.html">Store</a>
+					<a href="../modules/payload.html">Payload</a>
 				</li>
 				<li>
-					<a href="../modules/store.recommendations.html">Recommendations</a>
-				</li>
-				<li>
-					<a href="store.recommendations.pastpurchase.html">PastPurchase</a>
+					<a href="payload.query.html">Query</a>
 				</li>
 			</ul>
-			<h1>Interface PastPurchase</h1>
+			<h1>Interface Query</h1>
 		</div>
 	</div>
 </header>
@@ -76,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">PastPurchase</span>
+						<span class="target">Query</span>
 					</li>
 				</ul>
 			</section>
@@ -87,8 +84,10 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.recommendations.pastpurchase.html#quantity" class="tsd-kind-icon">quantity</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="store.recommendations.pastpurchase.html#sku" class="tsd-kind-icon">sku</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="payload.query.html#corrected" class="tsd-kind-icon">corrected</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="payload.query.html#didyoumean" class="tsd-kind-icon">did<wbr>You<wbr>Mean</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="payload.query.html#related" class="tsd-kind-icon">related</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="payload.query.html#rewrites" class="tsd-kind-icon">rewrites</a></li>
 							</ul>
 						</section>
 					</div>
@@ -97,22 +96,42 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="quantity" class="tsd-anchor"></a>
-					<h3>quantity</h3>
-					<div class="tsd-signature tsd-kind-icon">quantity<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="corrected" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> corrected</h3>
+					<div class="tsd-signature tsd-kind-icon">corrected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/db974b0/src/core/store/index.ts#L246">core/store/index.ts:246</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/actions/payloads.ts#L33">core/actions/payloads.ts:33</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="sku" class="tsd-anchor"></a>
-					<h3>sku</h3>
-					<div class="tsd-signature tsd-kind-icon">sku<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="didyoumean" class="tsd-anchor"></a>
+					<h3>did<wbr>You<wbr>Mean</h3>
+					<div class="tsd-signature tsd-kind-icon">did<wbr>You<wbr>Mean<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/db974b0/src/core/store/index.ts#L245">core/store/index.ts:245</a></li>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/actions/payloads.ts#L35">core/actions/payloads.ts:35</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="related" class="tsd-anchor"></a>
+					<h3>related</h3>
+					<div class="tsd-signature tsd-kind-icon">related<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/actions/payloads.ts#L34">core/actions/payloads.ts:34</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="rewrites" class="tsd-anchor"></a>
+					<h3>rewrites</h3>
+					<div class="tsd-signature tsd-kind-icon">rewrites<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/groupby/flux-capacitor/blob/1f0beb2/src/core/actions/payloads.ts#L36">core/actions/payloads.ts:36</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -142,6 +161,9 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/selectors.html">Selectors</a>
 					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/storesections.html">Store<wbr>Sections</a>
+					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
@@ -164,30 +186,36 @@
 						<a href="../modules/page.html">Page</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
+						<a href="../modules/pastpurchases.html">Past<wbr>Purchases</a>
+					</li>
+					<li class="current tsd-kind-module tsd-is-external">
+						<a href="../modules/payload.html">Payload</a>
+						<ul>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/payload.autocomplete.html">Autocomplete</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/payload.collection.html">Collection</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/payload.component.html">Component</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/payload.navigation.html">Navigation</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/payload.personalization.html">Personalization</a>
+							</li>
+						</ul>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
 						<a href="../modules/personalization.html">Personalization</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="../modules/recommendations.html">Recommendations</a>
 					</li>
-					<li class="current tsd-kind-module tsd-is-external">
+					<li class=" tsd-kind-module tsd-is-external">
 						<a href="../modules/store.html">Store</a>
-						<ul>
-							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-								<a href="../modules/store.autocomplete.html">Autocomplete</a>
-							</li>
-							<li class=" tsd-kind-module tsd-parent-kind-module tsd-has-type-parameter tsd-is-external">
-								<a href="../modules/store.indexed.html">Indexed</a>
-							</li>
-							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-								<a href="../modules/store.personalization.html">Personalization</a>
-							</li>
-							<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-external">
-								<a href="../modules/store.recommendations.html">Recommendations</a>
-							</li>
-							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
-								<a href="../modules/store.zone.html">Zone</a>
-							</li>
-						</ul>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="../modules/tasks.html">Tasks</a>
@@ -197,40 +225,31 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="store.recommendations.navigation.html" class="tsd-kind-icon">Navigation</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="store.recommendations.orderhistoryproduct.html" class="tsd-kind-icon">Order<wbr>History<wbr>Product</a>
+						<a href="payload.page.html" class="tsd-kind-icon">Page</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="store.recommendations.pastpurchase.html" class="tsd-kind-icon">Past<wbr>Purchase</a>
+						<a href="payload.query.html" class="tsd-kind-icon">Query</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="store.recommendations.pastpurchase.html#quantity" class="tsd-kind-icon">quantity</a>
+								<a href="payload.query.html#corrected" class="tsd-kind-icon">corrected</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="store.recommendations.pastpurchase.html#sku" class="tsd-kind-icon">sku</a>
+								<a href="payload.query.html#didyoumean" class="tsd-kind-icon">did<wbr>You<wbr>Mean</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="payload.query.html#related" class="tsd-kind-icon">related</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="payload.query.html#rewrites" class="tsd-kind-icon">rewrites</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="store.recommendations.recommendationrefinement.html" class="tsd-kind-icon">Recommendation<wbr>Refinement</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/store.recommendations.html#orderhistory" class="tsd-kind-icon">order<wbr>History</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/store.recommendations.html#pastpurchases" class="tsd-kind-icon">past<wbr>Purchases</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/store.recommendations.html#querypastpurchases" class="tsd-kind-icon">query<wbr>Past<wbr>Purchases</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/store.recommendations.html#suggested" class="tsd-kind-icon">suggested</a>
+						<a href="payload.search.html" class="tsd-kind-icon">Search</a>
 					</li>
 				</ul>
 			</nav>

@@ -10,7 +10,14 @@ suite('session', ({ expect }) => {
   const state: Store.Session = {
     recallId: RECALL_ID,
     searchId: SEARCH_ID,
-    origin: ORIGIN
+    origin: ORIGIN,
+    config: <any>{
+      recommendations: {
+        pastPurchases: {
+          securedPayload: { c: 'd' }
+        }
+      }
+    }
   };
 
   describe('updateSession()', () => {
@@ -60,6 +67,25 @@ suite('session', ({ expect }) => {
       const reducer = session(state, <any>{ type: Actions.UPDATE_LOCATION, payload: location });
 
       expect(reducer).to.eql(newState);
+    });
+
+    it('should update secured payload on UPDATE_SECURED_PAYLOAD', () => {
+      const securedPayload = { a: 'b' };
+      const newState = {
+        ...state,
+        config: {
+          ...state.config,
+          recommendations: {
+            ...state.config.recommendations,
+            pastPurchases: {
+              ...state.config.recommendations.pastPurchases,
+              securedPayload
+            }
+          }
+        }
+      };
+
+      expect(session(state, <any>{ type: Actions.UPDATE_SECURED_PAYLOAD, payload: securedPayload })).to.eql(newState);
     });
 
     it('should return state on default', () => {
