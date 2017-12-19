@@ -33,8 +33,6 @@ namespace Actions {
     (...args: any[]): Action | Action[] | Thunk<any>;
   }
 
-  export import Payload = Payloads;
-
   // tslint:disable max-line-length
   // update actions
   export const UPDATE_AUTOCOMPLETE_QUERY = 'UPDATE_AUTOCOMPLETE_QUERY';

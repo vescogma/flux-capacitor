@@ -46,16 +46,16 @@ export namespace Tasks {
   }
 
   export function* addToCartCall(flux: FluxCapacitor, cartId: string, product: any) {
+    console.log('in call', product)
+    const cartState = yield effects.select(Selectors.cart);
     const url = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/`;
-
     const res = yield effects.call(fetch, url,
       ({
         method: 'POST',
-        body: JSON.stringify(product)
+        body: JSON.stringify([product])
       }));
 
     const response = yield res.json();
-    console.log(response.result);
     yield effects.put(flux.actions.cartServerUpdated(response.result));
   }
 }
