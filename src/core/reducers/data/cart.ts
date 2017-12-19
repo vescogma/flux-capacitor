@@ -65,7 +65,7 @@ export const updateWithServerData = (state: State, { generatedTotalPrice, totalQ
   ...state, content: {
     ...state.content,
     totalQuantity,
-    items: Adapter.mergeServerItemsWithState(state.content.items, items),
+    items,
     generatedTotalPrice,
     lastModified
   }

@@ -17,15 +17,21 @@ namespace Cart {
   });
 
   export const productTransform = (product: any, quantity: number, config: any) => {
-    // should take in structure
-    return [{
+    // todo: should take in structure
+
+    return {
       // ad-hoc: using is for skuId
       sku: product.data.id,
       productId: product.data.id,
       collection: config.collection,
       price: product.data.price,
-      quantity,
-    }];
+      quantity: Number(quantity),
+      title: product.data.title,
+      metadata: [{
+        key: 'image',
+        value: product.data.image
+      }]
+    };
   };
 
   export const transformToBrowser = (state: Store.Cart, reducerKey: string): Store.Cart => state;
@@ -54,16 +60,16 @@ namespace Cart {
     }
   };
 
+  // may not need this any more
   export const mergeServerItemsWithState = (stateItems: any, serverItems: any) => {
     const mergedItems = serverItems.map((item: any) => {
       const stateItem = stateItems.find((el: any) => el.sku === item.sku);
       item.quantity = Number(item.quantity);
-      
+
       console.log('m', stateItem, item);
       return { ...stateItem, ...item };
     });
     return mergedItems;
-
   };
 
   export interface CartBody {
