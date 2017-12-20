@@ -39,11 +39,16 @@ namespace Cart {
   // tslint:disable-next-line:max-line-length
   export const transformFromBrowser = (state: Store.Cart): Store.Cart => state;
 
-  export const calculateTotalQuantity = (items: any[]) =>
-    items.reduce((acc, item) => {
-      return acc + item['quantity'];
-    }, 0);
+  export const calculateTotalQuantity = (items: any[]) => {
+    console.log('ttquantity', items.reduce((acc, item) => {
+      return Number(acc) + Number(item['quantity']);
+    }, 0))
 
+    return items.reduce((acc, item) => {
+      return Number(acc) + Number(item['quantity']);
+    }, 0);
+  }
+    
   export const combineLikeItems = (items: any[], item: any, key: string) => {
     // todo: handle diffenret structure
     const likeItem = items.find((el: any) => el[key] === item[key]);

@@ -7,7 +7,9 @@ import Store from '../../store';
 export type Action = Actions.GetTrackerInfo
   | Actions.CartCreated
   | Actions.AddToCart
-  | Actions.CartServerUpdated;
+  | Actions.CartServerUpdated
+  | Actions.ItemQuantityChanged;
+
 export type State = Store.Cart;
 
 export const STORAGE_KEY = 'gb-cart';
@@ -35,6 +37,8 @@ function updateCart(state: State = DEFAULTS, action: Action): State {
       return cartCreated(state, action.payload);
     case Actions.CART_SERVER_UPDATED:
       return updateWithServerData(state, action.payload);
+    case Actions.ITEM_QUANTITY_CHANGED:
+      return itemQuantityChanged(state, action.payload);
     default:
       return state;
   }
@@ -47,12 +51,13 @@ export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.P
   });
 
 export const addToCart = (state: State, { product, quantity }) => {
-  console.log('product');
-  const combinedItems = Adapter.combineLikeItems(state.content.items, { item: product, quantity }, 'id');
-  return {
-    // tslint:disable-next-line:max-line-length
-    ...state, content: { ...state.content, totalQuantity: Adapter.calculateTotalQuantity(combinedItems), items: combinedItems }
-  };
+  return state
+  // console.log('type of quantity', typeof quantity)
+  // const combinedItems = Adapter.combineLikeItems(state.content.items, { item: product, quantity }, 'id');
+  // return {
+  //   // tslint:disable-next-line:max-line-length
+  //   ...state, content: { ...state.content, totalQuantity: Adapter.calculateTotalQuantity(combinedItems), items: combinedItems }
+  // };
 };
 
 export const cartCreated = (state: State, cartId: string) =>
@@ -70,6 +75,11 @@ export const updateWithServerData = (state: State, { generatedTotalPrice, totalQ
     lastModified
   }
 });
+
+export const itemQuantityChanged = (state: State, payload: any ) => {
+  console.log('see what i get from reducer', payload)
+  return state;
+}
 
 const cartTransform = createTransform((state: State, key: string) => state, (state: State, key: string) => state);
 
