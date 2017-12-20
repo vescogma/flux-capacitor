@@ -8,13 +8,13 @@ import Requests from '../requests';
 import Selectors from '../selectors';
 import Store from '../store';
 import { fetch } from '../utils';
+import { itemQuantityChanged } from '../reducers/data/cart';
 
 export namespace Tasks {
   export function* addToCart(flux: FluxCapacitor, { payload: { product, quantity } }: any) {
     try {
       const cartState = yield effects.select(Selectors.cart);
       const config = yield effects.select(Selectors.config);
-      console.log('cc', cartState)
 
       const cartExists = !!cartState.content.cartId;
       const transformed = Adapter.productTransform(product, quantity, config);
@@ -46,8 +46,6 @@ export namespace Tasks {
   }
 
   export function* addToCartCall(flux: FluxCapacitor, cartId: string, product: any) {
-    console.log('in call', product)
-    const cartState = yield effects.select(Selectors.cart);
     const url = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/`;
     const res = yield effects.call(fetch, url,
       ({
@@ -58,8 +56,26 @@ export namespace Tasks {
     const response = yield res.json();
     yield effects.put(flux.actions.cartServerUpdated(response.result));
   }
+
+  export function* itemQuantityChanged(flux: FluxCapacitor, { payload: { product, quantity } }) {
+    const cartState = yield effects.select(Selectors.cart);
+    const { cartId } = cartState.content;
+    const config = yield effects.select(Selectors.config);
+    // todo: need to refactor productTransform
+    const productWithCorrectQuantity = { ...product, quantity };
+    const url = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/`;
+    const res = yield effects.call(fetch, url,
+      ({
+        method: 'PUT',
+        body: JSON.stringify([productWithCorrectQuantity])
+      }));
+
+    const response = yield res.json();
+    yield effects.put(flux.actions.cartServerUpdated(response.result));
+  }
 }
 
 export default (flux: FluxCapacitor) => function* cartSaga() {
   yield effects.takeEvery(Actions.ADD_TO_CART, Tasks.addToCart, flux);
+  yield effects.takeEvery(Actions.ITEM_QUANTITY_CHANGED, Tasks.itemQuantityChanged, flux);
 };

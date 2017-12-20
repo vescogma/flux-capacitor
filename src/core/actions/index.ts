@@ -215,6 +215,8 @@ namespace Actions {
   export type AddToCart = Action<typeof ADD_TO_CART, any>;
   export const CART_SERVER_UPDATED = 'CART_SERVER_UPDATED';
   export type CartServerUpdated = Action<typeof CART_SERVER_UPDATED, any>;
+  export const ITEM_QUANTITY_CHANGED = 'ITEM_QUANTITY_CHANGED';
+  export type ItemQuantityChanged = Action<typeof ITEM_QUANTITY_CHANGED, any>
 
   export namespace Payload {
     export namespace Personalization {

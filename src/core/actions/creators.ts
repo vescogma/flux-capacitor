@@ -805,6 +805,10 @@ namespace ActionCreators {
     return createAction(Actions.CART_SERVER_UPDATED, cart);
   }
 
+  export function itemQuantityChanged(product: any, quantity: number): any {
+    return createAction(Actions.ITEM_QUANTITY_CHANGED, { product, quantity });
+  }
+
   // ui action creators
   /**
    * Adds state for a given tag to the store.
