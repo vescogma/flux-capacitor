@@ -457,8 +457,12 @@ suite('Observer', ({ expect, spy, stub }) => {
           });
 
           it('should emit PAST_PURCHASE_PRODUCTS_UPDATED event', () => {
+            const extractData = stub(Search, 'extractData').returns(testObject);
+
             observers.data.present.pastPurchases.products(undefined, testObject);
 
+            expect(extractData).to.be.calledWithExactly(undefined);
+            expect(extractData).to.be.calledWithExactly(testObject);
             expect(emit).to.be.calledWith(Events.PAST_PURCHASE_PRODUCTS_UPDATED, testObject);
           });
 

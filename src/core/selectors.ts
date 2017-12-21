@@ -27,6 +27,18 @@ namespace Selectors {
     state.data.present.query.original;
 
   /**
+   * Returns the didYouMean array
+   */
+  export const didYouMean = (state: Store.State) =>
+    state.data.present.query.didYouMean;
+
+  /**
+   * Returns the related queries array
+   */
+  export const relatedQueries = (state: Store.State) =>
+    state.data.present.query.related;
+
+  /**
    * Returns the corrected query if it exists, otherwise returns the original query.
    */
   export const currentQuery = (state: Store.State) => {
@@ -53,6 +65,12 @@ namespace Selectors {
     Selectors.collections(state).allIds.indexOf(name);
 
   /**
+   * Returns the current page object.
+   */
+  export const pageObject = (state: Store.State) =>
+    state.data.present.page;
+
+  /**
    * Returns the page sizes object.
    */
   export const pageSizes = (state: Store.State) =>
@@ -73,7 +91,7 @@ namespace Selectors {
     Selectors.pageSizes(state).selected;
 
   /**
-   * Returns the current page.
+   * Returns the current page number.
    */
   export const page = (state: Store.State) =>
     state.data.present.page.current;
@@ -114,6 +132,12 @@ namespace Selectors {
    */
   export const products = (state: Store.State) =>
     Search.extractData(state.data.present.products);
+
+  /**
+   * Returns a boolean indicating whether products are loaded
+   */
+  export const productsLoaded = (state: Store.State) =>
+    state.data.present.productsLoaded;
 
   /**
    * Returns the product with the given id
@@ -178,6 +202,12 @@ namespace Selectors {
    */
   export const navigation = (state: Store.State, navigationId: string) =>
     state.data.present.navigations.byId[navigationId];
+
+  /**
+   * Returns the navigations object.
+   */
+  export const navigationsObject = (state: Store.State) =>
+    state.data.present.navigations;
 
   /**
    * Returns the navigations.
@@ -365,6 +395,12 @@ namespace Selectors {
     state.data.present.pastPurchases.query;
 
   /**
+   * Returns the past purchase navigations object.
+   */
+  export const pastPurchaseNavigationsObject = (state: Store.State) =>
+    state.data.present.pastPurchases.navigations;
+
+  /**
    * Returns the past purchase navigation object for the given navigationId.
    */
   export const pastPurchaseNavigation = (state: Store.State, navigationId: string) =>
@@ -400,6 +436,12 @@ namespace Selectors {
     const nav = Selectors.pastPurchaseNavigation(state, navigationId);
     return !!nav && nav.selected.includes(index);
   };
+
+  /**
+   * Returns the current past purchase page object.
+   */
+  export const pastPurchasePageObject = (state: Store.State) =>
+    state.data.present.pastPurchases.page;
 
   /**
    * Returns the past purchase page number
