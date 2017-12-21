@@ -217,6 +217,10 @@ namespace Actions {
   export type CartServerUpdated = Action<typeof CART_SERVER_UPDATED, any>;
   export const ITEM_QUANTITY_CHANGED = 'ITEM_QUANTITY_CHANGED';
   export type ItemQuantityChanged = Action<typeof ITEM_QUANTITY_CHANGED, any>
+  export const REMOVE_ITEM = 'REMOVE_ITEM';
+  export type RemoveItem = Action<typeof REMOVE_ITEM, any>
+  export const ITEM_DELETED = 'ITEM_DELETED';
+  export type ItemDeleted = Action<typeof ITEM_DELETED, any>
 
   export namespace Payload {
     export namespace Personalization {
