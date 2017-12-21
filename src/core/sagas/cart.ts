@@ -33,10 +33,10 @@ export namespace Tasks {
     const url = Adapter.buildUrl(customerId);
 
     const res = yield effects.call(fetch, url,
-      ({
+      {
         method: 'POST',
         body: JSON.stringify({ sessionId, visitorId, cartType: 'cart' })
-      }));
+      });
 
     const response = yield res.json();
     const { id } = response.result;
@@ -48,10 +48,10 @@ export namespace Tasks {
   export function* addToCartCall(flux: FluxCapacitor, cartId: string, product: any) {
     const url = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/`;
     const res = yield effects.call(fetch, url,
-      ({
+      {
         method: 'POST',
         body: JSON.stringify([product])
-      }));
+      });
 
     const response = yield res.json();
     yield effects.put(flux.actions.cartServerUpdated(response.result));
@@ -65,17 +65,30 @@ export namespace Tasks {
     const productWithCorrectQuantity = { ...product, quantity };
     const url = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/`;
     const res = yield effects.call(fetch, url,
-      ({
+      {
         method: 'PUT',
         body: JSON.stringify([productWithCorrectQuantity])
-      }));
+      });
 
     const response = yield res.json();
     yield effects.put(flux.actions.cartServerUpdated(response.result));
+  }
+
+  export function* removeItem(flux: FluxCapacitor, { payload: product }: any) {
+    const cartState = yield effects.select(Selectors.cart);
+    const { cartId } = cartState.content;
+    console.log('I got this', product)
+    const url = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/${product.sku}`;
+    const res = yield effects.call(fetch, url, { method: 'DELETE' });
+
+    // const response = yield res.json();
+    // console.log('delte', response.result)
+    // yield effects.put(flux.actions.itemDeleted(product));
   }
 }
 
 export default (flux: FluxCapacitor) => function* cartSaga() {
   yield effects.takeEvery(Actions.ADD_TO_CART, Tasks.addToCart, flux);
   yield effects.takeEvery(Actions.ITEM_QUANTITY_CHANGED, Tasks.itemQuantityChanged, flux);
+  yield effects.takeEvery(Actions.REMOVE_ITEM, Tasks.removeItem, flux);
 };

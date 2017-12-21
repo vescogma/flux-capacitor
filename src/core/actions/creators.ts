@@ -809,6 +809,14 @@ namespace ActionCreators {
     return createAction(Actions.ITEM_QUANTITY_CHANGED, { product, quantity });
   }
 
+  export function removeItem(product: any): any {
+    return createAction(Actions.REMOVE_ITEM, product);
+  }
+
+  export function itemDeleted(product: any): any {
+    return createAction(Actions.REMOVE_ITEM, product);
+  }
+
   // ui action creators
   /**
    * Adds state for a given tag to the store.

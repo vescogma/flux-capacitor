@@ -8,7 +8,8 @@ export type Action = Actions.GetTrackerInfo
   | Actions.CartCreated
   | Actions.AddToCart
   | Actions.CartServerUpdated
-  | Actions.ItemQuantityChanged;
+  | Actions.ItemQuantityChanged
+  | Actions.RemoveItem;
 
 export type State = Store.Cart;
 
@@ -39,6 +40,8 @@ function updateCart(state: State = DEFAULTS, action: Action): State {
       return updateWithServerData(state, action.payload);
     case Actions.ITEM_QUANTITY_CHANGED:
       return itemQuantityChanged(state, action.payload);
+    case Actions.REMOVE_ITEM:
+      return removeItem(state, action.payload);
     default:
       return state;
   }
@@ -76,9 +79,16 @@ export const updateWithServerData = (state: State, { generatedTotalPrice, totalQ
   }
 });
 
-export const itemQuantityChanged = (state: State, payload: any ) => {
+export const itemQuantityChanged = (state: State, payload: any) => {
   console.log('see what i get from reducer', payload)
   return state;
+}
+
+export const removeItem = (state: State, product: any) => {
+  const { items } = state.content;
+  const index = items.findIndex((item) => item.sku === product.sku)
+  items.splice(index, 1);
+  return { ...state, items };
 }
 
 const cartTransform = createTransform((state: State, key: string) => state, (state: State, key: string) => state);
