@@ -77,11 +77,24 @@ export namespace Tasks {
   export function* removeItem(flux: FluxCapacitor, { payload: product }: any) {
     const cartState = yield effects.select(Selectors.cart);
     const { cartId } = cartState.content;
-    console.log('I got this', product)
-    const url = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/${product.sku}`;
-    const res = yield effects.call(fetch, url, { method: 'DELETE' });
+    try {
+      const deleteUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/${product.sku}`;
+      const deleteRes = yield effects.call(fetch, deleteUrl, { method: 'DELETE' });
+    } catch (e) {
+      console.error(e);
+    }
 
-    // const response = yield res.json();
+    try {
+      // do I need to validate res?
+      const checkCartUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/`
+      const cartRes = yield effects.call(fetch, checkCartUrl, { method: 'GET' });
+      const response = yield cartRes.json();
+      console.log('res', response.result);
+      yield effects.put(flux.actions.cartServerUpdated(response.result));
+    } catch (e) {
+      console.error(e);
+    }
+
     // console.log('delte', response.result)
     // yield effects.put(flux.actions.itemDeleted(product));
   }

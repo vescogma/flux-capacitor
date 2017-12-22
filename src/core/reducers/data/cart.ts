@@ -88,7 +88,9 @@ export const removeItem = (state: State, product: any) => {
   const { items } = state.content;
   const index = items.findIndex((item) => item.sku === product.sku)
   items.splice(index, 1);
-  return { ...state, items };
+  return {
+    ...state, content: { ...state.content, items }
+  };
 }
 
 const cartTransform = createTransform((state: State, key: string) => state, (state: State, key: string) => state);
