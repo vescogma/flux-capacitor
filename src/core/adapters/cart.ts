@@ -20,7 +20,7 @@ namespace Cart {
     // todo: should take in structure
 
     return {
-      // ad-hoc: using is for skuId
+      // ad-hoc: using id for skuId
       sku: product.data.id,
       productId: product.data.id,
       collection: config.collection,
@@ -39,31 +39,44 @@ namespace Cart {
   // tslint:disable-next-line:max-line-length
   export const transformFromBrowser = (state: Store.Cart): Store.Cart => state;
 
-  export const calculateTotalQuantity = (items: any[]) => {
-    console.log('ttquantity', items.reduce((acc, item) => {
-      return Number(acc) + Number(item['quantity']);
-    }, 0))
+  export const calculateTotalQuantity = (items: CartProduct[]) => items.reduce((acc, item) => (Number(acc) + Number(item['quantity'])), 0);
 
-    return items.reduce((acc, item) => {
-      return Number(acc) + Number(item['quantity']);
-    }, 0);
-  }
-    
-  export const combineLikeItems = (items: any[], item: any, key: string) => {
+  export const findItems = (items: CartProduct[], product: CartProduct, key: string) => {
     // todo: handle diffenret structure
-    const likeItem = items.find((el: any) => el[key] === item[key]);
+    const likeItem = items.find((el: any) => {
+      if (el[key]) {
+        return el[key] === product[key]
+      } else {
+        throw "Key is not valid!"
+      }
+    });
+    return likeItem;
+  }
+
+  export const combineLikeItems = (items: CartProduct[], product: CartProduct, key: string) => {
+    // todo: handle diffenret structure
+    const likeItem = findItems(items, product, key);
     console.log('items', items, 'likeItem', likeItem);
     if (likeItem) {
-      items.forEach((el: any) => {
-        if (el[key] === item[key]) {
-          el.quantity += item.quantity;
+      return items.map((el: any) => {
+        if (el[key] === product[key]) {
+          el.quantity += product.quantity;
         }
+        return el;
       });
-      return items;
     } else {
-      return [...items, item];
+      return [...items, product];
     }
   };
+
+  export const changeItemQuantity = (items: CartProduct[], product: CartProduct, quantity: number) => {
+    items.forEach((el: CartProduct) => {
+      if (el.sku === product.sku){
+        el.quantity = quantity;
+      }
+    });
+    return items;
+  }
 
   // may not need this any more
   export const mergeServerItemsWithState = (stateItems: any, serverItems: any) => {
@@ -82,6 +95,21 @@ namespace Cart {
     sessionId: string;
     visitorId: string;
     cartType: string;
+  }
+
+  export interface CartProduct {
+    productId?: string;
+    metadata?: Metadata[];
+    collection: string;
+    price: number;
+    sku: string;
+    title: string;
+    quantity: number;
+  }
+
+  export interface Metadata {
+    key: string;
+    value: string;
   }
 
 }

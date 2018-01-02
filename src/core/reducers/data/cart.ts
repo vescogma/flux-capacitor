@@ -2,6 +2,7 @@ import { createTransform, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import Actions from '../../actions';
 import Adapter from '../../adapters/cart';
+import Selectors from '../../selectors';
 import Store from '../../store';
 
 export type Action = Actions.GetTrackerInfo
@@ -54,13 +55,14 @@ export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.P
   });
 
 export const addToCart = (state: State, { product, quantity }) => {
-  return state
-  // console.log('type of quantity', typeof quantity)
-  // const combinedItems = Adapter.combineLikeItems(state.content.items, { item: product, quantity }, 'id');
-  // return {
-  //   // tslint:disable-next-line:max-line-length
-  //   ...state, content: { ...state.content, totalQuantity: Adapter.calculateTotalQuantity(combinedItems), items: combinedItems }
-  // };
+  const transformed = Adapter.productTransform(product, quantity, Selectors.config);
+  const combinedItems = Adapter.combineLikeItems(state.content.items, transformed, 'sku');
+  console.log('wh', combinedItems);
+  
+  return {
+    // tslint:disable-next-line:max-line-length
+    ...state, content: { ...state.content, totalQuantity: Adapter.calculateTotalQuantity(combinedItems), items: combinedItems }
+  };
 };
 
 export const cartCreated = (state: State, cartId: string) =>
@@ -70,7 +72,8 @@ export const cartCreated = (state: State, cartId: string) =>
 
 // tslint:disable-next-line:max-line-length
 export const updateWithServerData = (state: State, { generatedTotalPrice, totalQuantity, items, lastModified }: any) => ({
-  ...state, content: {
+  ...state,
+   content: {
     ...state.content,
     totalQuantity,
     items,
@@ -79,19 +82,26 @@ export const updateWithServerData = (state: State, { generatedTotalPrice, totalQ
   }
 });
 
-export const itemQuantityChanged = (state: State, payload: any) => {
-  console.log('see what i get from reducer', payload)
-  return state;
-}
+export const itemQuantityChanged = (state: State, { product, quantity }: any) => {
+  const items = Adapter.changeItemQuantity(state.content.items, product, quantity);
+  return {
+    ...state,
+    content: {
+      ...state.content,
+      items,
+      totalQuantity: Adapter.calculateTotalQuantity(items)
+    }
+  }
+};
 
 export const removeItem = (state: State, product: any) => {
   const { items } = state.content;
   const index = items.findIndex((item) => item.sku === product.sku)
   items.splice(index, 1);
   return {
-    ...state, content: { ...state.content, items }
+    ...state, content: { ...state.content, items, totalQuantity: Adapter.calculateTotalQuantity(items) }
   };
-}
+};
 
 const cartTransform = createTransform((state: State, key: string) => state, (state: State, key: string) => state);
 
