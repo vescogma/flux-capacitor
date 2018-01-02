@@ -89,14 +89,10 @@ export namespace Tasks {
       const checkCartUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/`
       const cartRes = yield effects.call(fetch, checkCartUrl, { method: 'GET' });
       const response = yield cartRes.json();
-      console.log('res', response.result);
       yield effects.put(flux.actions.cartServerUpdated(response.result));
     } catch (e) {
       console.error(e);
     }
-
-    // console.log('delte', response.result)
-    // yield effects.put(flux.actions.itemDeleted(product));
   }
 }
 
