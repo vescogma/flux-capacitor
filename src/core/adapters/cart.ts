@@ -5,9 +5,9 @@ import Selectors from '../selectors';
 import Store from '../store';
 import { fetch, sortBasedOn } from '../utils';
 import ConfigurationAdapter from './configuration';
+import { Adapters } from '../../index';
 
 namespace Cart {
-
   export const buildUrl = (customerId: string) =>
     `https://qa2.groupbycloud.com/api/v0/carts/`;
 
@@ -18,6 +18,7 @@ namespace Cart {
 
   export const productTransform = (product: any, quantity: number, config: any) => {
     // todo: should take in structure
+
 
     return {
       // ad-hoc: using id for skuId
@@ -41,11 +42,11 @@ namespace Cart {
 
   export const calculateTotalQuantity = (items: CartProduct[]) => items.reduce((acc, item) => (Number(acc) + Number(item['quantity'])), 0);
 
-  export const findItems = (items: CartProduct[], product: CartProduct, key: string) => {
+  export const findItems = (items: CartProduct[], product: CartProduct) => {
     // todo: handle diffenret structure
     const likeItem = items.find((el: any) => {
-      if (el[key]) {
-        return el[key] === product[key]
+      if (el.sku) {
+        return el.sku === product.sku
       } else {
         throw "Key is not valid!"
       }
@@ -53,13 +54,14 @@ namespace Cart {
     return likeItem;
   }
 
-  export const combineLikeItems = (items: CartProduct[], product: CartProduct, key: string) => {
+  export const combineLikeItems = (items: CartProduct[], product: CartProduct) => {
+
     // todo: handle diffenret structure
-    const likeItem = findItems(items, product, key);
+    const likeItem = findItems(items, product);
     console.log('items', items, 'likeItem', likeItem);
     if (likeItem) {
       return items.map((el: any) => {
-        if (el[key] === product[key]) {
+        if (el.sku === product.sku) {
           el.quantity += product.quantity;
         }
         return el;
@@ -84,7 +86,6 @@ namespace Cart {
       const stateItem = stateItems.find((el: any) => el.sku === item.sku);
       item.quantity = Number(item.quantity);
 
-      console.log('m', stateItem, item);
       return { ...stateItem, ...item };
     });
     return mergedItems;

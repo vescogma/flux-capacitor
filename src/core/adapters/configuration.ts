@@ -176,6 +176,12 @@ namespace Adapter {
 
   export const extractRealTimeBiasingExpiry = (config: Configuration) =>
     config.personalization.realTimeBiasing.expiry;
+
+  export const extractCartExpiry = (config: Configuration) => 
+    config.cart.expiry;
+
+  export const extractCartMasterId = (config: Configuration) =>
+    config.cart;
 }
 
 export default Adapter;
