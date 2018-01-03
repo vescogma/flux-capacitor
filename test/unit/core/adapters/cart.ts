@@ -17,15 +17,15 @@ suite.only('Cart Adapter', ({ expect }) => {
       }];
     });
 
-    it('should throw if key is not valid', () => {
-      const item = <any>{
-        sku: '123',
-        quantity: 2,
-        title: 'cat'
-      };
+    // it('should throw if key is not valid', () => {
+    //   const item = <any>{
+    //     sku: '123',
+    //     quantity: 2,
+    //     title: 'cat'
+    //   };
 
-      expect(() => Adapter.findItems(stateItems, item, 'id')).to.throw('Key is not valid!');
-    });
+    //   expect(() => Adapter.findItems(stateItems, item, 'id')).to.throw('Key is not valid!');
+    // });
 
     it('should return items with same sku', () => {
       const item = <any>{
@@ -34,7 +34,7 @@ suite.only('Cart Adapter', ({ expect }) => {
         title: 'cat'
       };
 
-      const result = Adapter.findItems(stateItems, item, 'sku');
+      const result = Adapter.findItems(stateItems, item);
 
       expect(result).to.eql({
         sku: '123',
@@ -50,7 +50,7 @@ suite.only('Cart Adapter', ({ expect }) => {
         title: 'hand lotion'
       };
 
-      const result = Adapter.findItems(stateItems, item, 'sku');
+      const result = Adapter.findItems(stateItems, item);
 
       expect(result).to.be.undefined;
     })
@@ -82,7 +82,7 @@ suite.only('Cart Adapter', ({ expect }) => {
         title: 'fan'
       }];
 
-      const result = Adapter.combineLikeItems(stateItems, item, 'sku');
+      const result = Adapter.combineLikeItems(stateItems, item);
 
       expect(result).to.eql(expected);
     })

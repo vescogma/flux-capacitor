@@ -49,6 +49,8 @@ interface Configuration {
   network?: Configuration.Bridge;
 
   personalization?: Configuration.Personalization;
+
+  cart?: Configuration.Cart;
 }
 
 namespace Configuration {
@@ -382,6 +384,25 @@ namespace Configuration {
       maxBiases: number;
     }
   }
+
+  export interface Cart {
+    // change name
+    structure?: CartProductStructure;
+    expiry: number;
+  }
+
+  export interface CartProductStructure {
+    sku: string;
+    productId: string;
+    quantity: number;
+    price: number;
+    image: string;
+  }
+
+  // export interface CartProductMetadata {
+  //   key: string;
+  //   value: string
+  // }
 
   export type ValueOptions<T> = T | { options: T[], default: T };
 

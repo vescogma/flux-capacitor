@@ -56,8 +56,7 @@ export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.P
 
 export const addToCart = (state: State, { product, quantity }) => {
   const transformed = Adapter.productTransform(product, quantity, Selectors.config);
-  const combinedItems = Adapter.combineLikeItems(state.content.items, transformed, 'sku');
-  console.log('wh', combinedItems);
+  const combinedItems = Adapter.combineLikeItems(state.content.items, transformed);
   
   return {
     // tslint:disable-next-line:max-line-length

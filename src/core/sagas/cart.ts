@@ -13,6 +13,8 @@ import { itemQuantityChanged } from '../reducers/data/cart';
 export namespace Tasks {
   export function* addToCart(flux: FluxCapacitor, { payload: { product, quantity } }: any) {
     try {
+
+      const ddd = yield effects.select(Selectors.transformCartProduct);
       const cartState = yield effects.select(Selectors.cart);
       const config = yield effects.select(Selectors.config);
 
