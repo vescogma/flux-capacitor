@@ -1,3 +1,4 @@
+import Actions from '../actions';
 import { Navigation, ValueRefinement } from 'groupby-api';
 import * as effects from 'redux-saga/effects';
 import Configuration from '../configuration';
@@ -15,25 +16,6 @@ namespace Cart {
     method: 'POST',
     body: JSON.stringify(body)
   });
-
-  export const productTransform = (product: any, quantity: number, config: any) => {
-    // todo: should take in structure
-
-
-    return {
-      // ad-hoc: using id for skuId
-      sku: product.data.id,
-      productId: product.data.id,
-      collection: config.collection,
-      price: product.data.price,
-      quantity: Number(quantity),
-      title: product.data.title,
-      metadata: [{
-        key: 'image',
-        value: product.data.image
-      }]
-    };
-  };
 
   export const transformToBrowser = (state: Store.Cart, reducerKey: string): Store.Cart => state;
 
@@ -58,7 +40,6 @@ namespace Cart {
 
     // todo: handle diffenret structure
     const likeItem = findItems(items, product);
-    console.log('items', items, 'likeItem', likeItem);
     if (likeItem) {
       return items.map((el: any) => {
         if (el.sku === product.sku) {
@@ -80,16 +61,19 @@ namespace Cart {
     return items;
   }
 
-  // may not need this any more
-  export const mergeServerItemsWithState = (stateItems: any, serverItems: any) => {
-    const mergedItems = serverItems.map((item: any) => {
-      const stateItem = stateItems.find((el: any) => el.sku === item.sku);
-      item.quantity = Number(item.quantity);
+  export const persistExpire = (store: Store.State) => {
+    const expiryTime = store.session.config.cart.expiry;
+    const lastModified = store.data.present.cart.content.lastModified;
+  }
 
-      return { ...stateItem, ...item };
-    });
-    return mergedItems;
-  };
+  export const clearCartState = (cart: Store.Cart) => {
+    return {content: {}};
+  }
+
+  export const dateToUnix = (date) => {
+    return +(date.getTime() / 1000).toFixed(0);
+  }
+
 
   export interface CartBody {
     loginId?: string;
