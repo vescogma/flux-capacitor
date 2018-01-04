@@ -793,8 +793,8 @@ namespace ActionCreators {
     return createAction(Actions.GET_TRACKER_INFO, { visitorId, sessionId });
   }
 
-  export function addToCart(product: any, quantity: number) {
-    return createAction(Actions.ADD_TO_CART, { product, quantity });
+  export function addToCart(product: any) {
+    return createAction(Actions.ADD_TO_CART, product);
   }
 
   export function cartCreated(cartId: string): Actions.CartCreated {

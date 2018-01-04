@@ -500,12 +500,6 @@ namespace Selectors {
   export const cart = (state: Store.State) =>
     state.data.present.cart;
 
-  export const transformCartProduct = (state: Store.State) => {
-    const { structure } = state.session.config.cart;
-    console.log('dfa')
-    
-  }
-
   /**
    * Returns the ui state for the all of the tags with the given tagName.
    */

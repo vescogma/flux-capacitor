@@ -11,16 +11,14 @@ import { fetch } from '../utils';
 import { itemQuantityChanged } from '../reducers/data/cart';
 
 export namespace Tasks {
-  export function* addToCart(flux: FluxCapacitor, { payload: { product, quantity } }: any) {
+  export function* addToCart(flux: FluxCapacitor, { payload: product }: any) {
     try {
-
-      const ddd = yield effects.select(Selectors.transformCartProduct);
       const cartState = yield effects.select(Selectors.cart);
-      const config = yield effects.select(Selectors.config);
-
       const cartExists = !!cartState.content.cartId;
-      const transformed = Adapter.productTransform(product, quantity, config);
-      cartExists ? yield addToCartCall(flux, cartState.content.cartId, transformed) : yield createCartAndAddCall(flux, cartState, transformed);
+
+      // todo: clean up
+      cartExists ? yield addToCartCall(flux, cartState.content.cartId, product) : 
+      yield createCartAndAddCall(flux, cartState, product);
       // todo: needs to compare res with the current state and update state if there is descrapency
     } catch (e) {
       console.error(e);
@@ -48,6 +46,7 @@ export namespace Tasks {
   }
 
   export function* addToCartCall(flux: FluxCapacitor, cartId: string, product: any) {
+    // if certain item already exists, server will add up quantities for POST method and replace quanitity for PUT method
     const url = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/`;
     const res = yield effects.call(fetch, url,
       {
@@ -77,6 +76,24 @@ export namespace Tasks {
   }
 
   export function* removeItem(flux: FluxCapacitor, { payload: product }: any) {
+    // const cartState = yield effects.select(Selectors.cart);
+    // const { cartId } = cartState.content;
+    // try {
+    //   const deleteUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/${product.sku}`;
+    //   const deleteRes = yield effects.call(fetch, deleteUrl, { method: 'DELETE' });
+    // } catch (e) {
+    //   console.error(e);
+    // }
+
+    // try {
+    //   // do I need to validate res?
+    //   const checkCartUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/`
+    //   const cartRes = yield effects.call(fetch, checkCartUrl, { method: 'GET' });
+    //   const response = yield cartRes.json();
+    //   yield effects.put(flux.actions.cartServerUpdated(response.result));
+    // } catch (e) {
+    //   console.error(e);
+    // }
     const cartState = yield effects.select(Selectors.cart);
     const { cartId } = cartState.content;
     try {

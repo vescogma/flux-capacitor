@@ -183,8 +183,9 @@ namespace Adapter {
   export const extractCartExpiry = (config: Configuration) => 
     config.cart.expiry;
 
-  export const extractCartMasterId = (config: Configuration) =>
-    config.cart;
+    // think: should I put in a key called 'enabled'?
+  export const isCartEnabled = (config: Configuration) =>
+    !!(config.cart.structure || config.cart.expiry);
 }
 
 export default Adapter;
