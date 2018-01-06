@@ -61,20 +61,6 @@ namespace Cart {
     return items;
   }
 
-  export const persistExpire = (store: Store.State) => {
-    const expiryTime = store.session.config.cart.expiry;
-    const lastModified = store.data.present.cart.content.lastModified;
-  }
-
-  export const clearCartState = (cart: Store.Cart) => {
-    return {content: {}};
-  }
-
-  export const dateToUnix = (date) => {
-    return +(date.getTime() / 1000).toFixed(0);
-  }
-
-
   export interface CartBody {
     loginId?: string;
     sessionId: string;

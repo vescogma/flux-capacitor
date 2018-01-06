@@ -8,9 +8,33 @@ import Requests from '../requests';
 import Selectors from '../selectors';
 import Store from '../store';
 import { fetch } from '../utils';
-import { itemQuantityChanged } from '../reducers/data/cart';
+import { itemQuantityChanged, cartCreated } from '../reducers/data/cart';
 
 export namespace Tasks {
+  export function cartIdReady() {
+    
+  }
+
+  export function* checkCart(flux: FluxCapacitor) {
+    // yield take(cartIdReady);
+    const cartId = yield effects.select(Selectors.cartId);
+    console.log('get cartId', cartId)
+    if(cartId) {
+      try {
+        // do I need to validate res?
+        console.log('am i caling')
+        const checkCartUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/`
+        const cartRes = yield effects.call(fetch, checkCartUrl, { method: 'GET' });
+        const response = yield cartRes.json();
+        yield effects.put(flux.actions.cartServerUpdated(response.result));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
+  
+
   export function* addToCart(flux: FluxCapacitor, { payload: product }: any) {
     try {
       const cartState = yield effects.select(Selectors.cart);
@@ -76,24 +100,6 @@ export namespace Tasks {
   }
 
   export function* removeItem(flux: FluxCapacitor, { payload: product }: any) {
-    // const cartState = yield effects.select(Selectors.cart);
-    // const { cartId } = cartState.content;
-    // try {
-    //   const deleteUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/${product.sku}`;
-    //   const deleteRes = yield effects.call(fetch, deleteUrl, { method: 'DELETE' });
-    // } catch (e) {
-    //   console.error(e);
-    // }
-
-    // try {
-    //   // do I need to validate res?
-    //   const checkCartUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/`
-    //   const cartRes = yield effects.call(fetch, checkCartUrl, { method: 'GET' });
-    //   const response = yield cartRes.json();
-    //   yield effects.put(flux.actions.cartServerUpdated(response.result));
-    // } catch (e) {
-    //   console.error(e);
-    // }
     const cartState = yield effects.select(Selectors.cart);
     const { cartId } = cartState.content;
     try {
@@ -116,6 +122,7 @@ export namespace Tasks {
 }
 
 export default (flux: FluxCapacitor) => function* cartSaga() {
+  yield effects.takeEvery(Actions.START_APP, Tasks.checkCart, flux);
   yield effects.takeEvery(Actions.ADD_TO_CART, Tasks.addToCart, flux);
   yield effects.takeEvery(Actions.ITEM_QUANTITY_CHANGED, Tasks.itemQuantityChanged, flux);
   yield effects.takeEvery(Actions.REMOVE_ITEM, Tasks.removeItem, flux);

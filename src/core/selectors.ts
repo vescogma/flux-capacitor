@@ -500,6 +500,10 @@ namespace Selectors {
   export const cart = (state: Store.State) =>
     state.data.present.cart;
 
+  export const cartId = (state: Store.State) => {
+    return state.data.present.cart.content.cartId;
+  }
+
   /**
    * Returns the ui state for the all of the tags with the given tagName.
    */

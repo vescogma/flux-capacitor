@@ -27,12 +27,13 @@ namespace Store {
       middleware,
     );
 
+    // todo: put in a flag to switch persist on and off for cart		
+ -    persistStore(store);
+
     // cannot stub persistStore
     /* istanbul ignore next */
     if (Adapter.isRealTimeBiasEnabled(flux.__config) || Adapter.isCartEnabled) {
-      persistStore(store, {
-        transforms: [() => CartAdapter.persistExpire(store.getState())]
-      });
+      persistStore(store);
     }
 
     createSagas(SAGA_CREATORS, flux).forEach(sagaMiddleware.run);
