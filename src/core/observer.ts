@@ -129,7 +129,11 @@ namespace Observer {
               // tslint:disable-next-line max-line-length
               if (oldLength < newState.length && (oldState[0] === newState[0] || oldState[oldState.length - 1] === newState[newState.length - 1])) {
                 // TODO: Add appendProducts action
-                emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
+                if (oldState[0] === newState[0]) {
+                  emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
+                } else if (oldState[oldState.length - 1] === newState[newState.length - 1]) {
+                  emitMoreProductsAdded(oldState, newState.slice(0, newState.length - oldState.length), path);
+                }
               } else {
                 emitProductsUpdated(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path);
               }
