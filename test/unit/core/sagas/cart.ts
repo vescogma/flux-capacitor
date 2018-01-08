@@ -26,8 +26,16 @@ suite.only('autocomplete saga', ({ expect, spy, stub }) => {
   });
 
   describe('Tasks', () => {
-    describe('addToCartCall()', () => {
+    describe('addToCart()', () => {
+      it('should call createCartCall if there is no cart id in the state', () => {
+        const product = { a: 'b' };
+        const cartSelector = stub(Selectors, 'cart').returns({ content: { cartId: '' } });
+        const createCallTask = stub(Tasks, 'createCartCall').returns('IamcartId');
+        const addToCartTask = stub(Tasks, 'addToCartCall')
 
+        Tasks.addToCart(<any>{ a: 'b' }, { payload: <any>{ c: 'd' } });
+        expect(Tasks.addToCart).to.eq({});
+      })
     });
   });
 });

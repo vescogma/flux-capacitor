@@ -241,7 +241,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         // tslint:disable-next-line max-line-length
         const extractPastPurchaseProductCount = stub(ConfigAdapter, 'extractPastPurchaseProductCount').returns(productCount);
 
-        const task = Tasks.fetchPastPurchases(flux, <any>{});
+        const task = Tasks.fetchPastPurchases(flux);
 
         expect(task.next().value).to.eql(effects.select(Selectors.config));
         expect(task.next(config).value).to.eql(effects.put(receivePastPurchaseSkus([])));
@@ -260,7 +260,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         // tslint:disable-next-line max-line-length
         const extractPastPurchaseProductCount = stub(ConfigAdapter, 'extractPastPurchaseProductCount').returns(productCount);
 
-        const task = Tasks.fetchPastPurchases(flux, <any>{});
+        const task = Tasks.fetchPastPurchases(flux);
 
         expect(task.next().value).to.eql(effects.select(Selectors.config));
         expect(task.next(config).value).to.eql(effects.call(<any>Tasks.fetchSkus, config, 'popular'));
@@ -277,7 +277,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const receivePastPurchaseSkus = spy(() => error);
         const flux: any = { actions: { receivePastPurchaseSkus } };
 
-        const task = Tasks.fetchPastPurchases(flux, <any>{});
+        const task = Tasks.fetchPastPurchases(flux);
 
         task.next();
         expect(task.throw(error).value).to.eql(effects.put(receivePastPurchaseSkus(error)));
@@ -289,7 +289,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const receivePastPurchaseSkus = spy(() => error);
         const flux: any = { actions: { receivePastPurchaseSkus } };
 
-        const task = Tasks.fetchPastPurchases(flux, <any>{});
+        const task = Tasks.fetchPastPurchases(flux);
 
         task.next();
         expect(task.throw(error).value).to.eql(undefined);
