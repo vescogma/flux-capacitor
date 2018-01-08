@@ -372,7 +372,7 @@ suite('Search Adapter', ({ expect, stub }) => {
       expect(previousPage).to.be.calledWith(current);
     });
 
-    it('should build page information when pastPurchase is true', () => {
+    it('should build page information when parameters passed in', () => {
       const current = 4;
       const previous = 7;
       const next = 2;
@@ -390,17 +390,16 @@ suite('Search Adapter', ({ expect, stub }) => {
       const nextPage = stub(PageAdapter, 'nextPage').returns(next);
       const previousPage = stub(PageAdapter, 'previousPage').returns(previous);
 
-      const pageInfo = Adapter.extractPage(state, total, pastPurchasePage(), pastPurchasePageSize());
+      const pageInfo = Adapter.extractPage(state, total, pastPurchasePage(state), pastPurchasePageSize(state));
 
       expect(pageInfo).to.eql({
         from,
         to,
         last,
         next,
-        previous
+        previous,
+        current
       });
-      expect(pastPurchasePageSize).to.be.calledWith(state);
-      expect(pastPurchasePage).to.be.calledWith(state);
       expect(finalPage).to.be.calledWith(size, total);
       expect(fromResult).to.be.calledWith(current, size);
       expect(toResult).to.be.calledWith(current, size, total);

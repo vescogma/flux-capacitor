@@ -342,6 +342,8 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
         const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(productData);
         const extractPage = stub(SearchAdapter, 'extractPage').returns(productData);
         const extractRecordCount = stub(SearchAdapter, 'extractRecordCount').returns(productData);
+        const pastPurchasePage = stub(Selectors, 'pastPurchasePage').returns(2);
+        const pastPurchasePageSize = stub(Selectors, 'pastPurchasePageSize').returns(25);
 
         const task = Tasks.fetchPastPurchaseProducts(flux, <any>{});
 
