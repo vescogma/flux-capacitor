@@ -9,14 +9,6 @@ import ConfigurationAdapter from './configuration';
 import { Adapters } from '../../index';
 
 namespace Cart {
-  export const buildUrl = (customerId: string) =>
-    `https://qa2.groupbycloud.com/api/v0/carts/`;
-
-  export const buildCreateCartBody = (body: CartBody) => ({
-    method: 'POST',
-    body: JSON.stringify(body)
-  });
-
   export const transformToBrowser = (state: Store.Cart, reducerKey: string): Store.Cart => state;
 
   // tslint:disable-next-line:max-line-length
