@@ -360,6 +360,26 @@ suite('FluxCapacitor', ({ expect, spy, stub }) => {
 
         expect(created.headers).to.eq(headers);
       });
+
+      it('should set Skip-Caching', () => {
+        stub(groupbyApi, 'BrowserBridge').returns({ headers: {} });
+
+        const created = FluxCapacitor.createBridge(<any>{ network: { skipCache: true } }, () => null);
+
+        expect(created.headers).to.eql({
+          'Skip-Caching': true,
+        });
+      });
+
+      it('should set Skip-Semantish', () => {
+        stub(groupbyApi, 'BrowserBridge').returns({ headers: {} });
+
+        const created = FluxCapacitor.createBridge(<any>{ network: { skipSemantish: false } }, () => null);
+
+        expect(created.headers).to.eql({
+          'Skip-Semantish': false,
+        });
+      });
     });
 
     describe('createSayt()', () => {

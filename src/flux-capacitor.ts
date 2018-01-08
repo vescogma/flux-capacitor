@@ -161,6 +161,12 @@ class FluxCapacitor extends EventEmitter {
     if (networkConfig.headers) {
       bridge.headers = networkConfig.headers;
     }
+    if (networkConfig.skipCache !== undefined) {
+      bridge.headers['Skip-Caching'] = networkConfig.skipCache;
+    }
+    if (networkConfig.skipSemantish !== undefined) {
+      bridge.headers['Skip-Semantish'] = networkConfig.skipSemantish;
+    }
     bridge.errorHandler = errorHandler;
 
     return bridge;

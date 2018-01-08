@@ -151,7 +151,10 @@ namespace Observer {
 
           pastPurchases: {
             skus: emit(Events.PAST_PURCHASE_SKUS_UPDATED),
-            products: emit(Events.PAST_PURCHASE_PRODUCTS_UPDATED),
+            products: ((emitProductsUpdated: Observer) =>
+             (oldState, newState, path) => {
+               emitProductsUpdated(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path);
+             })(emit(Events.PAST_PURCHASE_PRODUCTS_UPDATED)),
             saytPastPurchases: emit(Events.SAYT_PAST_PURCHASES_UPDATED),
             query: emit(Events.PAST_PURCHASE_QUERY_UPDATED),
             page: Object.assign(emit(Events.PAST_PURCHASE_PAGE_UPDATED), {

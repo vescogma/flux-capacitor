@@ -162,6 +162,10 @@ namespace Configuration {
      */
     fuzzy?: boolean;
     /**
+     * enable updating query when hovering over sayt elements
+     */
+    hoverAutoFill?: boolean;
+    /**
      * autocomplete products settings
      */
     products?: Configuration.Autocomplete.Products;

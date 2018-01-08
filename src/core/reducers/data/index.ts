@@ -9,6 +9,7 @@ import page from './page';
 import pastPurchases from './pastPurchases';
 import personalization from './personalization';
 import products from './products';
+import productsLoaded from './productsLoaded';
 import query from './query';
 import recommendations from './recommendations';
 import recordCount from './record-count';
@@ -26,6 +27,7 @@ export default redux.combineReducers({
   page,
   personalization,
   products,
+  productsLoaded,
   query,
   recommendations,
   pastPurchases,

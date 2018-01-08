@@ -59,6 +59,7 @@ namespace Store {
 
     sorts: SelectableList<Sort>;
     products: ProductWithMetadata[]; // post
+    productsLoaded: boolean;
     collections: Indexed.Selectable<Collection>; // mixed
     navigations: AvailableNavigations; // mixed
 
