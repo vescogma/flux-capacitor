@@ -11,50 +11,27 @@ import { fetch } from '../utils';
 import { itemQuantityChanged, cartCreated } from '../reducers/data/cart';
 
 export namespace Tasks {
-  export function cartIdReady() {
-    
-  }
-
-  export function* checkCart(flux: FluxCapacitor) {
-    // yield take(cartIdReady);
-    const cartId = yield effects.select(Selectors.cartId);
-    console.log('get cartId', cartId)
-    if(cartId) {
-      try {
-        // do I need to validate res?
-        console.log('am i caling')
-        const checkCartUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/`
-        const cartRes = yield effects.call(fetch, checkCartUrl, { method: 'GET' });
-        const response = yield cartRes.json();
-        yield effects.put(flux.actions.cartServerUpdated(response.result));
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }
-
-  
-
-  export function* addToCart(flux: FluxCapacitor, { payload: product }: any) {
+  export function* addToCart(flux: FluxCapacitor, { payload: product }: Actions.AddToCart) {
     try {
       const cartState = yield effects.select(Selectors.cart);
-      const cartExists = !!cartState.content.cartId;
+      let { cartId } = cartState.content;
+      if (!cartId) {
+        cartId = yield createCartCall(flux, cartState, product);
+      }
 
-      // todo: clean up
-      cartExists ? yield addToCartCall(flux, cartState.content.cartId, product) : 
-      yield createCartAndAddCall(flux, cartState, product);
-      // todo: needs to compare res with the current state and update state if there is descrapency
+      return yield addToCartCall(flux, cartId, product);
+
     } catch (e) {
       console.error(e);
     }
   }
 
-  export function* createCartAndAddCall(flux: FluxCapacitor, state: Store.Cart, product: any) {
-    // todo: make API call
+  export function* createCartCall(flux: FluxCapacitor, state: Store.Cart, product: any) {
     const config = yield effects.select(Selectors.config);
     const { visitorId, sessionId } = state.content;
     const customerId = config.customerId;
-    const url = Adapter.buildUrl(customerId);
+    // change to include customerId once productionalized
+    const url = `https://qa2.groupbycloud.com/api/v0/carts/`;
 
     const res = yield effects.call(fetch, url,
       {
@@ -65,8 +42,10 @@ export namespace Tasks {
     const response = yield res.json();
     const { id } = response.result;
 
+    console.log('doi ', id)
+
     yield effects.put(flux.actions.cartCreated(id));
-    return yield addToCartCall(flux, id, product);
+    return id;
   }
 
   export function* addToCartCall(flux: FluxCapacitor, cartId: string, product: any) {
@@ -82,7 +61,7 @@ export namespace Tasks {
     yield effects.put(flux.actions.cartServerUpdated(response.result));
   }
 
-  export function* itemQuantityChanged(flux: FluxCapacitor, { payload: { product, quantity } }) {
+  export function* itemQuantityChanged(flux: FluxCapacitor, { payload: { product, quantity } }: Actions.ItemQuantityChanged) {
     const cartState = yield effects.select(Selectors.cart);
     const { cartId } = cartState.content;
     const config = yield effects.select(Selectors.config);
@@ -99,7 +78,7 @@ export namespace Tasks {
     yield effects.put(flux.actions.cartServerUpdated(response.result));
   }
 
-  export function* removeItem(flux: FluxCapacitor, { payload: product }: any) {
+  export function* removeItem(flux: FluxCapacitor, { payload: product }: Actions.RemoveItem ) {
     const cartState = yield effects.select(Selectors.cart);
     const { cartId } = cartState.content;
     try {
@@ -122,7 +101,6 @@ export namespace Tasks {
 }
 
 export default (flux: FluxCapacitor) => function* cartSaga() {
-  yield effects.takeEvery(Actions.START_APP, Tasks.checkCart, flux);
   yield effects.takeEvery(Actions.ADD_TO_CART, Tasks.addToCart, flux);
   yield effects.takeEvery(Actions.ITEM_QUANTITY_CHANGED, Tasks.itemQuantityChanged, flux);
   yield effects.takeEvery(Actions.REMOVE_ITEM, Tasks.removeItem, flux);
