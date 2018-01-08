@@ -94,7 +94,6 @@ export namespace Tasks {
   export function* fetchMoreProducts(flux: FluxCapacitor, action: Actions.FetchMoreProducts) {
     try {
       const state: Store.State = yield effects.select();
-      const config = yield effects.select(Selectors.config);
       const products = Selectors.productsWithMetadata(state);
       const pageSize = action.payload.amount;
 

@@ -36,7 +36,7 @@ export const removeComponentState = (state: State, { tagName, id }: Actions.Payl
     ...state,
     [tagName]: {
       ...Object.keys(state[tagName])
-        .filter((key) => key !== id)
+        .filter((key) => state[tagName][key] !== state[tagName][id])
         .reduce((tags, key) => Object.assign(tags, { [key]: state[tagName][key] }), {})
     }
   });
