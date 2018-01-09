@@ -16,17 +16,16 @@ export namespace Tasks {
       const cartState = yield effects.select(Selectors.cart);
       let { cartId } = cartState.content;
       if (!cartId) {
-        cartId = yield Tasks.createCartCall(flux, cartState, product);
+        cartId = yield effects.call(createCartCall, flux, cartState);
       }
 
-      return yield Tasks.addToCartCall(flux, cartId, product);
-
+      return yield effects.call(addToCartCall, flux, cartId, product);
     } catch (e) {
-      console.error(e);
+      return e;
     }
   }
 
-  export function* createCartCall(flux: FluxCapacitor, state: Store.Cart, product: any) {
+  export function* createCartCall(flux: FluxCapacitor, state: Store.Cart) {
     try {
       const config = yield effects.select(Selectors.config);
       const { visitorId, sessionId } = state.content;
@@ -69,40 +68,37 @@ export namespace Tasks {
   }
 
   export function* itemQuantityChanged(flux: FluxCapacitor, { payload: { product, quantity } }: Actions.ItemQuantityChanged) {
-    const cartState = yield effects.select(Selectors.cart);
-    const { cartId } = cartState.content;
-    const config = yield effects.select(Selectors.config);
-    // todo: need to refactor productTransform
-    const productWithCorrectQuantity = { ...product, quantity };
-    const url = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/`;
-    const res = yield effects.call(fetch, url,
-      {
-        method: 'PUT',
-        body: JSON.stringify([productWithCorrectQuantity])
-      });
+    try {
+      const cartState = yield effects.select(Selectors.cart);
+      const { cartId } = cartState.content;
+      const productWithCorrectQuantity = { ...product, quantity };
+      const url = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/`;
+      const res = yield effects.call(fetch, url,
+        {
+          method: 'PUT',
+          body: JSON.stringify([productWithCorrectQuantity])
+        });
 
-    const response = yield res.json();
-    yield effects.put(flux.actions.cartServerUpdated(response.result));
+      const response = yield res.json();
+      yield effects.put(flux.actions.cartServerUpdated(response.result));
+    } catch (e) {
+      yield effects.put(flux.actions.cartServerUpdated(e));
+    }
   }
 
   export function* removeItem(flux: FluxCapacitor, { payload: product }: Actions.RemoveItem) {
-    const cartState = yield effects.select(Selectors.cart);
-    const { cartId } = cartState.content;
     try {
+      const cartState = yield effects.select(Selectors.cart);
+      const { cartId } = cartState.content;
       const deleteUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/${product.sku}`;
-      const deleteRes = yield effects.call(fetch, deleteUrl, { method: 'DELETE' });
-    } catch (e) {
-      console.error(e);
-    }
-
-    try {
-      // do I need to validate res?
+      yield effects.call(fetch, deleteUrl, { method: 'DELETE' });
+      
       const checkCartUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/`
       const cartRes = yield effects.call(fetch, checkCartUrl, { method: 'GET' });
       const response = yield cartRes.json();
       yield effects.put(flux.actions.cartServerUpdated(response.result));
     } catch (e) {
-      console.error(e);
+      yield effects.put(flux.actions.cartServerUpdated(e));
     }
   }
 }

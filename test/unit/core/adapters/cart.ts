@@ -1,7 +1,7 @@
 import Adapter from '../../../../src/core/adapters/cart';
 import suite from '../../_suite';
 
-suite.only('Cart Adapter', ({ expect }) => {
+suite('Cart Adapter', ({ expect }) => {
   describe('findItems()', () => {
     let stateItems;
 
@@ -43,7 +43,7 @@ suite.only('Cart Adapter', ({ expect }) => {
       });
     });
 
-    it.only('should return null if same item is not found', () => {
+    it('should return null if same item is not found', () => {
       const item = <any>{
         sku: '789',
         quantity: 2,
@@ -106,7 +106,7 @@ suite.only('Cart Adapter', ({ expect }) => {
     })
   })
 
-  describe.only('changeItemQuantity()', () => {
+  describe('changeItemQuantity()', () => {
     it('should return items with updated quantities', () => {
       const stateItems = <any>[{
         sku: '123',
