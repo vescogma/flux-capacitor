@@ -23,7 +23,8 @@ suite('reducers', ({ expect, stub }) => {
       session: undefined,
       data: {
         past: [{ personalization: { biasing: 'bias' }, autocomplete: { c: 'd' }, details: { data: '3' } }],
-        present: { personalization: { biasing: 'not' }, autocomplete: {}, details: { data: '3' } },
+        // tslint:disable-next-line:max-line-length
+        present: { personalization: { biasing: 'not' }, autocomplete: {}, details: { data: '3' }, cart: {content: 'b'} },
         future: []
       }
     };
@@ -34,7 +35,10 @@ suite('reducers', ({ expect, stub }) => {
         present: {
           personalization: { biasing: 'not' },
           autocomplete: {},
-          details: {}
+          details: {},
+          cart: {
+            content: 'b'
+          }
         },
         future: []
       }

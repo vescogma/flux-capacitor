@@ -1,5 +1,6 @@
 import * as sagas from '../../../../src/core/sagas';
 import autocomplete from '../../../../src/core/sagas/autocomplete';
+import cart from '../../../../src/core/sagas/cart';
 import collection from '../../../../src/core/sagas/collection';
 import productDetails from '../../../../src/core/sagas/product-details';
 import products from '../../../../src/core/sagas/products';
@@ -13,6 +14,7 @@ suite('sagas', ({ expect, spy, stub }) => {
     it('should include all saga creators', () => {
       expect(sagas.SAGA_CREATORS).to.eql([
         autocomplete,
+        cart,
         collection,
         productDetails,
         products,

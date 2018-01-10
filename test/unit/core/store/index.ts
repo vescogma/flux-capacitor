@@ -24,7 +24,8 @@ suite('Store', ({ expect, spy, stub }) => {
       const createSagaMiddleware = stub(reduxSaga, 'default').returns(sagaMiddleware);
       const createMiddleware = stub(Middleware, 'create').returns(middleware);
       const createSagas = stub(sagas, 'default').returns(['m', 'n', 'o']);
-      const isRealTimeBiasEnabled = stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
+      stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
+      stub(Adapter, 'isCartEnabled').returns(false);
 
       const store = Store.create(flux);
 
@@ -39,7 +40,7 @@ suite('Store', ({ expect, spy, stub }) => {
         .and.calledWith('o');
     });
 
-    it('should not persist store if real time bias disabled', () => {
+    it('should not persist store if both real time bias and cart disabled', () => {
       // tslint:disable-next-line variable-name
       const flux: any = {};
       const persistStore = stub(persist, 'persistStore');
@@ -49,6 +50,7 @@ suite('Store', ({ expect, spy, stub }) => {
       stub(Middleware, 'create').returns(['e', 'f', 'g']);
       stub(sagas, 'default').returns([]);
       stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
+      stub(Adapter, 'isCartEnabled').returns(false);
 
       const store = Store.create(flux);
 
@@ -66,6 +68,7 @@ suite('Store', ({ expect, spy, stub }) => {
       stub(sagas, 'default').returns([]);
       stub(Middleware, 'create').returns([]);
       stub(Adapter, 'isRealTimeBiasEnabled').returns(false);
+      stub(Adapter, 'isCartEnabled').returns(false);
 
       Store.create(<any>{ config: {} }, listenerFactory);
 

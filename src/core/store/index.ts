@@ -5,8 +5,8 @@ import createSagaMiddleware from 'redux-saga';
 import * as validatorMiddleware from 'redux-validator';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
-import Adapter from '../adapters/configuration';
 import CartAdapter from '../adapters/cart';
+import Adapter from '../adapters/configuration';
 import Configuration from '../configuration';
 import reducer from '../reducers';
 import createSagas, { SAGA_CREATORS } from '../sagas';
@@ -27,12 +27,9 @@ namespace Store {
       middleware,
     );
 
-    // todo: put in a flag to switch persist on and off for cart		
- -    persistStore(store);
-
     // cannot stub persistStore
     /* istanbul ignore next */
-    if (Adapter.isRealTimeBiasEnabled(flux.__config) || Adapter.isCartEnabled) {
+    if (Adapter.isRealTimeBiasEnabled(flux.__config) || Adapter.isCartEnabled(flux.__config)) {
       persistStore(store);
     }
 
@@ -246,17 +243,17 @@ namespace Store {
   }
 
   export interface PastPurchase {
-      defaultSkus: PastPurchases.PastPurchaseProduct[];
-      skus: PastPurchases.PastPurchaseProduct[];
-      saytPastPurchases: ProductWithMetadata[];
-      products: ProductWithMetadata[];
-      allRecordCount: number;
-      currentRecordCount: number;
-      navigations: Indexed<Store.Navigation>;
-      query: string;
-      sort?: SelectableList<PastPurchases.PastPurchaseSort>;
-      page: Page;
-    }
+    defaultSkus: PastPurchases.PastPurchaseProduct[];
+    skus: PastPurchases.PastPurchaseProduct[];
+    saytPastPurchases: ProductWithMetadata[];
+    products: ProductWithMetadata[];
+    allRecordCount: number;
+    currentRecordCount: number;
+    navigations: Indexed<Store.Navigation>;
+    query: string;
+    sort?: SelectableList<PastPurchases.PastPurchaseSort>;
+    page: Page;
+  }
 
   export namespace PastPurchases {
     export interface PastPurchaseSort extends Sort {

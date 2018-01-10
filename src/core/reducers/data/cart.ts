@@ -54,9 +54,9 @@ export const getTrackerInfo = (state: State, { visitorId, sessionId }: Actions.P
     content: { ...state.content, visitorId, sessionId }
   });
 
-export const addToCart = (state: State, product) => {
+export const addToCart = (state: State, product: Actions.Payload.Cart.Product) => {
   const combinedItems = Adapter.combineLikeItems(state.content.items, product);
-  
+
   return {
     // tslint:disable-next-line:max-line-length
     ...state, content: { ...state.content, totalQuantity: Adapter.calculateTotalQuantity(combinedItems), items: combinedItems }
@@ -71,7 +71,7 @@ export const cartCreated = (state: State, cartId: string) =>
 // tslint:disable-next-line:max-line-length
 export const updateWithServerData = (state: State, { generatedTotalPrice, totalQuantity, items, lastModified }: any) => ({
   ...state,
-   content: {
+  content: {
     ...state.content,
     totalQuantity,
     items,
@@ -89,21 +89,20 @@ export const itemQuantityChanged = (state: State, { product, quantity }: any) =>
       items,
       totalQuantity: Adapter.calculateTotalQuantity(items)
     }
-  }
+  };
 };
 
 export const removeItem = (state: State, product: any) => {
   const { items } = state.content;
-  const index = items.findIndex((item) => item.sku === product.sku)
-  items.splice(index, 1);
+  const updatedItems = Adapter.removeItem(items, product);
+
   return {
-    ...state, content: { ...state.content, items, totalQuantity: Adapter.calculateTotalQuantity(items) }
+    // tslint:disable-next-line:max-line-length
+    ...state, content: { ...state.content, items: updatedItems, totalQuantity: Adapter.calculateTotalQuantity(updatedItems) }
   };
 };
 
-const cartTransform = createTransform((state: State, key: string) => state, (state: State, key: string) => state);
-
 export default persistReducer({
-  transforms: [cartTransform], key: STORAGE_KEY, storage, whitelist: STORAGE_WHITELIST
+  key: STORAGE_KEY, storage, whitelist: STORAGE_WHITELIST
 },
   updateCart);

@@ -321,6 +321,21 @@ namespace Actions {
         sessionId: string;
         visitorId: string;
       }
+
+      export interface Product {
+        metadata?: CartMetadata[];
+        collection: string;
+        quantity: number;
+        sku: string;
+        productId: string;
+        title: string;
+        price: number;
+      }
+
+      export interface CartMetadata {
+        key: string;
+        value: string;
+      }
     }
   }
 

@@ -1,14 +1,9 @@
 import * as effects from 'redux-saga/effects';
 import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
-import Adapter from '../adapters/cart';
-import ConfigAdapter from '../adapters/configuration';
-import Configuration from '../configuration';
-import Requests from '../requests';
 import Selectors from '../selectors';
 import Store from '../store';
 import { fetch } from '../utils';
-import { itemQuantityChanged, cartCreated } from '../reducers/data/cart';
 
 export namespace Tasks {
   export function* addToCart(flux: FluxCapacitor, { payload: product }: Actions.AddToCart) {
@@ -52,7 +47,8 @@ export namespace Tasks {
 
   export function* addToCartCall(flux: FluxCapacitor, cartId: string, product: any) {
     try {
-      // if certain item already exists, server will add up quantities for POST method and replace quanitity for PUT method
+      // if certain item already exists, server will add up quantities for POST method
+      // and replace quanitity for PUT method
       const url = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/`;
       const res = yield effects.call(fetch, url,
         {
@@ -67,7 +63,8 @@ export namespace Tasks {
     }
   }
 
-  export function* itemQuantityChanged(flux: FluxCapacitor, { payload: { product, quantity } }: Actions.ItemQuantityChanged) {
+  export function* itemQuantityChanged(flux: FluxCapacitor, { payload: { product, quantity } }
+    : Actions.ItemQuantityChanged) {
     try {
       const cartState = yield effects.select(Selectors.cart);
       const { cartId } = cartState.content;
@@ -92,8 +89,8 @@ export namespace Tasks {
       const { cartId } = cartState.content;
       const deleteUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/items/${product.sku}`;
       yield effects.call(fetch, deleteUrl, { method: 'DELETE' });
-      
-      const checkCartUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/`
+
+      const checkCartUrl = `https://qa2.groupbycloud.com/api/v0/carts/${cartId}/`;
       const cartRes = yield effects.call(fetch, checkCartUrl, { method: 'GET' });
       const response = yield cartRes.json();
       yield effects.put(flux.actions.cartServerUpdated(response.result));

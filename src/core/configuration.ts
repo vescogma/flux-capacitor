@@ -388,7 +388,6 @@ namespace Configuration {
   export interface Cart {
     // change name
     structure?: CartProductStructure;
-    expiry: number;
   }
 
   export interface CartProductStructure {

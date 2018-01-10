@@ -27,7 +27,7 @@ namespace Observer {
 
   export function resolve(oldState: any, newState: any, observer: Node, path: string) {
     if (oldState !== newState) {
-      if (typeof observer === 'function') {
+      if (typeof observer === "function") {
         observer(oldState, newState, path);
       }
 
