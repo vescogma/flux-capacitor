@@ -7,6 +7,7 @@ import FluxCapacitor from '../../flux-capacitor';
 import Actions from '../actions';
 import CartAdapter from '../adapters/cart';
 import Adapter from '../adapters/configuration';
+import CartAdapter from '../adapters/cart';
 import Configuration from '../configuration';
 import reducer from '../reducers';
 import createSagas, { SAGA_CREATORS } from '../sagas';
@@ -26,6 +27,9 @@ namespace Store {
       <State>Adapter.initialState(flux.__config),
       middleware,
     );
+
+    // todo: put in a flag to switch persist on and off for cart		
+ -    persistStore(store);
 
     // cannot stub persistStore
     /* istanbul ignore next */

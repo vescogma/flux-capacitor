@@ -5,7 +5,7 @@ suite('Cart Adapter', ({ expect }) => {
   describe('findItems()', () => {
     let stateItems;
 
-    beforeEach(()=> {
+    beforeEach(() => {
       stateItems = [{
         sku: '123',
         quantity: 3,
@@ -43,7 +43,11 @@ suite('Cart Adapter', ({ expect }) => {
       });
     });
 
+<<<<<<< HEAD
     it('should return null if same item is not found', () => {
+=======
+    it.only('should return null if same item is not found', () => {
+>>>>>>> 129837ccb60cb32ef117251fa5195ed12ae90816
       const item = <any>{
         sku: '789',
         quantity: 2,

@@ -321,6 +321,7 @@ namespace Actions {
         sessionId: string;
         visitorId: string;
       }
+<<<<<<< HEAD
 
       export interface Product {
         metadata?: CartMetadata[];
@@ -336,6 +337,8 @@ namespace Actions {
         key: string;
         value: string;
       }
+=======
+>>>>>>> 129837ccb60cb32ef117251fa5195ed12ae90816
     }
   }
 
