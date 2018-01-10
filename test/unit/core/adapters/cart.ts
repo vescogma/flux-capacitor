@@ -43,11 +43,7 @@ suite('Cart Adapter', ({ expect }) => {
       });
     });
 
-<<<<<<< HEAD
     it('should return null if same item is not found', () => {
-=======
-    it.only('should return null if same item is not found', () => {
->>>>>>> 129837ccb60cb32ef117251fa5195ed12ae90816
       const item = <any>{
         sku: '789',
         quantity: 2,
@@ -57,8 +53,8 @@ suite('Cart Adapter', ({ expect }) => {
       const result = Adapter.findItems(stateItems, item);
 
       expect(result).to.be.undefined;
-    })
-  })
+    });
+  });
 
   describe('combineLikeItems()', () => {
     it('should combine items', () => {
@@ -75,7 +71,7 @@ suite('Cart Adapter', ({ expect }) => {
         sku: '123',
         quantity: 2,
         title: 'cat'
-      }
+      };
       const expected = [{
         sku: '123',
         quantity: 5,
@@ -89,7 +85,7 @@ suite('Cart Adapter', ({ expect }) => {
       const result = Adapter.combineLikeItems(stateItems, item);
 
       expect(result).to.eql(expected);
-    })
+    });
 
   });
 
@@ -107,8 +103,8 @@ suite('Cart Adapter', ({ expect }) => {
       const result = Adapter.calculateTotalQuantity(items);
 
       expect(result).to.eq(5);
-    })
-  })
+    });
+  });
 
   describe('changeItemQuantity()', () => {
     it('should return items with updated quantities', () => {
@@ -126,7 +122,7 @@ suite('Cart Adapter', ({ expect }) => {
         sku: '456',
         quantity: 3,
         title: 'fan'
-      }
+      };
 
       const result = Adapter.changeItemQuantity(stateItems, item, 1);
 
@@ -139,6 +135,6 @@ suite('Cart Adapter', ({ expect }) => {
         quantity: 1,
         title: 'fan'
       }]);
-    })
-  })
+    });
+  });
 });

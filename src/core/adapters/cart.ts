@@ -9,7 +9,7 @@ namespace Cart {
       if (el.sku) {
         return el.sku === product.sku;
       } else {
-        throw 'Key is not valid!';
+        throw 'The field sku does not exist!';
       }
     });
     return likeItem;
