@@ -180,18 +180,9 @@ namespace Adapter {
   export const extractRealTimeBiasingExpiry = (config: Configuration) =>
     config.personalization.realTimeBiasing.expiry;
 
-<<<<<<< HEAD
-    // think: should I put in a key called 'enabled'?
+  // think: should I put in a key called 'enabled'?
   export const isCartEnabled = (config: Configuration) =>
     !!config.cart.structure;
-=======
-  export const extractCartExpiry = (config: Configuration) => 
-    config.cart.expiry;
-
-    // think: should I put in a key called 'enabled'?
-  export const isCartEnabled = (config: Configuration) =>
-    !!(config.cart.structure || config.cart.expiry);
->>>>>>> 129837ccb60cb32ef117251fa5195ed12ae90816
 }
 
 export default Adapter;

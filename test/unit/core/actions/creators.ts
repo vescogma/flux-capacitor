@@ -957,7 +957,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
 
         // tslint:disable-next-line max-line-length
         expectAction(ActionCreators.receivePastPurchaseCurrentRecordCount(recordCount),
-                     Actions.RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT, recordCount);
+          Actions.RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT, recordCount);
       });
     });
 
@@ -967,7 +967,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
 
         // tslint:disable-next-line max-line-length
         expectAction(ActionCreators.receivePastPurchaseAllRecordCount(recordCount),
-                     Actions.RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT, recordCount);
+          Actions.RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT, recordCount);
       });
     });
 
@@ -1109,7 +1109,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       const query = 'hat';
 
       it('should return a batch action with resetPastPurchaseRefinements spreaded', () => {
-        const array = [1,2,3];
+        const array = [1, 2, 3];
         const resetPastPurchaseRefinements = stub(ActionCreators, 'resetPastPurchaseRefinements').returns(array);
 
         const action = ActionCreators.updatePastPurchaseQuery(query);
@@ -1176,6 +1176,64 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
           Actions.SELECT_PAST_PURCHASE_SORT, {
             payload: validators.isPastPurchasesSortDeselected,
           });
+      });
+    });
+  });
+
+  describe('cart action creators', () => {
+    describe('getTrackerInfo()', () => {
+      it('should return an action with tracker info', () => {
+        const visitorId = 'visitorId';
+        const sessionId = 'sessionId';
+
+        expectAction(ActionCreators.getTrackerInfo(visitorId, sessionId),
+          Actions.GET_TRACKER_INFO, { visitorId, sessionId });
+      });
+    });
+
+    describe('addToCart()', () => {
+      it('should return an action', () => {
+        const product: any = { sku: 'sku' };
+
+        expectAction(ActionCreators.addToCart(product),
+          Actions.ADD_TO_CART, product);
+      });
+    });
+
+    describe('cartCreated()', () => {
+      it('should return an action', () => {
+        const cartId = 'id';
+
+        expectAction(ActionCreators.cartCreated(cartId),
+          Actions.CART_CREATED, cartId);
+      });
+    });
+
+    describe('cartServerUpdated()', () => {
+      it('should return an action', () => {
+        const res: any = 'id';
+
+        expectAction(ActionCreators.cartServerUpdated(res),
+          Actions.CART_SERVER_UPDATED, res);
+      });
+    });
+
+    describe('itemQuantityChanged()', () => {
+      it('should return an action', () => {
+        const product: any = 'yolo';
+        const quantity = 2;
+
+        expectAction(ActionCreators.itemQuantityChanged(product, quantity),
+          Actions.ITEM_QUANTITY_CHANGED, { product, quantity });
+      });
+    });
+
+    describe('removeItem()', () => {
+      it('should return an action', () => {
+        const product: any = 'cat';
+
+        expectAction(ActionCreators.removeItem(product),
+          Actions.REMOVE_ITEM, product);
       });
     });
   });

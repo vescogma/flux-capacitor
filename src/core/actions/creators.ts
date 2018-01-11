@@ -788,32 +788,59 @@ namespace ActionCreators {
     ];
   }
 
-  // todo: generate docs
+  /**
+   * Get gb-tracker visitorId and sessionId to update to the state.
+   * @param  {string}               visitorId - visitorId from gb-tracker
+   * @param  {string}               sessionId - sessionId from gb-tracker
+   * @return {Actions.GetTrackerInfo}          - Action with visitorId and sessionId.
+   */
   export function getTrackerInfo(visitorId: string, sessionId: string): Actions.GetTrackerInfo {
     return createAction(Actions.GET_TRACKER_INFO, { visitorId, sessionId });
   }
 
-  export function addToCart(product: any) {
+  /**
+   * Add product to cart state and send to the server.
+   * @param  {string}               product - the product to add to cart
+   * @return {Actions.AddToCart}            - Action with product to add to cart.
+   */
+  export function addToCart(product: Store.CartProduct): Actions.AddToCart {
     return createAction(Actions.ADD_TO_CART, product);
   }
 
+  /**
+   * Update cart id to the state.
+   * @param  {string}               cartId - the cart id returned from the server response
+   * @return {Actions.cartCreated}            - Action with cart id to update to the state.
+   */
   export function cartCreated(cartId: string): Actions.CartCreated {
     return createAction(Actions.CART_CREATED, cartId);
   }
 
-  export function cartServerUpdated(cart: any): any {
-    return createAction(Actions.CART_SERVER_UPDATED, cart);
+  /**
+   * Update state with server response.
+   * @param  {string}               res - server response
+   * @return {Actions.CartServerUpdated}            - Action with server response.
+   */
+  export function cartServerUpdated(res: Partial<Store.Cart>): Actions.CartServerUpdated {
+    return createAction(Actions.CART_SERVER_UPDATED, res);
   }
 
-  export function itemQuantityChanged(product: any, quantity: number): any {
+  /**
+   * Change quantity for specific product in the cart in state and at the server.
+   * @param  {string}               product - the product that needs to change quantity
+   * @param  {string}               quantity - the quantity that the product needs to change to
+   * @return {Actions.itemQuantityChanged}            - Action with product and its new quantity.
+   */
+  export function itemQuantityChanged(product: Store.CartProduct, quantity: number): Actions.ItemQuantityChanged {
     return createAction(Actions.ITEM_QUANTITY_CHANGED, { product, quantity });
   }
 
-  export function removeItem(product: any): any {
-    return createAction(Actions.REMOVE_ITEM, product);
-  }
-
-  export function itemDeleted(product: any): any {
+  /**
+   * Remove item in the cart in state and at the server.
+   * @param  {string}               product - the product that needs to be removed
+   * @return {Actions.itemQuantityChanged}            - Action with product that needs to be removed.
+   */
+  export function removeItem(product: Store.CartProduct): Actions.RemoveItem {
     return createAction(Actions.REMOVE_ITEM, product);
   }
 

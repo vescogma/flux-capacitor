@@ -335,10 +335,12 @@ namespace Selectors {
    */
   export const pastPurchaseProductsBySku = (state: Store.State) =>
     state.data.present.pastPurchases.skus
-    .reduce((skuProducts, product) => Object.assign(skuProducts, { [product.sku]: {
-      quantity: product.quantity,
-      lastPurchased: product.lastPurchased,
-    }}), {});
+      .reduce((skuProducts, product) => Object.assign(skuProducts, {
+        [product.sku]: {
+          quantity: product.quantity,
+          lastPurchased: product.lastPurchased,
+        }
+      }), {});
 
   /**
    * Returns the entire byId object from biasing
@@ -482,7 +484,7 @@ namespace Selectors {
     state.data.present.pastPurchases.sort;
 
   /**
-   * Returns the currently selected sort for past purchases
+   * Returns the currently selected sort for past purchases.
    */
   export const pastPurchaseSortSelected = (state: Store.State) => {
     const ppSorts = pastPurchaseSort(state);
@@ -491,18 +493,17 @@ namespace Selectors {
   };
 
   /**
-   * Returns whether or not biasing has been rehydrated from localstorage
+   * Returns whether or not biasing has been rehydrated from localstorage.
    */
   export const realTimeBiasesHydrated = (state: Store.State) =>
     !Configuration.isRealTimeBiasEnabled(Selectors.config(state)) ||
     state.data.present.personalization['_persist'].rehydrated;
 
+  /**
+   * Returns the cart state.
+   */
   export const cart = (state: Store.State) =>
     state.data.present.cart;
-
-  export const cartId = (state: Store.State) => {
-    return state.data.present.cart.content.cartId;
-  }
 
   /**
    * Returns the ui state for the all of the tags with the given tagName.
@@ -527,7 +528,6 @@ namespace Selectors {
           refs.concat(nav.range
             ? { navigationName: nav.field, type: 'Range', high, low }
             : { navigationName: nav.field, type: 'Value', value }), [])), []);
-
 }
 
 export default Selectors;

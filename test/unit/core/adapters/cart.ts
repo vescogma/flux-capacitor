@@ -3,10 +3,28 @@ import suite from '../../_suite';
 
 suite('Cart Adapter', ({ expect }) => {
   describe('findItems()', () => {
-    let stateItems;
+    it('should throw if sku field does not exist', () => {
+      const stateItems: any = [{
+        noSku: '123',
+        quantity: 3,
+        title: 'cat'
+      }, {
+        sku: '456',
+        quantity: 2,
+        title: 'fan'
+      }];
 
-    beforeEach(() => {
-      stateItems = [{
+      const item: any = {
+        sku: '123',
+        quantity: 2,
+        title: 'cat'
+      };
+
+      expect(() => Adapter.findItems(stateItems, item)).to.throw('The field sku does not exist!');
+    });
+
+    it('should return items with same sku', () => {
+      const stateItems: any = [{
         sku: '123',
         quantity: 3,
         title: 'cat'
@@ -15,20 +33,8 @@ suite('Cart Adapter', ({ expect }) => {
         quantity: 2,
         title: 'fan'
       }];
-    });
 
-    // it('should throw if key is not valid', () => {
-    //   const item = <any>{
-    //     sku: '123',
-    //     quantity: 2,
-    //     title: 'cat'
-    //   };
-
-    //   expect(() => Adapter.findItems(stateItems, item, 'id')).to.throw('Key is not valid!');
-    // });
-
-    it('should return items with same sku', () => {
-      const item = <any>{
+      const item: any = {
         sku: '123',
         quantity: 2,
         title: 'cat'
@@ -44,6 +50,16 @@ suite('Cart Adapter', ({ expect }) => {
     });
 
     it('should return null if same item is not found', () => {
+      const stateItems: any = [{
+        sku: '123',
+        quantity: 3,
+        title: 'cat'
+      }, {
+        sku: '456',
+        quantity: 2,
+        title: 'fan'
+      }];
+
       const item = <any>{
         sku: '789',
         quantity: 2,
@@ -57,7 +73,7 @@ suite('Cart Adapter', ({ expect }) => {
   });
 
   describe('combineLikeItems()', () => {
-    it('should combine items', () => {
+    it('should combine items if like items are found', () => {
       const stateItems = <any>[{
         sku: '123',
         quantity: 3,
@@ -87,6 +103,42 @@ suite('Cart Adapter', ({ expect }) => {
       expect(result).to.eql(expected);
     });
 
+    it('should return items with new product if no like items found', () => {
+      const stateItems = <any>[{
+        sku: '123',
+        quantity: 3,
+        title: 'cat'
+      },
+      {
+        sku: '456',
+        quantity: 2,
+        title: 'fan'
+      }];
+      const item = <any>{
+        sku: 'unique',
+        quantity: 2,
+        title: 'unique cat'
+      };
+      const expected = [{
+        sku: '123',
+        quantity: 3,
+        title: 'cat'
+      },
+      {
+        sku: '456',
+        quantity: 2,
+        title: 'fan'
+      },
+      {
+        sku: 'unique',
+        quantity: 2,
+        title: 'unique cat'
+      }];
+
+      const result = Adapter.combineLikeItems(stateItems, item);
+
+      expect(result).to.eql(expected);
+    });
   });
 
   describe('calculateTotalQuantity()', () => {
@@ -136,5 +188,31 @@ suite('Cart Adapter', ({ expect }) => {
         title: 'fan'
       }]);
     });
+  });
+
+  describe('removeItem', () => {
+    const stateItems = <any>[{
+      sku: '123',
+      quantity: 3,
+      title: 'cat'
+    }, {
+      sku: '456',
+      quantity: 5,
+      title: 'fan'
+    }];
+
+    const item = <any>{
+      sku: '456',
+      quantity: 3,
+      title: 'fan'
+    };
+
+    const result = Adapter.removeItem(stateItems, item);
+
+    expect(result).to.eql([{
+      sku: '123',
+      quantity: 3,
+      title: 'cat'
+    }]);
   });
 });

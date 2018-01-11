@@ -599,7 +599,7 @@ suite('selectors', ({ expect, stub }) => {
     const skus = [{ a: 1 }];
     const saytPastPurchases = [{ a: 1 }];
     const query = 'hat';
-    const byId = { a: 1, b : 2, c: 3 };
+    const byId = { a: 1, b: 2, c: 3 };
     const allIds = ['a', 'b', 'c'];
     const navigations = { byId, allIds };
     const sizes = {
@@ -619,8 +619,10 @@ suite('selectors', ({ expect, stub }) => {
     const products = productData.map((data) => ({ data }));
     const currentRecordCount = 3;
     const allRecordCount = 5;
-    const pastPurchases = { skus, saytPastPurchases, products,
-                            query, navigations, page, sort, allRecordCount, currentRecordCount };
+    const pastPurchases = {
+      skus, saytPastPurchases, products,
+      query, navigations, page, sort, allRecordCount, currentRecordCount
+    };
     const state: any = { data: { present: { pastPurchases } } };
 
     describe('pastPurchases()', () => {
@@ -700,7 +702,7 @@ suite('selectors', ({ expect, stub }) => {
 
     describe('pastPurchaseNavigations()', () => {
       it('should return all navigations', () => {
-        stub(Selectors,'pastPurchaseNavigation').returnsArg(1);
+        stub(Selectors, 'pastPurchaseNavigation').returnsArg(1);
 
         expect(Selectors.pastPurchaseNavigations(state)).to.eql(allIds);
       });
@@ -709,7 +711,7 @@ suite('selectors', ({ expect, stub }) => {
     describe('pastPurchaseSelectedRefinements()', () => {
       it('should call getSelected with allIds and return the result', () => {
         const getSelected = stub(Selectors, 'getSelected').returns(query);
-        stub(Selectors,'pastPurchaseNavigation').returnsArg(1);
+        stub(Selectors, 'pastPurchaseNavigation').returnsArg(1);
 
         const returned = Selectors.pastPurchaseSelectedRefinements(state);
 
@@ -964,6 +966,23 @@ suite('selectors', ({ expect, stub }) => {
       const state: any = { ui: {} };
 
       expect(() => Selectors.uiTagState(state, tagName, id)).to.not.throw();
+    });
+  });
+
+  describe('cart()', () => {
+    it('should return cart state', () => {
+      const state: any = {
+        data: {
+          present: {
+            cart: {
+              content: {
+                cartId: 'a'
+              }
+            }
+          }
+        }
+      };
+      expect(Selectors.cart(state)).to.eql({ content: { cartId: 'a' } });
     });
   });
 });

@@ -6,7 +6,7 @@ namespace Cart {
 
   export const findItems = (items: CartProduct[], product: CartProduct) => {
     const likeItem = items.find((el: any) => {
-      if (el.sku) {
+      if (el.sku && product.sku) {
         return el.sku === product.sku;
       } else {
         throw 'The field sku does not exist!';

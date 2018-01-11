@@ -62,7 +62,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
                 sizes: {
                   selected: 0,
                   items: [PastPurchaseReducer.DEFAULT_PAGE_SIZE]
-              }
+                }
               }
             }
           }
@@ -387,7 +387,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     it('should return the configured autocomplete navigation labels', () => {
       const maxRefinements = 3;
       // tslint:disable-next-line max-line-length
-      expect(Adapter.extractMaxRefinements(<any>{ search: { maxRefinements }})).to.eql(maxRefinements);
+      expect(Adapter.extractMaxRefinements(<any>{ search: { maxRefinements } })).to.eql(maxRefinements);
     });
   });
 
@@ -452,6 +452,16 @@ suite('Configuration Adapter', ({ expect, stub }) => {
       const expiry = 3;
       // tslint:disable-next-line max-line-length
       expect(Adapter.extractRealTimeBiasingExpiry(<any>{ personalization: { realTimeBiasing: { expiry } } })).to.eq(expiry);
+    });
+  });
+
+  describe('isCartEnabled()', () => {
+    it('should return true if cart structure is in config', () => {
+      expect(Adapter.isCartEnabled(<any>{ cart: { structure: 'a' } })).to.eq(true);
+    });
+
+    it('should return false if cart structure is not in config', () => {
+      expect(Adapter.isCartEnabled(<any>{cart: {structure: null}})).to.eq(false);
     });
   });
 });

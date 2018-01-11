@@ -216,11 +216,9 @@ namespace Actions {
   export const CART_SERVER_UPDATED = 'CART_SERVER_UPDATED';
   export type CartServerUpdated = Action<typeof CART_SERVER_UPDATED, any>;
   export const ITEM_QUANTITY_CHANGED = 'ITEM_QUANTITY_CHANGED';
-  export type ItemQuantityChanged = Action<typeof ITEM_QUANTITY_CHANGED, any>
+  export type ItemQuantityChanged = Action<typeof ITEM_QUANTITY_CHANGED, any>;
   export const REMOVE_ITEM = 'REMOVE_ITEM';
-  export type RemoveItem = Action<typeof REMOVE_ITEM, any>
-  export const ITEM_DELETED = 'ITEM_DELETED';
-  export type ItemDeleted = Action<typeof ITEM_DELETED, any>
+  export type RemoveItem = Action<typeof REMOVE_ITEM, any>;
 
   export namespace Payload {
     export namespace Personalization {
@@ -321,10 +319,9 @@ namespace Actions {
         sessionId: string;
         visitorId: string;
       }
-<<<<<<< HEAD
 
       export interface Product {
-        metadata?: CartMetadata[];
+        metadata: CartMetadata[];
         collection: string;
         quantity: number;
         sku: string;
@@ -337,8 +334,6 @@ namespace Actions {
         key: string;
         value: string;
       }
-=======
->>>>>>> 129837ccb60cb32ef117251fa5195ed12ae90816
     }
   }
 
