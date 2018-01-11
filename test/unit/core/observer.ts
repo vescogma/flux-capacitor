@@ -491,6 +491,33 @@ suite('Observer', ({ expect, spy, stub }) => {
         });
       });
 
+      describe('cart', () => {
+        it('should emit CART_ID_UPDATED event', () => {
+          observers.data.present.cart.content.cartId(undefined, 'hey');
+
+          expect(emit).to.be.calledWithExactly(Events.CART_ID_UPDATED, 'hey');
+        });
+
+        it('should emit CART_ITEMS_UPDATED', () => {
+          observers.data.present.cart.content.items(undefined, testObject);
+
+          expect(emit).to.be.calledWithExactly(Events.CART_ITEMS_UPDATED, testObject);
+        });
+
+        it('should emit CART_ITEMS_UPDATED when quantity changes on a specific item', () => {
+          const item = { a: 1, quantity: 10 };
+          observers.data.present.cart.content.items([{ a: 1, quantity: 2 }], item);
+
+          expect(emit).to.be.calledWithExactly(Events.CART_ITEMS_UPDATED, item);
+        });
+
+        it('should emit CART_QUANTITY_UPDATED', () => {
+          observers.data.present.cart.content.totalQuantity(undefined, 3);
+
+          expect(emit).to.be.calledWithExactly(Events.CART_QUANTITY_UPDATED, 3);
+        });
+      });
+
       describe('redirect', () => {
         it('should emit REDIRECT event', () => {
           observers.data.present.redirect(undefined, testObject);

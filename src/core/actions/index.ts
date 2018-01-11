@@ -1,7 +1,7 @@
 import { Results } from 'groupby-api';
-import Payloads from './payloads';
 import Configuration from '../configuration';
 import Store from '../store';
+import Payloads from './payloads';
 
 namespace Actions {
   export interface Action<S = string, T = any> {
@@ -211,14 +211,13 @@ namespace Actions {
   export const CART_CREATED = 'CART_CREATED';
   export type CartCreated = Action<typeof CART_CREATED, string>;
   export const ADD_TO_CART = 'ADD_TO_CART';
-  // todo: change type
-  export type AddToCart = Action<typeof ADD_TO_CART, any>;
+  export type AddToCart = Action<typeof ADD_TO_CART, Store.CartProduct>;
   export const CART_SERVER_UPDATED = 'CART_SERVER_UPDATED';
-  export type CartServerUpdated = Action<typeof CART_SERVER_UPDATED, any>;
+  export type CartServerUpdated = Action<typeof CART_SERVER_UPDATED, Partial<Store.Cart>>;
   export const ITEM_QUANTITY_CHANGED = 'ITEM_QUANTITY_CHANGED';
   export type ItemQuantityChanged = Action<typeof ITEM_QUANTITY_CHANGED, any>;
   export const REMOVE_ITEM = 'REMOVE_ITEM';
-  export type RemoveItem = Action<typeof REMOVE_ITEM, any>;
+  export type RemoveItem = Action<typeof REMOVE_ITEM, Store.CartProduct>;
 
   export namespace Payload {
     export namespace Personalization {

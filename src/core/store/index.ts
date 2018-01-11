@@ -75,7 +75,7 @@ namespace Store {
     recommendations: Recommendations; // mixed
 
     personalization?: Personalization;
-    cart: Cart; // TODO
+    cart: Cart;
 
     pastPurchases: PastPurchase;
 

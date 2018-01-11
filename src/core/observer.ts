@@ -169,7 +169,6 @@ namespace Observer {
           cart: {
             content: {
               cartId: emit(Events.CART_ID_UPDATED),
-              // todo: write a new emitter so it can monitor quantity changes for the same item
               items: emit(Events.CART_ITEMS_UPDATED),
               totalQuantity: emit(Events.CART_QUANTITY_UPDATED)
             }
