@@ -35,7 +35,7 @@ namespace Adapter {
               sizes: Adapter.extractPageSizes(config, PastPurchaseReducer.DEFAULT_PAGE_SIZE)
             }
           }
-        },
+        }
       },
       session: { config }
     });
@@ -180,7 +180,6 @@ namespace Adapter {
   export const extractRealTimeBiasingExpiry = (config: Configuration) =>
     config.personalization.realTimeBiasing.expiry;
 
-  // think: should I put in a key called 'enabled'?
   export const isCartEnabled = (config: Configuration) =>
     !!config.cart.structure;
 }

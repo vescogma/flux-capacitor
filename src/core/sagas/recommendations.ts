@@ -96,7 +96,6 @@ export namespace Tasks {
       });
   }
 
-  // I delete action in parameter, it is not needed
   export function* fetchPastPurchases(flux: FluxCapacitor) {
     try {
       const config: Configuration = yield effects.select(Selectors.config);

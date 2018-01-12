@@ -398,11 +398,6 @@ namespace Configuration {
     image: string;
   }
 
-  // export interface CartProductMetadata {
-  //   key: string;
-  //   value: string
-  // }
-
   export type ValueOptions<T> = T | { options: T[], default: T };
 
   export type RecommendationMode = keyof typeof RECOMMENDATION_MODES;

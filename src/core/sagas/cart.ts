@@ -40,7 +40,6 @@ export namespace Tasks {
       yield effects.put(flux.actions.cartCreated(id));
       return id;
     } catch (e) {
-      // what does error do?
       yield effects.put(flux.actions.cartCreated(e));
     }
   }

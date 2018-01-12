@@ -99,20 +99,16 @@ namespace Events {
    */
   export const CART_ID_UPDATED = 'cart_id_updated'; // post
   /**
-   * Triggered when user adds item into cart.
-   *
-   */
-  export const ADD_TO_CART = 'add_to_cart';
-  /**
    * Triggered when cart total quantity changes.
-   *
+   * Returns totalQuantity in the cart.
    */
   export const CART_QUANTITY_UPDATED = 'cart_updated';
   /**
    * Triggered when cart content changes.
-   *
+   * Returns all items in the cart.
    */
   export const CART_ITEMS_UPDATED = 'cart_items_updated';
+
   // template events
   /**
    * Triggered when template is updated.
