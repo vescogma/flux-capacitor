@@ -386,7 +386,6 @@ namespace Configuration {
   }
 
   export interface Cart {
-    // change name
     structure?: CartProductStructure;
   }
 
