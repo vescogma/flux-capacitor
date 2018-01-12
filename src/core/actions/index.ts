@@ -221,9 +221,6 @@ namespace Actions {
   export type ItemQuantityChanged = Action<typeof ITEM_QUANTITY_CHANGED, any>;
   export const REMOVE_ITEM = 'REMOVE_ITEM';
   export type RemoveItem = Action<typeof REMOVE_ITEM, Store.CartProduct>;
-
-    
-
 }
 
 export default Actions;
