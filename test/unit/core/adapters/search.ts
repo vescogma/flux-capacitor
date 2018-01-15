@@ -390,14 +390,15 @@ suite('Search Adapter', ({ expect, stub }) => {
       const nextPage = stub(PageAdapter, 'nextPage').returns(next);
       const previousPage = stub(PageAdapter, 'previousPage').returns(previous);
 
-      const pageInfo = Adapter.extractPage(state, total, pastPurchasePage, pastPurchasePageSize);
+      const pageInfo = Adapter.extractPage(state, total, pastPurchasePage(state), pastPurchasePageSize(state));
 
       expect(pageInfo).to.eql({
         from,
         to,
         last,
         next,
-        previous
+        previous,
+        current
       });
       expect(pastPurchasePageSize).to.be.calledWith(state);
       expect(pastPurchasePage).to.be.calledWith(state);
