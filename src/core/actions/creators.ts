@@ -120,6 +120,10 @@ namespace ActionCreators {
     return createAction(Actions.FETCH_PAST_PURCHASE_PRODUCTS, query);
   }
 
+  export function fetchMorePastPurchaseProducts(forward: boolean = true): Actions.FetchMorePastPurchaseProducts {
+    return createAction(Actions.FETCH_MORE_PAST_PURCHASE_PRODUCTS, { forward });
+  }
+
   export function fetchPastPurchaseNavigations(): Actions.FetchPastPurchaseNavigations {
     return createAction(Actions.FETCH_PAST_PURCHASE_NAVIGATIONS, null);
   }
@@ -648,6 +652,13 @@ namespace ActionCreators {
   // tslint:disable-next-line max-line-length
   export function receivePastPurchaseProducts(products: Store.ProductWithMetadata[]): Actions.ReceivePastPurchaseProducts {
     return createAction(Actions.RECEIVE_PAST_PURCHASE_PRODUCTS, products);
+  }
+
+  export function receiveMorePastPurchaseProducts(res: Results) {
+    return (state: Store.State): Actions.ReceiveMorePastPurchaseProducts => {
+      // tslint:disable-next-line max-line-length
+      return handleError(createAction(Actions.RECEIVE_MORE_PAST_PURCHASE_PRODUCTS, res), () => createAction(Actions.RECEIVE_MORE_PAST_PURCHASE_PRODUCTS, SearchAdapter.augmentProducts(res)));
+    };
   }
 
   // tslint:disable-next-line max-line-length

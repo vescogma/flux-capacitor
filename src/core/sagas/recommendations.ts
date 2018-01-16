@@ -14,7 +14,7 @@ import * as utils from '../utils';
 
 export class MissingPayloadError extends Error {
   /* istanbul ignore next */
-  constructor (err: string = 'No Secured Payload') {
+  constructor(err: string = 'No Secured Payload') {
     super(err);
     Object.setPrototypeOf(this, MissingPayloadError.prototype);
   }
@@ -149,6 +149,39 @@ export namespace Tasks {
     }
   }
 
+  export function* fetchMorePastPurchaseProducts(flux: FluxCapacitor, action: Actions.FetchMorePastPurchaseProducts) {
+    try {
+      const state: Store.State = yield effects.select();
+      const products = Selectors.pastPurchaseProductsWithMetadata(state);
+      const pastPurchaseSkus: Store.PastPurchases.PastPurchaseProduct[] = yield effects.select(Selectors.pastPurchases);
+
+      let product;
+      if (action.payload.forward) {
+        product = products[products.length - 1].index;
+        yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingForward: true }));
+      } else {
+        product = products[0].index - Selectors.pastPurchasePageSize(state) - 1;
+        yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingBackward: true }));
+      }
+
+      const request = yield effects.select(Requests.pastPurchaseProducts, false, product);
+      const result = yield effects.call(fetchProductsFromSkus, flux, pastPurchaseSkus, request);
+
+      console.log('im fetching more', request, result);
+      yield effects.put(<any>[
+        flux.actions.receivePastPurchaseCurrentRecordCount(result.totalRecordCount),
+        flux.actions.receiveMorePastPurchaseProducts(result),
+      ]);
+      if (action.payload.forward) {
+        yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingForward: false }));
+      } else {
+        yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingBackward: false }));
+      }
+    } catch (e) {
+      return effects.put(<any>flux.actions.receiveMorePastPurchaseProducts(e));
+    }
+  }
+
   export function* fetchSaytPastPurchases(flux: FluxCapacitor, { payload }: Actions.FetchSaytPastPurchases) {
     try {
       const config: Configuration = yield effects.select(Selectors.config);
@@ -174,5 +207,6 @@ export default (flux: FluxCapacitor) => function* recommendationsSaga() {
   yield effects.takeLatest(Actions.FETCH_PAST_PURCHASES, Tasks.fetchPastPurchases, flux);
   yield effects.takeLatest(Actions.FETCH_PAST_PURCHASE_PRODUCTS, Tasks.fetchPastPurchaseProducts, flux);
   yield effects.takeLatest(Actions.FETCH_PAST_PURCHASE_NAVIGATIONS, Tasks.fetchPastPurchaseProducts, flux, null, true);
+  yield effects.takeEvery(Actions.FETCH_MORE_PAST_PURCHASE_PRODUCTS, Tasks.fetchMorePastPurchaseProducts, flux);
   yield effects.takeLatest(Actions.FETCH_SAYT_PAST_PURCHASES, Tasks.fetchSaytPastPurchases, flux);
 };

@@ -105,6 +105,8 @@ namespace Actions {
   export type FetchPastPurchases = Action<typeof FETCH_PAST_PURCHASES>;
   export const FETCH_PAST_PURCHASE_PRODUCTS = 'FETCH_PAST_PURCHASE_PRODUCTS';
   export type FetchPastPurchaseProducts = Action<typeof FETCH_PAST_PURCHASE_PRODUCTS, string | null>;
+  export const FETCH_MORE_PAST_PURCHASE_PRODUCTS = 'FETCH_MORE_PAST_PURCHASE_PRODUCTS';
+  export type FetchMorePastPurchaseProducts = Action<typeof FETCH_MORE_PAST_PURCHASE_PRODUCTS, { forward: boolean }>;
   export const FETCH_PAST_PURCHASE_NAVIGATIONS = 'FETCH_PAST_PURCHASE_NAVIGATIONS';
   export type FetchPastPurchaseNavigations = Action<typeof FETCH_PAST_PURCHASE_NAVIGATIONS>;
   export const FETCH_SAYT_PAST_PURCHASES = 'FETCH_SAYT_PAST_PURCHASES';
@@ -149,6 +151,8 @@ namespace Actions {
   export type ReceiveSaytPastPurchases = Action<typeof RECEIVE_SAYT_PAST_PURCHASES, Store.ProductWithMetadata[]>;
   export const RECEIVE_PAST_PURCHASE_PRODUCTS = 'RECEIVE_PAST_PURCHASE_PRODUCTS';
   export type ReceivePastPurchaseProducts = Action<typeof RECEIVE_PAST_PURCHASE_PRODUCTS, Store.ProductWithMetadata[]>;
+  export const RECEIVE_MORE_PAST_PURCHASE_PRODUCTS = 'RECEIVE_MORE_PAST_PURCHASE_PRODUCTS';
+  export type ReceiveMorePastPurchaseProducts = Action<typeof RECEIVE_MORE_PAST_PURCHASE_PRODUCTS, Store.ProductWithMetadata[]>;
   export const RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT = 'RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT';
   export type ReceivePastPurchaseCurrentRecordCount = Action<typeof RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT, number>;
   export const RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT = 'RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT';
