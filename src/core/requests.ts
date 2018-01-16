@@ -39,13 +39,13 @@ namespace Requests {
     return <Request>Requests.chain(config.search.defaults, request, config.search.overrides);
   };
 
-  export const pastPurchaseProducts = (state: Store.State, getNavigations: boolean = false): Request => {
+  export const pastPurchaseProducts = (state: Store.State, getNavigations: boolean = false, skip?: number): Request => {
     const request: Partial<Request> = {
       ...search(state),
       pageSize: Selectors.pastPurchasePageSize(state),
       query: getNavigations ? '' : Selectors.pastPurchaseQuery(state),
       refinements: getNavigations ? [] : Selectors.pastPurchaseSelectedRefinements(state),
-      skip: Selectors.pastPurchasePageSize(state) * (Selectors.pastPurchasePage(state) - 1),
+      skip: skip || Selectors.pastPurchasePageSize(state) * (Selectors.pastPurchasePage(state) - 1),
       // no sort needed, saves backend from processing this
       sort: undefined,
     };

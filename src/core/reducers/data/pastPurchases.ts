@@ -3,17 +3,26 @@ import Adapter from '../../adapters/pastPurchases';
 import Store from '../../store';
 import * as navigations from './navigations';
 import * as page from './page';
+import { updateMoreProducts } from './products';
 
 export { DEFAULT_PAGE_SIZE } from './page';
 
-export type Action = Actions.ReceivePastPurchaseSkus |
-  Actions.ReceivePastPurchaseProducts | Actions.ReceiveSaytPastPurchases |
-  Actions.ReceivePastPurchaseRefinements | Actions.UpdatePastPurchaseQuery |
-  Actions.SelectPastPurchaseSort | Actions.ResetPastPurchaseRefinements |
-  Actions.SelectPastPurchaseRefinement | Actions.DeselectPastPurchaseRefinement |
-  Actions.ResetPastPurchasePage | Actions.UpdatePastPurchasePageSize |
-  Actions.UpdatePastPurchaseCurrentPage | Actions.ReceivePastPurchasePage |
-  Actions.ReceivePastPurchaseAllRecordCount | Actions.ReceivePastPurchaseCurrentRecordCount;
+export type Action = Actions.ReceivePastPurchaseSkus
+  | Actions.ReceivePastPurchaseProducts
+  | Actions.ReceiveMorePastPurchaseProducts
+  | Actions.ReceiveSaytPastPurchases
+  | Actions.ReceivePastPurchaseRefinements
+  | Actions.UpdatePastPurchaseQuery
+  | Actions.SelectPastPurchaseSort
+  | Actions.ResetPastPurchaseRefinements
+  | Actions.SelectPastPurchaseRefinement
+  | Actions.DeselectPastPurchaseRefinement
+  | Actions.ResetPastPurchasePage
+  | Actions.UpdatePastPurchasePageSize
+  | Actions.UpdatePastPurchaseCurrentPage
+  | Actions.ReceivePastPurchasePage
+  | Actions.ReceivePastPurchaseAllRecordCount
+  | Actions.ReceivePastPurchaseCurrentRecordCount;
 export type State = Store.PastPurchase;
 
 export enum SORT_ENUMS {
@@ -34,12 +43,12 @@ export const DEFAULTS: State = <any>{
       descending: true,
       type: SORT_ENUMS.DEFAULT,
     },
-            {
+    {
       field: 'Most Recent',
       descending: true,
       type: SORT_ENUMS.MOST_RECENT,
     },
-            {
+    {
       field: 'Most Purchased',
       descending: true,
       type: SORT_ENUMS.MOST_PURCHASED,
@@ -58,10 +67,11 @@ export default function updatePastPurchases(state: State = DEFAULTS, action: Act
   switch (action.type) {
     case Actions.RECEIVE_PAST_PURCHASE_SKUS: return updatePastPurchaseSkus(state, action);
     case Actions.RECEIVE_PAST_PURCHASE_PRODUCTS: return updatePastPurchaseProducts(state, action);
+    case Actions.RECEIVE_MORE_PAST_PURCHASE_PRODUCTS: return updateMorePastPurchaseProducts(state, action);
     case Actions.RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT: return updatePastPurchaseAllRecordCount(state, action);
     case Actions.RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT: return updatePastPurchaseCurrentRecordCount(state, action);
     case Actions.RECEIVE_SAYT_PAST_PURCHASES: return updateSaytPastPurchases(state, action);
-    case Actions.UPDATE_PAST_PURCHASE_QUERY : return updatePastPurchaseQuery(state, action);
+    case Actions.UPDATE_PAST_PURCHASE_QUERY: return updatePastPurchaseQuery(state, action);
     case Actions.SELECT_PAST_PURCHASE_SORT: return updatePastPurchaseSortSelected(state, action);
     case Actions.RECEIVE_PAST_PURCHASE_REFINEMENTS: return applyNavigationReducer(state, action, navigations.receiveNavigations);
     case Actions.SELECT_PAST_PURCHASE_REFINEMENT: return applyNavigationReducer(state, action, navigations.selectRefinement);
@@ -89,17 +99,23 @@ export const updatePastPurchaseProducts = (state: State, { payload }: Actions.Re
     products: payload,
   });
 
-// tslint:disable-next-line max-line-length
-export const updatePastPurchaseCurrentRecordCount = (state: State, { payload }: Actions.ReceivePastPurchaseCurrentRecordCount) => ({
+export const updateMorePastPurchaseProducts = (state: State, action: Actions.ReceiveMorePastPurchaseProducts) =>
+  ({
     ...state,
-    currentRecordCount: payload
+    products: updateMoreProducts(state.products, action),
   });
 
 // tslint:disable-next-line max-line-length
+export const updatePastPurchaseCurrentRecordCount = (state: State, { payload }: Actions.ReceivePastPurchaseCurrentRecordCount) => ({
+  ...state,
+  currentRecordCount: payload
+});
+
+// tslint:disable-next-line max-line-length
 export const updatePastPurchaseAllRecordCount = (state: State, { payload }: Actions.ReceivePastPurchaseAllRecordCount) => ({
-    ...state,
-    allRecordCount: payload
-  });
+  ...state,
+  allRecordCount: payload
+});
 
 export const updateSaytPastPurchases = (state: State, { payload }: Actions.ReceiveSaytPastPurchases) =>
   ({
