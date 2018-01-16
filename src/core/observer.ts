@@ -73,9 +73,9 @@ namespace Observer {
   }
 
   export function create(flux: FluxCapacitor) {
-    const emit = (event: string) => (_, value: any, path: string) => {
-      flux.emit(event, value);
-      flux.emit(Events.OBSERVER_NODE_CHANGED, { event, path, value });
+    const emit = (event: string, section: string = utils.StoreSections.SEARCH) => (_, value: any, path: string) => {
+      flux.emit(event, value, section);
+      flux.emit(Events.OBSERVER_NODE_CHANGED, { event, path, value, section });
     };
 
     return {
@@ -123,7 +123,7 @@ namespace Observer {
             sizes: emit(Events.PAGE_SIZE_UPDATED)
           }),
 
-          products: ((emitMoreProductsAdded: Observer, emitProductsUpdated: Observer) =>
+          products: ((emitMoreProductsAdded: Observer, emitProductsUpdated: any) =>
             (oldState: Store.ProductWithMetadata[], newState: Store.ProductWithMetadata[], path: string) => {
               const oldLength = oldState.length;
               // tslint:disable-next-line max-line-length
@@ -160,7 +160,7 @@ namespace Observer {
             products: ((emitProductsUpdated: Observer) =>
              (oldState, newState, path) => {
                emitProductsUpdated(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path);
-             })(emit(Events.PAST_PURCHASE_PRODUCTS_UPDATED)),
+             })(emit(Events.PRODUCTS_UPDATED, utils.StoreSections.PAST_PURCHASES)),
             saytPastPurchases: emit(Events.SAYT_PAST_PURCHASES_UPDATED),
             query: emit(Events.PAST_PURCHASE_QUERY_UPDATED),
             page: Object.assign(emit(Events.PAST_PURCHASE_PAGE_UPDATED), {
