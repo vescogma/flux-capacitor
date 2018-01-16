@@ -181,6 +181,12 @@ namespace Selectors {
     state.data.present.products;
 
   /**
+   * Returns the current products extended with metadata
+   */
+  export const pastPurchaseProductsWithMetadata = (state: Store.State) =>
+    state.data.present.pastPurchases.products;
+
+  /**
    * Returns the current details object.
    */
   export const details = (state: Store.State) =>
