@@ -151,20 +151,22 @@ export namespace Tasks {
 
   export function* fetchMorePastPurchaseProducts(flux: FluxCapacitor, action: Actions.FetchMorePastPurchaseProducts) {
     try {
+      console.log('im fetchin');
       const state: Store.State = yield effects.select();
       const products = Selectors.pastPurchaseProductsWithMetadata(state);
       const pastPurchaseSkus: Store.PastPurchases.PastPurchaseProduct[] = yield effects.select(Selectors.pastPurchases);
+      const pageSize = action.payload.amount;
 
-      let product;
+      let skip;
       if (action.payload.forward) {
-        product = products[products.length - 1].index;
+        skip = products[products.length - 1].index;
         yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingForward: true }));
       } else {
-        product = products[0].index - Selectors.pastPurchasePageSize(state) - 1;
+        skip = products[0].index - Selectors.pastPurchasePageSize(state) - 1;
         yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingBackward: true }));
       }
 
-      const request = yield effects.select(Requests.pastPurchaseProducts, false, product);
+      const request = yield effects.select(Requests.pastPurchaseProducts, false, { pageSize, skip });
       const result = yield effects.call(fetchProductsFromSkus, flux, pastPurchaseSkus, request);
 
       console.log('im fetching more', request, result);

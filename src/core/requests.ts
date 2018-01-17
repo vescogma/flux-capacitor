@@ -39,13 +39,14 @@ namespace Requests {
     return <Request>Requests.chain(config.search.defaults, request, config.search.overrides);
   };
 
-  export const pastPurchaseProducts = (state: Store.State, getNavigations: boolean = false, skip?: number): Request => {
+  // tslint:disable-next-line max-line-length
+  export const pastPurchaseProducts = (state: Store.State, getNavigations: boolean = false, options: { pageSize: number, skip: number} = { pageSize: Selectors.pastPurchasePageSize(state), skip: Selectors.pastPurchasePageSize(state) * (Selectors.pastPurchasePage(state) - 1) }): Request => {
     const request: Partial<Request> = {
       ...search(state),
-      pageSize: Selectors.pastPurchasePageSize(state),
+      pageSize: options.pageSize,
       query: getNavigations ? '' : Selectors.pastPurchaseQuery(state),
       refinements: getNavigations ? [] : Selectors.pastPurchaseSelectedRefinements(state),
-      skip: skip || Selectors.pastPurchasePageSize(state) * (Selectors.pastPurchasePage(state) - 1),
+      skip: options.skip,
       // no sort needed, saves backend from processing this
       sort: undefined,
     };

@@ -188,6 +188,12 @@ namespace Events {
   export const PAST_PURCHASE_PRODUCTS_UPDATED = 'past_purchase_products_updated';
 
   /**
+   * Triggered when the more past purchase products are added
+   * Returns an array of the new past purchase products that were added
+   */
+  export const PAST_PURCHASE_MORE_PRODUCTS_ADDED = 'past_purchase_more_products_added';
+
+  /**
    * Triggered when the past purchase navigations are updated
    * Returns the new navigations
    */
@@ -222,6 +228,12 @@ namespace Events {
    * Returns the new sort object
    */
   export const PAST_PURCHASE_SORT_UPDATED = 'past_purchase_sort_updated';
+
+  /**
+   * Triggered when the past purchase allRecordCount is updated
+   * Returns the new record count
+   */
+  export const PAST_PURCHASE_RECORD_COUNT_UPDATED = 'past_purchase_record_count_updated';
 
   /**
    * Triggered when past purchase selected refinements are updated.
