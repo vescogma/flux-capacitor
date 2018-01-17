@@ -72,6 +72,39 @@ namespace Observer {
             })(emit(navigationsEvent));
   }
 
+  export function products(moreProductsAddedEvent: string, productsUpdatedEvent: string, emit: Function) {
+    return ((emitMoreProductsAdded: Observer, emitProductsUpdated: Observer) =>
+      (oldState: Store.ProductWithMetadata[], newState: Store.ProductWithMetadata[], path: string) => {
+        const oldLength = oldState.length;
+        // tslint:disable-next-line max-line-length
+        if (oldLength < newState.length && (oldState[0] === newState[0] || oldState[oldState.length - 1] === newState[newState.length - 1])) {
+          if (oldState[0] === newState[0]) {
+            emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
+          } else if (oldState[oldState.length - 1] === newState[newState.length - 1]) {
+            emitMoreProductsAdded(oldState, newState.slice(0, newState.length - oldState.length), path);
+          }
+        } else {
+          emitProductsUpdated(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path);
+        }
+      })(emit(moreProductsAddedEvent), emit(productsUpdatedEvent));
+  }
+
+  // export function products((emitMoreProductsAdded: Observer, emitProductsUpdated: Observer) =>
+  //   (oldState: Store.ProductWithMetadata[], newState: Store.ProductWithMetadata[], path: string) => {
+  //     const oldLength = oldState.length;
+  //     // tslint:disable-next-line max-line-length
+  //     if (oldLength < newState.length && (oldState[0] === newState[0] || oldState[oldState.length - 1] === newState[newState.length - 1])) {
+  //       // TODO: Add appendProducts action
+  //       if (oldState[0] === newState[0]) {
+  //         emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
+  //       } else if (oldState[oldState.length - 1] === newState[newState.length - 1]) {
+  //         emitMoreProductsAdded(oldState, newState.slice(0, newState.length - oldState.length), path);
+  //       }
+  //     } else {
+  //       emitProductsUpdated(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path);
+  //     }
+  //   })(emit(Events.MORE_PRODUCTS_ADDED), emit(Events.PRODUCTS_UPDATED))
+
   export function create(flux: FluxCapacitor) {
     const emit = (event: string) => (_, value: any, path: string) => {
       flux.emit(event, value);
@@ -123,21 +156,7 @@ namespace Observer {
             sizes: emit(Events.PAGE_SIZE_UPDATED)
           }),
 
-          products: ((emitMoreProductsAdded: Observer, emitProductsUpdated: Observer) =>
-            (oldState: Store.ProductWithMetadata[], newState: Store.ProductWithMetadata[], path: string) => {
-              const oldLength = oldState.length;
-              // tslint:disable-next-line max-line-length
-              if (oldLength < newState.length && (oldState[0] === newState[0] || oldState[oldState.length - 1] === newState[newState.length - 1])) {
-                // TODO: Add appendProducts action
-                if (oldState[0] === newState[0]) {
-                  emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
-                } else if (oldState[oldState.length - 1] === newState[newState.length - 1]) {
-                  emitMoreProductsAdded(oldState, newState.slice(0, newState.length - oldState.length), path);
-                }
-              } else {
-                emitProductsUpdated(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path);
-              }
-            })(emit(Events.MORE_PRODUCTS_ADDED), emit(Events.PRODUCTS_UPDATED)),
+          products: Observer.products(Events.MORE_PRODUCTS_ADDED, Events.PRODUCTS_UPDATED, emit),
 
           query: {
             corrected: emit(Events.CORRECTED_QUERY_UPDATED),
@@ -157,10 +176,8 @@ namespace Observer {
 
           pastPurchases: {
             skus: emit(Events.PAST_PURCHASE_SKUS_UPDATED),
-            products: ((emitProductsUpdated: Observer) =>
-             (oldState, newState, path) => {
-               emitProductsUpdated(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path);
-             })(emit(Events.PAST_PURCHASE_PRODUCTS_UPDATED)),
+            // tslint:disable-next-line max-line-length
+            products: Observer.products(Events.PAST_PURCHASE_MORE_PRODUCTS_ADDED, Events.PAST_PURCHASE_PRODUCTS_UPDATED, emit),
             saytPastPurchases: emit(Events.SAYT_PAST_PURCHASES_UPDATED),
             query: emit(Events.PAST_PURCHASE_QUERY_UPDATED),
             page: Object.assign(emit(Events.PAST_PURCHASE_PAGE_UPDATED), {
@@ -174,6 +191,7 @@ namespace Observer {
               emit
             ),
             sort: emit(Events.PAST_PURCHASE_SORT_UPDATED),
+            allRecordCount: emit(Events.PAST_PURCHASE_RECORD_COUNT_UPDATED),
           },
 
           infiniteScroll: emit(Events.INFINITE_SCROLL_UPDATED),

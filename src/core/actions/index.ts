@@ -106,7 +106,7 @@ namespace Actions {
   export const FETCH_PAST_PURCHASE_PRODUCTS = 'FETCH_PAST_PURCHASE_PRODUCTS';
   export type FetchPastPurchaseProducts = Action<typeof FETCH_PAST_PURCHASE_PRODUCTS, string | null>;
   export const FETCH_MORE_PAST_PURCHASE_PRODUCTS = 'FETCH_MORE_PAST_PURCHASE_PRODUCTS';
-  export type FetchMorePastPurchaseProducts = Action<typeof FETCH_MORE_PAST_PURCHASE_PRODUCTS, { forward: boolean }>;
+  export type FetchMorePastPurchaseProducts = Action<typeof FETCH_MORE_PAST_PURCHASE_PRODUCTS, { amount: number, forward: boolean }>;
   export const FETCH_PAST_PURCHASE_NAVIGATIONS = 'FETCH_PAST_PURCHASE_NAVIGATIONS';
   export type FetchPastPurchaseNavigations = Action<typeof FETCH_PAST_PURCHASE_NAVIGATIONS>;
   export const FETCH_SAYT_PAST_PURCHASES = 'FETCH_SAYT_PAST_PURCHASES';

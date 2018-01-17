@@ -120,8 +120,9 @@ namespace ActionCreators {
     return createAction(Actions.FETCH_PAST_PURCHASE_PRODUCTS, query);
   }
 
-  export function fetchMorePastPurchaseProducts(forward: boolean = true): Actions.FetchMorePastPurchaseProducts {
-    return createAction(Actions.FETCH_MORE_PAST_PURCHASE_PRODUCTS, { forward });
+  // tslint:disable-next-line max-line-length
+  export function fetchMorePastPurchaseProducts(amount: number, forward: boolean = true): Actions.FetchMorePastPurchaseProducts {
+    return createAction(Actions.FETCH_MORE_PAST_PURCHASE_PRODUCTS, { amount, forward });
   }
 
   export function fetchPastPurchaseNavigations(): Actions.FetchPastPurchaseNavigations {
