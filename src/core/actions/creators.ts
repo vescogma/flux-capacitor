@@ -509,7 +509,6 @@ namespace ActionCreators {
    */
   export function receivePage(recordCount: number, current?: number) {
     return (state: Store.State): Actions.ReceivePage => {
-      // console.log('extractedPage: ', SearchAdapter.extractPage(state, recordCount, current));
       return createAction(Actions.RECEIVE_PAGE, SearchAdapter.extractPage(state, recordCount, current));
     };
   }
@@ -689,11 +688,14 @@ namespace ActionCreators {
 
   /**
    * The page to receive and update state with.
-   * @param  {Actions.Payload.Page} page - The page object state will update to.
+   * @param  {Actions.Payload.recordCount} recordCount - The current recordCount.
+   * @param  {Actions.Payload.current} current - The current page.
    * @return {Actions.ReceivePage}       - Action with page.
    */
-  export function receivePastPurchasePage(page: Actions.Payload.Page): Actions.ReceivePastPurchasePage {
-    return createAction(Actions.RECEIVE_PAST_PURCHASE_PAGE, page);
+  export function receivePastPurchasePage(recordCount: number, current?: number) {
+    return (state: Store.State): Actions.ReceivePastPurchasePage => {
+      return createAction(Actions.RECEIVE_PAST_PURCHASE_PAGE, SearchAdapter.extractPage(state, recordCount, current));
+    };
   }
 
   /**
