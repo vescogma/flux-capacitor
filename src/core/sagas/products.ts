@@ -39,6 +39,7 @@ export namespace Tasks {
           navigations,
           config
         );
+
         yield effects.put(<any>actions);
         flux.saveState(utils.Routes.SEARCH);
       }

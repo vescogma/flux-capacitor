@@ -253,8 +253,8 @@ suite('Search Adapter', ({ expect, stub }) => {
       const merged = Adapter.combineNavigations(<any>{ availableNavigation, selectedNavigation });
 
       expect(merged).to.eql([
-        ...extractedAvailable,
         { name: 'x', refinements: [1, 2, 3], selected: [0, 1, 2] },
+        ...extractedAvailable,
       ]);
       expect(mergeSelectedRefinements).to.be.calledWith(extractedAvailable[1], selectedNavigation[0]);
       expect(extractNavigation).to.have.callCount(4)
