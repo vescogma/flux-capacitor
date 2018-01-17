@@ -9,13 +9,20 @@ import ui from './ui';
 
 export type Action = Actions.RefreshState;
 
+export const stateAction = (state, action) => {
+  const reducer = undoable(
+    data,
+    { limit: 5, filter: ({ type }) => type === Actions.SAVE_STATE}
+  );
+  const newState = reducer(state, action);
+  // console.log('undoable wtf', (state || {}).history, (newState || {}).history);
+  return newState;
+};
+
 export const rootReducer = redux.combineReducers<Store.State>({
   isRunning,
   session,
-  data: undoable(
-    data,
-    { limit: 5, filter: ({ type }) => type === Actions.SAVE_STATE}
-  ),
+  data: stateAction,
   ui,
 });
 
