@@ -522,7 +522,6 @@ namespace Selectors {
           refs.concat(nav.range
             ? { navigationName: nav.field, type: 'Range', high, low }
             : { navigationName: nav.field, type: 'Value', value }), [])), []);
-
 }
 
 export default Selectors;
