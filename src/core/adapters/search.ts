@@ -89,7 +89,7 @@ namespace Adapter {
 
   // tslint:disable-next-line max-line-length
   export const combineNavigations = ({ availableNavigation: available, selectedNavigation: selected }: Results): Store.Navigation[] => {
-    const navigations = available.reduce((map, navigation) =>
+    let navigations = available.reduce((map, navigation) =>
       Object.assign(map, { [navigation.name]: Adapter.extractNavigation(navigation) }), {});
 
     selected.forEach((selectedNav) => {
@@ -101,9 +101,10 @@ namespace Adapter {
         const navigation = Adapter.extractNavigation(selectedNav);
         navigation.selected = <any[]>Object.keys(Array(navigation.refinements.length).fill(0))
           .map((value) => Number(value));
-        navigations[selectedNav.name] = navigation;
+        navigations = { [selectedNav.name]: navigation, ...navigations };
       }
     });
+
     return Object.keys(navigations).reduce((navs, key) => navs.concat(navigations[key]), []);
   };
 
