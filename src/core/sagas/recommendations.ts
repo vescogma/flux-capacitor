@@ -147,7 +147,6 @@ export namespace Tasks {
 
   export function* fetchMorePastPurchaseProducts(flux: FluxCapacitor, action: Actions.FetchMorePastPurchaseProducts) {
     try {
-      console.log('im fetchin');
       const state: Store.State = yield effects.select();
       const products = Selectors.pastPurchaseProductsWithMetadata(state);
       const pastPurchaseSkus: Store.PastPurchases.PastPurchaseProduct[] = yield effects.select(Selectors.pastPurchases);
@@ -165,7 +164,6 @@ export namespace Tasks {
       const request = yield effects.select(Requests.pastPurchaseProducts, false, { pageSize, skip });
       const result = yield effects.call(fetchProductsFromSkus, flux, pastPurchaseSkus, request);
 
-      console.log('im fetching more', request, result);
       yield effects.put(<any>[
         flux.actions.receivePastPurchaseCurrentRecordCount(result.totalRecordCount),
         flux.actions.receiveMorePastPurchaseProducts(result),
@@ -205,6 +203,6 @@ export default (flux: FluxCapacitor) => function* recommendationsSaga() {
   yield effects.takeLatest(Actions.FETCH_PAST_PURCHASES, Tasks.fetchPastPurchases, flux);
   yield effects.takeLatest(Actions.FETCH_PAST_PURCHASE_PRODUCTS, Tasks.fetchPastPurchaseProducts, flux);
   yield effects.takeLatest(Actions.FETCH_PAST_PURCHASE_NAVIGATIONS, Tasks.fetchPastPurchaseProducts, flux, null, true);
-  yield effects.takeEvery(Actions.FETCH_MORE_PAST_PURCHASE_PRODUCTS, Tasks.fetchMorePastPurchaseProducts, flux);
   yield effects.takeLatest(Actions.FETCH_SAYT_PAST_PURCHASES, Tasks.fetchSaytPastPurchases, flux);
+  yield effects.takeEvery(Actions.FETCH_MORE_PAST_PURCHASE_PRODUCTS, Tasks.fetchMorePastPurchaseProducts, flux);
 };

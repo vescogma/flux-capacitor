@@ -107,6 +107,27 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('fetchMorePastPurchaseProducts()', () => {
+      it('should return an action with amount and forward true', () => {
+        const amount = 50;
+
+        expectAction(
+          ActionCreators.fetchMorePastPurchaseProducts(50),
+          Actions.FETCH_MORE_PAST_PURCHASE_PRODUCTS, { amount, forward: true }
+        );
+      });
+
+      it('should return an action with amount and forward false', () => {
+        const amount = 50;
+        const forward = false;
+
+        expectAction(
+          ActionCreators.fetchMorePastPurchaseProducts(50, forward),
+          Actions.FETCH_MORE_PAST_PURCHASE_PRODUCTS, { amount, forward }
+        );
+      });
+    });
+
     describe('fetchPastPurchaseNavigations()', () => {
       it('should return an action', () => {
         expectAction(ActionCreators.fetchPastPurchaseNavigations(), Actions.FETCH_PAST_PURCHASE_NAVIGATIONS, null);
@@ -754,6 +775,14 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('infiniteScrollRequestState()', () => {
+      it('should return an action', () => {
+        const fetchObj: any = { a: 'b' };
+
+        expectAction(ActionCreators.infiniteScrollRequestState(fetchObj), Actions.RECEIVE_INFINITE_SCROLL, fetchObj);
+      });
+    });
+
     describe('receiveProductRecords()', () => {
       it('should return an action', () => {
         const products: any = ['a', 'b'];
@@ -955,13 +984,28 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       });
     });
 
+    describe('receiveMorePastPurchaseProducts()', () => {
+      it('should return an action', () => {
+        const products: any = { a: 'b' };
+        const newProds = { c: 'd' };
+        const augmentProducts = stub(SearchAdapter, 'augmentProducts').returns(newProds);
+
+        expectAction(
+          ActionCreators.receiveMorePastPurchaseProducts(products)(null),
+          Actions.RECEIVE_MORE_PAST_PURCHASE_PRODUCTS,
+          newProds
+        );
+        expect(augmentProducts).to.be.calledWithExactly(products);
+      });
+    });
+
     describe('receivePastPurchaseCurrentRecordCount()', () => {
       it('should return an action', () => {
         const recordCount = 6;
 
         // tslint:disable-next-line max-line-length
         expectAction(ActionCreators.receivePastPurchaseCurrentRecordCount(recordCount),
-                     Actions.RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT, recordCount);
+          Actions.RECEIVE_PAST_PURCHASE_CURRENT_RECORD_COUNT, recordCount);
       });
     });
 
@@ -971,7 +1015,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
 
         // tslint:disable-next-line max-line-length
         expectAction(ActionCreators.receivePastPurchaseAllRecordCount(recordCount),
-                     Actions.RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT, recordCount);
+          Actions.RECEIVE_PAST_PURCHASE_ALL_RECORD_COUNT, recordCount);
       });
     });
 
@@ -999,8 +1043,11 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
     describe('receivePastPurchasePage()', () => {
       it('should return an action', () => {
         const page: any = 1;
+        const state: any = { c: 'd' };
+        const current = 2;
+        const payload = stub(SearchAdapter, 'extractPage').returns(page);
 
-        expectAction(ActionCreators.receivePastPurchasePage(page), Actions.RECEIVE_PAST_PURCHASE_PAGE, page);
+        expectAction(ActionCreators.receivePastPurchasePage(page)(state), Actions.RECEIVE_PAST_PURCHASE_PAGE, page);
       });
     });
 
@@ -1113,7 +1160,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
       const query = 'hat';
 
       it('should return a batch action with resetPastPurchaseRefinements spreaded', () => {
-        const array = [1,2,3];
+        const array = [1, 2, 3];
         const resetPastPurchaseRefinements = stub(ActionCreators, 'resetPastPurchaseRefinements').returns(array);
 
         const action = ActionCreators.updatePastPurchaseQuery(query);

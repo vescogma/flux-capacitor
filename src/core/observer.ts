@@ -89,22 +89,6 @@ namespace Observer {
       })(emit(moreProductsAddedEvent), emit(productsUpdatedEvent));
   }
 
-  // export function products((emitMoreProductsAdded: Observer, emitProductsUpdated: Observer) =>
-  //   (oldState: Store.ProductWithMetadata[], newState: Store.ProductWithMetadata[], path: string) => {
-  //     const oldLength = oldState.length;
-  //     // tslint:disable-next-line max-line-length
-  //     if (oldLength < newState.length && (oldState[0] === newState[0] || oldState[oldState.length - 1] === newState[newState.length - 1])) {
-  //       // TODO: Add appendProducts action
-  //       if (oldState[0] === newState[0]) {
-  //         emitMoreProductsAdded(oldState, newState.slice(oldLength), path);
-  //       } else if (oldState[oldState.length - 1] === newState[newState.length - 1]) {
-  //         emitMoreProductsAdded(oldState, newState.slice(0, newState.length - oldState.length), path);
-  //       }
-  //     } else {
-  //       emitProductsUpdated(SearchAdapter.extractData(oldState), SearchAdapter.extractData(newState), path);
-  //     }
-  //   })(emit(Events.MORE_PRODUCTS_ADDED), emit(Events.PRODUCTS_UPDATED))
-
   export function create(flux: FluxCapacitor) {
     const emit = (event: string) => (_, value: any, path: string) => {
       flux.emit(event, value);

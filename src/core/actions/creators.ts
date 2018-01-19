@@ -428,6 +428,12 @@ namespace ActionCreators {
     return createAction(Actions.UPDATE_SECURED_PAYLOAD, payload);
   }
 
+  /**
+   * The fetch state of infinite scroll request.
+   * @param  {Actions.Payload.fetchObj} fetchObj - Whether is fetching forward or
+   * backward.
+   * @return {Actions.ReceiveInfiniteScroll}        - Action with fetching state object.
+   */
   export function infiniteScrollRequestState(fetchObj: Actions.Payload.InfiniteScroll): Actions.ReceiveInfiniteScroll {
     return createAction(Actions.RECEIVE_INFINITE_SCROLL, fetchObj);
   }

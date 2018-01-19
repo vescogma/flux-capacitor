@@ -25,6 +25,7 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PAST_PURCHASE_PRODUCTS, Tasks.fetchPastPurchaseProducts, flux));
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_PAST_PURCHASE_NAVIGATIONS, Tasks.fetchPastPurchaseProducts, flux, null, true));
       expect(saga.next().value).to.eql(effects.takeLatest(Actions.FETCH_SAYT_PAST_PURCHASES, Tasks.fetchSaytPastPurchases, flux));
+      expect(saga.next().value).to.eql(effects.takeEvery(Actions.FETCH_MORE_PAST_PURCHASE_PRODUCTS, Tasks.fetchMorePastPurchaseProducts, flux));
       saga.next();
       // tslint:enable max-line-length
     });
@@ -361,10 +362,8 @@ suite('recommendations saga', ({ expect, spy, stub }) => {
 
         expect(augmentProducts).to.be.calledWithExactly(productData);
         expect(extractRecordCount).to.be.calledWithExactly(productData);
-        expect(extractPage).to.be.calledWithExactly(getState(), productData,
-          currentPage, pageSize);
+        expect(receivePastPurchasePage).to.be.calledWithExactly(productData, currentPage);
         expect(pastPurchasePage).to.be.calledWithExactly(flux.store.getState());
-        expect(pastPurchasePageSize).to.be.calledWithExactly(flux.store.getState());
         expect(saveState).to.be.calledWithExactly(utils.Routes.PAST_PURCHASE);
       });
 
