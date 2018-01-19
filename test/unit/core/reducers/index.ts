@@ -3,7 +3,7 @@ import reducer, * as reducers from '../../../../src/core/reducers';
 import * as dataReducers from '../../../../src/core/reducers/data';
 import suite from '../../_suite';
 
-suite('reducers', ({ expect, stub }) => {
+suite.only('reducers', ({ expect, stub }) => {
   it('should handle REFRESH_STATE action', () => {
     const payload = {
       a: 'b',

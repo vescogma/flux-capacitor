@@ -182,6 +182,7 @@ namespace Adapter {
 
   export const extractHistoryLength = (state: any) => {
     if (state && state.session && state.session.config) {
+      console.log('dd', state.session.config.history.length)
       return state.session.config.history.length;
     } else {
       return 0;
