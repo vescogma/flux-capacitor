@@ -1,9 +1,11 @@
 import Actions from '../../../../src/core/actions';
+import ConfigAdapter from '../../../../src/core/adapters/configuration';
 import reducer, * as reducers from '../../../../src/core/reducers';
+import { undoWithoutHistory } from '../../../../src/core/reducers';
 import * as dataReducers from '../../../../src/core/reducers/data';
 import suite from '../../_suite';
 
-suite.only('reducers', ({ expect, stub }) => {
+suite('reducers', ({ expect, stub }) => {
   it('should handle REFRESH_STATE action', () => {
     const payload = {
       a: 'b',
