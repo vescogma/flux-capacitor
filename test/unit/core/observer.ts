@@ -474,6 +474,13 @@ suite('Observer', ({ expect, spy, stub }) => {
             expect(emit).to.be.calledWith(Events.PAST_PURCHASE_PRODUCTS_UPDATED, testObject);
           });
 
+          it('should emit PAST_PURCHASE_MORE_PRODUCTS_ADDED event with more products from fetching forward', () => {
+            const newProducts = ['a', 'b', 'c', 'd'];
+            observers.data.present.pastPurchases.products(['a', 'b'], newProducts);
+
+            expect(emit).to.be.calledWith(Events.PAST_PURCHASE_MORE_PRODUCTS_ADDED, ['c', 'd']);
+          });
+
           it('should emit SAYT_PAST_PURCHASES_UPDATED event', () => {
             observers.data.present.pastPurchases.saytPastPurchases(undefined, testObject);
 
