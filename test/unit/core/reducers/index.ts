@@ -1,7 +1,5 @@
 import Actions from '../../../../src/core/actions';
-import ConfigAdapter from '../../../../src/core/adapters/configuration';
 import reducer, * as reducers from '../../../../src/core/reducers';
-import { undoWithoutHistory } from '../../../../src/core/reducers';
 import * as dataReducers from '../../../../src/core/reducers/data';
 import suite from '../../_suite';
 
