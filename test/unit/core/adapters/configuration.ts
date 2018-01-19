@@ -62,7 +62,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
                 sizes: {
                   selected: 0,
                   items: [PastPurchaseReducer.DEFAULT_PAGE_SIZE]
-              }
+                }
               }
             }
           }
@@ -387,7 +387,7 @@ suite('Configuration Adapter', ({ expect, stub }) => {
     it('should return the configured autocomplete navigation labels', () => {
       const maxRefinements = 3;
       // tslint:disable-next-line max-line-length
-      expect(Adapter.extractMaxRefinements(<any>{ search: { maxRefinements }})).to.eql(maxRefinements);
+      expect(Adapter.extractMaxRefinements(<any>{ search: { maxRefinements } })).to.eql(maxRefinements);
     });
   });
 
@@ -452,6 +452,17 @@ suite('Configuration Adapter', ({ expect, stub }) => {
       const expiry = 3;
       // tslint:disable-next-line max-line-length
       expect(Adapter.extractRealTimeBiasingExpiry(<any>{ personalization: { realTimeBiasing: { expiry } } })).to.eq(expiry);
+    });
+  });
+
+  describe('extractHistoryLength()', () => {
+    it('should return 0 if state is during constructuring', () => {
+      expect(Adapter.extractHistoryLength(<any>{})).to.eq(0);
+    });
+
+    it('should return history length after state is stable', () => {
+      const length = 5;
+      expect(Adapter.extractHistoryLength(<any>{ session: { config: { history: { length } } } })).to.eq(length);
     });
   });
 });
