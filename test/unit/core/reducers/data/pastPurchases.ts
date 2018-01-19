@@ -3,6 +3,7 @@ import Adapter from '../../../../../src/core/adapters/pastPurchases';
 import * as navigations from '../../../../../src/core/reducers/data/navigations';
 import * as page from '../../../../../src/core/reducers/data/page';
 import pastPurchases, * as past from '../../../../../src/core/reducers/data/pastPurchases';
+import * as products from '../../../../../src/core/reducers/data/products';
 import suite from '../../../_suite';
 
 suite('recommendations', ({ expect, stub }) => {
@@ -36,7 +37,7 @@ suite('recommendations', ({ expect, stub }) => {
       },
       page: {
         sizes: {
-          items: [1,2,3],
+          items: [1, 2, 3],
           selected: 0
         },
         current: 1,
@@ -69,6 +70,16 @@ suite('recommendations', ({ expect, stub }) => {
         ...state,
         products: payload
       });
+    });
+
+    it('should call updateMoreProducts() on RECEIVE_MORE_PAST_PURCHASE_PRODUCTS', () => {
+      const payload: any = [{ index: 4 }, { index: 5 }, { index: 6 }];
+      const newState: any = { products: [{ index: 1 }, { index: 2, }, { index: 3 }] };
+      stub(products, 'updateMoreProducts').returns(newState);
+
+      const reducer = pastPurchases(state, { type: Actions.RECEIVE_MORE_PAST_PURCHASE_PRODUCTS, payload });
+
+      expect(reducer).to.eql({ ...state, products: newState, });
     });
 
     it('should overwrite saytPastPurchases on RECEIVE_SAYT_PAST_PURCHASES', () => {

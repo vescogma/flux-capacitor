@@ -3,7 +3,7 @@ import Adapter from '../../adapters/pastPurchases';
 import Store from '../../store';
 import * as navigations from './navigations';
 import * as page from './page';
-import { updateMoreProducts } from './products';
+import * as products from './products';
 
 export { DEFAULT_PAGE_SIZE } from './page';
 
@@ -104,7 +104,7 @@ export const updatePastPurchaseProducts = (state: State, { payload }: Actions.Re
 export const updateMorePastPurchaseProducts = (state: State, action: Actions.ReceiveMorePastPurchaseProducts) =>
   ({
     ...state,
-    products: updateMoreProducts(state.products, action),
+    products: products.updateMoreProducts(state.products, action),
   });
 
 // tslint:disable-next-line max-line-length

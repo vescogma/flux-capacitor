@@ -579,4 +579,22 @@ suite('validators', ({ expect, spy, stub }) => {
       expect(validators.isNotFullRange.func(payload, state)).to.be.false;
     });
   });
+
+  describe('isNotFetching', () => {
+    const state: any = { a: 'b' };
+
+    it('should be valid if it is not fetching forward', () => {
+      const forward = true;
+      stub(Selectors, 'infiniteScroll').returns({ isFetchingForward: false });
+
+      expect(validators.isNotFetching.func(forward, state)).to.be.true;
+    });
+
+    it('should be valid if it is not fetching backward', () => {
+      const forward = false;
+      stub(Selectors, 'infiniteScroll').returns({ isFetchingBackward: false });
+
+      expect(validators.isNotFetching.func(forward, state)).to.be.true;
+    });
+  });
 });
