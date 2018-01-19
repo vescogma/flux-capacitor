@@ -223,6 +223,14 @@ suite('selectors', ({ expect, stub }) => {
     });
   });
 
+  describe('infiniteScroll()', () => {
+    it('should return the page object', () => {
+      const infiniteScroll = { a: 'b' };
+
+      expect(Selectors.infiniteScroll(<any>{ data: { present: { infiniteScroll } } })).to.eq(infiniteScroll);
+    });
+  });
+
   describe('pageSize()', () => {
     it('should return the currently selected page', () => {
       const state: any = { a: 'b' };
@@ -401,6 +409,19 @@ suite('selectors', ({ expect, stub }) => {
       const state: any = { a: 'b', data: { present: { products } } };
 
       expect(Selectors.productsWithMetadata(state)).to.eql(products);
+    });
+  });
+
+  describe('pastPurchaseProductsWithMetadata()', () => {
+    it('should return products with metadata', () => {
+      const products = [
+        { data: { id: 'a' }, id: 1, meta: { pastPurchase: true } },
+        { data: { id: 'b' }, id: 2, meta: {} },
+        { data: { id: 'c' }, id: 3, meta: { pastPurchase: true } },
+      ];
+      const state: any = { a: 'b', data: { present: { pastPurchases: { products} } } };
+
+      expect(Selectors.pastPurchaseProductsWithMetadata(state)).to.eql(products);
     });
   });
 
