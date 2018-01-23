@@ -98,12 +98,12 @@ export namespace Tasks {
       const products = Selectors.productsWithMetadata(state);
       const pageSize = action.payload.amount;
 
-      let product;
+      let skip;
       if (action.payload.forward) {
-        product = products[products.length - 1].index;
+        skip = products[products.length - 1].index;
         yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingForward: true }));
       } else {
-        product = products[0].index - pageSize - 1;
+        skip = products[0].index - pageSize - 1;
         yield effects.put(<any>flux.actions.infiniteScrollRequestState({ isFetchingBackward: true }));
       }
 
@@ -112,7 +112,7 @@ export namespace Tasks {
         {
           ...Requests.search(state),
           pageSize,
-          skip: product,
+          skip,
         }
       );
 

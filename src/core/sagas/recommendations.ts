@@ -83,7 +83,7 @@ export namespace Tasks {
   }
 
   // tslint:disable-next-line max-line-length
-  export function*  fetchProductsFromSkus(flux: FluxCapacitor, skus: Store.PastPurchases.PastPurchaseProduct[], request: Request) {
+  export function* fetchProductsFromSkus(flux: FluxCapacitor, skus: Store.PastPurchases.PastPurchaseProduct[], request: Request) {
     const ids: string[] = skus.map(({ sku }) => sku);
     return yield effects.call(
       [flux.clients.bridge, flux.clients.bridge.search],
