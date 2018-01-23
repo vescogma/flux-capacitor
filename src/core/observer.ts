@@ -161,8 +161,12 @@ namespace Observer {
               current: emit(Events.PAST_PURCHASE_CURRENT_PAGE_UPDATED),
               sizes: emit(Events.PAST_PURCHASE_PAGE_SIZE_UPDATED),
             }),
-            navigations: Observer.navigations(Events.PAST_PURCHASE_NAVIGATIONS_UPDATED,
-                                              Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED, emit),
+            count: emit(Events.PAST_PURCHASE_RECORD_COUNT_UPDATED),
+            navigations: Observer.navigations(
+              Events.PAST_PURCHASE_NAVIGATIONS_UPDATED,
+              Events.PAST_PURCHASE_SELECTED_REFINEMENTS_UPDATED,
+              emit
+            ),
             sort: emit(Events.PAST_PURCHASE_SORT_UPDATED),
           },
 
