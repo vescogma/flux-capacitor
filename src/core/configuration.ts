@@ -232,7 +232,7 @@ namespace Configuration {
     /**
      * set object to enable location-specific autocomplete recommendations
      */
-    location?: Configuration.Recommendations.Location;
+    location?: Configuration.Recommendations.Location | false;
 
     /**
      * Product ID field as used in recommendations.
