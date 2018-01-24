@@ -100,10 +100,7 @@ suite('recommendations', ({ expect, stub }) => {
 
       expect(reducer).to.eql({
         ...state,
-        count: {
-          ...state.count,
-          allRecordCount: payload,
-        }
+        allRecordCount: payload
       });
     });
 
@@ -114,10 +111,7 @@ suite('recommendations', ({ expect, stub }) => {
 
       expect(reducer).to.eql({
         ...state,
-        count: {
-          ...state.count,
-          currentRecordCount: payload,
-        }
+        currentRecordCount: payload
       });
     });
 
