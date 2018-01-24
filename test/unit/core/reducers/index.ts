@@ -17,18 +17,7 @@ suite('reducers', ({ expect, stub }) => {
         future: [],
       }
     };
-
-    const newState = {
-      a: 'b',
-      session: undefined,
-      data: {
-        past: [{ personalization: { biasing: 'bias' }, autocomplete: { c: 'd' }, details: { data: '3' } }],
-        present: { personalization: { biasing: 'not' }, autocomplete: {}, details: { data: '3' } },
-        future: []
-      }
-    };
-
-    expect(reducer(<any>{
+    const oldState = <any>{
       data: {
         past: [],
         present: {
@@ -37,8 +26,55 @@ suite('reducers', ({ expect, stub }) => {
           details: {}
         },
         future: []
+      },
+      session: {
+        config: {
+          history: {
+            length: 5
+          }
+        }
       }
-    }, { type: Actions.REFRESH_STATE, payload })).to.eql(newState);
+    };
+    const newState = {
+      a: 'b',
+      data: {
+        past: [{ personalization: { biasing: 'bias' }, autocomplete: { c: 'd' }, details: { data: '3' } }],
+        present: { personalization: { biasing: 'not' }, autocomplete: {}, details: { data: '3' } },
+        future: []
+      },
+      session: {
+        config: {
+          history: {
+            length: 5
+          }
+        }
+      }
+    };
+
+    expect(reducer(oldState, { type: Actions.REFRESH_STATE, payload })).to.eql(newState);
+  });
+
+  it('should keep the correct length of past', () => {
+    const historyLength = 2;
+    const payload = {
+      a: 'b',
+      data: {
+        past: [{ a: 1 }, { b: 2 }],
+        present: { personalization: { biasing: 2 }, autocomplete: {}, details: { data: 2 } },
+        future: []
+      }
+    };
+    const oldState = <any>{
+      a: 'b',
+      data: {
+        present: { personalization: { biasing: 1 }, autocomplete: {}, details: { data: 1 } },
+      },
+      session: {
+        config: { history: { length: historyLength } }
+      }
+    };
+
+    expect(reducer(oldState, { type: Actions.REFRESH_STATE, payload }).data.past.length).to.eql(historyLength);
   });
 
   it('should advance history on SAVE_STATE', () => {

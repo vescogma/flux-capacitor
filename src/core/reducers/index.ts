@@ -12,15 +12,15 @@ export type Action = Actions.RefreshState;
 
 export const undoWithoutHistory = (store) => {
   return (state, action) => {
-    const limit: number = ConfigAdapter.extractHistoryLength(store);
+    const historyLength: number = ConfigAdapter.extractHistoryLength(store);
     const config = {
-      limit,
+      limit: historyLength + 1,
       filter: includeAction(Actions.SAVE_STATE),
     };
     const reducer = undoable(data, config);
     const { history, ...newState } = reducer(state, action);
 
-    if (limit === 0) {
+    if (historyLength === 0) {
       // reset past
       return { ...newState, past: [{}] };
     }
@@ -46,14 +46,17 @@ export default (state: Store.State, action: Action) => {
 };
 
 export const updateState = (state: Store.State, { payload }: Actions.RefreshState) => {
+  const historyLength = state.session.config.history.length;
+  const pastLength = payload.data.past.length;
+  const truncatedPast = payload.data.past.length < historyLength ? payload.data.past : payload.data.past.slice(1);
+  // tslint:disable-next-line:max-line-length
+  const past = historyLength ? [...truncatedPast, payload.data.present] : [{}];
+
   return {
     ...payload,
     session: state.session,
     data: {
-      past: [
-        ...payload.data.past,
-        payload.data.present
-      ],
+      past,
       present: {
         ...payload.data.present,
         personalization: {

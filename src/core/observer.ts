@@ -85,6 +85,7 @@ namespace Observer {
           autocomplete: ((emitSuggestionsUpdated: Observer, emitQueryUpdated: Observer, emitProductsUpdated: Observer, emitTemplateUpdated: Observer) =>
             (oldState: Store.Autocomplete, newState: Store.Autocomplete, path: string) => {
               if (oldState !== newState) {
+                emitSuggestionsUpdated(oldState, newState, path);
                 if (oldState.suggestions !== newState.suggestions
                   || oldState.category !== newState.category
                   || oldState.navigations !== newState.navigations) {
