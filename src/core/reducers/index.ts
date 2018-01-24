@@ -20,11 +20,13 @@ export const undoWithoutHistory = (store) => {
     const reducer = undoable(data, config);
     const { history, ...newState } = reducer(state, action);
 
+    /* istanbul ignore next */
     if (historyLength === 0) {
       // reset past
       return { ...newState, past: [{}] };
     }
 
+    /* istanbul ignore next */
     return newState;
   };
 };
