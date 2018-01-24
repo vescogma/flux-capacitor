@@ -1,7 +1,7 @@
 import { Results } from 'groupby-api';
-import Payloads from './payloads';
 import Configuration from '../configuration';
 import Store from '../store';
+import Payloads from './payloads';
 
 namespace Actions {
   export interface Action<S = string, T = any> {
@@ -86,8 +86,10 @@ namespace Actions {
   export type FetchMoreRefinements = Action<typeof FETCH_MORE_REFINEMENTS, string>;
   export const FETCH_PRODUCTS = 'FETCH_PRODUCTS';
   export type FetchProducts = Action<typeof FETCH_PRODUCTS>;
+  export const FETCH_PRODUCTS_WITHOUT_HISTORY = 'FETCH_PRODUCTS_WITHOUT_HISTORY';
+  export type FetchProductsWithoutHistory = Action<typeof FETCH_PRODUCTS_WITHOUT_HISTORY>;
   export const FETCH_PRODUCTS_WHEN_HYDRATED = 'FETCH_PRODUCTS_WHEN_HYDRATED';
-  export type fetchProductsWhenHydrated = Action<typeof FETCH_PRODUCTS_WHEN_HYDRATED, Actions.FetchProducts>;
+  export type FetchProductsWhenHydrated = Action<typeof FETCH_PRODUCTS_WHEN_HYDRATED, Actions.FetchProducts>;
   export const FETCH_MORE_PRODUCTS = 'FETCH_MORE_PRODUCTS';
   export type FetchMoreProducts = Action<typeof FETCH_MORE_PRODUCTS, number>;
   export const FETCH_AUTOCOMPLETE_SUGGESTIONS = 'FETCH_AUTOCOMPLETE_SUGGESTIONS';

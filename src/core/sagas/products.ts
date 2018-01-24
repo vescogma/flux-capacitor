@@ -12,7 +12,7 @@ import Store from '../store';
 import * as utils from '../utils';
 
 export namespace Tasks {
-  export function* fetchProducts(flux: FluxCapacitor, action: Actions.FetchProducts) {
+  export function* fetchProducts(flux: FluxCapacitor, ignoreHistory: boolean = false, action: Actions.FetchProducts) {
     try {
       let [result, navigations]: [Results, Store.Recommendations.Navigation[]] = yield effects.all([
         effects.call(fetchProductsRequest, flux, action),
@@ -41,7 +41,10 @@ export namespace Tasks {
         );
 
         yield effects.put(<any>actions);
-        flux.saveState(utils.Routes.SEARCH);
+
+        if (!ignoreHistory) {
+          flux.saveState(utils.Routes.SEARCH);
+        }
       }
     } catch (e) {
       yield effects.put(<any>flux.actions.receiveProducts(e));
@@ -113,7 +116,7 @@ export namespace Tasks {
     }
   }
 
-  export function* fetchProductsWhenHydrated(flux: FluxCapacitor, action: Actions.fetchProductsWhenHydrated) {
+  export function* fetchProductsWhenHydrated(flux: FluxCapacitor, action: Actions.FetchProductsWhenHydrated) {
     if (Selectors.realTimeBiasesHydrated(flux.store.getState())) {
       yield effects.put(action.payload);
     } else {
@@ -124,7 +127,8 @@ export namespace Tasks {
 
 export default (flux: FluxCapacitor) => {
   return function* saga() {
-    yield effects.takeLatest(Actions.FETCH_PRODUCTS, Tasks.fetchProducts, flux);
+    yield effects.takeLatest(Actions.FETCH_PRODUCTS, Tasks.fetchProducts, flux, false);
+    yield effects.takeLatest(Actions.FETCH_PRODUCTS_WITHOUT_HISTORY, Tasks.fetchProducts, flux, true);
     yield effects.takeLatest(Actions.FETCH_PRODUCTS_WHEN_HYDRATED, Tasks.fetchProductsWhenHydrated, flux);
     yield effects.takeLatest(Actions.FETCH_MORE_PRODUCTS, Tasks.fetchMoreProducts, flux);
   };

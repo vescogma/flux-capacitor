@@ -37,10 +37,18 @@ namespace ActionCreators {
   }
 
   /**
+   * Makes a request for products without history being set afterwards.
+   * @return {Actions.FetchProductsWithoutHistory} - Action with null.
+   */
+  export function fetchProductsWithoutHistory(): Actions.FetchProductsWithoutHistory {
+    return createAction(Actions.FETCH_PRODUCTS_WITHOUT_HISTORY, null);
+  }
+
+  /**
    * Wrapper for fetchProducts, dispatches it within saga when store is rehydrated
    * @return {Actions.FetchProductsWhenHydrated} - Action with null.
    */
-  export function fetchProductsWhenHydrated(): Actions.fetchProductsWhenHydrated {
+  export function fetchProductsWhenHydrated(): Actions.FetchProductsWhenHydrated {
     return createAction(Actions.FETCH_PRODUCTS_WHEN_HYDRATED, fetchProducts());
   }
   /**
