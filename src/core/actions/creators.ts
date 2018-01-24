@@ -828,8 +828,8 @@ namespace ActionCreators {
    * @return {Actions.CreateComponentState}         - Action with tagName, id, and state.
    */
   // tslint:disable-next-line max-line-length
-  export function createComponentState(tagName: string, id: string, state: any = {}, persist: boolean = false): Actions.CreateComponentState {
-    return createAction(Actions.CREATE_COMPONENT_STATE, { tagName, id, state, persist });
+  export function createComponentState(tagName: string, id: string, state: any = {}): Actions.CreateComponentState {
+    return createAction(Actions.CREATE_COMPONENT_STATE, { tagName, id, state });
   }
 
   /**

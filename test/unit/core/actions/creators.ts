@@ -1239,17 +1239,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const state = { a: 'b' };
 
         // tslint:disable-next-line max-line-length
-        expectAction(ActionCreators.createComponentState(tagName, id, state), Actions.CREATE_COMPONENT_STATE, { tagName, id, state, persist: false });
-      });
-
-      it('should return an action with persist true', () => {
-        const tagName = 'my-tag';
-        const id = '123';
-        const state = { a: 'b' };
-        const persist = true;
-
-        // tslint:disable-next-line max-line-length
-        expectAction(ActionCreators.createComponentState(tagName, id, state, persist), Actions.CREATE_COMPONENT_STATE, { tagName, id, state, persist: true });
+        expectAction(ActionCreators.createComponentState(tagName, id, state), Actions.CREATE_COMPONENT_STATE, { tagName, id, state });
       });
 
       it('should return an action if no state is passed as an argument', () => {
@@ -1257,7 +1247,7 @@ suite('ActionCreators', ({ expect, spy, stub }) => {
         const id = '123';
 
         // tslint:disable-next-line max-line-length
-        expectAction(ActionCreators.createComponentState(tagName, id), Actions.CREATE_COMPONENT_STATE, { tagName, id, state: {}, persist: false });
+        expectAction(ActionCreators.createComponentState(tagName, id), Actions.CREATE_COMPONENT_STATE, { tagName, id, state: {} });
       });
     });
 

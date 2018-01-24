@@ -4,14 +4,11 @@ import suite from '../../_suite';
 
 suite('ui', ({ expect }) => {
   const global = true;
-  const ID = 5;
+  const ID = '5';
   const state: Store.UI = {
     breadcrumbs: {
       global,
-      [ID]: {
-        persist: false,
-        data: { a: 'yeah' },
-      },
+      [ID]: 'yeah',
     }
   };
 
@@ -23,15 +20,12 @@ suite('ui', ({ expect }) => {
       const newState = {
         ...state,
         query: {
-          [id]: {
-            data: {},
-            persist: false,
-          }
+          [id]: idState
         }
       };
 
       // tslint:disable-next-line max-line-length
-      const reducer = ui(state, <any>{ type: Actions.CREATE_COMPONENT_STATE, payload: { tagName, id, state: idState, persist: false } });
+      const reducer = ui(state, <any>{ type: Actions.CREATE_COMPONENT_STATE, payload: { tagName, id, state: idState } });
 
       expect(reducer).to.eql(newState);
     });
@@ -44,27 +38,9 @@ suite('ui', ({ expect }) => {
     });
 
     it('should clear state when recallId in meta', () => {
-      const reducer = ui(<any>{
-        ['gb-query']: { 3: { persist: false } },
-        ['gb-sort']: {
-          4: { persist: true, data: { eyy: 'yo' } },
-          5: { persist: false, data: { ayy: 'lmao' } },
-          6: { persist: true, data: { anotha: 'one' } },
-        },
-        ['gb-infinite-scroll']: { 1: { persist: true } },
-      },
-      { type: null,
-        payload: { query: 'eyy' },
-        meta: { recallId: 'a' } }
-      );
+      const reducer = ui(<any>{ a: 'b' }, { type: null, payload: { query: 'eyy' }, meta: { recallId: 'a' } });
 
-      expect(reducer).to.eql({
-        ['gb-sort']: {
-          4: { persist: true, data: { eyy: 'yo' } },
-          6: { persist: true, data: { anotha: 'one' } },
-        },
-        ['gb-infinite-scroll']: { 1: { persist: true } },
-      });
+      expect(reducer).to.eql({});
     });
 
     it('should return state on default', () => {
