@@ -25,8 +25,10 @@ export const DEFAULTS: State = <any>{
   skus: [],
   saytPastPurchases: [],
   products: [],
-  currentRecordCount: 0,
-  allRecordCount: 0,
+  count: {
+    currentRecordCount: 0,
+    allRecordCount: 0,
+  },
   query: '',
   sort: {
     items: [{
@@ -92,13 +94,19 @@ export const updatePastPurchaseProducts = (state: State, { payload }: Actions.Re
 // tslint:disable-next-line max-line-length
 export const updatePastPurchaseCurrentRecordCount = (state: State, { payload }: Actions.ReceivePastPurchaseCurrentRecordCount) => ({
     ...state,
-    currentRecordCount: payload
+    count: {
+      ...state.count,
+      currentRecordCount: payload,
+    }
   });
 
 // tslint:disable-next-line max-line-length
 export const updatePastPurchaseAllRecordCount = (state: State, { payload }: Actions.ReceivePastPurchaseAllRecordCount) => ({
     ...state,
-    allRecordCount: payload
+    count: {
+      ...state.count,
+      allRecordCount: payload,
+    }
   });
 
 export const updateSaytPastPurchases = (state: State, { payload }: Actions.ReceiveSaytPastPurchases) =>
