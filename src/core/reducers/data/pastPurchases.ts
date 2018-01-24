@@ -110,7 +110,10 @@ export const updateMorePastPurchaseProducts = (state: State, action: Actions.Rec
 // tslint:disable-next-line max-line-length
 export const updatePastPurchaseCurrentRecordCount = (state: State, { payload }: Actions.ReceivePastPurchaseCurrentRecordCount) => ({
   ...state,
-  currentRecordCount: payload
+  count: {
+    ...state.count,
+    currentRecordCount: payload,
+  }
 });
 
 // tslint:disable-next-line max-line-length
