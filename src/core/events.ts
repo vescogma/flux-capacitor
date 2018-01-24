@@ -212,12 +212,6 @@ namespace Events {
   export const PAST_PURCHASE_PAGE_UPDATED = 'past_purchase_page_updated';
 
   /**
-   * Triggered when the past purchase count object is updated
-   * Returns the new count object
-   */
-  export const PAST_PURCHASE_RECORD_COUNT_UPDATED = 'past_purchase_record_count_updated';
-
-  /**
    * Triggered when the past purchase current page number is udpated
    * Returns the new page number
    */
