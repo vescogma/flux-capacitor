@@ -245,8 +245,7 @@ namespace Store {
       skus: PastPurchases.PastPurchaseProduct[];
       saytPastPurchases: ProductWithMetadata[];
       products: ProductWithMetadata[];
-      allRecordCount: number;
-      currentRecordCount: number;
+      count: PastPurchases.PastPurchaseCount;
       navigations: Indexed<Store.Navigation>;
       query: string;
       sort?: SelectableList<PastPurchases.PastPurchaseSort>;
@@ -268,6 +267,11 @@ namespace Store {
       field: string;
       value: string;
       count: number;
+    }
+
+    export interface PastPurchaseCount {
+      allRecordCount: number;
+      currentRecordCount: number;
     }
   }
 

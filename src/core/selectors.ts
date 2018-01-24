@@ -335,10 +335,12 @@ namespace Selectors {
    */
   export const pastPurchaseProductsBySku = (state: Store.State) =>
     state.data.present.pastPurchases.skus
-    .reduce((skuProducts, product) => Object.assign(skuProducts, { [product.sku]: {
-      quantity: product.quantity,
-      lastPurchased: product.lastPurchased,
-    }}), {});
+      .reduce((skuProducts, product) => Object.assign(skuProducts, {
+        [product.sku]: {
+          quantity: product.quantity,
+          lastPurchased: product.lastPurchased,
+        }
+      }), {});
 
   /**
    * Returns the entire byId object from biasing
@@ -383,10 +385,10 @@ namespace Selectors {
    * Returns the past purchase record count
    */
   export const pastPurchaseAllRecordCount = (state: Store.State) =>
-    state.data.present.pastPurchases.allRecordCount;
+    state.data.present.pastPurchases.count.allRecordCount;
 
   export const pastPurchaseCurrentRecordCount = (state: Store.State) =>
-    state.data.present.pastPurchases.currentRecordCount;
+    state.data.present.pastPurchases.count.currentRecordCount;
 
   /**
    * Returns the past purchase query string

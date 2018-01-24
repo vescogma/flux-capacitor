@@ -211,6 +211,7 @@ suite('Observer', ({ expect, spy, stub }) => {
       expect(present.pastPurchases.page).to.be.a('function');
       expect(present.pastPurchases.page.current).to.be.a('function');
       expect(present.pastPurchases.page.sizes).to.be.a('function');
+      expect(present.pastPurchases.count).to.be.a('function');
       expect(present.pastPurchases.navigations).to.be.a('function');
       expect(present.pastPurchases.sort).to.be.a('function');
     });
@@ -470,6 +471,12 @@ suite('Observer', ({ expect, spy, stub }) => {
             observers.data.present.pastPurchases.saytPastPurchases(undefined, testObject);
 
             expect(emit).to.be.calledWith(Events.SAYT_PAST_PURCHASES_UPDATED, testObject);
+          });
+
+          it('should emit PAST_PURCHASE_RECORD_COUNT_UPDATED', () => {
+            observers.data.present.pastPurchases.count(undefined, testObject);
+
+            expect(emit).to.be.calledWithExactly(Events.PAST_PURCHASE_RECORD_COUNT_UPDATED, testObject);
           });
 
           it('should call navigations() for past purchase navigations', () => {
